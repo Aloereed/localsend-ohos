@@ -972,7 +972,7 @@ class _TranslationsTroubleshootPageNoConnectionPl extends TranslationsTroublesho
   String get symptom => 'Oba urządzenia nie mogą się nawzajem wykryć ani dzielić się plikami.';
   @override
   String get solution =>
-      'Problem istnieje po obu stronach? Upewnij się, że oba urządzenia są w tej samej sieci Wi-Fi i mają takie same ustawienia (port, adres multicast, szyfrowanie). Wi-Fi może nie zezwalać na komunikację między uczestnikami. W takim przypadku opcję tę należy włączyć w routerze.';
+      'Problem istnieje po obu stronach? Upewnij się, że oba urządzenia są w tej samej sieci Wi-Fi i mają takie same ustawienia (port, adres multicast, szyfrowanie). Wi-Fi może nie zezwalać na komunikację między uczestnikami z powodu izolacji punktu dostępu (AP). W takim przypadku tę opcję należy wyłączyć w routerze.';
 }
 
 // Path: receiveHistoryPage.entryActions
@@ -1368,6 +1368,12 @@ class _TranslationsDialogsQuickSaveFromFavoritesNoticePl extends TranslationsDia
   // Translations
   @override
   String get title => _root.general.quickSaveFromFavorites;
+  @override
+  List<String> get content => [
+        'Żądania plików są teraz akceptowane automatycznie z urządzeń na liście ulubionych.',
+        'Uwaga! Obecnie nie jest to całkowicie bezpieczne, ponieważ haker, który ma odcisk palca dowolnego urządzenia z listy ulubionych, może wysyłać Ci pliki bez ograniczeń.',
+        'Jednak ta opcja jest nadal bezpieczniejsza niż umożliwienie wszystkim użytkownikom w sieci lokalnej wysyłanie plików bez ograniczeń.',
+      ];
 }
 
 // Path: dialogs.pin
