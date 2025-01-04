@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "LocalSend 局域网文件发送"
+    },
+    {
+      "name": "read_imagevideo_reason",
+      "value": "read_imagevideo_reason"
+    }
+  ]
+}

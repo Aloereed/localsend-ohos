@@ -1,0 +1,23 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "file_selector_ohos": "file:../har/file_selector_ohos.har",
+    "image_picker_ohos": "file:../har/image_picker_ohos.har",
+    "in_app_purchase_ohos": "file:../har/in_app_purchase_ohos.har",
+    "path_provider_ohos": "file:../har/path_provider_ohos.har",
+    "shared_preferences_ohos": "file:../har/shared_preferences_ohos.har",
+    "url_launcher_ohos": "file:../har/url_launcher_ohos.har",
+    "connectivity_plus": "file:../har/connectivity_plus.har",
+    "device_info_plus": "file:../har/device_info_plus.har",
+    "package_info_plus": "file:../har/package_info_plus.har",
+    "open_filex": "file:../har/open_filex.har",
+    "permission_handler_ohos": "file:../har/permission_handler_ohos.har",
+    "share_plus": "file:../har/share_plus.har",
+    "fluttertoast": "file:../har/fluttertoast.har"
+  }
+}

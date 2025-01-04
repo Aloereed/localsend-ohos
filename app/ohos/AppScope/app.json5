@@ -1,0 +1,10 @@
+{
+  "app": {
+    "bundleName": "org.localsend.localsend_app_ohos",
+    "vendor": "example",
+    "versionCode": 47,
+    "versionName": "1.14.1",
+    "icon": "$media:app_icon",
+    "label": "$string:app_name"
+  }
+}

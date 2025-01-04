@@ -1,0 +1,150 @@
+dependencies:
+  app_group_directory: 2.0.0
+  basic_utils: 5.7.0
+  collection: ^1.17.2
+  common:
+    path: ../common
+  dart_mappable: 4.2.0
+  desktop_drop: 0.4.4
+  device_apps: 2.2.0
+  dio: 5.4.1
+  dynamic_color: 1.6.9
+  flutter:
+    sdk: flutter
+  flutter_displaymode: 0.6.0
+  flutter_localizations:
+    sdk: flutter
+  flutter_markdown: 0.6.19
+  gal: 2.3.0
+  intl: ^0.19.0
+  launch_at_startup: 0.2.2
+  logging: 1.2.0
+  mime: 1.0.4
+  network_info_plus: 4.1.0+1
+  pasteboard: ^0.2.0
+  path: 1.9.0
+  pretty_qr_code: 3.2.1
+  refena_flutter: 1.6.0
+  refena_inspector_client: 1.2.0
+  routerino: 0.8.0
+  saf_stream: 0.4.0
+  screen_retriever: 0.1.9
+  share_handler: 0.0.19
+  share_handler_ios: 0.0.12
+  shared_preferences_platform_interface: any
+  shared_storage: 0.8.1
+  shelf: 1.4.1
+  shelf_router: 1.1.4
+  slang: 3.29.0
+  slang_flutter: 3.29.0
+  system_settings: 2.1.0
+  system_tray: 2.0.3
+  tray_manager:
+    git:
+      ref: b37f5e088e0f02c45a684ae41e9d2da2d5c596db
+      url: https://github.com/Tienisto/tray_manager.git
+  uuid: 3.0.7
+  wechat_assets_picker: 8.8.1+1
+  window_manager: 0.3.8
+  yaru: 1.2.2
+dependency_overrides:
+  connectivity_plus:
+    git:
+      path: packages/connectivity_plus/connectivity_plus
+      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+  device_info_plus:
+    git:
+      path: packages/device_info_plus/device_info_plus
+      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+  share_plus:
+    git:
+      path: packages/share_plus/share_plus
+      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+  file_picker:
+    git:
+      url: https://gitee.com/openharmony-sig/fluttertpc_file_picker.git
+  file_selector:
+    git:
+      path: packages/file_selector/file_selector
+      url: https://gitee.com/openharmony-sig/flutter_packages.git
+  image_picker:
+    git:
+      path: packages/image_picker/image_picker
+      url: https://gitee.com/openharmony-sig/flutter_packages.git
+  in_app_purchase:
+    git:
+      path: packages/in_app_purchase/in_app_purchase
+      url: https://gitee.com/openharmony-sig/flutter_packages.git
+  open_filex:
+    git:
+      url: https://gitee.com/openharmony-sig/fluttertpc_open_filex.git
+  package_info_plus:
+    git:
+      path: packages/package_info_plus/package_info_plus
+      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+  path_provider:
+    git:
+      path: packages/path_provider/path_provider
+      url: https://gitee.com/openharmony-sig/flutter_packages.git
+  permission_handler:
+    git:
+      path: permission_handler
+      url: https://gitee.com/openharmony-sig/flutter_permission_handler.git
+  permission_handler_windows:
+    git:
+      ref: 2dadd8afbf81e0e3e4791d7144e689555e58f649
+      url: https://github.com/localsend/permission_handler_windows_noop.git
+  shared_preferences:
+    git:
+      path: packages/shared_preferences/shared_preferences
+      url: https://gitee.com/openharmony-sig/flutter_packages.git
+  url_launcher:
+    git:
+      path: packages/url_launcher/url_launcher
+      url: https://gitee.com/openharmony-sig/flutter_packages.git
+  wakelock_plus:
+    git:
+      path: wakelock_plus
+      url: https://gitee.com/openharmony-sig/fluttertpc_wakelock_plus.git
+  fluttertoast:
+      git: https://gitee.com/openharmony-sig/flutter_fluttertoast.git
+description: An open source cross-platform alternative to AirDrop
+dev_dependencies:
+  build_runner: 2.4.8
+  dart_mappable_builder: 4.2.0
+  flutter_gen_runner: 5.3.2
+  flutter_lints: 3.0.1
+  mockito: 5.4.4
+  msix: 3.16.7
+  refena_inspector: 1.2.0
+  slang_build_runner: 3.29.0
+  slang_gpt: 0.10.0
+  test: ^1.24.3
+environment:
+  flutter: '>=3.13.0'
+  sdk: '>=3.1.0 <4.0.0'
+flutter:
+  assets:
+  - assets/img/
+  - assets/web/
+  - assets/CHANGELOG.md
+  uses-material-design: true
+flutter_gen:
+  line_length: 150
+homepage: https://localsend.org/
+msix_config:
+  architecture: x64
+  display_name: LocalSend
+  identity_name: 11157TienDoNam.LocalSend
+  languages: en, ar, bn, cs, da, de, el, es-ES, eu, fa, fr, he, hu, in, it, ja, ko,
+    ne, nl, pl, pt-BR, ru, sv, th, tr, uk, vi, zh-CN, zh-HK, zh-TW
+  logo_path: assets\img\logo-512.png
+  os_min_version: 10.0.19041.0
+  publisher_display_name: Tien Do Nam
+  startup_task:
+    enabled: false
+    parameters: autostart
+    task_id: localsend
+name: localsend_app
+publish_to: none
+version: 1.14.1+47
