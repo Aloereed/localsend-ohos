@@ -46,6 +46,13 @@
       {
         name: "ohos.permission.GET_WIFI_INFO",
       },
+      {
+        name:"ohos.permission.READ_PASTEBOARD",
+        "reason": "$string:pasteboard_reason",
+        "usedScene": {
+          "when":"inuse"
+        }
+      }
     ],
   },
 }

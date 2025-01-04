@@ -15,6 +15,10 @@
     {
       "name": "read_imagevideo_reason",
       "value": "read_imagevideo_reason"
+    },
+    {
+      "name": "pasteboard_reason",
+      "value": "LocalSend is applying to access your clipboard."
     }
   ]
 }

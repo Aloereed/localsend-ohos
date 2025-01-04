@@ -15,6 +15,10 @@
     {
       "name": "read_imagevideo_reason",
       "value": "read_imagevideo_reason"
+    },
+    {
+      "name": "pasteboard_reason",
+      "value": "LocalSend申请访问你的剪贴板。"
     }
   ]
 }
