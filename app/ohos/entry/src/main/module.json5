@@ -27,7 +27,7 @@
         name: "EntryAbility",
         srcEntry: "./ets/entryability/EntryAbility.ets",
         description: "$string:EntryAbility_desc",
-        orientation: "auto_rotation",
+        orientation: "auto_rotation_restricted",
         icon: "$media:icon",
         label: "$string:EntryAbility_label",
         startWindowIcon: "$media:icon",
