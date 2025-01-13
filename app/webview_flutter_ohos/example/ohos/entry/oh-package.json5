@@ -1,0 +1,14 @@
+{
+  "license": "",
+  "devDependencies": {},
+  "author": "",
+  "name": "entry",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "version": "1.0.0",
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:../har/flutter.har",
+    "path_provider_ohos": "file:../har/path_provider_ohos.har",
+    "webview_flutter_ohos": "file:../har/webview_flutter_ohos.har"
+  }
+}

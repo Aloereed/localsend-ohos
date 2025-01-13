@@ -21,13 +21,13 @@ Future<void> main(List<String> args) async {
   runApp(RefenaScope.withContainer(
     container: container,
     child: TranslationProvider(
-      child: const LocalSendApp(),
+      child: const AloeChatAIApp(),
     ),
   ));
 }
 
-class LocalSendApp extends StatelessWidget {
-  const LocalSendApp();
+class AloeChatAIApp extends StatelessWidget {
+  const AloeChatAIApp();
 
   @override
   Widget build(BuildContext context) {

@@ -81,7 +81,7 @@ class MulticastService {
     yield* streamController.stream;
   }
 
-  /// Sends an announcement which triggers a response on every LocalSend member of the network.
+  /// Sends an announcement which triggers a response on every AloeChatAI member of the network.
   Future<void> sendAnnouncement() async {
     final settings = _ref.read(settingsProvider);
     final sockets = await _getSockets(settings.multicastGroup);

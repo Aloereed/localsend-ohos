@@ -18,6 +18,8 @@
     "open_filex": "file:../har/open_filex.har",
     "permission_handler_ohos": "file:../har/permission_handler_ohos.har",
     "share_plus": "file:../har/share_plus.har",
-    "fluttertoast": "file:../har/fluttertoast.har"
+    "fluttertoast": "file:../har/fluttertoast.har",
+    "webview_flutter_ohos": "file:../har/webview_flutter_ohos.har",
+    "file_picker_ohos": "file:../har/file_picker_ohos.har"
   }
 }

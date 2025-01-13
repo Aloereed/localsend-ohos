@@ -1,6 +1,6 @@
 {
   "locale": "한국어",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "수락",
     "accepted": "수락됨",
@@ -130,7 +130,7 @@
     },
     "other": {
       "title": "기타",
-      "support": "LocalSend 지원",
+      "support": "AloeChat.AI 지원",
       "donate": "기부",
       "privacyPolicy": "개인정보 처리 방침",
       "termsOfUse": "이용 약관"
@@ -184,7 +184,7 @@
   "receiveOptionsPage": {
     "title": "옵션",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend 폴더)",
+    "appDirectory": "(AloeChat.AI 폴더)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "디렉토리가 있어 자동으로 꺼집니다."
   },
@@ -222,13 +222,13 @@
     "noRequests": "아직 요청이 없습니다.",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "요청 자동 수락",
-    "encryptionHint": "LocalSend는 자체 서명된 인증서를 사용합니다. 브라우저에서 수락해야 합니다.",
+    "encryptionHint": "AloeChat.AI는 자체 서명된 인증서를 사용합니다. 브라우저에서 수락해야 합니다.",
     "pendingRequests": "대기중인 요청: {n}"
   },
   "aboutPage": {
-    "title": "LocalSend에 대해",
+    "title": "AloeChat.AI에 대해",
     "description": [
-      "LocalSend는 인터넷 연결이 필요 없이 로컬 네트워크를 통해 주변 기기와 파일 및 메시지를 안전하게 공유할 수 있는 무료 오픈소스 앱입니다.",
+      "AloeChat.AI는 인터넷 연결이 필요 없이 로컬 네트워크를 통해 주변 기기와 파일 및 메시지를 안전하게 공유할 수 있는 무료 오픈소스 앱입니다.",
       "이 앱은 Android, iOS, macOS, Windows 및 Linux에서 사용할 수 있습니다. 모든 다운로드 옵션은 공식 홈페이지에서 확인할 수 있습니다."
     ],
     "author": "작성자",
@@ -237,7 +237,7 @@
   },
   "donationPage": {
     "title": "기부",
-    "info": "LocalSend는 광고 없이 무료이며 오픈소스입니다. 앱을 좋아하신다면 개발을 후원하는 기부를 해주세요.",
+    "info": "AloeChat.AI는 광고 없이 무료이며 오픈소스입니다. 앱을 좋아하신다면 개발을 후원하는 기부를 해주세요.",
     "donate": "{amount} 기부하기",
     "thanks": "정말 감사합니다!",
     "restore": "구매 복원"
@@ -309,7 +309,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "로컬 네트워크를 스캔할 권한이 없어 LocalSend가 다른 기기를 찾을 수 없습니다. 설정에서 권한을 부여해주세요.",
+      "description": "로컬 네트워크를 스캔할 권한이 없어 AloeChat.AI가 다른 기기를 찾을 수 없습니다. 설정에서 권한을 부여해주세요.",
       "gotoSettings": "설정"
     },
     "messageInput": {
@@ -347,13 +347,13 @@
       "title": "전송 모드",
       "single": "파일을 한 명의 수신자에게 보냅니다. 파일 전송이 완료되면 선택이 지워집니다.",
       "multiple": "파일을 여러 명의 수신자에게 보냅니다. 선택이 지워지지 않습니다.",
-      "link": "LocalSend를 설치하지 않은 수신자는 브라우저에서 링크를 열어 선택한 파일을 다운로드할 수 있습니다."
+      "link": "AloeChat.AI를 설치하지 않은 수신자는 브라우저에서 링크를 열어 선택한 파일을 다운로드할 수 있습니다."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "LocalSend 종료"
+    "close": "AloeChat.AI 종료"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

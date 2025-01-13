@@ -55,7 +55,9 @@ Future<DeviceInfoResult> getDeviceInfo() async {
         deviceModel = deviceInfo.localizedModel;
         break;
       case TargetPlatform.ohos:
-        deviceModel = 'OpenHarmony';
+        final deviceInfo = await plugin.ohosInfo;
+        deviceModel = deviceInfo.productModel;
+        break;
       case TargetPlatform.linux:
         deviceModel = 'Linux';
         break;

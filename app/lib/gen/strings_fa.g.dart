@@ -27,7 +27,7 @@ class _StringsFa extends Translations {
 
 	// Translations
 	@override String get locale => 'فارسی';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralFa general = _StringsGeneralFa._(_root);
 	@override late final _StringsReceiveTabFa receiveTab = _StringsReceiveTabFa._(_root);
 	@override late final _StringsSendTabFa sendTab = _StringsSendTabFa._(_root);
@@ -271,7 +271,7 @@ class _StringsWebSharePageFa extends _StringsWebSharePageEn {
 	@override String get noRequests => 'هنوز درخواستی وجود ندارد';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
 	@override String get autoAccept => 'درخواست ها به طور خودکار پذیرفته میشوند';
-	@override String get encryptionHint => 'LocalSend از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید.';
+	@override String get encryptionHint => 'AloeChat.AI از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید.';
 	@override String pendingRequests({required Object n}) => 'درخواست های در حال انتظار: ${n}';
 }
 

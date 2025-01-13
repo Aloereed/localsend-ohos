@@ -27,7 +27,7 @@ class _StringsBn extends Translations {
 
 	// Translations
 	@override String get locale => 'বাংলা';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralBn general = _StringsGeneralBn._(_root);
 	@override late final _StringsReceiveTabBn receiveTab = _StringsReceiveTabBn._(_root);
 	@override late final _StringsSendTabBn sendTab = _StringsSendTabBn._(_root);
@@ -269,7 +269,7 @@ class _StringsWebSharePageBn extends _StringsWebSharePageEn {
 	@override String get requests => 'অনুরোধ';
 	@override String get noRequests => 'এখনো কোনো অনুরোধ নেই.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend একটি স্ব-স্বাক্ষরিত শংসাপত্র ব্যবহার করে। আপনাকে ব্রাউজারে এটি গ্রহণ করতে হবে।';
+	@override String get encryptionHint => 'AloeChat.AI একটি স্ব-স্বাক্ষরিত শংসাপত্র ব্যবহার করে। আপনাকে ব্রাউজারে এটি গ্রহণ করতে হবে।';
 	@override String pendingRequests({required Object n}) => 'অনুরোধ অপেক্ষারত: ${n}';
 }
 
@@ -280,9 +280,9 @@ class _StringsAboutPageBn extends _StringsAboutPageEn {
 	@override final _StringsBn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'LocalSend সম্পর্কে';
+	@override String get title => 'AloeChat.AI সম্পর্কে';
 	@override List<String> get description => [
-		'LocalSend হল একটি বিনামূল্যের, ওপেন সোর্স অ্যাপ যা আপনাকে ইন্টারনেট সংযোগের প্রয়োজন ছাড়াই আপনার স্থানীয় নেটওয়ার্কে কাছাকাছি ডিভাইসগুলির সাথে ফাইল এবং বার্তাগুলিকে নিরাপদে ভাগ করতে দেয়৷',
+		'AloeChat.AI হল একটি বিনামূল্যের, ওপেন সোর্স অ্যাপ যা আপনাকে ইন্টারনেট সংযোগের প্রয়োজন ছাড়াই আপনার স্থানীয় নেটওয়ার্কে কাছাকাছি ডিভাইসগুলির সাথে ফাইল এবং বার্তাগুলিকে নিরাপদে ভাগ করতে দেয়৷',
 		'এই অ্যাপটি Android, iOS, macOS, Windows এবং Linux-এ উপলব্ধ। আপনি অফিসিয়াল হোমপেজে সমস্ত ডাউনলোড বিকল্প খুঁজে পেতে পারেন।',
 	];
 	@override String get author => 'লেখক';
@@ -298,7 +298,7 @@ class _StringsDonationPageBn extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'দান';
-	@override String get info => 'LocalSend বিনামূল্যে, ওপেন সোর্স এবং কোনো বিজ্ঞাপন ছাড়াই। আপনি যদি অ্যাপটি পছন্দ করেন তবে আপনি একটি অনুদান দিয়ে বিকাশকে সমর্থন করতে পারেন।';
+	@override String get info => 'AloeChat.AI বিনামূল্যে, ওপেন সোর্স এবং কোনো বিজ্ঞাপন ছাড়াই। আপনি যদি অ্যাপটি পছন্দ করেন তবে আপনি একটি অনুদান দিয়ে বিকাশকে সমর্থন করতে পারেন।';
 	@override String donate({required Object amount}) => 'দান ${amount}';
 	@override String get thanks => 'আপনাকে অনেক ধন্যবাদ!';
 	@override String get restore => 'ক্রয় পুনরুদ্ধার';
@@ -432,7 +432,7 @@ class _StringsTrayBn extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'LocalSend থেকে প্রস্থান করুন';
+	@override String get close => 'AloeChat.AI থেকে প্রস্থান করুন';
 }
 
 // Path: web
@@ -806,7 +806,7 @@ class _StringsDialogsLocalNetworkUnauthorizedBn extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'স্থানীয় নেটওয়ার্ক স্ক্যান করার অনুমতি ছাড়া LocalSend অন্য ডিভাইস খুঁজে পায় না। অনুগ্রহ করে সেটিংসে এই অনুমতি দিন.';
+	@override String get description => 'স্থানীয় নেটওয়ার্ক স্ক্যান করার অনুমতি ছাড়া AloeChat.AI অন্য ডিভাইস খুঁজে পায় না। অনুগ্রহ করে সেটিংসে এই অনুমতি দিন.';
 	@override String get gotoSettings => 'সেটিংস';
 }
 
@@ -900,7 +900,7 @@ class _StringsDialogsSendModeHelpBn extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'মোড পাঠান';
 	@override String get single => 'একজন প্রাপকের কাছে ফাইল পাঠায়। ফাইল স্থানান্তর সমাপ্ত হওয়ার পরে নির্বাচন পরিষ্কার করা হবে.';
 	@override String get multiple => 'একাধিক প্রাপককে ফাইল পাঠায়। নির্বাচন সাফ করা হবে না.';
-	@override String get link => 'যাদের কাছে LocalSend ইনস্টল নেই তারা তাদের ব্রাউজারে লিঙ্কটি খুলে নির্বাচিত ফাইলগুলি ডাউনলোড করতে পারেন৷';
+	@override String get link => 'যাদের কাছে AloeChat.AI ইনস্টল নেই তারা তাদের ব্রাউজারে লিঙ্কটি খুলে নির্বাচিত ফাইলগুলি ডাউনলোড করতে পারেন৷';
 }
 
 // Path: settingsTab.general.brightnessOptions

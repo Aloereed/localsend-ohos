@@ -27,7 +27,7 @@ class _StringsCa extends Translations {
 
 	// Translations
 	@override String get locale => 'Català';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralCa general = _StringsGeneralCa._(_root);
 	@override late final _StringsReceiveTabCa receiveTab = _StringsReceiveTabCa._(_root);
 	@override late final _StringsSendTabCa sendTab = _StringsSendTabCa._(_root);
@@ -217,7 +217,7 @@ class _StringsReceiveOptionsPageCa extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'Opcions';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(Carpeta LocalSend)';
+	@override String get appDirectory => '(Carpeta AloeChat.AI)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'S\'ha desactivat automàticament perquè hi ha carpetes.';
 }
@@ -265,7 +265,7 @@ class _StringsWebSharePageCa extends _StringsWebSharePageEn {
 	@override String get requests => 'Peticions';
 	@override String get noRequests => 'Encar ano hi ha peticions.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend utilitza un certificat auto-signat. Cal que l\'accepteu al navegador.';
+	@override String get encryptionHint => 'AloeChat.AI utilitza un certificat auto-signat. Cal que l\'accepteu al navegador.';
 	@override String pendingRequests({required Object n}) => 'Peticions pendents: ${n}';
 }
 
@@ -276,7 +276,7 @@ class _StringsAboutPageCa extends _StringsAboutPageEn {
 	@override final _StringsCa _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Sobre LocalSend';
+	@override String get title => 'Sobre AloeChat.AI';
 }
 
 // Path: changelogPage
@@ -403,7 +403,7 @@ class _StringsTrayCa extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'Sortir de LocalSend';
+	@override String get close => 'Sortir de AloeChat.AI';
 }
 
 // Path: web
@@ -712,7 +712,7 @@ class _StringsDialogsLocalNetworkUnauthorizedCa extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend no pot trobar altres dispositius sense tenir el permís per escanejar la xarxa local. Concediu aquest permís a la configuració.';
+	@override String get description => 'AloeChat.AI no pot trobar altres dispositius sense tenir el permís per escanejar la xarxa local. Concediu aquest permís a la configuració.';
 	@override String get gotoSettings => 'Configuració';
 }
 
@@ -806,7 +806,7 @@ class _StringsDialogsSendModeHelpCa extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Modes d\'enviament';
 	@override String get single => 'Enviar fitxers a un destinatari. La selecció s\'esborrarà un cop finalitzada la transferència de fitxers.';
 	@override String get multiple => 'Enviar fitxers a diversos destinataris. La selecció no s\'esborrarà.';
-	@override String get link => 'Els destinataris que no tinguin LocalSend instal·lat poden descarregar els fitxers seleccionats obrint l\'enllaç al seu navegador.';
+	@override String get link => 'Els destinataris que no tinguin AloeChat.AI instal·lat poden descarregar els fitxers seleccionats obrint l\'enllaç al seu navegador.';
 }
 
 // Path: settingsTab.general.brightnessOptions

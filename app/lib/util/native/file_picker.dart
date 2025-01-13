@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:common/common.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
+import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,7 @@ enum FilePickerOption {
         FilePickerOption.file,
         FilePickerOption.media,
         FilePickerOption.text,
-        FilePickerOption.clipboard,
+        // FilePickerOption.clipboard,
       ];
     } else {
       // Desktop
@@ -167,6 +168,17 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
               converter: CrossFileConverters.convertPlatformFile,
             ));
       }
+    }
+    if (checkPlatform([TargetPlatform.ohos])) {
+      final result = await file_picker_ohos.FilePicker.platform.pickFiles(allowMultiple: true);
+      if (result != null) {
+        await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddFilesAction(
+              files: result.files,
+              converter: CrossFileConverters.convertPlatformFileOhos,
+            ));
+      }
     } else {
       final result = await file_selector.openFiles();
       if (result.isNotEmpty) {
@@ -230,8 +242,7 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
 final ImagePicker _picker = ImagePicker();
 Future<void> _pickMedia(BuildContext context, Ref ref) async {
   if (checkPlatform([TargetPlatform.ohos])) {
-    final XFile? pickedFile =
-        await _picker.pickMedia();
+    final XFile? pickedFile = await _picker.pickMedia();
 
     if (pickedFile != null) {
       // 如果选择了图片，使用 CrossFileConverters 将选中的图片转换并添加到状态管理

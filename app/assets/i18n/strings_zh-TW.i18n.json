@@ -1,6 +1,6 @@
 {
   "locale": "繁體中文 – 台灣",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "接受",
     "accepted": "已接受",
@@ -130,7 +130,7 @@
     },
     "other": {
       "title": "其它",
-      "support": "支持LocalSend",
+      "support": "支持AloeChat.AI",
       "donate": "贊助",
       "privacyPolicy": "隱私權政策",
       "termsOfUse": "使用條款"
@@ -184,7 +184,7 @@
   "receiveOptionsPage": {
     "title": "選項",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend 資料夾)",
+    "appDirectory": "(AloeChat.AI 資料夾)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "因存在目錄而自動關閉。"
   },
@@ -222,13 +222,13 @@
     "noRequests": "目前沒有任何要求。",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "自動接受請求",
-    "encryptionHint": "LocalSend 使用自簽名憑證。您需要在瀏覽器中接受它。",
+    "encryptionHint": "AloeChat.AI 使用自簽名憑證。您需要在瀏覽器中接受它。",
     "pendingRequests": "待處理的要求：{n}"
   },
   "aboutPage": {
-    "title": "關於 LocalSend",
+    "title": "關於 AloeChat.AI",
     "description": [
-      "LocalSend 是一款免費的開源應用程式，可讓您透過區域網路與鄰近的裝置安全的共享檔案和訊息，無需網際網路連線。",
+      "AloeChat.AI 是一款免費的開源應用程式，可讓您透過區域網路與鄰近的裝置安全的共享檔案和訊息，無需網際網路連線。",
       "此應用程式可在 Android、iOS、macOS、Windows 和 Linux 上使用。 您可以在官網首頁上找到所有下載選項。"
     ],
     "author": "作者",
@@ -237,7 +237,7 @@
   },
   "donationPage": {
     "title": "贊助",
-    "info": "LocalSend 是免費、開源且沒有任何廣告的。如果您喜歡此應用程式，您可以透過捐贈來支持開發。",
+    "info": "AloeChat.AI 是免費、開源且沒有任何廣告的。如果您喜歡此應用程式，您可以透過捐贈來支持開發。",
     "donate": "贊助 {amount}",
     "thanks": "非常感謝您!",
     "restore": "回復購買"
@@ -309,7 +309,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "在未取得掃描區域網路權限的狀況下 LocalSend 無法找到其他裝置，請在設定中授予此權限。",
+      "description": "在未取得掃描區域網路權限的狀況下 AloeChat.AI 無法找到其他裝置，請在設定中授予此權限。",
       "gotoSettings": "設定"
     },
     "messageInput": {
@@ -347,13 +347,13 @@
       "title": "傳送模式",
       "single": "傳送檔案至單個接收者，選取項目將在檔案傳輸完成後被清除。",
       "multiple": "傳送檔案至多重接收者，選取項目將不會被清除。",
-      "link": "未安裝 LocalSend 的接收者可以透過在瀏覽器開啟連結以下載選取的檔案."
+      "link": "未安裝 AloeChat.AI 的接收者可以透過在瀏覽器開啟連結以下載選取的檔案."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "離開 LocalSend"
+    "close": "離開 AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

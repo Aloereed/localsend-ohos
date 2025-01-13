@@ -1,6 +1,6 @@
 {
   "locale": "日本語",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "承諾",
     "accepted": "承諾済み",
@@ -130,7 +130,7 @@
     },
     "other": {
       "title": "その他",
-      "support": "LocalSendを支援",
+      "support": "AloeChat.AIを支援",
       "donate": "寄付",
       "privacyPolicy": "プライバシーポリシー",
       "termsOfUse": "利用規約"
@@ -184,7 +184,7 @@
   "receiveOptionsPage": {
     "title": "オプション",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend フォルダー)",
+    "appDirectory": "(AloeChat.AI フォルダー)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "ディレクトリーがあるため自動で無効になっています。"
   },
@@ -222,13 +222,13 @@
     "noRequests": "リクエストはまだありません。",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "自動でリクエストを承諾する",
-    "encryptionHint": "LocalSendは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。",
+    "encryptionHint": "AloeChat.AIは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。",
     "pendingRequests": "保留中のリクエスト数: {n}"
   },
   "aboutPage": {
-    "title": "LocalSendについて",
+    "title": "AloeChat.AIについて",
     "description": [
-      "LocalSendは無料のオープンソースアプリで、インターネットに接続することなく、ローカルネットワーク経由で近くにあるデバイスとファイルやメッセージを安全に共有することができます。",
+      "AloeChat.AIは無料のオープンソースアプリで、インターネットに接続することなく、ローカルネットワーク経由で近くにあるデバイスとファイルやメッセージを安全に共有することができます。",
       "本アプリはAndroid、iOS、macOS、Windows、Linuxで利用でき、公式ホームページからダウンロードすることができます。"
     ],
     "author": "制作者",
@@ -237,7 +237,7 @@
   },
   "donationPage": {
     "title": "寄付",
-    "info": "LocalSendは無料かつオープンソースで、広告を一切含みません。もしアプリを気に入っていただけたら、寄付で開発を支援することができます。",
+    "info": "AloeChat.AIは無料かつオープンソースで、広告を一切含みません。もしアプリを気に入っていただけたら、寄付で開発を支援することができます。",
     "donate": "{amount} 寄付する",
     "thanks": "ありがとうございます！",
     "restore": "購入を復元する"
@@ -309,7 +309,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "ローカルネットワークをスキャンする権限がないと、LocalSendは他のデバイスを見つけることができません。設定よりこの権限を付与してください。",
+      "description": "ローカルネットワークをスキャンする権限がないと、AloeChat.AIは他のデバイスを見つけることができません。設定よりこの権限を付与してください。",
       "gotoSettings": "設定"
     },
     "messageInput": {
@@ -347,13 +347,13 @@
       "title": "送信モード",
       "single": "単一の受信者にファイルを送信します。ファイルの転送完了後、選択は解除されます。",
       "multiple": "複数の受信者にファイルを送信します。ファイルの選択は解除されません。",
-      "link": "LocalSendをインストールしていない受信者でも、ブラウザでリンクを開くことで選択したファイルをダウンロードできます。"
+      "link": "AloeChat.AIをインストールしていない受信者でも、ブラウザでリンクを開くことで選択したファイルをダウンロードできます。"
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "LocalSendを終了"
+    "close": "AloeChat.AIを終了"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

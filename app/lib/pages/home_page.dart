@@ -13,6 +13,10 @@ import 'package:localsend_app/theme.dart';
 import 'package:localsend_app/util/native/cross_file_converters.dart';
 import 'package:localsend_app/widget/responsive_builder.dart';
 import 'package:refena_flutter/refena_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'privacy_policy.dart';
 
 enum HomeTab {
   receive(Icons.wifi),
@@ -55,7 +59,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with Refena {
   late PageController _pageController;
   HomeTab _currentTab = HomeTab.receive;
-
+  bool _isPolicyAccepted = false;
   bool _dragAndDropIndicator = false;
 
   @override
@@ -69,6 +73,7 @@ class _HomePageState extends State<HomePage> with Refena {
       ref.redux(homeTabProvider).dispatch(SetHomeTabAction(widget.initialTab));
       await postInit(context, ref, widget.appStart, _goToPage);
     });
+    _checkPrivacyPolicyStatus();
   }
 
   void _goToPage(int index) {
@@ -78,6 +83,62 @@ class _HomePageState extends State<HomePage> with Refena {
       _currentTab = tab;
       _pageController.jumpToPage(_currentTab.index);
     });
+  }
+
+  Future<void> _checkPrivacyPolicyStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isAccepted = prefs.getBool('privacy_policy_accepted');
+
+    // 如果尚未接受隐私政策，显示对话框
+    if (isAccepted == null || !isAccepted) {
+      Future.delayed(Duration.zero, () {
+        _showPrivacyPolicyDialog();
+      });
+    } else {
+      setState(() {
+        _isPolicyAccepted = true;
+      });
+      // 创建实例
+      final _platform =
+          const MethodChannel('samples.flutter.dev/downloadplugin');
+// 调用方法 getBatteryLevel
+      final result =
+          await _platform.invokeMethod<String>('getDownloadPermission');
+    }
+  }
+
+  void _showPrivacyPolicyDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 禁止点击外部关闭对话框
+      builder: (BuildContext context) {
+        return PrivacyPolicyDialog(
+          onAccept: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('privacy_policy_accepted', true);
+            setState(() {
+              _isPolicyAccepted = true;
+            });
+            Navigator.of(context).pop(); // 关闭对话框
+            // 创建实例
+            final _platform =
+                const MethodChannel('samples.flutter.dev/downloadplugin');
+// 调用方法 getBatteryLevel
+            final result =
+                await _platform.invokeMethod<String>('getDownloadPermission');
+          },
+          onDecline: () {
+            // 用户拒绝，退出应用
+            Navigator.of(context).pop(); // 关闭对话框
+            Future.delayed(Duration(milliseconds: 200), () {
+              // 退出应用
+              // SystemNavigator.pop();
+              exit(0);
+            });
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -95,12 +156,17 @@ class _HomePageState extends State<HomePage> with Refena {
         });
       },
       onDragDone: (event) async {
-        if (event.files.length == 1 && Directory(event.files.first.path).existsSync()) {
+        if (event.files.length == 1 &&
+            Directory(event.files.first.path).existsSync()) {
           // user dropped a directory
-          await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddDirectoryAction(event.files.first.path));
+          await ref
+              .redux(selectedSendingFilesProvider)
+              .dispatchAsync(AddDirectoryAction(event.files.first.path));
         } else {
           // user dropped one or more files
-          await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
+          await ref
+              .redux(selectedSendingFilesProvider)
+              .dispatchAsync(AddFilesAction(
                 files: event.files,
                 converter: CrossFileConverters.convertXFile,
               ));
@@ -112,7 +178,7 @@ class _HomePageState extends State<HomePage> with Refena {
           return Scaffold(
             body: Row(
               children: [
-                if (!sizingInformation.isMobile)
+                if (false && !sizingInformation.isMobile)
                   NavigationRail(
                     selectedIndex: _currentTab.index,
                     onDestinationSelected: _goToPage,
@@ -123,8 +189,9 @@ class _HomePageState extends State<HomePage> with Refena {
                             children: [
                               SizedBox(height: 20),
                               Text(
-                                'LocalSend',
-                                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                                'AloeChatAI',
+                                style: TextStyle(
+                                    fontSize: 32, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(height: 20),
@@ -163,7 +230,9 @@ class _HomePageState extends State<HomePage> with Refena {
                               children: [
                                 const Icon(Icons.file_download, size: 128),
                                 const SizedBox(height: 30),
-                                Text(t.sendTab.placeItems, style: Theme.of(context).textTheme.titleLarge),
+                                Text(t.sendTab.placeItems,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge),
                               ],
                             ),
                           ),
@@ -173,12 +242,15 @@ class _HomePageState extends State<HomePage> with Refena {
                 ),
               ],
             ),
-            bottomNavigationBar: sizingInformation.isMobile
-                ? NavigationBar(
-                    selectedIndex: _currentTab.index,
-                    onDestinationSelected: _goToPage,
-                    destinations: HomeTab.values.map((tab) {
-                      return NavigationDestination(icon: Icon(tab.icon), label: tab.label);
+            bottomNavigationBar: true || sizingInformation.isMobile
+                ? BottomNavigationBar(
+                    currentIndex: _currentTab.index,
+                    onTap: _goToPage,
+                    items: HomeTab.values.map((tab) {
+                      return BottomNavigationBarItem(
+                        icon: Icon(tab.icon),
+                        label: tab.label,
+                      );
                     }).toList(),
                   )
                 : null,

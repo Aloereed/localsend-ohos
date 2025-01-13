@@ -27,7 +27,7 @@ class _StringsEu extends Translations {
 
 	// Translations
 	@override String get locale => 'Euskara';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralEu general = _StringsGeneralEu._(_root);
 	@override late final _StringsReceiveTabEu receiveTab = _StringsReceiveTabEu._(_root);
 	@override late final _StringsSendTabEu sendTab = _StringsSendTabEu._(_root);
@@ -267,7 +267,7 @@ class _StringsWebSharePageEu extends _StringsWebSharePageEn {
 	@override String get requests => 'Eskerak';
 	@override String get noRequests => 'Oraindik ez dago eskaerarik.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu';
+	@override String get encryptionHint => 'AloeChat.AI-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu';
 	@override String pendingRequests({required Object n}) => 'Eskerak: ${n}';
 }
 
@@ -278,7 +278,7 @@ class _StringsAboutPageEu extends _StringsAboutPageEn {
 	@override final _StringsEu _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'LocalSend buruz';
+	@override String get title => 'AloeChat.AI buruz';
 }
 
 // Path: changelogPage
@@ -337,7 +337,7 @@ class _StringsTrayEu extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'Itxi LocalSend';
+	@override String get close => 'Itxi AloeChat.AI';
 }
 
 // Path: web
@@ -685,7 +685,7 @@ class _StringsDialogsLocalNetworkUnauthorizedEu extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'Sare lokala eskaneatzeko baimenik gabe, LocalSend-ek ezin ditu inguruko gailuak aurkitu. Mesedez, onartu baimen hau ezarpenetan.';
+	@override String get description => 'Sare lokala eskaneatzeko baimenik gabe, AloeChat.AI-ek ezin ditu inguruko gailuak aurkitu. Mesedez, onartu baimen hau ezarpenetan.';
 	@override String get gotoSettings => 'Ezarpenak';
 }
 
@@ -779,7 +779,7 @@ class _StringsDialogsSendModeHelpEu extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Bidalketa moduak';
 	@override String get single => 'Bidali fitxategiak hartzaile bakar bati. Bidalketa bukatutakoan aukeraketa garbituko da.';
 	@override String get multiple => 'Bidali fitxategiak hartzaile anitzeri. Aukeraketa ez da garbituko.';
-	@override String get link => 'LocalSend instalatuta ez duten hartzaileak fitxategiak eskuratu ahali zango dituzte lotura nabigatzailean zabalduz.';
+	@override String get link => 'AloeChat.AI instalatuta ez duten hartzaileak fitxategiak eskuratu ahali zango dituzte lotura nabigatzailean zabalduz.';
 }
 
 // Path: settingsTab.general.brightnessOptions

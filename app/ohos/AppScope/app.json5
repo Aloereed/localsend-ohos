@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "org.localsend.localsend_app_ohos",
+    "bundleName": "com.aloereed.aloechatai",
     "vendor": "example",
     "versionCode": 48,
     "versionName": "1.14.2",

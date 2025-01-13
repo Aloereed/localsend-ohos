@@ -76,11 +76,11 @@ class SettingsTab extends StatelessWidget {
                     onChanged: vm.onChangeColorMode,
                   ),
                 ),
-                _ButtonEntry(
-                  label: t.settingsTab.general.language,
-                  buttonLabel: vm.settings.locale?.humanName ?? t.settingsTab.general.languageOptions.system,
-                  onTap: () => vm.onTapLanguage(context),
-                ),
+                // _ButtonEntry(
+                //   label: t.settingsTab.general.language,
+                //   buttonLabel: vm.settings.locale?.humanName ?? t.settingsTab.general.languageOptions.system,
+                //   onTap: () => vm.onTapLanguage(context),
+                // ),
                 if (checkPlatformIsDesktop()) ...[
                   /// Wayland does window position handling, so there's no need for it. See [https://github.com/localsend/localsend/issues/544]
                   if (vm.advanced && checkPlatformIsNotWaylandDesktop())
@@ -415,19 +415,19 @@ class SettingsTab extends StatelessWidget {
                     await context.push(() => const AboutPage());
                   },
                 ),
-                _ButtonEntry(
-                  label: t.settingsTab.other.support,
-                  buttonLabel: t.settingsTab.other.donate,
-                  onTap: () async {
-                    await context.push(() => const DonationPage());
-                  },
-                ),
+                // _ButtonEntry(
+                //   label: t.settingsTab.other.support,
+                //   buttonLabel: t.settingsTab.other.donate,
+                //   onTap: () async {
+                //     await context.push(() => const DonationPage());
+                //   },
+                // ),
                 _ButtonEntry(
                   label: t.settingsTab.other.privacyPolicy,
                   buttonLabel: t.general.open,
                   onTap: () async {
                     await launchUrl(
-                      Uri.parse('https://localsend.org/#/privacy'),
+                      Uri.parse('https://aloereed.com/aloechat/privacy-statement.html'),
                       mode: LaunchMode.externalApplication,
                     );
                   },
@@ -458,7 +458,7 @@ class SettingsTab extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            const LocalSendLogo(withText: true),
+            const AloeChatAILogo(withText: true),
             const SizedBox(height: 5),
             ref.watch(versionProvider).maybeWhen(
                   data: (version) => Text(
@@ -468,21 +468,25 @@ class SettingsTab extends StatelessWidget {
                   orElse: () => Container(),
                 ),
             Text(
-              '© ${DateTime.now().year} Tien Do Nam',
+              '© ${DateTime.now().year} 芦荟流转助手 AloeChat.AI',
               textAlign: TextAlign.center,
             ),
-            Center(
-              child: TextButton.icon(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.onSurface,
-                ),
-                onPressed: () async {
-                  await context.push(() => const ChangelogPage());
-                },
-                icon: const Icon(Icons.history),
-                label: Text(t.changelogPage.title),
-              ),
+            Text(
+              '基于LocalSend移植开发',
+              textAlign: TextAlign.center,
             ),
+            // Center(
+            //   child: TextButton.icon(
+            //     style: TextButton.styleFrom(
+            //       foregroundColor: Theme.of(context).colorScheme.onSurface,
+            //     ),
+            //     onPressed: () async {
+            //       await context.push(() => const ChangelogPage());
+            //     },
+            //     icon: const Icon(Icons.history),
+            //     label: Text(t.changelogPage.title),
+            //   ),
+            // ),
             const SizedBox(height: 80),
           ],
         );
@@ -647,7 +651,7 @@ extension on ColorMode {
   String get humanName {
     return switch (this) {
       ColorMode.system => t.settingsTab.general.colorOptions.system,
-      ColorMode.localsend => t.appName,
+      ColorMode.localsend => 'AloeChat.AI',
       ColorMode.oled => t.settingsTab.general.colorOptions.oled,
       ColorMode.yaru => 'Yaru',
     };

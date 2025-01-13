@@ -27,7 +27,7 @@ class _StringsCs extends Translations {
 
 	// Translations
 	@override String get locale => 'Česky';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralCs general = _StringsGeneralCs._(_root);
 	@override late final _StringsReceiveTabCs receiveTab = _StringsReceiveTabCs._(_root);
 	@override late final _StringsSendTabCs sendTab = _StringsSendTabCs._(_root);
@@ -221,7 +221,7 @@ class _StringsReceiveOptionsPageCs extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'Možnosti';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend folder)';
+	@override String get appDirectory => '(AloeChat.AI folder)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'Automaticky vypnuto, protože existují adresáře.';
 }
@@ -269,7 +269,7 @@ class _StringsWebSharePageCs extends _StringsWebSharePageEn {
 	@override String get requests => 'Žádosti';
 	@override String get noRequests => 'Zatím žádné žádosti.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči.';
+	@override String get encryptionHint => 'AloeChat.AI používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči.';
 	@override String pendingRequests({required Object n}) => 'Čekající žádosti: ${n}';
 }
 
@@ -280,9 +280,9 @@ class _StringsAboutPageCs extends _StringsAboutPageEn {
 	@override final _StringsCs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'O aplikaci LocalSend';
+	@override String get title => 'O aplikaci AloeChat.AI';
 	@override List<String> get description => [
-		'LocalSend je bezplatná aplikace s otevřeným zdrojovým kódem, která vám umožňuje bezpečně sdílet soubory a zprávy s okolními zařízeními přes vaši místní síť, aniž byste potřebovali připojení k internetu.',
+		'AloeChat.AI je bezplatná aplikace s otevřeným zdrojovým kódem, která vám umožňuje bezpečně sdílet soubory a zprávy s okolními zařízeními přes vaši místní síť, aniž byste potřebovali připojení k internetu.',
 		'Tato aplikace je dostupná pro Android, iOS, macOS, Windows a Linux. Všechny možnosti stahování najdete na oficiální domovské stránce.',
 	];
 	@override String get author => 'Autor';
@@ -298,7 +298,7 @@ class _StringsDonationPageCs extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Darovat';
-	@override String get info => 'LocalSend je zdarma, open source a bez reklam. Pokud se vám aplikace líbí, můžete její vývoj podpořit darem.';
+	@override String get info => 'AloeChat.AI je zdarma, open source a bez reklam. Pokud se vám aplikace líbí, můžete její vývoj podpořit darem.';
 	@override String donate({required Object amount}) => 'Darovat ${amount}';
 	@override String get thanks => 'Děkuji mnohokrát!';
 	@override String get restore => 'Obnovit';
@@ -361,7 +361,7 @@ class _StringsTrayCs extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'Ukončit LocalSend';
+	@override String get close => 'Ukončit AloeChat.AI';
 }
 
 // Path: web
@@ -531,7 +531,7 @@ class _StringsSettingsTabOtherCs extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Ostatní';
-	@override String get support => 'Podpora LocalSend';
+	@override String get support => 'Podpora AloeChat.AI';
 	@override String get donate => 'Darovat';
 	@override String get privacyPolicy => 'Zásady ochrany osobních údajů';
 	@override String get termsOfUse => 'Podmínky použití';
@@ -735,7 +735,7 @@ class _StringsDialogsLocalNetworkUnauthorizedCs extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend nemůže najít jiná zařízení, aniž by měl oprávnění skenovat místní síť. Udělte prosím toto oprávnění v nastavení.';
+	@override String get description => 'AloeChat.AI nemůže najít jiná zařízení, aniž by měl oprávnění skenovat místní síť. Udělte prosím toto oprávnění v nastavení.';
 	@override String get gotoSettings => 'Nastavení';
 }
 
@@ -829,7 +829,7 @@ class _StringsDialogsSendModeHelpCs extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Režimy odesílání';
 	@override String get single => 'Odešle soubory jednomu příjemci. Po dokončení přenosu souboru bude výběr vymazán.';
 	@override String get multiple => 'Odešle soubory více příjemcům. Výběr nebude vymazán.';
-	@override String get link => 'Příjemci, kteří nemají nainstalovaný LocalSend, si mohou vybrané soubory stáhnout otevřením odkazu ve svém prohlížeči.';
+	@override String get link => 'Příjemci, kteří nemají nainstalovaný AloeChat.AI, si mohou vybrané soubory stáhnout otevřením odkazu ve svém prohlížeči.';
 }
 
 // Path: settingsTab.general.brightnessOptions

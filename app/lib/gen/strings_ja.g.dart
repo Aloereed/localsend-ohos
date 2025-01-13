@@ -27,7 +27,7 @@ class _StringsJa extends Translations {
 
 	// Translations
 	@override String get locale => '日本語';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralJa general = _StringsGeneralJa._(_root);
 	@override late final _StringsReceiveTabJa receiveTab = _StringsReceiveTabJa._(_root);
 	@override late final _StringsSendTabJa sendTab = _StringsSendTabJa._(_root);
@@ -222,7 +222,7 @@ class _StringsReceiveOptionsPageJa extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'オプション';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend フォルダー)';
+	@override String get appDirectory => '(AloeChat.AI フォルダー)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'ディレクトリーがあるため自動で無効になっています。';
 }
@@ -271,7 +271,7 @@ class _StringsWebSharePageJa extends _StringsWebSharePageEn {
 	@override String get noRequests => 'リクエストはまだありません。';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
 	@override String get autoAccept => '自動でリクエストを承諾する';
-	@override String get encryptionHint => 'LocalSendは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。';
+	@override String get encryptionHint => 'AloeChat.AIは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。';
 	@override String pendingRequests({required Object n}) => '保留中のリクエスト数: ${n}';
 }
 
@@ -282,9 +282,9 @@ class _StringsAboutPageJa extends _StringsAboutPageEn {
 	@override final _StringsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'LocalSendについて';
+	@override String get title => 'AloeChat.AIについて';
 	@override List<String> get description => [
-		'LocalSendは無料のオープンソースアプリで、インターネットに接続することなく、ローカルネットワーク経由で近くにあるデバイスとファイルやメッセージを安全に共有することができます。',
+		'AloeChat.AIは無料のオープンソースアプリで、インターネットに接続することなく、ローカルネットワーク経由で近くにあるデバイスとファイルやメッセージを安全に共有することができます。',
 		'本アプリはAndroid、iOS、macOS、Windows、Linuxで利用でき、公式ホームページからダウンロードすることができます。',
 	];
 	@override String get author => '制作者';
@@ -300,7 +300,7 @@ class _StringsDonationPageJa extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => '寄付';
-	@override String get info => 'LocalSendは無料かつオープンソースで、広告を一切含みません。もしアプリを気に入っていただけたら、寄付で開発を支援することができます。';
+	@override String get info => 'AloeChat.AIは無料かつオープンソースで、広告を一切含みません。もしアプリを気に入っていただけたら、寄付で開発を支援することができます。';
 	@override String donate({required Object amount}) => '${amount} 寄付する';
 	@override String get thanks => 'ありがとうございます！';
 	@override String get restore => '購入を復元する';
@@ -363,7 +363,7 @@ class _StringsTrayJa extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'LocalSendを終了';
+	@override String get close => 'AloeChat.AIを終了';
 }
 
 // Path: web
@@ -544,7 +544,7 @@ class _StringsSettingsTabOtherJa extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'その他';
-	@override String get support => 'LocalSendを支援';
+	@override String get support => 'AloeChat.AIを支援';
 	@override String get donate => '寄付';
 	@override String get privacyPolicy => 'プライバシーポリシー';
 	@override String get termsOfUse => '利用規約';
@@ -748,7 +748,7 @@ class _StringsDialogsLocalNetworkUnauthorizedJa extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'ローカルネットワークをスキャンする権限がないと、LocalSendは他のデバイスを見つけることができません。設定よりこの権限を付与してください。';
+	@override String get description => 'ローカルネットワークをスキャンする権限がないと、AloeChat.AIは他のデバイスを見つけることができません。設定よりこの権限を付与してください。';
 	@override String get gotoSettings => '設定';
 }
 
@@ -842,7 +842,7 @@ class _StringsDialogsSendModeHelpJa extends _StringsDialogsSendModeHelpEn {
 	@override String get title => '送信モード';
 	@override String get single => '単一の受信者にファイルを送信します。ファイルの転送完了後、選択は解除されます。';
 	@override String get multiple => '複数の受信者にファイルを送信します。ファイルの選択は解除されません。';
-	@override String get link => 'LocalSendをインストールしていない受信者でも、ブラウザでリンクを開くことで選択したファイルをダウンロードできます。';
+	@override String get link => 'AloeChat.AIをインストールしていない受信者でも、ブラウザでリンクを開くことで選択したファイルをダウンロードできます。';
 }
 
 // Path: settingsTab.general.brightnessOptions

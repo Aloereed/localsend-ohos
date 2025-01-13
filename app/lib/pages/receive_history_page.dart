@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/persistence/receive_history_entry.dart';
 import 'package:localsend_app/provider/receive_history_provider.dart';
@@ -32,13 +33,17 @@ enum _EntryOption {
       case _EntryOption.delete:
         return t.receiveHistoryPage.entryActions.deleteFromHistory;
       case _EntryOption.deleteFile:
-        return t.receiveHistoryPage.entryActions.deleteFromHistory+"并删除缓存文件";
+        return t.receiveHistoryPage.entryActions.deleteFromHistory + "并删除缓存文件";
     }
   }
 }
 
 const _optionsAll = _EntryOption.values;
-final _optionsWithoutOpen = [_EntryOption.info, _EntryOption.delete, _EntryOption.deleteFile];
+final _optionsWithoutOpen = [
+  _EntryOption.info,
+  _EntryOption.delete,
+  _EntryOption.deleteFile
+];
 void deleteFile(String filePath) async {
   final file = File(filePath);
 
@@ -77,6 +82,7 @@ void deleteFile(String filePath) async {
     );
   }
 }
+
 class ReceiveHistoryPage extends StatelessWidget {
   const ReceiveHistoryPage({super.key});
 
@@ -90,7 +96,8 @@ class ReceiveHistoryPage extends StatelessWidget {
         context,
         entry.fileType,
         entry.path!,
-        onDeleteTap: () => dispatcher.dispatchAsync(RemoveHistoryEntryAction(entry.id)),
+        onDeleteTap: () =>
+            dispatcher.dispatchAsync(RemoveHistoryEntryAction(entry.id)),
       );
     }
   }
@@ -111,26 +118,58 @@ class ReceiveHistoryPage extends StatelessWidget {
             child: Row(
               children: [
                 const SizedBox(width: 15),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.secondaryContainerIfDark,
-                    foregroundColor: Theme.of(context).colorScheme.onSecondaryContainerIfDark,
-                  ),
-                  onPressed: checkPlatform([TargetPlatform.iOS])
-                      ? null
-                      : () async {
-                          // ignore: use_build_context_synchronously
-                          final destination = context.read(settingsProvider).destination ?? await getDefaultDestinationDirectory();
-                          await openFolder(destination);
-                        },
-                  icon: const Icon(Icons.folder),
-                  label: Text(t.receiveHistoryPage.openFolder),
-                ),
+                Visibility(
+                    visible: !checkPlatform([TargetPlatform.iOS]),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .secondaryContainerIfDark,
+                        foregroundColor: Theme.of(context)
+                            .colorScheme
+                            .onSecondaryContainerIfDark,
+                      ),
+                      onPressed: checkPlatform([TargetPlatform.iOS])
+                          ? null
+                          : () async {
+                              // ignore: use_build_context_synchronously
+                              final destination =
+                                  context.read(settingsProvider).destination ??
+                                      await getDefaultDestinationDirectory();
+
+                              if (destination ==
+                                  "/storage/Users/currentUser/Download/com.aloereed.aloechatai") {
+                                 Fluttertoast.showToast(
+                                  msg: "请自行打开“/下载/AloeChat.AI”。",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,);
+                                // 延时2秒
+                                await Future.delayed(Duration(seconds: 2));
+                                // 创建实例
+                                final _platform = const MethodChannel(
+                                    'samples.flutter.dev/downloadplugin');
+                                // 调用方法 getBatteryLevel
+                                final result =
+                                    await _platform.invokeMethod<String>(
+                                        'openFileManager');
+                              }
+                              await openFolder(destination);
+                            },
+                      icon: const Icon(Icons.folder),
+                      label: Text(t.receiveHistoryPage.openFolder),
+                    )),
                 const SizedBox(width: 20),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.secondaryContainerIfDark,
-                    foregroundColor: Theme.of(context).colorScheme.onSecondaryContainerIfDark,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.secondaryContainerIfDark,
+                    foregroundColor: Theme.of(context)
+                        .colorScheme
+                        .onSecondaryContainerIfDark,
                   ),
                   onPressed: entries.isEmpty
                       ? null
@@ -141,7 +180,9 @@ class ReceiveHistoryPage extends StatelessWidget {
                           );
 
                           if (context.mounted && result == true) {
-                            await context.redux(receiveHistoryProvider).dispatchAsync(RemoveAllHistoryEntriesAction());
+                            await context
+                                .redux(receiveHistoryProvider)
+                                .dispatchAsync(RemoveAllHistoryEntriesAction());
                           }
                         },
                   icon: const Icon(Icons.delete),
@@ -154,18 +195,24 @@ class ReceiveHistoryPage extends StatelessWidget {
           if (entries.isEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 100),
-              child: Center(child: Text(t.receiveHistoryPage.empty, style: Theme.of(context).textTheme.headlineMedium)),
+              child: Center(
+                  child: Text(t.receiveHistoryPage.empty,
+                      style: Theme.of(context).textTheme.headlineMedium)),
             )
           else
             ...entries.map((entry) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 child: InkWell(
                   splashColor: Colors.transparent,
                   splashFactory: NoSplash.splashFactory,
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
-                  onTap: entry.path != null ? () async => _openFile(context, entry, context.redux(receiveHistoryProvider)) : null,
+                  onTap: entry.path != null
+                      ? () async => _openFile(
+                          context, entry, context.redux(receiveHistoryProvider))
+                      : null,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -201,7 +248,8 @@ class ReceiveHistoryPage extends StatelessWidget {
                         onSelected: (_EntryOption item) async {
                           switch (item) {
                             case _EntryOption.open:
-                              await _openFile(context, entry, context.redux(receiveHistoryProvider));
+                              await _openFile(context, entry,
+                                  context.redux(receiveHistoryProvider));
                               break;
                             case _EntryOption.info:
                               // ignore: use_build_context_synchronously
@@ -212,17 +260,26 @@ class ReceiveHistoryPage extends StatelessWidget {
                               break;
                             case _EntryOption.delete:
                               // ignore: use_build_context_synchronously
-                              await context.redux(receiveHistoryProvider).dispatchAsync(RemoveHistoryEntryAction(entry.id));
+                              await context
+                                  .redux(receiveHistoryProvider)
+                                  .dispatchAsync(
+                                      RemoveHistoryEntryAction(entry.id));
                               break;
                             case _EntryOption.deleteFile:
                               // ignore: use_build_context_synchronously
                               deleteFile(entry.path!);
-                              await context.redux(receiveHistoryProvider).dispatchAsync(RemoveHistoryEntryAction(entry.id));
+                              await context
+                                  .redux(receiveHistoryProvider)
+                                  .dispatchAsync(
+                                      RemoveHistoryEntryAction(entry.id));
                               break;
                           }
                         },
                         itemBuilder: (BuildContext context) {
-                          return (entry.path != null ? _optionsAll : _optionsWithoutOpen).map((e) {
+                          return (entry.path != null
+                                  ? _optionsAll
+                                  : _optionsWithoutOpen)
+                              .map((e) {
                             return PopupMenuItem<_EntryOption>(
                               value: e,
                               child: Text(e.label),

@@ -1,6 +1,6 @@
 {
   "locale": "Euskara",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Onartu",
     "accepted": "Onartuta",
@@ -209,11 +209,11 @@
     "requests": "Eskerak",
     "noRequests": "Oraindik ez dago eskaerarik.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu",
+    "encryptionHint": "AloeChat.AI-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu",
     "pendingRequests": "Eskerak: {n}"
   },
   "aboutPage": {
-    "title": "LocalSend buruz"
+    "title": "AloeChat.AI buruz"
   },
   "changelogPage": {
     "title": "Aldaketak"
@@ -278,7 +278,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "Sare lokala eskaneatzeko baimenik gabe, LocalSend-ek ezin ditu inguruko gailuak aurkitu. Mesedez, onartu baimen hau ezarpenetan.",
+      "description": "Sare lokala eskaneatzeko baimenik gabe, AloeChat.AI-ek ezin ditu inguruko gailuak aurkitu. Mesedez, onartu baimen hau ezarpenetan.",
       "gotoSettings": "Ezarpenak"
     },
     "messageInput": {
@@ -316,13 +316,13 @@
       "title": "Bidalketa moduak",
       "single": "Bidali fitxategiak hartzaile bakar bati. Bidalketa bukatutakoan aukeraketa garbituko da.",
       "multiple": "Bidali fitxategiak hartzaile anitzeri. Aukeraketa ez da garbituko.",
-      "link": "LocalSend instalatuta ez duten hartzaileak fitxategiak eskuratu ahali zango dituzte lotura nabigatzailean zabalduz."
+      "link": "AloeChat.AI instalatuta ez duten hartzaileak fitxategiak eskuratu ahali zango dituzte lotura nabigatzailean zabalduz."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "Itxi LocalSend"
+    "close": "Itxi AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

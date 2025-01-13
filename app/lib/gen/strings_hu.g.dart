@@ -27,7 +27,7 @@ class _StringsHu extends Translations {
 
 	// Translations
 	@override String get locale => 'Magyar';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralHu general = _StringsGeneralHu._(_root);
 	@override late final _StringsReceiveTabHu receiveTab = _StringsReceiveTabHu._(_root);
 	@override late final _StringsSendTabHu sendTab = _StringsSendTabHu._(_root);
@@ -222,7 +222,7 @@ class _StringsReceiveOptionsPageHu extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'Opciók';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend mappa)';
+	@override String get appDirectory => '(AloeChat.AI mappa)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'Automatikusan kikapcsol, mert vannak könyvtárak.';
 }
@@ -271,7 +271,7 @@ class _StringsWebSharePageHu extends _StringsWebSharePageEn {
 	@override String get noRequests => 'Még nincsenek kérések.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
 	@override String get autoAccept => 'Kérések automatikus elfogadása';
-	@override String get encryptionHint => 'A LocalSend a saját aláírt tanúsítványt használja. A böngészőben kell elfogadnod.';
+	@override String get encryptionHint => 'A AloeChat.AI a saját aláírt tanúsítványt használja. A böngészőben kell elfogadnod.';
 	@override String pendingRequests({required Object n}) => 'Függőben lévő kérések: ${n}';
 }
 
@@ -282,9 +282,9 @@ class _StringsAboutPageHu extends _StringsAboutPageEn {
 	@override final _StringsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'A LocalSend';
+	@override String get title => 'A AloeChat.AI';
 	@override List<String> get description => [
-		'A LocalSend egy ingyenes, nyílt forráskódú alkalmazás, amely lehetővé teszi a fájlok és üzenetek biztonságos megosztását a közeli eszközökkel a helyi hálózaton keresztül, internet kapcsolat nélkül.',
+		'A AloeChat.AI egy ingyenes, nyílt forráskódú alkalmazás, amely lehetővé teszi a fájlok és üzenetek biztonságos megosztását a közeli eszközökkel a helyi hálózaton keresztül, internet kapcsolat nélkül.',
 		'Ez az alkalmazás Android, iOS, macOS, Windows és Linux rendszereken érhető el. Az összes letöltési lehetőséget megtalálja a hivatalos honlapon.',
 	];
 	@override String get author => 'Szerző';
@@ -300,7 +300,7 @@ class _StringsDonationPageHu extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Adomány';
-	@override String get info => 'A LocalSend ingyenes, nyílt forráskódú és hirdetések nélküli. Ha megtetszett az alkalmazás, adományával támogathatja a fejlesztést.';
+	@override String get info => 'A AloeChat.AI ingyenes, nyílt forráskódú és hirdetések nélküli. Ha megtetszett az alkalmazás, adományával támogathatja a fejlesztést.';
 	@override String donate({required Object amount}) => 'Adomány ${amount}';
 	@override String get thanks => 'Köszönöm szépen!';
 	@override String get restore => 'Vásárlás visszaállítása';
@@ -544,7 +544,7 @@ class _StringsSettingsTabOtherHu extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Egyéb';
-	@override String get support => 'LocalSend támogatás';
+	@override String get support => 'AloeChat.AI támogatás';
 	@override String get donate => 'Adomány';
 	@override String get privacyPolicy => 'Adatvédelmi irányelvek';
 	@override String get termsOfUse => 'Használati feltételek';
@@ -748,7 +748,7 @@ class _StringsDialogsLocalNetworkUnauthorizedHu extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'A LocalSend nem találhat más eszközöket a helyi hálózat vizsgálatára vonatkozó engedély nélkül. Adja meg ezt az engedélyt a beállításokban.';
+	@override String get description => 'A AloeChat.AI nem találhat más eszközöket a helyi hálózat vizsgálatára vonatkozó engedély nélkül. Adja meg ezt az engedélyt a beállításokban.';
 	@override String get gotoSettings => 'Beállítások';
 }
 
@@ -842,7 +842,7 @@ class _StringsDialogsSendModeHelpHu extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Küldési módok';
 	@override String get single => 'Fájlokat küld egy címzettnek. Az átvitel befejezése után a kijelölés törlődik.';
 	@override String get multiple => 'Fájlokat küld több címzettnek. A kijelölés nem törlődik.';
-	@override String get link => 'Azok a címzettek, akiknél nincs telepítve a LocalSend, letölthetik a kiválasztott fájlokat a hivatkozás megnyitásával a böngészőjükben.';
+	@override String get link => 'Azok a címzettek, akiknél nincs telepítve a AloeChat.AI, letölthetik a kiválasztott fájlokat a hivatkozás megnyitásával a böngészőjükben.';
 }
 
 // Path: settingsTab.general.brightnessOptions

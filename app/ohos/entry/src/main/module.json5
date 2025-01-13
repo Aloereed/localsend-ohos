@@ -18,7 +18,7 @@
     type: "entry",
     description: "$string:module_desc",
     mainElement: "EntryAbility",
-    deviceTypes: ["phone"],
+    deviceTypes: ["phone","tablet"],
     deliveryWithInstall: true,
     installationFree: false,
     pages: "$profile:main_pages",
@@ -42,17 +42,17 @@
       },
     ],
     requestPermissions: [
-      { name: "ohos.permission.INTERNET" },
+      // { name: "ohos.permission.INTERNET" },
       {
         name: "ohos.permission.GET_WIFI_INFO",
       },
-      {
-        name:"ohos.permission.READ_PASTEBOARD",
-        "reason": "$string:pasteboard_reason",
-        "usedScene": {
-          "when":"inuse"
-        }
-      }
+      // {
+      //   name:"ohos.permission.READ_PASTEBOARD",
+      //   "reason": "$string:pasteboard_reason",
+      //   "usedScene": {
+      //     "when":"inuse"
+      //   }
+      // }
     ],
   },
 }

@@ -1,6 +1,6 @@
 {
   "locale": "فارسی",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "پذیرفتن",
     "accepted": "پذیرفته شده",
@@ -222,7 +222,7 @@
     "noRequests": "هنوز درخواستی وجود ندارد",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "درخواست ها به طور خودکار پذیرفته میشوند",
-    "encryptionHint": "LocalSend از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید.",
+    "encryptionHint": "AloeChat.AI از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید.",
     "pendingRequests": "درخواست های در حال انتظار: {n}"
   },
   "aboutPage": {

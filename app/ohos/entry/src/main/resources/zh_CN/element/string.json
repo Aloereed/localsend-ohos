@@ -10,7 +10,7 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "LocalSend 局域网文件发送"
+      "value": "芦荟流转助手（AloeChat.AI）"
     },
     {
       "name": "read_imagevideo_reason",
@@ -18,7 +18,7 @@
     },
     {
       "name": "pasteboard_reason",
-      "value": "LocalSend申请访问你的剪贴板。"
+      "value": "AloeChat.AI申请访问你的剪贴板。"
     }
   ]
 }

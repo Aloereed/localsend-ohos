@@ -27,7 +27,7 @@ class _StringsDe extends Translations {
 
 	// Translations
 	@override String get locale => 'Deutsch';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralDe general = _StringsGeneralDe._(_root);
 	@override late final _StringsReceiveTabDe receiveTab = _StringsReceiveTabDe._(_root);
 	@override late final _StringsSendTabDe sendTab = _StringsSendTabDe._(_root);
@@ -222,7 +222,7 @@ class _StringsReceiveOptionsPageDe extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'Optionen';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend-Ordner)';
+	@override String get appDirectory => '(AloeChat.AI-Ordner)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'Aufgrund von Ordnern automatisch ausgeschaltet.';
 }
@@ -271,7 +271,7 @@ class _StringsWebSharePageDe extends _StringsWebSharePageEn {
 	@override String get noRequests => 'Bisher keine Anfragen erhalten.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
 	@override String get autoAccept => 'Anfragen automatisch aktzeptieren';
-	@override String get encryptionHint => 'LocalSend verwendet ein selbstsigniertes Zertifikat. Sie müssen es im Browser akzeptieren.';
+	@override String get encryptionHint => 'AloeChat.AI verwendet ein selbstsigniertes Zertifikat. Sie müssen es im Browser akzeptieren.';
 	@override String pendingRequests({required Object n}) => 'Offene Anfragen: ${n}';
 }
 
@@ -282,9 +282,9 @@ class _StringsAboutPageDe extends _StringsAboutPageEn {
 	@override final _StringsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Über LocalSend';
+	@override String get title => 'Über AloeChat.AI';
 	@override List<String> get description => [
-		'LocalSend ist eine kostenlose Open-Source-App, mit der du Dateien und Nachrichten sicher über dein lokales Netzwerk mit Geräten in der Nähe teilen kannst, ohne dass eine Internetverbindung erforderlich ist.',
+		'AloeChat.AI ist eine kostenlose Open-Source-App, mit der du Dateien und Nachrichten sicher über dein lokales Netzwerk mit Geräten in der Nähe teilen kannst, ohne dass eine Internetverbindung erforderlich ist.',
 		'Diese App ist für Android, iOS, macOS, Windows und Linux verfügbar. Alle Downloadmöglichkeiten findest du auf der offiziellen Homepage.',
 	];
 	@override String get author => 'Autor';
@@ -300,7 +300,7 @@ class _StringsDonationPageDe extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Spenden';
-	@override String get info => 'LocalSend ist kostenlos, open-source und frei von Werbung. Wenn dir diese App gefällt, kannst du die Entwicklung mit einer Spende unterstützen.';
+	@override String get info => 'AloeChat.AI ist kostenlos, open-source und frei von Werbung. Wenn dir diese App gefällt, kannst du die Entwicklung mit einer Spende unterstützen.';
 	@override String donate({required Object amount}) => 'Spende ${amount}';
 	@override String get thanks => 'Vielen Dank für deine Unterstützung!';
 	@override String get restore => 'Käufe Wiederherstellen';
@@ -363,7 +363,7 @@ class _StringsTrayDe extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'LocalSend beenden';
+	@override String get close => 'AloeChat.AI beenden';
 }
 
 // Path: web
@@ -544,7 +544,7 @@ class _StringsSettingsTabOtherDe extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Weitere';
-	@override String get support => 'LocalSend unterstützen';
+	@override String get support => 'AloeChat.AI unterstützen';
 	@override String get donate => 'Spenden';
 	@override String get privacyPolicy => 'Datenschutzerklärung';
 	@override String get termsOfUse => 'Nutzungsbedingungen';
@@ -748,7 +748,7 @@ class _StringsDialogsLocalNetworkUnauthorizedDe extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend kann nicht auf das lokale Netzwerk zugreifen. Bitte erlaube LocalSend den Zugriff auf das lokale Netzwerk in den Einstellungen.';
+	@override String get description => 'AloeChat.AI kann nicht auf das lokale Netzwerk zugreifen. Bitte erlaube AloeChat.AI den Zugriff auf das lokale Netzwerk in den Einstellungen.';
 	@override String get gotoSettings => 'Einstellungen';
 }
 
@@ -842,7 +842,7 @@ class _StringsDialogsSendModeHelpDe extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Sendemodus';
 	@override String get single => 'Sende Dateien an einen Empfänger. Die Auswahl wird nach Abschluss der Dateiübertragung gelöscht.';
 	@override String get multiple => 'Sende Dateien an mehrere Empfänger. Die Auswahl bleibt erhalten.';
-	@override String get link => 'Empfänger, die LocalSend nicht installiert haben, können die ausgewählten Dateien herunterladen, in dem sie den Link im Browser öffnen.';
+	@override String get link => 'Empfänger, die AloeChat.AI nicht installiert haben, können die ausgewählten Dateien herunterladen, in dem sie den Link im Browser öffnen.';
 }
 
 // Path: settingsTab.general.brightnessOptions

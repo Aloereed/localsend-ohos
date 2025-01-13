@@ -411,6 +411,13 @@ packages:
       url: "https://gitee.com/openharmony-sig/fluttertpc_file_picker.git"
     source: git
     version: "8.0.6"
+  file_picker_ohos:
+    dependency: "direct overridden"
+    description:
+      path: "fluttertpc_file_picker/ohos"
+      relative: true
+    source: path
+    version: "1.0.1"
   file_selector:
     dependency: "direct overridden"
     description:
@@ -751,12 +758,11 @@ packages:
   in_app_purchase:
     dependency: "direct overridden"
     description:
-      path: "packages/in_app_purchase/in_app_purchase"
-      ref: HEAD
-      resolved-ref: b324d05272791f251cce341c9a1cce2fa17a2c70
-      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
-    source: git
-    version: "3.1.11"
+      name: in_app_purchase
+      sha256: "960f26a08d9351fb8f89f08901f8a829d41b04d45a694b8f776121d9e41dcad6"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.0"
   in_app_purchase_android:
     dependency: transitive
     description:
@@ -765,15 +771,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.6+7"
-  in_app_purchase_ohos:
-    dependency: transitive
-    description:
-      path: "packages\\in_app_purchase\\in_app_purchase_ohos"
-      ref: HEAD
-      resolved-ref: "6bab8b570e33707c0bf0f4f513009327593dca74"
-      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
-    source: git
-    version: "0.1.0"
   in_app_purchase_platform_interface:
     dependency: transitive
     description:
@@ -1842,6 +1839,51 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.1"
+  webview_flutter:
+    dependency: "direct overridden"
+    description:
+      path: "packages/webview_flutter/webview_flutter"
+      ref: HEAD
+      resolved-ref: "9dd6909619e1232f9b7efa1ba63f98f4f45f8acb"
+      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
+    source: git
+    version: "4.6.0"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      path: "packages/webview_flutter/webview_flutter_android"
+      ref: HEAD
+      resolved-ref: "9dd6909619e1232f9b7efa1ba63f98f4f45f8acb"
+      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
+    source: git
+    version: "3.15.0"
+  webview_flutter_ohos:
+    dependency: transitive
+    description:
+      path: "packages/webview_flutter/webview_flutter_ohos"
+      ref: HEAD
+      resolved-ref: "9dd6909619e1232f9b7efa1ba63f98f4f45f8acb"
+      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
+    source: git
+    version: "3.15.0"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      path: "packages/webview_flutter/webview_flutter_platform_interface"
+      ref: HEAD
+      resolved-ref: "9dd6909619e1232f9b7efa1ba63f98f4f45f8acb"
+      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
+    source: git
+    version: "2.10.0"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      path: "packages/webview_flutter/webview_flutter_wkwebview"
+      ref: HEAD
+      resolved-ref: "9dd6909619e1232f9b7efa1ba63f98f4f45f8acb"
+      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
+    source: git
+    version: "3.12.0"
   wechat_assets_picker:
     dependency: "direct main"
     description:

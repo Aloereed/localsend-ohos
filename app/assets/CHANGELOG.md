@@ -91,11 +91,11 @@
 ## 1.9.0 (2023-04-23)
 
 - feat: directory share
-- feat: share via browser link (for non-LocalSend users)
+- feat: share via browser link (for non-AloeChatAI users)
 - feat: add "delete from history" button when file could not be opened (by @TheGB0077)
 - feat: close message request when copied / opened link
 - feat: slightly improve transfer speed
-- feat: implement LocalSend protocol v2 with v1 fallback
+- feat: implement AloeChatAI protocol v2 with v1 fallback
 - feat: scan (sync) button automatically scans all network interfaces when count < 3
 - feat(android, ios): add "Save to gallery" setting button in file receive options
 - feat(desktop): move troubleshoot out of navigation into send page

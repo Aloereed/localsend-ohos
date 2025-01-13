@@ -27,7 +27,7 @@ class _StringsZhCn extends Translations {
 
 	// Translations
 	@override String get locale => '简体中文';
-	@override String get appName => 'LocalSend';
+	@override String get appName => '芦荟流转助手 AloeChat.AI';
 	@override late final _StringsGeneralZhCn general = _StringsGeneralZhCn._(_root);
 	@override late final _StringsReceiveTabZhCn receiveTab = _StringsReceiveTabZhCn._(_root);
 	@override late final _StringsSendTabZhCn sendTab = _StringsSendTabZhCn._(_root);
@@ -125,7 +125,7 @@ class _StringsSendTabZhCn extends _StringsSendTabEn {
 	@override String get sendMode => '发送模式';
 	@override late final _StringsSendTabSendModesZhCn sendModes = _StringsSendTabSendModesZhCn._(_root);
 	@override String get sendModeHelp => '解释';
-	@override String get help => '请确保目标连接的是同一个 Wi‑Fi 网络';
+	@override String get help => '请确保目标连接的是同一个 WLAN 网络';
 	@override String get placeItems => '列出要分享的文件';
 }
 
@@ -222,7 +222,7 @@ class _StringsReceiveOptionsPageZhCn extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => '设置';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend 文件夹)';
+	@override String get appDirectory => '(AloeChat.AI 文件夹)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => '由于存在目录，已自动关闭。';
 }
@@ -271,7 +271,7 @@ class _StringsWebSharePageZhCn extends _StringsWebSharePageEn {
 	@override String get noRequests => '尚无请求。';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
 	@override String get autoAccept => '自动接受请求';
-	@override String get encryptionHint => 'LocalSend 使用自签名证书,您需要在浏览器中接受它';
+	@override String get encryptionHint => 'AloeChat.AI 使用自签名证书,您需要在浏览器中接受它';
 	@override String pendingRequests({required Object n}) => '待处理请求: ${n}';
 }
 
@@ -282,14 +282,94 @@ class _StringsAboutPageZhCn extends _StringsAboutPageEn {
 	@override final _StringsZhCn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '关于 LocalSend';
+	@override String get title => '关于 AloeChat.AI 芦荟流转助手';
 	@override List<String> get description => [
-		'LocalSend 是一款免费的开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
-		'本程序可在 Android、iOS、macOS、Windows 和 Linux 上使用。您可以在官方主页找到所有下载选项。',
+		'AloeChat.AI 芦荟流转助手是一款基于LocalSend的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
+		'本程序可在 鸿蒙Next上使用，并且与Android、iOS、macOS、Windows 和 Linux 上的LocalSend交互。您可以在官方主页找到所有下载选项。',
 	];
 	@override String get author => '作者';
 	@override String get contributors => '贡献者';
 	@override String get translators => '翻译者';
+}
+
+// 路径: aliasGenerator
+class _StringsAliasGeneratorZhCn extends _StringsAliasGeneratorEn {
+	_StringsAliasGeneratorZhCn._(_StringsZhCn root) : this._root = root, super._(root);
+
+	@override final _StringsZhCn _root; // 忽略: unused_field
+
+	// 翻译
+	@override List<String> get adjectives => [
+		'可爱',
+		'美丽',
+		'大',
+		'明亮',
+		'干净',
+		'聪明',
+		'酷',
+		'可爱',
+		'狡猾',
+		'坚定',
+		'有活力',
+		'高效',
+		'棒',
+		'快',
+		'很好',
+		'新鲜',
+		'好',
+		'华丽',
+		'伟大',
+		'英俊',
+		'热',
+		'善良',
+		'可爱',
+		'神秘',
+		'整洁',
+		'好',
+		'耐心',
+		'漂亮',
+		'强大',
+		'富有',
+		'秘密',
+		'聪明',
+		'结实',
+		'特别',
+		'有策略',
+		'强壮',
+		'整齐',
+		'聪慧',
+	];
+	@override List<String> get fruits => [
+		'苹果',
+		'牛油果',
+		'香蕉',
+		'黑莓',
+		'蓝莓',
+		'西兰花',
+		'胡萝卜',
+		'樱桃',
+		'椰子',
+		'葡萄',
+		'柠檬',
+		'生菜',
+		'芒果',
+		'瓜',
+		'蘑菇',
+		'洋葱',
+		'橙子',
+		'木瓜',
+		'桃子',
+		'梨',
+		'菠萝',
+		'土豆',
+		'南瓜',
+		'覆盆子',
+		'草莓',
+		'西红柿',
+	];
+
+	/// 在某些语言中，形容词必须放在最后。
+	@override String combination({required Object adjective, required Object fruit}) => '${adjective}的${fruit}';
 }
 
 // Path: donationPage
@@ -300,7 +380,7 @@ class _StringsDonationPageZhCn extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => '捐赠';
-	@override String get info => 'LocalSend 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。';
+	@override String get info => 'AloeChat.AI 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。';
 	@override String donate({required Object amount}) => '捐款 ${amount}';
 	@override String get thanks => '非常感谢您的支持！';
 	@override String get restore => '恢复';
@@ -317,13 +397,13 @@ class _StringsChangelogPageZhCn extends _StringsChangelogPageEn {
 }
 
 // Path: aliasGenerator
-class _StringsAliasGeneratorZhCn extends _StringsAliasGeneratorEn {
-	_StringsAliasGeneratorZhCn._(_StringsZhCn root) : this._root = root, super._(root);
+// class _StringsAliasGeneratorZhCn extends _StringsAliasGeneratorEn {
+// 	_StringsAliasGeneratorZhCn._(_StringsZhCn root) : this._root = root, super._(root);
 
-	@override final _StringsZhCn _root; // ignore: unused_field
+// 	@override final _StringsZhCn _root; // ignore: unused_field
 
-	// Translations
-}
+// 	// Translations
+// }
 
 // Path: dialogs
 class _StringsDialogsZhCn extends _StringsDialogsEn {
@@ -363,7 +443,7 @@ class _StringsTrayZhCn extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => '退出 LocalSend';
+	@override String get close => '退出 AloeChat.AI';
 }
 
 // Path: web
@@ -544,7 +624,7 @@ class _StringsSettingsTabOtherZhCn extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => '其他';
-	@override String get support => '支持 LocalSend';
+	@override String get support => '支持 AloeChat.AI';
 	@override String get donate => '捐赠';
 	@override String get privacyPolicy => '隐私政策';
 	@override String get termsOfUse => '使用条款';
@@ -748,7 +828,7 @@ class _StringsDialogsLocalNetworkUnauthorizedZhCn extends _StringsDialogsLocalNe
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。';
+	@override String get description => 'AloeChat.AI 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。';
 	@override String get gotoSettings => '设置';
 }
 
@@ -842,7 +922,7 @@ class _StringsDialogsSendModeHelpZhCn extends _StringsDialogsSendModeHelpEn {
 	@override String get title => '发送模式';
 	@override String get single => '发送文件给一个接收者。已选择的文件在发送后会取消选择。';
 	@override String get multiple => '发送文件给多个接收者。已选择的文件在发送后不会取消选择。';
-	@override String get link => '未安装 LocalSend 的接收者可以在浏览器中打开链接以下载选中的文件。';
+	@override String get link => '未安装 AloeChat.AI 的接收者可以在浏览器中打开链接以下载选中的文件。';
 }
 
 // Path: settingsTab.general.brightnessOptions

@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storePassword": "0000001C08E26D06220AF3A9CF47F3DE0B89917894438F621964003D02CF61313E0144818D91C5910AB09B5A",
+          "certpath": "C:/Users/huzheng/Downloads/aloechatai.cer",
+          "keyAlias": "aloechatai",
+          "keyPassword": "0000001CF8994148129A3DCBA428CE56006D3CF51F6D837D2E421D1FE1D3E0BF5D712D8F5E8F007DB3DEEEE3",
+          "profile": "C:/Users/huzheng/Downloads/aloechataiRelease.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:/Users/huzheng/aloechatai.p12"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
