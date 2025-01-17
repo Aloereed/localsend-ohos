@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> with Refena {
       ref.redux(homeTabProvider).dispatch(SetHomeTabAction(widget.initialTab));
       await postInit(context, ref, widget.appStart, _goToPage);
     });
-    _checkPrivacyPolicyStatus();
+    // _checkPrivacyPolicyStatus();
   }
 
   void _goToPage(int index) {
@@ -85,61 +85,7 @@ class _HomePageState extends State<HomePage> with Refena {
     });
   }
 
-  Future<void> _checkPrivacyPolicyStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? isAccepted = prefs.getBool('privacy_policy_accepted');
-
-    // 如果尚未接受隐私政策，显示对话框
-    if (isAccepted == null || !isAccepted) {
-      Future.delayed(Duration.zero, () {
-        _showPrivacyPolicyDialog();
-      });
-    } else {
-      setState(() {
-        _isPolicyAccepted = true;
-      });
-      // 创建实例
-      final _platform =
-          const MethodChannel('samples.flutter.dev/downloadplugin');
-// 调用方法 getBatteryLevel
-      final result =
-          await _platform.invokeMethod<String>('getDownloadPermission');
-    }
-  }
-
-  void _showPrivacyPolicyDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // 禁止点击外部关闭对话框
-      builder: (BuildContext context) {
-        return PrivacyPolicyDialog(
-          onAccept: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setBool('privacy_policy_accepted', true);
-            setState(() {
-              _isPolicyAccepted = true;
-            });
-            Navigator.of(context).pop(); // 关闭对话框
-            // 创建实例
-            final _platform =
-                const MethodChannel('samples.flutter.dev/downloadplugin');
-// 调用方法 getBatteryLevel
-            final result =
-                await _platform.invokeMethod<String>('getDownloadPermission');
-          },
-          onDecline: () {
-            // 用户拒绝，退出应用
-            Navigator.of(context).pop(); // 关闭对话框
-            Future.delayed(Duration(milliseconds: 200), () {
-              // 退出应用
-              // SystemNavigator.pop();
-              exit(0);
-            });
-          },
-        );
-      },
-    );
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
