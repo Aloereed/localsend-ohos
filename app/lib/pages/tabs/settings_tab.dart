@@ -468,7 +468,7 @@ class SettingsTab extends StatelessWidget {
                   orElse: () => Container(),
                 ),
             Text(
-              '© ${DateTime.now().year} 芦荟流转助手 AloeChat.AI',
+              '© ${DateTime.now().year} AloeChat.AI',
               textAlign: TextAlign.center,
             ),
             Text(

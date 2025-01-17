@@ -1,6 +1,6 @@
 {
   "locale": "简体中文",
-  "appName": "AloeChat.AI 芦荟流转助手",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "接受",
     "accepted": "已接受",
@@ -130,7 +130,7 @@
     },
     "other": {
       "title": "其他",
-      "support": "支持 AloeChat.AI 芦荟流转助手",
+      "support": "支持 AloeChat.AI",
       "donate": "捐赠",
       "privacyPolicy": "隐私政策",
       "termsOfUse": "使用条款"
@@ -184,7 +184,7 @@
   "receiveOptionsPage": {
     "title": "设置",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(AloeChat.AI 芦荟流转助手 文件夹)",
+    "appDirectory": "(AloeChat.AI 文件夹)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "由于存在目录，已自动关闭。"
   },
@@ -222,13 +222,13 @@
     "noRequests": "尚无请求。",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "自动接受请求",
-    "encryptionHint": "AloeChat.AI 芦荟流转助手 使用自签名证书,您需要在浏览器中接受它",
+    "encryptionHint": "AloeChat.AI 使用自签名证书,您需要在浏览器中接受它",
     "pendingRequests": "待处理请求: {n}"
   },
   "aboutPage": {
-    "title": "关于 AloeChat.AI 芦荟流转助手",
+    "title": "关于 AloeChat.AI",
     "description": [
-      "AloeChat.AI 芦荟流转助手 是一款免费的开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。",
+      "AloeChat.AI 是一款免费的开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。",
       "本程序可在 Android、iOS、macOS、Windows 和 Linux 上使用。您可以在官方主页找到所有下载选项。"
     ],
     "author": "作者",
@@ -237,7 +237,7 @@
   },
   "donationPage": {
     "title": "捐赠",
-    "info": "AloeChat.AI 芦荟流转助手 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。",
+    "info": "AloeChat.AI 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。",
     "donate": "捐款 {amount}",
     "thanks": "非常感谢您的支持！",
     "restore": "恢复"
@@ -309,7 +309,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "AloeChat.AI 芦荟流转助手 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。",
+      "description": "AloeChat.AI 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。",
       "gotoSettings": "设置"
     },
     "messageInput": {
@@ -347,13 +347,13 @@
       "title": "发送模式",
       "single": "发送文件给一个接收者。已选择的文件在发送后会取消选择。",
       "multiple": "发送文件给多个接收者。已选择的文件在发送后不会取消选择。",
-      "link": "未安装 AloeChat.AI 芦荟流转助手 的接收者可以在浏览器中打开链接以下载选中的文件。"
+      "link": "未安装 AloeChat.AI 的接收者可以在浏览器中打开链接以下载选中的文件。"
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "退出 AloeChat.AI 芦荟流转助手"
+    "close": "退出 AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

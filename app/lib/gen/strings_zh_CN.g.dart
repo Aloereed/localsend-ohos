@@ -27,7 +27,7 @@ class _StringsZhCn extends Translations {
 
 	// Translations
 	@override String get locale => '简体中文';
-	@override String get appName => '芦荟流转助手 AloeChat.AI';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralZhCn general = _StringsGeneralZhCn._(_root);
 	@override late final _StringsReceiveTabZhCn receiveTab = _StringsReceiveTabZhCn._(_root);
 	@override late final _StringsSendTabZhCn sendTab = _StringsSendTabZhCn._(_root);
@@ -282,9 +282,9 @@ class _StringsAboutPageZhCn extends _StringsAboutPageEn {
 	@override final _StringsZhCn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '关于 AloeChat.AI 芦荟流转助手';
+	@override String get title => '关于 AloeChat.AI ';
 	@override List<String> get description => [
-		'AloeChat.AI 芦荟流转助手是一款基于LocalSend的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
+		'AloeChat.AI 是一款基于LocalSend的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
 		'本程序可在 鸿蒙Next上使用，并且与Android、iOS、macOS、Windows 和 Linux 上的LocalSend交互。您可以在官方主页找到所有下载选项。',
 	];
 	@override String get author => '作者';
