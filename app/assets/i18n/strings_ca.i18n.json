@@ -1,6 +1,6 @@
 {
   "locale": "Català",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Acceptar",
     "accepted": "Acceptat",
@@ -168,7 +168,7 @@
   "receiveOptionsPage": {
     "title": "Opcions",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(Carpeta LocalSend)",
+    "appDirectory": "(Carpeta AloeChat.AI)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "S'ha desactivat automàticament perquè hi ha carpetes."
   },
@@ -205,11 +205,11 @@
     "requests": "Peticions",
     "noRequests": "Encar ano hi ha peticions.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend utilitza un certificat auto-signat. Cal que l'accepteu al navegador.",
+    "encryptionHint": "AloeChat.AI utilitza un certificat auto-signat. Cal que l'accepteu al navegador.",
     "pendingRequests": "Peticions pendents: {n}"
   },
   "aboutPage": {
-    "title": "Sobre LocalSend"
+    "title": "Sobre AloeChat.AI"
   },
   "changelogPage": {
     "title": "Registre de canvis"
@@ -327,7 +327,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "LocalSend no pot trobar altres dispositius sense tenir el permís per escanejar la xarxa local. Concediu aquest permís a la configuració.",
+      "description": "AloeChat.AI no pot trobar altres dispositius sense tenir el permís per escanejar la xarxa local. Concediu aquest permís a la configuració.",
       "gotoSettings": "Configuració"
     },
     "messageInput": {
@@ -365,13 +365,13 @@
       "title": "Modes d'enviament",
       "single": "Enviar fitxers a un destinatari. La selecció s'esborrarà un cop finalitzada la transferència de fitxers.",
       "multiple": "Enviar fitxers a diversos destinataris. La selecció no s'esborrarà.",
-      "link": "Els destinataris que no tinguin LocalSend instal·lat poden descarregar els fitxers seleccionats obrint l'enllaç al seu navegador."
+      "link": "Els destinataris que no tinguin AloeChat.AI instal·lat poden descarregar els fitxers seleccionats obrint l'enllaç al seu navegador."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "Sortir de LocalSend"
+    "close": "Sortir de AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

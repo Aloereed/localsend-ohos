@@ -1,8 +1,16 @@
+/*
+ * @Author: 
+ * @Date: 2024-12-21 15:37:26
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2025-01-13 13:32:41
+ * @Description: file content
+ */
 import 'dart:io';
 
 import 'package:common/common.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
+import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localsend_app/model/cross_file.dart';
@@ -12,7 +20,21 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 /// Utility functions to convert third party models to common [CrossFile] model.
 class CrossFileConverters {
-  static Future<CrossFile> convertPlatformFile(file_picker.PlatformFile file) async {
+  static Future<CrossFile> convertPlatformFile(
+      file_picker.PlatformFile file) async {
+    return CrossFile(
+      name: file.name,
+      fileType: file.name.guessFileType(),
+      size: file.size,
+      thumbnail: null,
+      asset: null,
+      path: kIsWeb ? null : file.path,
+      bytes: kIsWeb ? file.bytes! : null,
+    );
+  }
+
+  static Future<CrossFile> convertPlatformFileOhos(
+      file_picker_ohos.PlatformFile file) async {
     return CrossFile(
       name: file.name,
       fileType: file.name.guessFileType(),
@@ -38,18 +60,27 @@ class CrossFileConverters {
   }
 
   static Future<CrossFile> convertXFile(XFile file) async {
+    // delete "file://media" or "file://docs" from the path
+    final fileName = file.path.fileName;
+
     return CrossFile(
-      name: file.name,
+      name: Uri.decodeFull(file.name),
       fileType: file.name.guessFileType(),
       size: await file.length(),
       thumbnail: null,
       asset: null,
-      path: kIsWeb ? null : file.path,
-      bytes: kIsWeb ? await file.readAsBytes() : null, // we can fetch it now because in Web it is already there
+      path: kIsWeb
+          ? null
+          : Uri.decodeFull(
+              file.path.replaceFirst(RegExp(r"file://(media|docs)"), "")),
+      bytes: kIsWeb
+          ? await file.readAsBytes()
+          : null, // we can fetch it now because in Web it is already there
     );
   }
 
-  static Future<CrossFile> convertSharedAttachment(SharedAttachment attachment) async {
+  static Future<CrossFile> convertSharedAttachment(
+      SharedAttachment attachment) async {
     final file = File(attachment.path);
     final fileName = attachment.path.fileName;
     return CrossFile(

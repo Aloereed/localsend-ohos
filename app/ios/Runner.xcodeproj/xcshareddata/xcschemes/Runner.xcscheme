@@ -60,7 +60,7 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <StoreKitConfigurationFileReference
-         identifier = "../MyLocalSendStoreKit.storekit">
+         identifier = "../MyAloeChatAIStoreKit.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction

@@ -26,8 +26,8 @@ class _StringsZhTw extends Translations {
 	@override late final _StringsZhTw _root = this; // ignore: unused_field
 
 	// Translations
-	@override String get locale => '繁體中文 – 台灣';
-	@override String get appName => 'LocalSend';
+	@override String get locale => '繁體中文';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralZhTw general = _StringsGeneralZhTw._(_root);
 	@override late final _StringsReceiveTabZhTw receiveTab = _StringsReceiveTabZhTw._(_root);
 	@override late final _StringsSendTabZhTw sendTab = _StringsSendTabZhTw._(_root);
@@ -222,7 +222,7 @@ class _StringsReceiveOptionsPageZhTw extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => '選項';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend 資料夾)';
+	@override String get appDirectory => '(AloeChat.AI 資料夾)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => '因存在目錄而自動關閉。';
 }
@@ -271,7 +271,7 @@ class _StringsWebSharePageZhTw extends _StringsWebSharePageEn {
 	@override String get noRequests => '目前沒有任何要求。';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
 	@override String get autoAccept => '自動接受請求';
-	@override String get encryptionHint => 'LocalSend 使用自簽名憑證。您需要在瀏覽器中接受它。';
+	@override String get encryptionHint => 'AloeChat.AI 使用自簽名憑證。您需要在瀏覽器中接受它。';
 	@override String pendingRequests({required Object n}) => '待處理的要求：${n}';
 }
 
@@ -282,10 +282,10 @@ class _StringsAboutPageZhTw extends _StringsAboutPageEn {
 	@override final _StringsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '關於 LocalSend';
+	@override String get title => '關於 AloeChat.AI';
 	@override List<String> get description => [
-		'LocalSend 是一款免費的開源應用程式，可讓您透過區域網路與鄰近的裝置安全的共享檔案和訊息，無需網際網路連線。',
-		'此應用程式可在 Android、iOS、macOS、Windows 和 Linux 上使用。 您可以在官網首頁上找到所有下載選項。',
+		'AloeChat. AI 蘆薈流轉助手是一款基於LocalSend的免費開源應用程序，可讓您通過本地網絡與附近的設備安全地共用檔和資訊，而無需互聯網連接。',
+		'本程式可在鴻蒙Next上使用，並且與Android、iOS、macOS、Windows和Linux上的LocalSend互動。 您可以在官方主頁找到所有下載選項',
 	];
 	@override String get author => '作者';
 	@override String get contributors => '貢獻者';
@@ -300,7 +300,7 @@ class _StringsDonationPageZhTw extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => '贊助';
-	@override String get info => 'LocalSend 是免費、開源且沒有任何廣告的。如果您喜歡此應用程式，您可以透過捐贈來支持開發。';
+	@override String get info => 'AloeChat.AI 是免費、開源且沒有任何廣告的。如果您喜歡此應用程式，您可以透過捐贈來支持開發。';
 	@override String donate({required Object amount}) => '贊助 ${amount}';
 	@override String get thanks => '非常感謝您!';
 	@override String get restore => '回復購買';
@@ -363,7 +363,7 @@ class _StringsTrayZhTw extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => '離開 LocalSend';
+	@override String get close => '離開 AloeChat.AI';
 }
 
 // Path: web
@@ -544,7 +544,7 @@ class _StringsSettingsTabOtherZhTw extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => '其它';
-	@override String get support => '支持LocalSend';
+	@override String get support => '支持AloeChat.AI';
 	@override String get donate => '贊助';
 	@override String get privacyPolicy => '隱私權政策';
 	@override String get termsOfUse => '使用條款';
@@ -748,7 +748,7 @@ class _StringsDialogsLocalNetworkUnauthorizedZhTw extends _StringsDialogsLocalNe
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => '在未取得掃描區域網路權限的狀況下 LocalSend 無法找到其他裝置，請在設定中授予此權限。';
+	@override String get description => '在未取得掃描區域網路權限的狀況下 AloeChat.AI 無法找到其他裝置，請在設定中授予此權限。';
 	@override String get gotoSettings => '設定';
 }
 
@@ -842,7 +842,7 @@ class _StringsDialogsSendModeHelpZhTw extends _StringsDialogsSendModeHelpEn {
 	@override String get title => '傳送模式';
 	@override String get single => '傳送檔案至單個接收者，選取項目將在檔案傳輸完成後被清除。';
 	@override String get multiple => '傳送檔案至多重接收者，選取項目將不會被清除。';
-	@override String get link => '未安裝 LocalSend 的接收者可以透過在瀏覽器開啟連結以下載選取的檔案.';
+	@override String get link => '未安裝 AloeChat.AI 的接收者可以透過在瀏覽器開啟連結以下載選取的檔案.';
 }
 
 // Path: settingsTab.general.brightnessOptions

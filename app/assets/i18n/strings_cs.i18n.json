@@ -1,6 +1,6 @@
 {
   "locale": "Česky",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Přijmout",
     "accepted": "Přijato",
@@ -126,7 +126,7 @@
     },
     "other": {
       "title": "Ostatní",
-      "support": "Podpora LocalSend",
+      "support": "Podpora AloeChat.AI",
       "donate": "Darovat",
       "privacyPolicy": "Zásady ochrany osobních údajů",
       "termsOfUse": "Podmínky použití"
@@ -180,7 +180,7 @@
   "receiveOptionsPage": {
     "title": "Možnosti",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend folder)",
+    "appDirectory": "(AloeChat.AI folder)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Automaticky vypnuto, protože existují adresáře."
   },
@@ -217,13 +217,13 @@
     "requests": "Žádosti",
     "noRequests": "Zatím žádné žádosti.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči.",
+    "encryptionHint": "AloeChat.AI používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči.",
     "pendingRequests": "Čekající žádosti: {n}"
   },
   "aboutPage": {
-    "title": "O aplikaci LocalSend",
+    "title": "O aplikaci AloeChat.AI",
     "description": [
-      "LocalSend je bezplatná aplikace s otevřeným zdrojovým kódem, která vám umožňuje bezpečně sdílet soubory a zprávy s okolními zařízeními přes vaši místní síť, aniž byste potřebovali připojení k internetu.",
+      "AloeChat.AI je bezplatná aplikace s otevřeným zdrojovým kódem, která vám umožňuje bezpečně sdílet soubory a zprávy s okolními zařízeními přes vaši místní síť, aniž byste potřebovali připojení k internetu.",
       "Tato aplikace je dostupná pro Android, iOS, macOS, Windows a Linux. Všechny možnosti stahování najdete na oficiální domovské stránce."
     ],
     "author": "Autor",
@@ -232,7 +232,7 @@
   },
   "donationPage": {
     "title": "Darovat",
-    "info": "LocalSend je zdarma, open source a bez reklam. Pokud se vám aplikace líbí, můžete její vývoj podpořit darem.",
+    "info": "AloeChat.AI je zdarma, open source a bez reklam. Pokud se vám aplikace líbí, můžete její vývoj podpořit darem.",
     "donate": "Darovat {amount}",
     "thanks": "Děkuji mnohokrát!",
     "restore": "Obnovit"
@@ -304,7 +304,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "LocalSend nemůže najít jiná zařízení, aniž by měl oprávnění skenovat místní síť. Udělte prosím toto oprávnění v nastavení.",
+      "description": "AloeChat.AI nemůže najít jiná zařízení, aniž by měl oprávnění skenovat místní síť. Udělte prosím toto oprávnění v nastavení.",
       "gotoSettings": "Nastavení"
     },
     "messageInput": {
@@ -342,13 +342,13 @@
       "title": "Režimy odesílání",
       "single": "Odešle soubory jednomu příjemci. Po dokončení přenosu souboru bude výběr vymazán.",
       "multiple": "Odešle soubory více příjemcům. Výběr nebude vymazán.",
-      "link": "Příjemci, kteří nemají nainstalovaný LocalSend, si mohou vybrané soubory stáhnout otevřením odkazu ve svém prohlížeči."
+      "link": "Příjemci, kteří nemají nainstalovaný AloeChat.AI, si mohou vybrané soubory stáhnout otevřením odkazu ve svém prohlížeči."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "Ukončit LocalSend"
+    "close": "Ukončit AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

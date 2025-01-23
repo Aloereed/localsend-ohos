@@ -27,7 +27,7 @@ class _StringsNl extends Translations {
 
 	// Translations
 	@override String get locale => 'Nederlands';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralNl general = _StringsGeneralNl._(_root);
 	@override late final _StringsReceiveTabNl receiveTab = _StringsReceiveTabNl._(_root);
 	@override late final _StringsSendTabNl sendTab = _StringsSendTabNl._(_root);
@@ -219,7 +219,7 @@ class _StringsReceiveOptionsPageNl extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'Opties';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend folder)';
+	@override String get appDirectory => '(AloeChat.AI folder)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'Automatisch uitgezet want er zijn mappen.';
 }
@@ -267,7 +267,7 @@ class _StringsWebSharePageNl extends _StringsWebSharePageEn {
 	@override String get requests => 'Verzoeken';
 	@override String get noRequests => 'Nog geen verzoeken.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend maakt gebruik van een zelfondertekend certificaat. U moet het accepteren in de browser.';
+	@override String get encryptionHint => 'AloeChat.AI maakt gebruik van een zelfondertekend certificaat. U moet het accepteren in de browser.';
 	@override String pendingRequests({required Object n}) => 'Openstaande verzoeken: ${n}';
 }
 
@@ -278,7 +278,7 @@ class _StringsAboutPageNl extends _StringsAboutPageEn {
 	@override final _StringsNl _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Over LocalSend';
+	@override String get title => 'Over AloeChat.AI';
 }
 
 // Path: changelogPage
@@ -338,7 +338,7 @@ class _StringsTrayNl extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'LocalSend afsluiten';
+	@override String get close => 'AloeChat.AI afsluiten';
 }
 
 // Path: web
@@ -697,7 +697,7 @@ class _StringsDialogsLocalNetworkUnauthorizedNl extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend kan geen andere apparaten op uw netwerk vinden zonder de juiste rechten voor netwerktoegang te hebben verkregen. Stel deze correct in in het instellingen menu.';
+	@override String get description => 'AloeChat.AI kan geen andere apparaten op uw netwerk vinden zonder de juiste rechten voor netwerktoegang te hebben verkregen. Stel deze correct in in het instellingen menu.';
 	@override String get gotoSettings => 'Instellingen';
 }
 

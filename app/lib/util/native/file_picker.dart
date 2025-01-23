@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:common/common.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
+import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'package:localsend_app/widget/dialogs/loading_dialog.dart';
 import 'package:localsend_app/widget/dialogs/message_input_dialog.dart';
 import 'package:localsend_app/widget/dialogs/no_permission_dialog.dart';
 import 'package:logging/logging.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:refena_flutter/refena_flutter.dart';
@@ -77,6 +79,15 @@ enum FilePickerOption {
         FilePickerOption.text,
         FilePickerOption.folder,
         FilePickerOption.app,
+      ];
+    } else if (checkPlatform([TargetPlatform.ohos])) {
+      // On HarmonyOS, the file app is most powerful.
+      // It actually also allows to pick media files.
+      return [
+        FilePickerOption.file,
+        FilePickerOption.media,
+        FilePickerOption.text,
+        // FilePickerOption.clipboard,
       ];
     } else {
       // Desktop
@@ -147,17 +158,33 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
   try {
     if (checkPlatform([TargetPlatform.android])) {
       // We also need to use the file_picker package because file_selector does not expose the raw path.
-      final result = await file_picker.FilePicker.platform.pickFiles(allowMultiple: true);
+      final result =
+          await file_picker.FilePicker.platform.pickFiles(allowMultiple: true);
       if (result != null) {
-        await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
+        await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddFilesAction(
               files: result.files,
               converter: CrossFileConverters.convertPlatformFile,
+            ));
+      }
+    }
+    if (checkPlatform([TargetPlatform.ohos])) {
+      final result = await file_picker_ohos.FilePicker.platform.pickFiles(allowMultiple: true);
+      if (result != null) {
+        await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddFilesAction(
+              files: result.files,
+              converter: CrossFileConverters.convertPlatformFileOhos,
             ));
       }
     } else {
       final result = await file_selector.openFiles();
       if (result.isNotEmpty) {
-        await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
+        await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddFilesAction(
               files: result,
               converter: CrossFileConverters.convertXFile,
             ));
@@ -165,7 +192,8 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
     }
   } catch (e) {
     // ignore: use_build_context_synchronously
-    await showDialog(context: context, builder: (_) => const NoPermissionDialog());
+    await showDialog(
+        context: context, builder: (_) => const NoPermissionDialog());
     _logger.warning('Failed to pick files', e);
   } finally {
     // ignore: use_build_context_synchronously
@@ -196,24 +224,43 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
   try {
     final directoryPath = await pickDirectoryPath();
     if (directoryPath != null) {
-      await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddDirectoryAction(directoryPath));
+      await ref
+          .redux(selectedSendingFilesProvider)
+          .dispatchAsync(AddDirectoryAction(directoryPath));
     }
   } catch (e) {
     _logger.warning('Failed to pick directory', e);
     // ignore: use_build_context_synchronously
-    await showDialog(context: context, builder: (_) => const NoPermissionDialog());
+    await showDialog(
+        context: context, builder: (_) => const NoPermissionDialog());
   } finally {
     // ignore: use_build_context_synchronously
     Routerino.context.popUntilRoot(); // remove loading dialog
   }
 }
 
+final ImagePicker _picker = ImagePicker();
 Future<void> _pickMedia(BuildContext context, Ref ref) async {
+  if (checkPlatform([TargetPlatform.ohos])) {
+    final XFile? pickedFile = await _picker.pickMedia();
+
+    if (pickedFile != null) {
+      // 如果选择了图片，使用 CrossFileConverters 将选中的图片转换并添加到状态管理
+      await ref
+          .redux(selectedSendingFilesProvider)
+          .dispatchAsync(AddFilesAction(
+            files: [pickedFile], // 这里传入选中的图片
+            converter: CrossFileConverters.convertXFile,
+          ));
+    }
+    return;
+  }
   final oldBrightness = Theme.of(context).brightness;
   // ignore: use_build_context_synchronously
   final List<AssetEntity>? result = await AssetPicker.pickAssets(
     context,
-    pickerConfig: const AssetPickerConfig(maxAssets: 999, textDelegate: TranslatedAssetPickerTextDelegate()),
+    pickerConfig: const AssetPickerConfig(
+        maxAssets: 999, textDelegate: TranslatedAssetPickerTextDelegate()),
   );
 
   WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -233,13 +280,46 @@ Future<void> _pickMedia(BuildContext context, Ref ref) async {
 }
 
 Future<void> _pickText(BuildContext context, Ref ref) async {
-  final result = await showDialog<String>(context: context, builder: (_) => const MessageInputDialog());
+  final result = await showDialog<String>(
+      context: context, builder: (_) => const MessageInputDialog());
   if (result != null) {
-    ref.redux(selectedSendingFilesProvider).dispatch(AddMessageAction(message: result));
+    ref
+        .redux(selectedSendingFilesProvider)
+        .dispatch(AddMessageAction(message: result));
   }
 }
 
 Future<void> _pickClipboard(BuildContext context, Ref ref) async {
+  if (checkPlatform([TargetPlatform.ohos])) {
+    try {
+      // 从剪贴板读取文本
+      final ClipboardData? clipboardData =
+          await Clipboard.getData('text/plain');
+
+      // 确保剪贴板中有内容
+      if (clipboardData != null &&
+          clipboardData.text != null &&
+          clipboardData.text!.isNotEmpty) {
+        final String clipboardText = clipboardData.text!;
+
+        // 将剪贴板中的文本添加到 redux 状态
+        ref
+            .redux(selectedSendingFilesProvider)
+            .dispatch(AddMessageAction(message: clipboardText));
+      } else {
+        // 如果剪贴板为空，可以选择显示一个提示
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('剪贴板中没有可用的文本')),
+        );
+      }
+    } catch (e) {
+      // 处理错误，例如用户拒绝了剪贴板的访问权限
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('无法读取剪贴板: $e')),
+      );
+    }
+    return;
+  }
   late List<String> files = [];
   for (final file in await Pasteboard.files()) {
     files.add(file);
@@ -254,7 +334,9 @@ Future<void> _pickClipboard(BuildContext context, Ref ref) async {
 
   final data = await Clipboard.getData(Clipboard.kTextPlain);
   if (data?.text != null) {
-    ref.redux(selectedSendingFilesProvider).dispatch(AddMessageAction(message: data!.text!));
+    ref
+        .redux(selectedSendingFilesProvider)
+        .dispatch(AddMessageAction(message: data!.text!));
     return;
   }
 

@@ -1,6 +1,6 @@
 {
   "locale": "Türkçe",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Kabul et",
     "accepted": "Kabul edildi",
@@ -127,7 +127,7 @@
     "advancedSettings": "Gelişmiş ayarlar",
     "other": {
       "title": "Diğer",
-      "support": "LocalSend'i destekle",
+      "support": "AloeChat.AI'i destekle",
       "donate": "Bağış yap",
       "privacyPolicy": "Gizlilik politikası",
       "termsOfUse": "Kullanım koşulları"
@@ -180,7 +180,7 @@
   "receiveOptionsPage": {
     "title": "Seçenekler",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend klasörü)",
+    "appDirectory": "(AloeChat.AI klasörü)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Otomatik olarak kapanır çünkü bunlar klasör."
   },
@@ -217,13 +217,13 @@
     "requests": "İstekler",
     "noRequests": "Henüz istek yok.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.",
+    "encryptionHint": "AloeChat.AI, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.",
     "pendingRequests": "Bekleyen istekler: {n}"
   },
   "aboutPage": {
-    "title": "LocalSend hakkında",
+    "title": "AloeChat.AI hakkında",
     "description": [
-      "LocalSend, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.",
+      "AloeChat.AI, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.",
       "Bu uygulama Android, iOS, macOS, Windows ve Linux'ta mevcuttur. Tüm indirme seçeneklerini resmi ana sayfada bulabilirsiniz."
     ],
     "author": "Yazar",
@@ -232,7 +232,7 @@
   },
   "donationPage": {
     "title": "Bağış yap",
-    "info": "LocalSend ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.",
+    "info": "AloeChat.AI ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.",
     "donate": "Bağışta bulun {amount}",
     "thanks": "Çok teşekkür ederim!",
     "restore": "Satın alınanları geri yükle"
@@ -300,7 +300,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "LocalSend, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.",
+      "description": "AloeChat.AI, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.",
       "gotoSettings": "Ayarlar"
     },
     "messageInput": {
@@ -338,7 +338,7 @@
       "title": "Gönderme Modu",
       "single": "Dosyaları bir alıcıya gönderir. Seçim, bitmiş dosya aktarımından sonra temizlenir.",
       "multiple": "Dosyaları birden çok alıcıya gönderir. Seçim temizlenmeyecektir.",
-      "link": "LocalSend yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir."
+      "link": "AloeChat.AI yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir."
     },
     "historyClearDialog": {
       "title": "Geçmişi temizle",
@@ -348,7 +348,7 @@
   "tray": {
     "@info": "Apple'ın yönergeleri, 'kapat' ifadesi konusunda çok katıdır.",
     "open": "@:general.open",
-    "close": "LocalSend'den çık"
+    "close": "AloeChat.AI'den çık"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

@@ -33,6 +33,7 @@ Future<DeviceInfoResult> getDeviceInfo() async {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.iOS:
+      case TargetPlatform.ohos:
         deviceType = DeviceType.mobile;
         break;
       case TargetPlatform.linux:
@@ -52,6 +53,10 @@ Future<DeviceInfoResult> getDeviceInfo() async {
       case TargetPlatform.iOS:
         final deviceInfo = await plugin.iosInfo;
         deviceModel = deviceInfo.localizedModel;
+        break;
+      case TargetPlatform.ohos:
+        final deviceInfo = await plugin.ohosInfo;
+        deviceModel = deviceInfo.marketName;
         break;
       case TargetPlatform.linux:
         deviceModel = 'Linux';

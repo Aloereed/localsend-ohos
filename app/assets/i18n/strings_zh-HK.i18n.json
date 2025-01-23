@@ -1,6 +1,6 @@
 {
   "locale": "繁體中文 – 香港",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "接受",
     "accepted": "已接受",
@@ -126,7 +126,7 @@
     },
     "other": {
       "title": "其他",
-      "support": "支援 LocalSend",
+      "support": "支援 AloeChat.AI",
       "donate": "捐款",
       "privacyPolicy": "私隱權政策",
       "termsOfUse": "服務條款"
@@ -180,7 +180,7 @@
   "receiveOptionsPage": {
     "title": "@:general.settings",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "（LocalSend 資料夾）",
+    "appDirectory": "（AloeChat.AI 資料夾）",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "因為有資料夾存在而自動閂咗"
   },
@@ -217,13 +217,13 @@
     "requests": "請求",
     "noRequests": "未有",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。",
+    "encryptionHint": "AloeChat.AI 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。",
     "pendingRequests": "仲有 {n} 個請求未處理"
   },
   "aboutPage": {
-    "title": "關於 LocalSend",
+    "title": "關於 AloeChat.AI",
     "description": [
-      "LocalSend 係一款免費嘅開源應用程式，佢可以透過區域網路幫你安全噉將檔案同訊息分享畀附近嘅裝置，全程無需互聯網連線。",
+      "AloeChat.AI 係一款免費嘅開源應用程式，佢可以透過區域網路幫你安全噉將檔案同訊息分享畀附近嘅裝置，全程無需互聯網連線。",
       "呢個 app 喺 Android、iOS、macOS、Windows 同 Linux 都用得㗎。你可以喺我哋嘅網站揾到呢個 app 所有平台嘅版本同其他下載方式。"
     ],
     "author": "作者",
@@ -232,7 +232,7 @@
   },
   "donationPage": {
     "title": "@:settingsTab.other.donate",
-    "info": "LocalSend 唔單只免費、開源，仲係冇廣告添㗎！如果你鍾意呢個 app，不妨捐款贊助我哋開發？",
+    "info": "AloeChat.AI 唔單只免費、開源，仲係冇廣告添㗎！如果你鍾意呢個 app，不妨捐款贊助我哋開發？",
     "donate": "捐 {amount}",
     "thanks": "多謝支持！",
     "restore": "還原 app 內購買"
@@ -304,7 +304,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "喺冇權掃描區域網路嘅情況下 LocalSend 唔會偵測到其他裝置。麻煩你喺系統設定開返呢個權限。",
+      "description": "喺冇權掃描區域網路嘅情況下 AloeChat.AI 唔會偵測到其他裝置。麻煩你喺系統設定開返呢個權限。",
       "gotoSettings": "開啟系統設定"
     },
     "messageInput": {
@@ -342,13 +342,13 @@
       "title": "@:sendTab.sendMode",
       "single": "淨係 send 畀一部裝置，傳輸完成後會清除揀選項目。",
       "multiple": "一次過 send 畀多部裝置，揀選項目會一路保留。",
-      "link": "冇裝 LocalSend 嘅裝置可以透過條 link 嚟 download 返揀選嘅項目。"
+      "link": "冇裝 AloeChat.AI 嘅裝置可以透過條 link 嚟 download 返揀選嘅項目。"
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "退出 LocalSend"
+    "close": "退出 AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

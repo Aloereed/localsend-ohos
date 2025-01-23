@@ -10,7 +10,7 @@ StoredSecurityContext generateSecurityContext([AsymmetricKeyPair? keyPair]) {
   final privateKey = keyPair.privateKey as RSAPrivateKey;
   final publicKey = keyPair.publicKey as RSAPublicKey;
   final dn = {
-    'CN': 'LocalSend User',
+    'CN': 'AloeChatAI User',
     'O': '',
     'OU': '',
     'L': '',

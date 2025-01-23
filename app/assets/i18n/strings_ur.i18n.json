@@ -1,6 +1,6 @@
 {
   "locale": "اردو",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "قبول کریں",
     "accepted": "قبول کر لیا",
@@ -205,11 +205,11 @@
     "requests": "درخواستیں",
     "noRequests": "ابھی تک کوئی درخواست نہیں۔",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔",
+    "encryptionHint": "AloeChat.AI براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔",
     "pendingRequests": "زیر التواء درخواستیں: {n}"
   },
   "aboutPage": {
-    "title": "کے بارے میں LocalSend"
+    "title": "کے بارے میں AloeChat.AI"
   },
   "changelogPage": {
     "title": "چینج لاگ"
@@ -257,7 +257,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "لوکل نیٹ ورک کا سکین کرنے کی اجازت کے بغیر LocalSend، دیگر ڈیوائسز تلاش نہیں کرسکتا ہے۔ براہ کرم ترتیبات میں اس اجازت کو منظور کریں۔",
+      "description": "لوکل نیٹ ورک کا سکین کرنے کی اجازت کے بغیر AloeChat.AI، دیگر ڈیوائسز تلاش نہیں کرسکتا ہے۔ براہ کرم ترتیبات میں اس اجازت کو منظور کریں۔",
       "gotoSettings": "ترتیبات"
     },
     "messageInput": {
@@ -295,13 +295,13 @@
       "title": "بھیجنے کے انداز",
       "single": "ایک ریسیور کو فائل بھیجتا ہے۔ بھیجتے وقت سلیکشن ختم ہوجائیگا۔",
       "multiple": "اکثر متعدد ریسیورز کو فائل بھیجتا ہے۔ سلیکشن ختم نہیں ہوگا۔",
-      "link": "LocalSend نصب نہیں ہونے والے رسیورز منتخب شدہ فائلز کو لنک اپنے براؤزر میں کھولنے سے ڈاؤن لوڈ کر سکتے ہیں۔"
+      "link": "AloeChat.AI نصب نہیں ہونے والے رسیورز منتخب شدہ فائلز کو لنک اپنے براؤزر میں کھولنے سے ڈاؤن لوڈ کر سکتے ہیں۔"
     }
   },
   "tray": {
     "@info": "ایپل کے رہنما خطوط 'قریبی' الفاظ کے بارے میں بہت سخت ہیں۔",
     "open": "@:general.open",
-    "close": "چھوڑو LocalSend"
+    "close": "چھوڑو AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

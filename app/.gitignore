@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+/ohos/.hvigor
+/ohos/entry/build
+/ohos/entry/libs
+/ohos/oh_modules

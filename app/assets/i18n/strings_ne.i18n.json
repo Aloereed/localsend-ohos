@@ -1,6 +1,6 @@
 {
   "locale": "नेपाली",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "स्वीकार गर्नुहोस्",
     "accepted": "स्वीकृत",
@@ -168,7 +168,7 @@
   "receiveOptionsPage": {
     "title": "विकल्पहरू",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend फोल्डर)",
+    "appDirectory": "(AloeChat.AI फोल्डर)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "निर्दिष्ट की यह नहीं की जा सकती है क्योंकि डायरेक्टरियाँ हैं।"
   },
@@ -205,11 +205,11 @@
     "requests": "अनुरोध",
     "noRequests": "अबतक कोई अनुरोध नहीं हैं।",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।",
+    "encryptionHint": "AloeChat.AI एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।",
     "pendingRequests": "लंबित अनुरोध: {n}"
   },
   "aboutPage": {
-    "title": "LocalSend को बारेमा"
+    "title": "AloeChat.AI को बारेमा"
   },
   "changelogPage": {
     "title": "Changelog"
@@ -327,7 +327,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": " LocalSend बिना निजी नेटवर्क स्कैन की अनुमति के बिना अन्य उपकरणों को नहीं खोज सकता है। कृपया सेटिंग्स में इस अनुमति को प्रदान करें।",
+      "description": " AloeChat.AI बिना निजी नेटवर्क स्कैन की अनुमति के बिना अन्य उपकरणों को नहीं खोज सकता है। कृपया सेटिंग्स में इस अनुमति को प्रदान करें।",
       "gotoSettings": "सेटिंग्स"
     },
     "messageInput": {
@@ -365,13 +365,13 @@
       "title": "मोड भेजें",
       "single": "एकांत प्राप्तकर्ताओं को फ़ाइलें भेजता है। चयन फ़ाइल संचरण के बाद साफ़ हो जाएगा।",
       "multiple": "एकाधिक प्राप्तकर्ताओं को फ़ाइलें भेजता है। चयन साफ़ नहीं होगा।",
-      "link": "LocalSend इंस्टॉल न करने वाले प्राप्तकर्ता चयनित फ़ाइलें डाउनलोड कर सकते हैं जब वह ब्राउज़र में लिंक खोलते हैं।"
+      "link": "AloeChat.AI इंस्टॉल न करने वाले प्राप्तकर्ता चयनित फ़ाइलें डाउनलोड कर सकते हैं जब वह ब्राउज़र में लिंक खोलते हैं।"
     }
   },
   "tray": {
     "@info": "Apple दिशानिर्देशहरू 'नजिक' शब्दको बारेमा धेरै सख्त छन्।",
     "open": "@:general.open",
-    "close": "LocalSend छोड्नुहोस्"
+    "close": "AloeChat.AI छोड्नुहोस्"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

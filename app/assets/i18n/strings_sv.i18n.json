@@ -1,6 +1,6 @@
 {
   "locale": "Svenska",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Acceptera",
     "accepted": "Accepterad",
@@ -168,7 +168,7 @@
   "receiveOptionsPage": {
     "title": "Alternativ",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend-mappen)",
+    "appDirectory": "(AloeChat.AI-mappen)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Avstängd automatiskt eftersom det finns kataloger."
   },
@@ -205,11 +205,11 @@
     "requests": "Förfrågningar",
     "noRequests": "Inga förfrågningar ännu.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren.",
+    "encryptionHint": "AloeChat.AI använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren.",
     "pendingRequests": "Väntande förfrågningar: {n}"
   },
   "aboutPage": {
-    "title": "Om LocalSend"
+    "title": "Om AloeChat.AI"
   },
   "changelogPage": {
     "title": "Ändringslog"
@@ -327,7 +327,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "LocalSend kan inte hitta andra enheter utan att ha behörighet att skanna det lokala nätverket. Bevilja denna behörighet i inställningarna.",
+      "description": "AloeChat.AI kan inte hitta andra enheter utan att ha behörighet att skanna det lokala nätverket. Bevilja denna behörighet i inställningarna.",
       "gotoSettings": "Inställningar"
     },
     "messageInput": {
@@ -365,13 +365,13 @@
       "title": "Sändningslägen",
       "single": "Skickar filer till en mottagare. Valet rensas efter avslutad filöverföring.",
       "multiple": "Skickar filer till flera mottagare. Valet rensas inte.",
-      "link": "Mottagare som inte har LocalSend installerat kan ladda ner de valda filerna genom att öppna länken i deras webbläsare."
+      "link": "Mottagare som inte har AloeChat.AI installerat kan ladda ner de valda filerna genom att öppna länken i deras webbläsare."
     }
   },
   "tray": {
     "@info": "Apples Riktlinjer är väldigt strikta kring 'stäng' formuleringen.",
     "open": "@:general.open",
-    "close": "Avsluta LocalSend"
+    "close": "Avsluta AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

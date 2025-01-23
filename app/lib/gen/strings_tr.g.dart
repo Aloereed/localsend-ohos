@@ -27,7 +27,7 @@ class _StringsTr extends Translations {
 
 	// Translations
 	@override String get locale => 'Türkçe';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralTr general = _StringsGeneralTr._(_root);
 	@override late final _StringsReceiveTabTr receiveTab = _StringsReceiveTabTr._(_root);
 	@override late final _StringsSendTabTr sendTab = _StringsSendTabTr._(_root);
@@ -221,7 +221,7 @@ class _StringsReceiveOptionsPageTr extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'Seçenekler';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(LocalSend klasörü)';
+	@override String get appDirectory => '(AloeChat.AI klasörü)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'Otomatik olarak kapanır çünkü bunlar klasör.';
 }
@@ -269,7 +269,7 @@ class _StringsWebSharePageTr extends _StringsWebSharePageEn {
 	@override String get requests => 'İstekler';
 	@override String get noRequests => 'Henüz istek yok.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.';
+	@override String get encryptionHint => 'AloeChat.AI, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.';
 	@override String pendingRequests({required Object n}) => 'Bekleyen istekler: ${n}';
 }
 
@@ -280,9 +280,9 @@ class _StringsAboutPageTr extends _StringsAboutPageEn {
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'LocalSend hakkında';
+	@override String get title => 'AloeChat.AI hakkında';
 	@override List<String> get description => [
-		'LocalSend, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.',
+		'AloeChat.AI, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.',
 		'Bu uygulama Android, iOS, macOS, Windows ve Linux\'ta mevcuttur. Tüm indirme seçeneklerini resmi ana sayfada bulabilirsiniz.',
 	];
 	@override String get author => 'Yazar';
@@ -298,7 +298,7 @@ class _StringsDonationPageTr extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Bağış yap';
-	@override String get info => 'LocalSend ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.';
+	@override String get info => 'AloeChat.AI ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.';
 	@override String donate({required Object amount}) => 'Bağışta bulun ${amount}';
 	@override String get thanks => 'Çok teşekkür ederim!';
 	@override String get restore => 'Satın alınanları geri yükle';
@@ -361,7 +361,7 @@ class _StringsTrayTr extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'LocalSend\'den çık';
+	@override String get close => 'AloeChat.AI\'den çık';
 }
 
 // Path: web
@@ -531,7 +531,7 @@ class _StringsSettingsTabOtherTr extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Diğer';
-	@override String get support => 'LocalSend\'i destekle';
+	@override String get support => 'AloeChat.AI\'i destekle';
 	@override String get donate => 'Bağış yap';
 	@override String get privacyPolicy => 'Gizlilik politikası';
 	@override String get termsOfUse => 'Kullanım koşulları';
@@ -724,7 +724,7 @@ class _StringsDialogsLocalNetworkUnauthorizedTr extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.';
+	@override String get description => 'AloeChat.AI, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.';
 	@override String get gotoSettings => 'Ayarlar';
 }
 
@@ -818,7 +818,7 @@ class _StringsDialogsSendModeHelpTr extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Gönderme Modu';
 	@override String get single => 'Dosyaları bir alıcıya gönderir. Seçim, bitmiş dosya aktarımından sonra temizlenir.';
 	@override String get multiple => 'Dosyaları birden çok alıcıya gönderir. Seçim temizlenmeyecektir.';
-	@override String get link => 'LocalSend yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir.';
+	@override String get link => 'AloeChat.AI yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir.';
 }
 
 // Path: dialogs.historyClearDialog

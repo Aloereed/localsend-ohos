@@ -27,7 +27,7 @@ class _StringsUk extends Translations {
 
 	// Translations
 	@override String get locale => 'Українська';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralUk general = _StringsGeneralUk._(_root);
 	@override late final _StringsReceiveTabUk receiveTab = _StringsReceiveTabUk._(_root);
 	@override late final _StringsSendTabUk sendTab = _StringsSendTabUk._(_root);
@@ -222,7 +222,7 @@ class _StringsReceiveOptionsPageUk extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'Параметри отримання';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(Тека LocalSend)';
+	@override String get appDirectory => '(Тека AloeChat.AI)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'Вимкнено автоматично, оскільки є каталоги.';
 }
@@ -271,7 +271,7 @@ class _StringsWebSharePageUk extends _StringsWebSharePageEn {
 	@override String get noRequests => 'Запитів поки що немає.';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
 	@override String get autoAccept => 'Автоматично приймати запити';
-	@override String get encryptionHint => 'LocalSend використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері.';
+	@override String get encryptionHint => 'AloeChat.AI використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері.';
 	@override String pendingRequests({required Object n}) => 'Запити, що очікують на розгляд: ${n}';
 }
 
@@ -282,9 +282,9 @@ class _StringsAboutPageUk extends _StringsAboutPageEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Про LocalSend';
+	@override String get title => 'Про AloeChat.AI';
 	@override List<String> get description => [
-		'LocalSend — це безкоштовний додаток з відкритим вихідним кодом, який дозволяє безпечно обмінюватися файлами та повідомленнями з пристроями поблизу через локальну мережу без підключення до Інтернету.',
+		'AloeChat.AI — це безкоштовний додаток з відкритим вихідним кодом, який дозволяє безпечно обмінюватися файлами та повідомленнями з пристроями поблизу через локальну мережу без підключення до Інтернету.',
 		'Цей додаток доступний для Android, iOS, macOS, Windows і Linux. Ви можете знайти всі варіанти завантаження на офіційній домашній сторінці.',
 	];
 	@override String get author => 'Автор';
@@ -300,7 +300,7 @@ class _StringsDonationPageUk extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Пожертвувати';
-	@override String get info => 'LocalSend є безкоштовним, із відкритим вихідним кодом і без реклами. Якщо вам подобається додаток, ви можете підтримати його розробку пожертвою.';
+	@override String get info => 'AloeChat.AI є безкоштовним, із відкритим вихідним кодом і без реклами. Якщо вам подобається додаток, ви можете підтримати його розробку пожертвою.';
 	@override String donate({required Object amount}) => 'Пожертвувати ${amount}';
 	@override String get thanks => 'Велике спасибі!';
 	@override String get restore => 'Відновити покупку';
@@ -363,7 +363,7 @@ class _StringsTrayUk extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'Вихід із LocalSend';
+	@override String get close => 'Вихід із AloeChat.AI';
 }
 
 // Path: web
@@ -544,7 +544,7 @@ class _StringsSettingsTabOtherUk extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Інше';
-	@override String get support => 'Підтримати LocalSend';
+	@override String get support => 'Підтримати AloeChat.AI';
 	@override String get donate => 'Пожертвувати';
 	@override String get privacyPolicy => 'Політика конфіденційності';
 	@override String get termsOfUse => 'Умови використання';
@@ -748,7 +748,7 @@ class _StringsDialogsLocalNetworkUnauthorizedUk extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend не може знайти інші пристрої, не маючи дозволу на сканування в локальній мережі. Надайте цей дозвіл у налаштуваннях.';
+	@override String get description => 'AloeChat.AI не може знайти інші пристрої, не маючи дозволу на сканування в локальній мережі. Надайте цей дозвіл у налаштуваннях.';
 	@override String get gotoSettings => 'Налаштування';
 }
 
@@ -842,7 +842,7 @@ class _StringsDialogsSendModeHelpUk extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Режими надсилання';
 	@override String get single => 'Надсилає файли одному одержувачу. Вибірку буде очищено після завершення передачі файлів.';
 	@override String get multiple => 'Надсилає файли кільком одержувачам. Вибірку не буде очищено.';
-	@override String get link => 'Одержувачі, у яких не встановлений LocalSend, можуть завантажити вибрані файли відкривши посилання у своєму браузері.';
+	@override String get link => 'Одержувачі, у яких не встановлений AloeChat.AI, можуть завантажити вибрані файли відкривши посилання у своєму браузері.';
 }
 
 // Path: settingsTab.general.brightnessOptions

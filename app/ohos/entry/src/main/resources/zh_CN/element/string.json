@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "AloeChat.AI"
+    },
+    {
+      "name": "read_imagevideo_reason",
+      "value": "read_imagevideo_reason"
+    },
+    {
+      "name": "pasteboard_reason",
+      "value": "AloeChat.AI申请访问你的剪贴板。"
+    }
+  ]
+}

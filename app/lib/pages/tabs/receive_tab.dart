@@ -47,7 +47,7 @@ class ReceiveTab extends StatelessWidget {
                                   return RotatingWidget(
                                     duration: const Duration(seconds: 15),
                                     spinning: vm.serverState != null && animations && activeTab == HomeTab.receive,
-                                    child: const LocalSendLogo(withText: false),
+                                    child: const AloeChatAILogo(withText: false),
                                   );
                                 }),
                               ),

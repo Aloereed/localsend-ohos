@@ -1,6 +1,6 @@
 {
   "locale": "Dansk",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Accepter",
     "accepted": "Accepteret",
@@ -126,7 +126,7 @@
     },
     "other": {
       "title": "Andet",
-      "support": "Støt LocalSend",
+      "support": "Støt AloeChat.AI",
       "donate": "Doner",
       "privacyPolicy": "Privatlivspolitik",
       "termsOfUse": "Brugsbetingelser"
@@ -180,7 +180,7 @@
   "receiveOptionsPage": {
     "title": "Muligheder",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend mappe)",
+    "appDirectory": "(AloeChat.AI mappe)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Aufgrund von Ordnern automatisch ausgeschaltet."
   },
@@ -217,13 +217,13 @@
     "requests": "Forespørgsler",
     "noRequests": "Ingen forespørgsler endnu.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend benytter et selvsigneret certifikat. Det skal accepteres i browseren.",
+    "encryptionHint": "AloeChat.AI benytter et selvsigneret certifikat. Det skal accepteres i browseren.",
     "pendingRequests": "Offene Anfragen: {n}"
   },
   "aboutPage": {
-    "title": "Om LocalSend",
+    "title": "Om AloeChat.AI",
     "description": [
-      "LocalSend er en gratis Open-Source-App, som du kan bruge til sikkert at dele filer og beskeder med andre enheder i nærheden på dit lokale netværk, uden en internet forbindelse.",
+      "AloeChat.AI er en gratis Open-Source-App, som du kan bruge til sikkert at dele filer og beskeder med andre enheder i nærheden på dit lokale netværk, uden en internet forbindelse.",
       "Appen findes til Android, iOS, macOS, Windows og Linux. Alle downloadmuligheder finder du på den officielle hjemmeside."
     ],
     "author": "Skaber",
@@ -232,7 +232,7 @@
   },
   "donationPage": {
     "title": "Doner",
-    "info": "LocalSend er gratis, open-source og reklamefri. Hvis du kan lide denne app, kan du støtte dens udvikling med en donation.",
+    "info": "AloeChat.AI er gratis, open-source og reklamefri. Hvis du kan lide denne app, kan du støtte dens udvikling med en donation.",
     "donate": "Donation {amount}",
     "thanks": "Tusind tak for din støtte!",
     "restore": "Genskab køb"
@@ -304,7 +304,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "LocalSend kan ikke finde andre enheder uden tilladelse til at scanne det lokale netværk. Giv venligst tilladelse i systemindstillingerne.",
+      "description": "AloeChat.AI kan ikke finde andre enheder uden tilladelse til at scanne det lokale netværk. Giv venligst tilladelse i systemindstillingerne.",
       "gotoSettings": "Einstellungen"
     },
     "messageInput": {
@@ -342,13 +342,13 @@
       "title": "Sendemåde",
       "single": "Send filer til en modtager. Filvalget vil blive ryddet når filoverførslen er slut.",
       "multiple": "Send filer til flere modtagere. Filvalget vil ikke blive ryddet.",
-      "link": "Modtagere, der ikke har LocalSend installeret, kan downloade de valgte filer i en browser."
+      "link": "Modtagere, der ikke har AloeChat.AI installeret, kan downloade de valgte filer i en browser."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "LocalSend beenden"
+    "close": "AloeChat.AI beenden"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

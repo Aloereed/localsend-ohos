@@ -27,7 +27,7 @@ class _StringsTh extends Translations {
 
 	// Translations
 	@override String get locale => 'ไทย';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralTh general = _StringsGeneralTh._(_root);
 	@override late final _StringsReceiveTabTh receiveTab = _StringsReceiveTabTh._(_root);
 	@override late final _StringsSendTabTh sendTab = _StringsSendTabTh._(_root);
@@ -221,7 +221,7 @@ class _StringsReceiveOptionsPageTh extends _StringsReceiveOptionsPageEn {
 	// Translations
 	@override String get title => 'ตัวเลือก';
 	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(โฟลเดอร์ของ LocalSend)';
+	@override String get appDirectory => '(โฟลเดอร์ของ AloeChat.AI)';
 	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	@override String get saveToGalleryOff => 'ปิดโดยอัตโนมัติเนื่องจากมีไดเร็กทอรี';
 }
@@ -269,7 +269,7 @@ class _StringsWebSharePageTh extends _StringsWebSharePageEn {
 	@override String get requests => 'คำขอ';
 	@override String get noRequests => 'ยังไม่มีคำขอ';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend ใช้ใบรับรองที่ลงนามด้วยตัวเอง คุณต้องยอมรับในเบราว์เซอร์';
+	@override String get encryptionHint => 'AloeChat.AI ใช้ใบรับรองที่ลงนามด้วยตัวเอง คุณต้องยอมรับในเบราว์เซอร์';
 	@override String pendingRequests({required Object n}) => 'คำขอที่รอดำเนินการ: ${n}';
 }
 
@@ -280,9 +280,9 @@ class _StringsAboutPageTh extends _StringsAboutPageEn {
 	@override final _StringsTh _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'เกี่ยวกับ LocalSend';
+	@override String get title => 'เกี่ยวกับ AloeChat.AI';
 	@override List<String> get description => [
-		'LocalSend เป็นแอปโอเพ่นซอร์สฟรีที่ช่วยให้คุณแบ่งปันไฟล์และข้อความอย่างปลอดภัยกับอุปกรณ์ใกล้เคียงผ่านเครือข่ายท้องถิ่นของคุณโดยไม่จำเป็นต้องเชื่อมต่ออินเทอร์เน็ต',
+		'AloeChat.AI เป็นแอปโอเพ่นซอร์สฟรีที่ช่วยให้คุณแบ่งปันไฟล์และข้อความอย่างปลอดภัยกับอุปกรณ์ใกล้เคียงผ่านเครือข่ายท้องถิ่นของคุณโดยไม่จำเป็นต้องเชื่อมต่ออินเทอร์เน็ต',
 		'แอปนี้พร้อมใช้งานบน Android, iOS, macOS, Windows และ Linux คุณสามารถค้นหาตัวเลือกการดาวน์โหลดทั้งหมดได้จากหน้าแรกของเว็บไซต์ที่ทางการ',
 	];
 	@override String get author => 'ผู้เขียน';
@@ -298,7 +298,7 @@ class _StringsDonationPageTh extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'บริจาค';
-	@override String get info => 'LocalSend เป็นบริการโอเพ่นซอร์สฟรีและไม่มีโฆษณา หากคุณชอบแอพนี้ คุณสามารถสนับสนุนการพัฒนาด้วยการบริจาค';
+	@override String get info => 'AloeChat.AI เป็นบริการโอเพ่นซอร์สฟรีและไม่มีโฆษณา หากคุณชอบแอพนี้ คุณสามารถสนับสนุนการพัฒนาด้วยการบริจาค';
 	@override String donate({required Object amount}) => 'บริจาค ${amount}';
 	@override String get thanks => 'ขอบคุณมาก!';
 	@override String get restore => 'คืนค่าการซื้อ';
@@ -432,7 +432,7 @@ class _StringsTrayTh extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'ออกจาก LocalSend';
+	@override String get close => 'ออกจาก AloeChat.AI';
 }
 
 // Path: web
@@ -602,7 +602,7 @@ class _StringsSettingsTabOtherTh extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'อื่นๆ';
-	@override String get support => 'สนับสนุน LocalSend';
+	@override String get support => 'สนับสนุน AloeChat.AI';
 	@override String get donate => 'บริจาค';
 	@override String get privacyPolicy => 'นโยบายความเป็นส่วนตัว';
 	@override String get termsOfUse => 'ข้อกำหนดการใช้งาน';
@@ -806,7 +806,7 @@ class _StringsDialogsLocalNetworkUnauthorizedTh extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'LocalSend ไม่สามารถค้นหาอุปกรณ์อื่นได้หากไม่มีสิทธิ์ในการสแกนเครือข่ายท้องถิ่น โปรดอนุญาตสิทธิ์นี้ในการตั้งค่า';
+	@override String get description => 'AloeChat.AI ไม่สามารถค้นหาอุปกรณ์อื่นได้หากไม่มีสิทธิ์ในการสแกนเครือข่ายท้องถิ่น โปรดอนุญาตสิทธิ์นี้ในการตั้งค่า';
 	@override String get gotoSettings => 'การตั้งค่า';
 }
 
@@ -900,7 +900,7 @@ class _StringsDialogsSendModeHelpTh extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'โหมดส่ง';
 	@override String get single => 'ส่งไฟล์ไปยังผู้รับคนเดียว การเลือกจะถูกล้างออกออกหลังจากเสร็จสิ้นการโอนไฟล์';
 	@override String get multiple => 'ส่งไฟล์ไปยังผู้รับหลายคน การเลือกจะไม่ถูกล้างออก';
-	@override String get link => 'ผู้รับที่ไม่ได้ติดตั้ง LocalSend สามารถดาวน์โหลดไฟล์ที่เลือกได้โดยเปิดลิงก์ในเบราว์เซอร์';
+	@override String get link => 'ผู้รับที่ไม่ได้ติดตั้ง AloeChat.AI สามารถดาวน์โหลดไฟล์ที่เลือกได้โดยเปิดลิงก์ในเบราว์เซอร์';
 }
 
 // Path: settingsTab.general.brightnessOptions

@@ -1,4 +1,4 @@
-display_name: LocalSend
+display_name: AloeChatAI
 packager: Tienisto
 packagerEmail: dev.tien.donam@gmail.com
 url: https://localsend.org
@@ -17,7 +17,7 @@ keywords:
   - Files
 
 generic_name: An open source cross-platform alternative to AirDrop
-summary: Share files easily with LocalSend
+summary: Share files easily with AloeChatAI
 group: Applications/Utilities
 
 categories:

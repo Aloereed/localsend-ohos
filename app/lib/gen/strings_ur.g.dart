@@ -27,7 +27,7 @@ class _StringsUr extends Translations {
 
 	// Translations
 	@override String get locale => 'اردو';
-	@override String get appName => 'LocalSend';
+	@override String get appName => 'AloeChat.AI';
 	@override late final _StringsGeneralUr general = _StringsGeneralUr._(_root);
 	@override late final _StringsReceiveTabUr receiveTab = _StringsReceiveTabUr._(_root);
 	@override late final _StringsSendTabUr sendTab = _StringsSendTabUr._(_root);
@@ -265,7 +265,7 @@ class _StringsWebSharePageUr extends _StringsWebSharePageEn {
 	@override String get requests => 'درخواستیں';
 	@override String get noRequests => 'ابھی تک کوئی درخواست نہیں۔';
 	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'LocalSend براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔';
+	@override String get encryptionHint => 'AloeChat.AI براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔';
 	@override String pendingRequests({required Object n}) => 'زیر التواء درخواستیں: ${n}';
 }
 
@@ -276,7 +276,7 @@ class _StringsAboutPageUr extends _StringsAboutPageEn {
 	@override final _StringsUr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'کے بارے میں LocalSend';
+	@override String get title => 'کے بارے میں AloeChat.AI';
 }
 
 // Path: changelogPage
@@ -332,7 +332,7 @@ class _StringsTrayUr extends _StringsTrayEn {
 
 	// Translations
 	@override String get open => '${_root.general.open}';
-	@override String get close => 'چھوڑو LocalSend';
+	@override String get close => 'چھوڑو AloeChat.AI';
 }
 
 // Path: web
@@ -641,7 +641,7 @@ class _StringsDialogsLocalNetworkUnauthorizedUr extends _StringsDialogsLocalNetw
 
 	// Translations
 	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'لوکل نیٹ ورک کا سکین کرنے کی اجازت کے بغیر LocalSend، دیگر ڈیوائسز تلاش نہیں کرسکتا ہے۔ براہ کرم ترتیبات میں اس اجازت کو منظور کریں۔';
+	@override String get description => 'لوکل نیٹ ورک کا سکین کرنے کی اجازت کے بغیر AloeChat.AI، دیگر ڈیوائسز تلاش نہیں کرسکتا ہے۔ براہ کرم ترتیبات میں اس اجازت کو منظور کریں۔';
 	@override String get gotoSettings => 'ترتیبات';
 }
 
@@ -735,7 +735,7 @@ class _StringsDialogsSendModeHelpUr extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'بھیجنے کے انداز';
 	@override String get single => 'ایک ریسیور کو فائل بھیجتا ہے۔ بھیجتے وقت سلیکشن ختم ہوجائیگا۔';
 	@override String get multiple => 'اکثر متعدد ریسیورز کو فائل بھیجتا ہے۔ سلیکشن ختم نہیں ہوگا۔';
-	@override String get link => 'LocalSend نصب نہیں ہونے والے رسیورز منتخب شدہ فائلز کو لنک اپنے براؤزر میں کھولنے سے ڈاؤن لوڈ کر سکتے ہیں۔';
+	@override String get link => 'AloeChat.AI نصب نہیں ہونے والے رسیورز منتخب شدہ فائلز کو لنک اپنے براؤزر میں کھولنے سے ڈاؤن لوڈ کر سکتے ہیں۔';
 }
 
 // Path: settingsTab.general.brightnessOptions

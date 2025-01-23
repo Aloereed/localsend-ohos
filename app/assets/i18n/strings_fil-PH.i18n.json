@@ -1,6 +1,6 @@
 {
   "locale": "Filipino",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Tanggapin",
     "accepted": "Tinanggap",
@@ -126,7 +126,7 @@
     },
     "other": {
       "title": "Iba Pa",
-      "support": "Suportahan ang LocalSend",
+      "support": "Suportahan ang AloeChat.AI",
       "donate": "Mag-donate",
       "privacyPolicy": "Patakaran sa Privacy",
       "termsOfUse": "Mga Tuntunin sa Paggamit"
@@ -180,7 +180,7 @@
   "receiveOptionsPage": {
     "title": "Options",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend folder)",
+    "appDirectory": "(AloeChat.AI folder)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Awtomatikong pinatay dahil mayroong mga directories."
   },
@@ -217,13 +217,13 @@
     "requests": "Requests",
     "noRequests": "Wala pang mga request.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "Ang LocalSend ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser.",
+    "encryptionHint": "Ang AloeChat.AI ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser.",
     "pendingRequests": "Mga naka-pending na request: {n}"
   },
   "aboutPage": {
-    "title": "Tungkol sa LocalSend",
+    "title": "Tungkol sa AloeChat.AI",
     "description": [
-      "Ang LocalSend ay isang libre at open-source na app na nagbibigay-daan sa secure na pagbabahagi ng mga file at mga message sa mga kalapit na device sa iyong local network nang hindi nangangailangan ng koneksyon sa internet.",
+      "Ang AloeChat.AI ay isang libre at open-source na app na nagbibigay-daan sa secure na pagbabahagi ng mga file at mga message sa mga kalapit na device sa iyong local network nang hindi nangangailangan ng koneksyon sa internet.",
       "Available ang app na ito sa Android, iOS, macOS, Windows, at Linux. Maaari mong mahanap ang lahat ng mga pagpipilian sa pag-download sa opisyal na homepage."
     ],
     "author": "Author",
@@ -232,7 +232,7 @@
   },
   "donationPage": {
     "title": "Mag-donate",
-    "info": "Ang LocalSend ay libre, open-source, at walang anumang mga ad. Kung iyong nagustuhan ang app, maaari mong suportahan ang development sa pamamagitan ng donasyon.",
+    "info": "Ang AloeChat.AI ay libre, open-source, at walang anumang mga ad. Kung iyong nagustuhan ang app, maaari mong suportahan ang development sa pamamagitan ng donasyon.",
     "donate": "Mag-donate ng {amount}",
     "thanks": "Maraming salamat!",
     "restore": "Restore purchase"
@@ -374,7 +374,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "Hindi makikita ng LocalSend ang ibang devices hangga't hindi nabibigyan ng permission para mag-scan sa lokal na network. Mangyaring bigyan ito ng permission sa settings.",
+      "description": "Hindi makikita ng AloeChat.AI ang ibang devices hangga't hindi nabibigyan ng permission para mag-scan sa lokal na network. Mangyaring bigyan ito ng permission sa settings.",
       "gotoSettings": "Settings"
     },
     "messageInput": {
@@ -412,13 +412,13 @@
       "title": "Send modes",
       "single": "Magpadala ng mga file sa iisang recipient o tatanggap. Ang mga pagpipilian ay maaalis pagkatapos ipadala ang file.",
       "multiple": "Magpadala ng mga file sa maraming recipient o tatanggap. Ang mga pagpipilian ay hindi maaalis.",
-      "link": "Ang mga recipient o tatanggap na walang nakainstall na LocalSend ay maaaring mag download nang mga napiling file sa pamamagitan ng pagbukas ng link sa kanilang browser."
+      "link": "Ang mga recipient o tatanggap na walang nakainstall na AloeChat.AI ay maaaring mag download nang mga napiling file sa pamamagitan ng pagbukas ng link sa kanilang browser."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "Isara ang LocalSend"
+    "close": "Isara ang AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

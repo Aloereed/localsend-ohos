@@ -28,18 +28,18 @@ class AboutPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         children: [
           const SizedBox(height: 20),
-          const LocalSendLogo(withText: true),
+          const AloeChatAILogo(withText: true),
           Text(
-            '© ${DateTime.now().year} Tien Do Nam',
+            '© ${DateTime.now().year} Aloereed',
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Center(
             child: TextButton(
               onPressed: () async {
-                await launchUrl(Uri.parse('https://localsend.org'));
+                await launchUrl(Uri.parse('https://ohos.aloereed.com'),mode: LaunchMode.externalApplication);
               },
-              child: const Text('localsend.org'),
+              child: const Text('ohos.aloereed.com'),
             ),
           ),
           const SizedBox(height: 10),
@@ -47,69 +47,87 @@ class AboutPage extends StatelessWidget {
           const SizedBox(height: 20),
           Text(t.aboutPage.author, style: const TextStyle(fontWeight: FontWeight.bold)),
           Text.rich(_buildContributor(
-            label: 'Tien Do Nam (@Tienisto)',
+            label: 'Aloereed',
             primaryColor: primaryColor,
           )),
           const SizedBox(height: 20),
-          Text(t.aboutPage.contributors, style: const TextStyle(fontWeight: FontWeight.bold)),
-          ..._contributors.map((contributor) {
-            return Text.rich(_buildContributor(
-              label: contributor,
-              primaryColor: primaryColor,
-            ));
-          }),
-          const SizedBox(height: 20),
-          Text(t.aboutPage.translators, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Table(
-            columnWidths: const {
-              0: IntrinsicColumnWidth(),
-              1: FlexColumnWidth(),
-            },
-            children: [
-              ..._translators.entries.map(
-                (e) => TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Text(e.key.translations.locale),
-                    ),
-                    Text.rich(
-                      TextSpan(
-                        children: e.value.mapIndexed(
-                          (index, translator) {
-                            return _buildContributor(
-                              label: translator,
-                              primaryColor: primaryColor,
-                              newLine: index != 0,
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          Text('鸿蒙移植', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text.rich(_buildContributor(
+            label: 'https://github.com/Aloereed/localsend-ohos',
+            primaryColor: primaryColor,
+          )),
+          // const SizedBox(height: 20),
+          // Text(t.aboutPage.contributors, style: const TextStyle(fontWeight: FontWeight.bold)),
+          // ..._contributors.map((contributor) {
+          //   return Text.rich(_buildContributor(
+          //     label: contributor,
+          //     primaryColor: primaryColor,
+          //   ));
+          // }),
+          // const SizedBox(height: 20),
+          // Text(t.aboutPage.translators, style: const TextStyle(fontWeight: FontWeight.bold)),
+          // Table(
+          //   columnWidths: const {
+          //     0: IntrinsicColumnWidth(),
+          //     1: FlexColumnWidth(),
+          //   },
+          //   children: [
+          //     ..._translators.entries.map(
+          //       (e) => TableRow(
+          //         children: [
+          //           Padding(
+          //             padding: const EdgeInsets.only(right: 10),
+          //             child: Text(e.key.translations.locale),
+          //           ),
+          //           Text.rich(
+          //             TextSpan(
+          //               children: e.value.mapIndexed(
+          //                 (index, translator) {
+          //                   return _buildContributor(
+          //                     label: translator,
+          //                     primaryColor: primaryColor,
+          //                     newLine: index != 0,
+          //                   );
+          //                 },
+          //               ).toList(),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
                 onPressed: () async {
-                  await launchUrl(Uri.parse('https://localsend.org'));
+                  await launchUrl(Uri.parse('https://www.aloereed.com'), mode: LaunchMode.externalApplication);
                 },
-                child: const Text('Homepage'),
+                child: const Text('主页'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await launchUrl(Uri.parse('https://ohos.aloereed.com'), mode: LaunchMode.externalApplication);
+                },
+                child: const Text('Aloereed鸿蒙应用'),
               ),
               TextButton(
                 onPressed: () async {
                   await launchUrl(Uri.parse('https://github.com/localsend/localsend'), mode: LaunchMode.externalApplication);
                 },
-                child: const Text('Source Code (Github)'),
+                child: const Text('基于LocalSend开发'),
               ),
               TextButton(
                 onPressed: () async {
-                  await launchUrl(Uri.parse('https://opensource.org/licenses/MIT'));
+                  await launchUrl(Uri.parse('https://github.com/localsend/localsend/blob/main/LICENSE'), mode: LaunchMode.externalApplication);
+                },
+                child: const Text('LocalSend原始许可证'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await launchUrl(Uri.parse('https://opensource.org/licenses/MIT'), mode: LaunchMode.externalApplication);
                 },
                 child: const Text('MIT License'),
               ),
@@ -117,14 +135,14 @@ class AboutPage extends StatelessWidget {
                 onPressed: () async {
                   await context.push(() => const LicensePage());
                 },
-                child: const Text('License Notices'),
+                child: const Text('AloeChat.AI还使用了这些开源组件许可'),
               ),
-              TextButton(
-                onPressed: () async {
-                  await context.push(() => const DebugPage());
-                },
-                child: const Text('Debugging'),
-              ),
+              // TextButton(
+              //   onPressed: () async {
+              //     await context.push(() => const DebugPage());
+              //   },
+              //   child: const Text('Debugging'),
+              // ),
             ],
           ),
           const SizedBox(height: 50),

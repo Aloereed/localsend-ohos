@@ -32,7 +32,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 
 	// Translations
 	String get locale => 'English';
-	String get appName => 'LocalSend';
+	String get appName => 'AloeChat.AI';
 	late final _StringsGeneralEn general = _StringsGeneralEn._(_root);
 	late final _StringsReceiveTabEn receiveTab = _StringsReceiveTabEn._(_root);
 	late final _StringsSendTabEn sendTab = _StringsSendTabEn._(_root);
@@ -227,7 +227,7 @@ class _StringsReceiveOptionsPageEn {
 	// Translations
 	String get title => 'Options';
 	String get destination => '${_root.settingsTab.receive.destination}';
-	String get appDirectory => '(LocalSend folder)';
+	String get appDirectory => '(AloeChat.AI folder)';
 	String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
 	String get saveToGalleryOff => 'Turned off automatically because there are directories.';
 }
@@ -276,7 +276,7 @@ class _StringsWebSharePageEn {
 	String get noRequests => 'No requests yet.';
 	String get encryption => '${_root.settingsTab.network.encryption}';
 	String get autoAccept => 'Automatically accept requests';
-	String get encryptionHint => 'LocalSend uses a self-signed certificate. You need to accept it in your browser.';
+	String get encryptionHint => 'AloeChat.AI uses a self-signed certificate. You need to accept it in your browser.';
 	String pendingRequests({required Object n}) => 'Pending requests: ${n}';
 }
 
@@ -287,10 +287,10 @@ class _StringsAboutPageEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'About LocalSend';
+	String get title => 'About AloeChat.AI';
 	List<String> get description => [
-		'LocalSend is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
-		'This app is available on Android, iOS, macOS, Windows and Linux. You can find all download options on the official homepage.',
+		'AloeChat.AI is a free, open-source app based on LocalSend that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
+		'This app can be used on HarmonyOS Next and interacts with LocalSend on Android, iOS, macOS, Windows, and Linux.  You can find all download options on the official homepage.',
 	];
 	String get author => 'Author';
 	String get contributors => 'Contributors';
@@ -305,7 +305,7 @@ class _StringsDonationPageEn {
 
 	// Translations
 	String get title => 'Donate';
-	String get info => 'LocalSend is free, open-source and without any ads. If you like the app, you can support the development with a donation.';
+	String get info => 'AloeChat.AI is free, open-source and without any ads. If you like the app, you can support the development with a donation.';
 	String donate({required Object amount}) => 'Donate ${amount}';
 	String get thanks => 'Thank you very much!';
 	String get restore => 'Restore purchase';
@@ -439,7 +439,7 @@ class _StringsTrayEn {
 
 	// Translations
 	String get open => '${_root.general.open}';
-	String get close => 'Quit LocalSend';
+	String get close => 'Quit AloeChat.AI';
 }
 
 // Path: web
@@ -620,7 +620,7 @@ class _StringsSettingsTabOtherEn {
 
 	// Translations
 	String get title => 'Other';
-	String get support => 'Support LocalSend';
+	String get support => 'Support AloeChat.AI';
 	String get donate => 'Donate';
 	String get privacyPolicy => 'Privacy Policy';
 	String get termsOfUse => 'Terms of Use';
@@ -824,7 +824,7 @@ class _StringsDialogsLocalNetworkUnauthorizedEn {
 
 	// Translations
 	String get title => '${_root.dialogs.noPermission.title}';
-	String get description => 'LocalSend can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
+	String get description => 'AloeChat.AI can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
 	String get gotoSettings => 'Settings';
 }
 
@@ -918,7 +918,7 @@ class _StringsDialogsSendModeHelpEn {
 	String get title => 'Send modes';
 	String get single => 'Sends files to one recipient. Selection will be cleared after finished file transfer.';
 	String get multiple => 'Sends files to multiple recipients. Selection will not be cleared.';
-	String get link => 'Recipients who do not have LocalSend installed can download the selected files by opening the link in their browser.';
+	String get link => 'Recipients who do not have AloeChat.AI installed can download the selected files by opening the link in their browser.';
 }
 
 // Path: settingsTab.general.brightnessOptions

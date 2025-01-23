@@ -1,6 +1,6 @@
 {
   "locale": "Indonesian",
-  "appName": "LocalSend",
+  "appName": "AloeChat.AI",
   "general": {
     "accept": "Terima",
     "accepted": "Diterima",
@@ -126,7 +126,7 @@
     },
     "other": {
       "title": "Lainnya",
-      "support": "Dukung LocalSend",
+      "support": "Dukung AloeChat.AI",
       "donate": "Berikan Donasi",
       "privacyPolicy": "Kebijakan Privasi",
       "termsOfUse": "Syarat dan Ketentuan Penggunaan"
@@ -180,7 +180,7 @@
   "receiveOptionsPage": {
     "title": "Opsi",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(LocalSend folder)",
+    "appDirectory": "(AloeChat.AI folder)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Dimatikan secara otomatis karena ada direktori."
   },
@@ -217,13 +217,13 @@
     "requests": "Permintaan",
     "noRequests": "Belum ada permintaan.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "LocalSend menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban.",
+    "encryptionHint": "AloeChat.AI menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban.",
     "pendingRequests": "Permintaan tertunda: {n}"
   },
   "aboutPage": {
-    "title": "Tentang LocalSend",
+    "title": "Tentang AloeChat.AI",
     "description": [
-      "LocalSend merupakan aplikasi gratis, open-source (terbuka) yang dapat membantu anda untuk transfer file dan pesan secara aman dengan perangkat terdekat lain melalui jaringan lokal tanpa perlu koneksi internet atau paket data.",
+      "AloeChat.AI merupakan aplikasi gratis, open-source (terbuka) yang dapat membantu anda untuk transfer file dan pesan secara aman dengan perangkat terdekat lain melalui jaringan lokal tanpa perlu koneksi internet atau paket data.",
       "Aplikasi ini tersedia untuk Android, iOS, macOS, Windows dan Linux. Anda dapat menemukan semua pilihan download pada halaman resmi kami."
     ],
     "author": "Pencipta",
@@ -232,7 +232,7 @@
   },
   "donationPage": {
     "title": "Donasi",
-    "info": "LocalSend merupakan aplikasi gratis, terbuka dan bebas iklan. Jika anda menyukai aplikasi ini, anda dapat membantu dengan cara memberikan donasi.",
+    "info": "AloeChat.AI merupakan aplikasi gratis, terbuka dan bebas iklan. Jika anda menyukai aplikasi ini, anda dapat membantu dengan cara memberikan donasi.",
     "donate": "Donasi {amount}",
     "thanks": "Terima kasih banyak!",
     "restore": "Kembalikan dana"
@@ -374,7 +374,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "LocalSend tidak dapat menemukan perangkat lain tanpa izin untuk memindai jaringan lokal. Mohon berikan izin ini di pengaturan.",
+      "description": "AloeChat.AI tidak dapat menemukan perangkat lain tanpa izin untuk memindai jaringan lokal. Mohon berikan izin ini di pengaturan.",
       "gotoSettings": "Pengaturan"
     },
     "messageInput": {
@@ -412,13 +412,13 @@
       "title": "Mode pengiriman",
       "single": "Mengirim file ke satu penerima. Pilihan akan dihapus setelah selesai mentransfer file.",
       "multiple": "Mengirim file ke beberapa penerima. Pilihan tidak akan dihapus.",
-      "link": "Penerima yang tidak memiliki LocalSend dapat mengunduh file yang dipilih dengan membuka tautan di browser mereka."
+      "link": "Penerima yang tidak memiliki AloeChat.AI dapat mengunduh file yang dipilih dengan membuka tautan di browser mereka."
     }
   },
   "tray": {
     "@info": "Pedoman Apple sangat ketat tentang kata-kata 'tutup'.",
     "open": "@:general.open",
-    "close": "Tutup LocalSend"
+    "close": "Tutup AloeChat.AI"
   },
   "web": {
     "waiting": "@:sendPage.waiting",
