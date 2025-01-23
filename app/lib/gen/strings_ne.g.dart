@@ -33,7 +33,7 @@ class TranslationsNe extends Translations {
   @override
   String get locale => 'नेपाली';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralNe general = _TranslationsGeneralNe._(_root);
   @override
@@ -341,7 +341,7 @@ class _TranslationsReceiveOptionsPageNe extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend फोल्डर)';
+  String get appDirectory => '(AloeChat.AI फोल्डर)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -414,7 +414,7 @@ class _TranslationsWebSharePageNe extends TranslationsWebSharePageEn {
   @override
   String get encryption => _root.settingsTab.network.encryption;
   @override
-  String get encryptionHint => 'LocalSend एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।';
+  String get encryptionHint => 'AloeChat.AI एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।';
   @override
   String pendingRequests({required Object n}) => 'लंबित अनुरोध: ${n}';
 }
@@ -429,7 +429,7 @@ class _TranslationsAboutPageNe extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'LocalSend को बारेमा';
+  String get title => 'AloeChat.AI को बारेमा';
 }
 
 // Path: changelogPage
@@ -587,7 +587,7 @@ class _TranslationsTrayNe extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'LocalSend छोड्नुहोस्';
+  String get close => 'AloeChat.AI छोड्नुहोस्';
 }
 
 // Path: web
@@ -1059,7 +1059,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedNe extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      ' LocalSend बिना निजी नेटवर्क स्कैन की अनुमति के बिना अन्य उपकरणों को नहीं खोज सकता है। कृपया सेटिंग्स में इस अनुमति को प्रदान करें।';
+      ' AloeChat.AI बिना निजी नेटवर्क स्कैन की अनुमति के बिना अन्य उपकरणों को नहीं खोज सकता है। कृपया सेटिंग्स में इस अनुमति को प्रदान करें।';
   @override
   String get gotoSettings => 'सेटिंग्स';
 }
@@ -1191,7 +1191,7 @@ class _TranslationsDialogsSendModeHelpNe extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'एकाधिक प्राप्तकर्ताओं को फ़ाइलें भेजता है। चयन साफ़ नहीं होगा।';
   @override
-  String get link => 'LocalSend इंस्टॉल न करने वाले प्राप्तकर्ता चयनित फ़ाइलें डाउनलोड कर सकते हैं जब वह ब्राउज़र में लिंक खोलते हैं।';
+  String get link => 'AloeChat.AI इंस्टॉल न करने वाले प्राप्तकर्ता चयनित फ़ाइलें डाउनलोड कर सकते हैं जब वह ब्राउज़र में लिंक खोलते हैं।';
 }
 
 // Path: settingsTab.general.brightnessOptions

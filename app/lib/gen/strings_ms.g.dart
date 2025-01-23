@@ -33,7 +33,7 @@ class TranslationsMs extends Translations {
   @override
   String get locale => 'Bahasa Melayu';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralMs general = _TranslationsGeneralMs._(_root);
   @override
@@ -359,7 +359,7 @@ class _TranslationsReceiveOptionsPageMs extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(folder LocalSend)';
+  String get appDirectory => '(folder AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -451,10 +451,10 @@ class _TranslationsAboutPageMs extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Mengenai LocalSend';
+  String get title => 'Mengenai AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend adalah aplikasi percuma dan sumber terbuka yang membolehkan anda berkongsi fail dan mesej dengan selamat dengan peranti berdekatan melalui rangkaian tempatan anda tanpa memerlukan sambungan internet.',
+        'AloeChat.AI adalah aplikasi percuma dan sumber terbuka yang membolehkan anda berkongsi fail dan mesej dengan selamat dengan peranti berdekatan melalui rangkaian tempatan anda tanpa memerlukan sambungan internet.',
         'Aplikasi ini tersedia di Android, iOS, macOS, Windows dan Linux. Anda boleh mencari semua pilihan muat turun di laman web rasmi.',
       ];
   @override
@@ -478,7 +478,7 @@ class _TranslationsDonationPageMs extends TranslationsDonationPageEn {
   String get title => 'Derma';
   @override
   String get info =>
-      'LocalSend adalah percuma, sumber terbuka dan tanpa iklan. Jika anda menyukai aplikasi ini, anda boleh menyokong pembangunannya dengan derma.';
+      'AloeChat.AI adalah percuma, sumber terbuka dan tanpa iklan. Jika anda menyukai aplikasi ini, anda boleh menyokong pembangunannya dengan derma.';
   @override
   String donate({required Object amount}) => 'Derma ${amount}';
   @override
@@ -654,7 +654,7 @@ class _TranslationsTrayMs extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Keluar LocalSend';
+  String get close => 'Keluar AloeChat.AI';
   @override
   String get closeWindows => 'Keluar';
 }
@@ -869,7 +869,7 @@ class _TranslationsSettingsTabGeneralMs extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Mula automatik: Mula tersembunyi';
   @override
-  String get showInContextMenu => 'Tunjukkan LocalSend dalam menu konteks';
+  String get showInContextMenu => 'Tunjukkan AloeChat.AI dalam menu konteks';
   @override
   String get animations => 'Animasi';
 }
@@ -971,7 +971,7 @@ class _TranslationsSettingsTabOtherMs extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Lain-lain';
   @override
-  String get support => 'Sokong LocalSend';
+  String get support => 'Sokong AloeChat.AI';
   @override
   String get donate => 'Derma';
   @override
@@ -1227,7 +1227,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedMs extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend tidak dapat mencari peranti lain tanpa mempunyai kebenaran untuk mengimbas rangkaian tempatan. Sila berikan kebenaran ini dalam tetapan.';
+      'AloeChat.AI tidak dapat mencari peranti lain tanpa mempunyai kebenaran untuk mengimbas rangkaian tempatan. Sila berikan kebenaran ini dalam tetapan.';
   @override
   String get gotoSettings => 'Tetapan';
 }
@@ -1374,7 +1374,7 @@ class _TranslationsDialogsSendModeHelpMs extends TranslationsDialogsSendModeHelp
   String get multiple => 'Menghantar fail kepada beberapa penerima. Pilihan tidak akan dibersihkan.';
   @override
   String get link =>
-      'Penerima yang tidak mempunyai LocalSend dipasang boleh memuat turun fail yang dipilih dengan membuka pautan dalam pelayar mereka.';
+      'Penerima yang tidak mempunyai AloeChat.AI dipasang boleh memuat turun fail yang dipilih dengan membuka pautan dalam pelayar mereka.';
 }
 
 // Path: dialogs.favoriteDialog

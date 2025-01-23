@@ -33,7 +33,7 @@ class TranslationsSr extends Translations {
   @override
   String get locale => 'Srpski';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralSr general = _TranslationsGeneralSr._(_root);
   @override
@@ -359,7 +359,7 @@ class _TranslationsReceiveOptionsPageSr extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend folder)';
+  String get appDirectory => '(AloeChat.AI folder)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageSr extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN je "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend koristi sertifikate koji su self-signed. Morate da prihvatite to u browseru.';
+  String get encryptionHint => 'AloeChat.AI koristi sertifikate koji su self-signed. Morate da prihvatite to u browseru.';
   @override
   String pendingRequests({required Object n}) => 'Zahtevi na čekanju: ${n}';
 }
@@ -455,10 +455,10 @@ class _TranslationsAboutPageSr extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'O LocalSend-u';
+  String get title => 'O AloeChat.AI-u';
   @override
   List<String> get description => [
-        'LocalSend je besplatna (slobodna) open-source aplikacija, koja vam omogućava da delite fajlove i poruke sa obližnjim uredjajima sigurno, preko lokalne mreže, bez potrebe za internet konekcijom.',
+        'AloeChat.AI je besplatna (slobodna) open-source aplikacija, koja vam omogućava da delite fajlove i poruke sa obližnjim uredjajima sigurno, preko lokalne mreže, bez potrebe za internet konekcijom.',
         'Ova aplikacije je dostupna za Android, iOS, macOS, Windows i Linux. Možete pronaći sve opcije za download na oficijelnoj web strani.',
       ];
   @override
@@ -484,7 +484,7 @@ class _TranslationsDonationPageSr extends TranslationsDonationPageEn {
   String get title => 'Doniraj';
   @override
   String get info =>
-      'LocalSend je slobodna, open-source aplikacije bez reklama. Ako vam se dopada aplikacija, možete podržati razvoj putem donacije.';
+      'AloeChat.AI je slobodna, open-source aplikacije bez reklama. Ako vam se dopada aplikacija, možete podržati razvoj putem donacije.';
   @override
   String donate({required Object amount}) => 'Doniraj ${amount}';
   @override
@@ -678,7 +678,7 @@ class _TranslationsTraySr extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Quit LocalSend';
+  String get close => 'Quit AloeChat.AI';
   @override
   String get closeWindows => 'Izadji';
 }
@@ -886,7 +886,7 @@ class _TranslationsSettingsTabGeneralSr extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Autostartuj: Start sakriven';
   @override
-  String get showInContextMenu => 'Prikaži LocalSend u kontekst meniju';
+  String get showInContextMenu => 'Prikaži AloeChat.AI u kontekst meniju';
   @override
   String get animations => 'Animacije';
 }
@@ -988,7 +988,7 @@ class _TranslationsSettingsTabOtherSr extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Drugo';
   @override
-  String get support => 'Podrži LocalSend';
+  String get support => 'Podrži AloeChat.AI';
   @override
   String get donate => 'Doniraj';
   @override
@@ -1298,7 +1298,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedSr extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend ne može da nadje druge uredjaje bez dozvole da skenira lokalnu mrežu. Molim dodajte ovu dozvolu u Podešavanja.';
+      'AloeChat.AI ne može da nadje druge uredjaje bez dozvole da skenira lokalnu mrežu. Molim dodajte ovu dozvolu u Podešavanja.';
   @override
   String get gotoSettings => 'Podešavanja';
 }
@@ -1456,7 +1456,7 @@ class _TranslationsDialogsSendModeHelpSr extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Pošalji fajlove za više primalaca. Selekcija neće biti resetovana nakon završenog slanja.';
   @override
-  String get link => 'Primaoci koji nemaju LocalSend instaliran, mogu da download-uju selektovane fajlove preko Linka u browseru.';
+  String get link => 'Primaoci koji nemaju AloeChat.AI instaliran, mogu da download-uju selektovane fajlove preko Linka u browseru.';
 }
 
 // Path: dialogs.zoom

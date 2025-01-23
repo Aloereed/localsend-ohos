@@ -33,7 +33,7 @@ class TranslationsBn extends Translations {
   @override
   String get locale => 'বাংলা';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralBn general = _TranslationsGeneralBn._(_root);
   @override
@@ -422,7 +422,7 @@ class _TranslationsWebSharePageBn extends TranslationsWebSharePageEn {
   @override
   String get encryption => _root.settingsTab.network.encryption;
   @override
-  String get encryptionHint => 'LocalSend একটি স্ব-স্বাক্ষরিত শংসাপত্র ব্যবহার করে। আপনাকে ব্রাউজারে এটি গ্রহণ করতে হবে।';
+  String get encryptionHint => 'AloeChat.AI একটি স্ব-স্বাক্ষরিত শংসাপত্র ব্যবহার করে। আপনাকে ব্রাউজারে এটি গ্রহণ করতে হবে।';
   @override
   String pendingRequests({required Object n}) => 'অনুরোধ অপেক্ষারত: ${n}';
 }
@@ -437,10 +437,10 @@ class _TranslationsAboutPageBn extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'LocalSend সম্পর্কে';
+  String get title => 'AloeChat.AI সম্পর্কে';
   @override
   List<String> get description => [
-        'LocalSend হল একটি বিনামূল্যের, ওপেন সোর্স অ্যাপ যা আপনাকে ইন্টারনেট সংযোগের প্রয়োজন ছাড়াই আপনার স্থানীয় নেটওয়ার্কে কাছাকাছি ডিভাইসগুলির সাথে ফাইল এবং বার্তাগুলিকে নিরাপদে ভাগ করতে দেয়৷',
+        'AloeChat.AI হল একটি বিনামূল্যের, ওপেন সোর্স অ্যাপ যা আপনাকে ইন্টারনেট সংযোগের প্রয়োজন ছাড়াই আপনার স্থানীয় নেটওয়ার্কে কাছাকাছি ডিভাইসগুলির সাথে ফাইল এবং বার্তাগুলিকে নিরাপদে ভাগ করতে দেয়৷',
         'এই অ্যাপটি Android, iOS, macOS, Windows এবং Linux-এ উপলব্ধ। আপনি অফিসিয়াল হোমপেজে সমস্ত ডাউনলোড বিকল্প খুঁজে পেতে পারেন।',
       ];
   @override
@@ -464,7 +464,7 @@ class _TranslationsDonationPageBn extends TranslationsDonationPageEn {
   String get title => 'দান';
   @override
   String get info =>
-      'LocalSend বিনামূল্যে, ওপেন সোর্স এবং কোনো বিজ্ঞাপন ছাড়াই। আপনি যদি অ্যাপটি পছন্দ করেন তবে আপনি একটি অনুদান দিয়ে বিকাশকে সমর্থন করতে পারেন।';
+      'AloeChat.AI বিনামূল্যে, ওপেন সোর্স এবং কোনো বিজ্ঞাপন ছাড়াই। আপনি যদি অ্যাপটি পছন্দ করেন তবে আপনি একটি অনুদান দিয়ে বিকাশকে সমর্থন করতে পারেন।';
   @override
   String donate({required Object amount}) => 'দান ${amount}';
   @override
@@ -636,7 +636,7 @@ class _TranslationsTrayBn extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'LocalSend থেকে প্রস্থান করুন';
+  String get close => 'AloeChat.AI থেকে প্রস্থান করুন';
 }
 
 // Path: web
@@ -1200,7 +1200,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedBn extends TranslationsDialogs
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => 'স্থানীয় নেটওয়ার্ক স্ক্যান করার অনুমতি ছাড়া LocalSend অন্য ডিভাইস খুঁজে পায় না। অনুগ্রহ করে সেটিংসে এই অনুমতি দিন.';
+  String get description => 'স্থানীয় নেটওয়ার্ক স্ক্যান করার অনুমতি ছাড়া AloeChat.AI অন্য ডিভাইস খুঁজে পায় না। অনুগ্রহ করে সেটিংসে এই অনুমতি দিন.';
   @override
   String get gotoSettings => 'সেটিংস';
 }
@@ -1332,7 +1332,7 @@ class _TranslationsDialogsSendModeHelpBn extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'একাধিক প্রাপককে ফাইল পাঠায়। নির্বাচন সাফ করা হবে না.';
   @override
-  String get link => 'যাদের কাছে LocalSend ইনস্টল নেই তারা তাদের ব্রাউজারে লিঙ্কটি খুলে নির্বাচিত ফাইলগুলি ডাউনলোড করতে পারেন৷';
+  String get link => 'যাদের কাছে AloeChat.AI ইনস্টল নেই তারা তাদের ব্রাউজারে লিঙ্কটি খুলে নির্বাচিত ফাইলগুলি ডাউনলোড করতে পারেন৷';
 }
 
 // Path: settingsTab.general.brightnessOptions

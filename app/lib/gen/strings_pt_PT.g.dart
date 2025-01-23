@@ -33,7 +33,7 @@ class TranslationsPtPt extends Translations {
   @override
   String get locale => 'Português (Portugal)';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralPtPt general = _TranslationsGeneralPtPt._(_root);
   @override
@@ -353,7 +353,7 @@ class _TranslationsReceiveOptionsPagePtPt extends TranslationsReceiveOptionsPage
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(pasta LocalSend)';
+  String get appDirectory => '(pasta AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -428,7 +428,7 @@ class _TranslationsWebSharePagePtPt extends TranslationsWebSharePageEn {
   @override
   String get autoAccept => 'Aceitar pedidos automaticamente';
   @override
-  String get encryptionHint => 'O LocalSend utiliza um certificado assinado automaticamente. Precisa de aceitá-lo no navegador.';
+  String get encryptionHint => 'O AloeChat.AI utiliza um certificado assinado automaticamente. Precisa de aceitá-lo no navegador.';
   @override
   String pendingRequests({required Object n}) => 'Pedidos pendentes: ${n}';
 }
@@ -443,10 +443,10 @@ class _TranslationsAboutPagePtPt extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Acerca do LocalSend';
+  String get title => 'Acerca do AloeChat.AI';
   @override
   List<String> get description => [
-        'O LocalSend é uma aplicação gratuita e de código aberto que permite partilhar ficheiros e mensagens de forma segura com dispositivos próximos através da sua rede local, sem a necessidade de uma ligação à Internet.',
+        'O AloeChat.AI é uma aplicação gratuita e de código aberto que permite partilhar ficheiros e mensagens de forma segura com dispositivos próximos através da sua rede local, sem a necessidade de uma ligação à Internet.',
         'Esta aplicação está disponível para Android, iOS, macOS, Windows e Linux. Pode encontrar todas as opções para descarregar na página oficial.',
       ];
   @override
@@ -470,7 +470,7 @@ class _TranslationsDonationPagePtPt extends TranslationsDonationPageEn {
   String get title => 'Doar';
   @override
   String get info =>
-      'O LocalSend é um software gratuito, de código aberto e sem qualquer anúncio. Se gosta da aplicação, então considere apoiar o desenvolvimento com um donativo!';
+      'O AloeChat.AI é um software gratuito, de código aberto e sem qualquer anúncio. Se gosta da aplicação, então considere apoiar o desenvolvimento com um donativo!';
   @override
   String donate({required Object amount}) => 'Doar ${amount}';
   @override
@@ -662,7 +662,7 @@ class _TranslationsTrayPtPt extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Fechar o LocalSend';
+  String get close => 'Fechar o AloeChat.AI';
 }
 
 // Path: web
@@ -952,7 +952,7 @@ class _TranslationsSettingsTabOtherPtPt extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Outros';
   @override
-  String get support => 'Suporte o LocalSend';
+  String get support => 'Suporte o AloeChat.AI';
   @override
   String get donate => 'Doar';
   @override
@@ -1245,7 +1245,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedPtPt extends TranslationsDialo
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'O LocalSend não consegue encontrar outros dispositivos sem ter a permissão para analisar a rede local. Conceda esta permissão nas definições.';
+      'O AloeChat.AI não consegue encontrar outros dispositivos sem ter a permissão para analisar a rede local. Conceda esta permissão nas definições.';
   @override
   String get gotoSettings => 'Definições';
 }
@@ -1379,7 +1379,7 @@ class _TranslationsDialogsSendModeHelpPtPt extends TranslationsDialogsSendModeHe
   String get multiple => 'Envia ficheiros para vários destinatários. A seleção não será apagada.';
   @override
   String get link =>
-      'Os destinatários que não têm o LocalSend instalado podem descarregar os ficheiros selecionados abrindo o link fornecido no navegador.';
+      'Os destinatários que não têm o AloeChat.AI instalado podem descarregar os ficheiros selecionados abrindo o link fornecido no navegador.';
 }
 
 // Path: dialogs.zoom

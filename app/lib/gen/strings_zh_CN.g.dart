@@ -33,7 +33,7 @@ class TranslationsZhCn extends Translations {
   @override
   String get locale => '简体中文';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralZhCn general = _TranslationsGeneralZhCn._(_root);
   @override
@@ -214,7 +214,7 @@ class _TranslationsSendTabZhCn extends TranslationsSendTabEn {
   @override
   String get sendModeHelp => '解释';
   @override
-  String get help => '请确保目标连接的是同一个 Wi‑Fi 网络';
+  String get help => '请确保目标连接的是同一个 WLAN 网络';
   @override
   String get placeItems => '列出要分享的文件';
 }
@@ -359,7 +359,7 @@ class _TranslationsReceiveOptionsPageZhCn extends TranslationsReceiveOptionsPage
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend 文件夹)';
+  String get appDirectory => '(AloeChat.AI 文件夹)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageZhCn extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN 为 “${pin}”';
   @override
-  String get encryptionHint => 'LocalSend 使用自签名证书。您需要在浏览器中允许它。';
+  String get encryptionHint => 'AloeChat.AI 使用自签名证书。您需要在浏览器中允许它。';
   @override
   String pendingRequests({required Object n}) => '待处理请求：${n}';
 }
@@ -455,11 +455,11 @@ class _TranslationsAboutPageZhCn extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => '关于 LocalSend';
+  String get title => '关于 AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend 是一款免费的开源应用程序，可让您通过本地网络与附近的设备安全地分享文件和信息，而无需互联网连接。',
-        '本程序可在 Android、iOS、macOS、Windows 和 Linux 上使用。您可以在官方主页找到所有下载选项。',
+        'AloeChat.AI 是一款基于LocalSend的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
+		    '本程序可在 鸿蒙Next上使用，并且与Android、iOS、macOS、Windows 和 Linux 上的LocalSend交互。您可以在官方主页找到所有下载选项。',
       ];
   @override
   String get author => '作者';
@@ -483,7 +483,7 @@ class _TranslationsDonationPageZhCn extends TranslationsDonationPageEn {
   @override
   String get title => '捐赠';
   @override
-  String get info => 'LocalSend 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。';
+  String get info => 'AloeChat.AI 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。';
   @override
   String donate({required Object amount}) => '捐款 ${amount}';
   @override
@@ -675,7 +675,7 @@ class _TranslationsTrayZhCn extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => '退出 LocalSend';
+  String get close => '退出 AloeChat.AI';
   @override
   String get closeWindows => '离开';
 }
@@ -882,7 +882,7 @@ class _TranslationsSettingsTabGeneralZhCn extends TranslationsSettingsTabGeneral
   @override
   String get launchMinimized => '静默自启：只启动托盘服务';
   @override
-  String get showInContextMenu => '在“发送到”文件菜单中显示 LocalSend';
+  String get showInContextMenu => '在“发送到”文件菜单中显示 AloeChat.AI';
   @override
   String get animations => '动画效果';
 }
@@ -982,7 +982,7 @@ class _TranslationsSettingsTabOtherZhCn extends TranslationsSettingsTabOtherEn {
   @override
   String get title => '其他';
   @override
-  String get support => '支持 LocalSend';
+  String get support => '支持 AloeChat.AI';
   @override
   String get donate => '捐赠';
   @override
@@ -1020,7 +1020,7 @@ class _TranslationsTroubleshootPageNoDiscoveryZhCn extends TranslationsTroublesh
   @override
   String get symptom => '此设备未能发现其他设备。';
   @override
-  String get solution => '确保所有设备都处于同一个 Wi‑Fi 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。您可以尝试手动键入目标设备的 IP 地址。如果这有效，请考虑将此设备添加到收藏夹中，以便将来可以自动发现。';
+  String get solution => '确保所有设备都处于同一个 WLAN 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。您可以尝试手动键入目标设备的 IP 地址。如果这有效，请考虑将此设备添加到收藏夹中，以便将来可以自动发现。';
 }
 
 // Path: troubleshootPage.noConnection
@@ -1035,7 +1035,7 @@ class _TranslationsTroubleshootPageNoConnectionZhCn extends TranslationsTroubles
   @override
   String get symptom => '双方设备均无法发现对方或者分享文件。';
   @override
-  String get solution => '当问题发生在双方设备上时，请先确认双方设备处于同一个 Wi‑Fi 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。若因 Wi‑Fi 不允许参与者间通信，那么请在路由器中关闭“接入点 (AP) 隔离”选项。';
+  String get solution => '当问题发生在双方设备上时，请先确认双方设备处于同一个 WLAN 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。若因 WLAN 不允许参与者间通信，那么请在路由器中关闭“接入点 (AP) 隔离”选项。';
 }
 
 // Path: receiveHistoryPage.entryActions
@@ -1288,7 +1288,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedZhCn extends TranslationsDialo
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => 'LocalSend 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。';
+  String get description => 'AloeChat.AI 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。';
   @override
   String get gotoSettings => '设置';
 }
@@ -1452,7 +1452,7 @@ class _TranslationsDialogsSendModeHelpZhCn extends TranslationsDialogsSendModeHe
   @override
   String get multiple => '发送文件给多个接收者。已选择的文件在发送后不会取消选择。';
   @override
-  String get link => '未安装 LocalSend 的接收者可以在浏览器中打开链接以下载选中的文件。';
+  String get link => '未安装 AloeChat.AI 的接收者可以在浏览器中打开链接以下载选中的文件。';
 }
 
 // Path: dialogs.zoom

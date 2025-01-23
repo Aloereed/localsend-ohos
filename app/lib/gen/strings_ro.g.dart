@@ -33,7 +33,7 @@ class TranslationsRo extends Translations {
   @override
   String get locale => 'Română';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralRo general = _TranslationsGeneralRo._(_root);
   @override
@@ -353,7 +353,7 @@ class _TranslationsReceiveOptionsPageRo extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(Dosarul LocalSend)';
+  String get appDirectory => '(Dosarul AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -434,7 +434,7 @@ class _TranslationsWebSharePageRo extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN-ul este "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend folosește un certificat auto-semnat. Trebuie să-l accepți în browserul tău.';
+  String get encryptionHint => 'AloeChat.AI folosește un certificat auto-semnat. Trebuie să-l accepți în browserul tău.';
   @override
   String pendingRequests({required Object n}) => 'Cererile în așteptare: ${n}';
 }
@@ -449,10 +449,10 @@ class _TranslationsAboutPageRo extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Despre LocalSend';
+  String get title => 'Despre AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend este o aplicație gratuită și open-source care îți permite să partajezi în siguranță fișiere și mesaje cu dispozitivele din apropiere prin rețeaua ta locală, fără a avea nevoie de o conexiune la internet.',
+        'AloeChat.AI este o aplicație gratuită și open-source care îți permite să partajezi în siguranță fișiere și mesaje cu dispozitivele din apropiere prin rețeaua ta locală, fără a avea nevoie de o conexiune la internet.',
         'Această aplicație este disponibilă pe Android, iOS, macOS, Windows și Linux. Poți găsi toate opțiunile de descărcare pe pagina oficială.',
       ];
   @override
@@ -475,7 +475,7 @@ class _TranslationsDonationPageRo extends TranslationsDonationPageEn {
   @override
   String get title => 'Donează';
   @override
-  String get info => 'LocalSend este gratuit, open-source și fără reclame. Dacă îți place aplicația, poți susține dezvoltarea cu o donație.';
+  String get info => 'AloeChat.AI este gratuit, open-source și fără reclame. Dacă îți place aplicația, poți susține dezvoltarea cu o donație.';
   @override
   String donate({required Object amount}) => 'Donează ${amount}';
   @override
@@ -664,7 +664,7 @@ class _TranslationsTrayRo extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Închide LocalSend';
+  String get close => 'Închide AloeChat.AI';
 }
 
 // Path: web
@@ -868,7 +868,7 @@ class _TranslationsSettingsTabGeneralRo extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Autopornire: Pornire ascunsă';
   @override
-  String get showInContextMenu => 'Afișează LocalSend în meniul contextual';
+  String get showInContextMenu => 'Afișează AloeChat.AI în meniul contextual';
   @override
   String get animations => 'Animații';
 }
@@ -964,7 +964,7 @@ class _TranslationsSettingsTabOtherRo extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Altele';
   @override
-  String get support => 'Susțineți LocalSend';
+  String get support => 'Susțineți AloeChat.AI';
   @override
   String get donate => 'Donează';
   @override
@@ -1259,7 +1259,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedRo extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend nu poate găsi alte dispozitive fără permisiunea de a scana rețeaua locală. Să acorzi această permisiune în setări.';
+      'AloeChat.AI nu poate găsi alte dispozitive fără permisiunea de a scana rețeaua locală. Să acorzi această permisiune în setări.';
   @override
   String get gotoSettings => 'Setări';
 }
@@ -1404,7 +1404,7 @@ class _TranslationsDialogsSendModeHelpRo extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Trimite fișiere la mai mulți recipienți. Selecția nu va fi golită.';
   @override
-  String get link => 'Recipienții care nu au LocalSend instalat pot descărca fișierele selectate accesând linkul în browser.';
+  String get link => 'Recipienții care nu au AloeChat.AI instalat pot descărca fișierele selectate accesând linkul în browser.';
 }
 
 // Path: dialogs.zoom

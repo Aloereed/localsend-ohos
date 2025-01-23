@@ -33,7 +33,7 @@ class TranslationsFilPh extends Translations {
   @override
   String get locale => 'Filipino';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralFilPh general = _TranslationsGeneralFilPh._(_root);
   @override
@@ -359,7 +359,7 @@ class _TranslationsReceiveOptionsPageFilPh extends TranslationsReceiveOptionsPag
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend folder)';
+  String get appDirectory => '(AloeChat.AI folder)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageFilPh extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'Ang Pin ay "${pin}"';
   @override
-  String get encryptionHint => 'Ang LocalSend ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser.';
+  String get encryptionHint => 'Ang AloeChat.AI ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser.';
   @override
   String pendingRequests({required Object n}) => 'Mga naka-pending na request: ${n}';
 }
@@ -455,10 +455,10 @@ class _TranslationsAboutPageFilPh extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Tungkol sa LocalSend';
+  String get title => 'Tungkol sa AloeChat.AI';
   @override
   List<String> get description => [
-        'Ang LocalSend ay isang libre at open-source na app na nagbibigay-daan sa secure na pagbabahagi ng mga file at mga message sa mga kalapit na device sa iyong local network nang hindi nangangailangan ng koneksyon sa internet.',
+        'Ang AloeChat.AI ay isang libre at open-source na app na nagbibigay-daan sa secure na pagbabahagi ng mga file at mga message sa mga kalapit na device sa iyong local network nang hindi nangangailangan ng koneksyon sa internet.',
         'Available ang app na ito sa Android, iOS, macOS, Windows, at Linux. Maaari mong mahanap ang lahat ng mga pagpipilian sa pag-download sa opisyal na homepage.',
       ];
   @override
@@ -484,7 +484,7 @@ class _TranslationsDonationPageFilPh extends TranslationsDonationPageEn {
   String get title => 'Mag-donate';
   @override
   String get info =>
-      'Ang LocalSend ay libre, open-source, at walang anumang mga ad. Kung iyong nagustuhan ang app, maaari mong suportahan ang development sa pamamagitan ng donasyon.';
+      'Ang AloeChat.AI ay libre, open-source, at walang anumang mga ad. Kung iyong nagustuhan ang app, maaari mong suportahan ang development sa pamamagitan ng donasyon.';
   @override
   String donate({required Object amount}) => 'Mag-donate ng ${amount}';
   @override
@@ -678,7 +678,7 @@ class _TranslationsTrayFilPh extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Isara ang LocalSend';
+  String get close => 'Isara ang AloeChat.AI';
   @override
   String get closeWindows => 'Isara';
 }
@@ -886,7 +886,7 @@ class _TranslationsSettingsTabGeneralFilPh extends TranslationsSettingsTabGenera
   @override
   String get launchMinimized => 'Autostart: I-start nang nakatago';
   @override
-  String get showInContextMenu => 'Ipakita ang LocalSend sa context menu';
+  String get showInContextMenu => 'Ipakita ang AloeChat.AI sa context menu';
   @override
   String get animations => 'Animations';
 }
@@ -984,7 +984,7 @@ class _TranslationsSettingsTabOtherFilPh extends TranslationsSettingsTabOtherEn 
   @override
   String get title => 'Iba Pa';
   @override
-  String get support => 'Suportahan ang LocalSend';
+  String get support => 'Suportahan ang AloeChat.AI';
   @override
   String get donate => 'Mag-donate';
   @override
@@ -1296,7 +1296,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedFilPh extends TranslationsDial
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'Hindi makikita ng LocalSend ang ibang devices hangga\'t hindi nabibigyan ng permission para mag-scan sa lokal na network. Mangyaring bigyan ito ng permission sa settings.';
+      'Hindi makikita ng AloeChat.AI ang ibang devices hangga\'t hindi nabibigyan ng permission para mag-scan sa lokal na network. Mangyaring bigyan ito ng permission sa settings.';
   @override
   String get gotoSettings => 'Settings';
 }
@@ -1456,7 +1456,7 @@ class _TranslationsDialogsSendModeHelpFilPh extends TranslationsDialogsSendModeH
   String get multiple => 'Magpadala ng mga file sa maraming recipient o tatanggap. Ang mga pagpipilian ay hindi maaalis.';
   @override
   String get link =>
-      'Ang mga recipient o tatanggap na walang nakainstall na LocalSend ay maaaring mag download nang mga napiling file sa pamamagitan ng pagbukas ng link sa kanilang browser.';
+      'Ang mga recipient o tatanggap na walang nakainstall na AloeChat.AI ay maaaring mag download nang mga napiling file sa pamamagitan ng pagbukas ng link sa kanilang browser.';
 }
 
 // Path: dialogs.zoom

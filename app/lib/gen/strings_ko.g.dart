@@ -33,7 +33,7 @@ class TranslationsKo extends Translations {
   @override
   String get locale => '한국어';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralKo general = _TranslationsGeneralKo._(_root);
   @override
@@ -355,7 +355,7 @@ class _TranslationsReceiveOptionsPageKo extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend 폴더)';
+  String get appDirectory => '(AloeChat.AI 폴더)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -436,7 +436,7 @@ class _TranslationsWebSharePageKo extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN 번호는 "${pin}" 입니다';
   @override
-  String get encryptionHint => 'LocalSend는 자체 서명된 인증서를 사용합니다. 브라우저에서 수락해야 합니다.';
+  String get encryptionHint => 'AloeChat.AI는 자체 서명된 인증서를 사용합니다. 브라우저에서 수락해야 합니다.';
   @override
   String pendingRequests({required Object n}) => '대기중인 요청: ${n}';
 }
@@ -451,10 +451,10 @@ class _TranslationsAboutPageKo extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'LocalSend에 대해';
+  String get title => 'AloeChat.AI에 대해';
   @override
   List<String> get description => [
-        'LocalSend는 인터넷 연결이 필요 없이 로컬 네트워크를 통해 주변 기기와 파일 및 메시지를 안전하게 공유할 수 있는 무료 오픈소스 앱입니다.',
+        'AloeChat.AI는 인터넷 연결이 필요 없이 로컬 네트워크를 통해 주변 기기와 파일 및 메시지를 안전하게 공유할 수 있는 무료 오픈소스 앱입니다.',
         '이 앱은 Android, iOS, macOS, Windows 및 Linux에서 사용할 수 있습니다. 모든 다운로드 옵션은 공식 홈페이지에서 확인할 수 있습니다.',
       ];
   @override
@@ -479,7 +479,7 @@ class _TranslationsDonationPageKo extends TranslationsDonationPageEn {
   @override
   String get title => '기부';
   @override
-  String get info => 'LocalSend는 광고 없이 무료이며 오픈소스입니다. 앱을 좋아하신다면 개발을 후원하는 기부를 해주세요.';
+  String get info => 'AloeChat.AI는 광고 없이 무료이며 오픈소스입니다. 앱을 좋아하신다면 개발을 후원하는 기부를 해주세요.';
   @override
   String donate({required Object amount}) => '${amount} 기부하기';
   @override
@@ -596,7 +596,7 @@ class _TranslationsTrayKo extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'LocalSend 종료';
+  String get close => 'AloeChat.AI 종료';
 }
 
 // Path: web
@@ -799,7 +799,7 @@ class _TranslationsSettingsTabGeneralKo extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => '최소화된 상태로 시작';
   @override
-  String get showInContextMenu => '컨텍스트 메뉴에 LocalSend 표시';
+  String get showInContextMenu => '컨텍스트 메뉴에 AloeChat.AI 표시';
   @override
   String get animations => '애니메이션';
 }
@@ -894,7 +894,7 @@ class _TranslationsSettingsTabOtherKo extends TranslationsSettingsTabOtherEn {
   @override
   String get title => '기타';
   @override
-  String get support => 'LocalSend 지원';
+  String get support => 'AloeChat.AI 지원';
   @override
   String get donate => '기부';
   @override
@@ -1202,7 +1202,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedKo extends TranslationsDialogs
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => '로컬 네트워크를 스캔할 권한이 없어 LocalSend가 다른 기기를 찾을 수 없습니다. 설정에서 권한을 부여해주세요.';
+  String get description => '로컬 네트워크를 스캔할 권한이 없어 AloeChat.AI가 다른 기기를 찾을 수 없습니다. 설정에서 권한을 부여해주세요.';
   @override
   String get gotoSettings => '설정';
 }
@@ -1347,7 +1347,7 @@ class _TranslationsDialogsSendModeHelpKo extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => '파일을 여러 명의 수신자에게 보냅니다. 선택이 지워지지 않습니다.';
   @override
-  String get link => 'LocalSend를 설치하지 않은 수신자는 브라우저에서 링크를 열어 선택한 파일을 다운로드할 수 있습니다.';
+  String get link => 'AloeChat.AI를 설치하지 않은 수신자는 브라우저에서 링크를 열어 선택한 파일을 다운로드할 수 있습니다.';
 }
 
 // Path: dialogs.zoom

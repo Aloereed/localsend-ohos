@@ -33,7 +33,7 @@ class TranslationsKm extends Translations {
   @override
   String get locale => 'ភាសាខ្មែរ';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralKm general = _TranslationsGeneralKm._(_root);
   @override
@@ -349,7 +349,7 @@ class _TranslationsReceiveOptionsPageKm extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(ថតឯកសារ LocalSend)';
+  String get appDirectory => '(ថតឯកសារ AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -422,7 +422,7 @@ class _TranslationsWebSharePageKm extends TranslationsWebSharePageEn {
   @override
   String get encryption => _root.settingsTab.network.encryption;
   @override
-  String get encryptionHint => 'LocalSend ប្រើវិញ្ញាបនបត្រដែលចុះហត្ថលេខាដោយខ្លួនឯង។ អ្នកត្រូវទទួលយកវានៅក្នុងកម្មវិធី​ browser ។';
+  String get encryptionHint => 'AloeChat.AI ប្រើវិញ្ញាបនបត្រដែលចុះហត្ថលេខាដោយខ្លួនឯង។ អ្នកត្រូវទទួលយកវានៅក្នុងកម្មវិធី​ browser ។';
   @override
   String pendingRequests({required Object n}) => 'សំណើដែលកំពុងរង់ចាំ: ${n}';
 }
@@ -437,11 +437,11 @@ class _TranslationsAboutPageKm extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'អំពី LocalSend';
+  String get title => 'អំពី AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend គឺជាកម្មវិធីដែលប្រើដោយឥតគិតថ្លៃ និងបើកចំហនូវប្រភពកូដ ដែលអនុញ្ញាតឱ្យអ្នកអាចចែករំលែកឯកសារ និងសារដោយសុវត្ថិភាពជាមួយនឹងឧបករណ៍ដែលនៅជិតៗដែលនៅលើបណ្តាញមូលដ្ឋានរួមគ្នាដោយមិនចាំបាច់ភ្ជាប់អ៊ីនធឺណិត។',
-        'កម្មវិធីនេះគឺអាចដំណើរការនៅលើគ្រប់ប្រព័ន្ធប្រតិបត្តិការទាំងអស់រួមមានដូចជា Android, iOS, macOS, Windows និង Linux ។ អ្នកអាចស្វែងរក និងទាញយកបានច្រើនវិធីសាស្ត្រតាមរយៈគេហទំព័រផ្លូវការរបស់ LocalSend ។',
+        'AloeChat.AI គឺជាកម្មវិធីដែលប្រើដោយឥតគិតថ្លៃ និងបើកចំហនូវប្រភពកូដ ដែលអនុញ្ញាតឱ្យអ្នកអាចចែករំលែកឯកសារ និងសារដោយសុវត្ថិភាពជាមួយនឹងឧបករណ៍ដែលនៅជិតៗដែលនៅលើបណ្តាញមូលដ្ឋានរួមគ្នាដោយមិនចាំបាច់ភ្ជាប់អ៊ីនធឺណិត។',
+        'កម្មវិធីនេះគឺអាចដំណើរការនៅលើគ្រប់ប្រព័ន្ធប្រតិបត្តិការទាំងអស់រួមមានដូចជា Android, iOS, macOS, Windows និង Linux ។ អ្នកអាចស្វែងរក និងទាញយកបានច្រើនវិធីសាស្ត្រតាមរយៈគេហទំព័រផ្លូវការរបស់ AloeChat.AI ។',
       ];
   @override
   String get author => 'ម្ចាស់កម្មសិទ្ធ';
@@ -464,7 +464,7 @@ class _TranslationsDonationPageKm extends TranslationsDonationPageEn {
   String get title => 'ការឧបត្ថម្ភ';
   @override
   String get info =>
-      'LocalSend ជាកម្មវិធីដែលឥតគិតថ្លៃ, បើកបង្ហាញប្រភពកូដជាសាធារណៈ និងមិនមានការបង្ហាញនូវផ្ទាំងពាណិជ្ជកម្មរំខានឡើយ។ ប្រសិនបើអ្នកពេញចិត្តកម្មវិធីនេះ​ និងចង់ជួយពួកយើង, អ្នកអាចចូលរួមលើកស្ទួយការអភិវឌ្ឍន៍កម្មវិធីនេះជាមួយពួកយើងតាមរយៈការឧបត្ថម្ភជាថវិកា។';
+      'AloeChat.AI ជាកម្មវិធីដែលឥតគិតថ្លៃ, បើកបង្ហាញប្រភពកូដជាសាធារណៈ និងមិនមានការបង្ហាញនូវផ្ទាំងពាណិជ្ជកម្មរំខានឡើយ។ ប្រសិនបើអ្នកពេញចិត្តកម្មវិធីនេះ​ និងចង់ជួយពួកយើង, អ្នកអាចចូលរួមលើកស្ទួយការអភិវឌ្ឍន៍កម្មវិធីនេះជាមួយពួកយើងតាមរយៈការឧបត្ថម្ភជាថវិកា។';
   @override
   String donate({required Object amount}) => 'ឧបត្ថម្ភចំនួន ${amount}';
   @override
@@ -636,7 +636,7 @@ class _TranslationsTrayKm extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'ចាកចេញពីកម្មវិធី LocalSend';
+  String get close => 'ចាកចេញពីកម្មវិធី AloeChat.AI';
 }
 
 // Path: web
@@ -909,7 +909,7 @@ class _TranslationsSettingsTabOtherKm extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'ផ្សេងៗ';
   @override
-  String get support => 'ជួយគាំទ្រ LocalSend';
+  String get support => 'ជួយគាំទ្រ AloeChat.AI';
   @override
   String get donate => 'ការឧបត្ថម្ភ';
   @override
@@ -1202,7 +1202,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedKm extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend មិន​អាច​រក​ឃើញ​ឧបករណ៍​ផ្សេង​ទៀត​ដោយ​មិន​មាន​ការ​អនុញ្ញាត​ក្នុង​ការ​ស្កែន​បណ្តាញរួមគ្នា​ទេ។ សូមផ្តល់ការអនុញ្ញាតនេះនៅក្នុងការកំណត់។';
+      'AloeChat.AI មិន​អាច​រក​ឃើញ​ឧបករណ៍​ផ្សេង​ទៀត​ដោយ​មិន​មាន​ការ​អនុញ្ញាត​ក្នុង​ការ​ស្កែន​បណ្តាញរួមគ្នា​ទេ។ សូមផ្តល់ការអនុញ្ញាតនេះនៅក្នុងការកំណត់។';
   @override
   String get gotoSettings => 'ការកំណត់';
 }
@@ -1335,7 +1335,7 @@ class _TranslationsDialogsSendModeHelpKm extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'ផ្ញើឯកសារទៅអ្នកទទួលច្រើននាក់។ ការជ្រើសរើសនឹងមិនត្រូវបានសម្អាតទេ។';
   @override
-  String get link => 'អ្នកទទួលដែលមិនបានដំឡើង LocalSend អាចទាញយកឯកសារដែលបានជ្រើសរើសដោយបើកតំណនៅក្នុងកម្មវិធី browser របស់ពួកគេ។';
+  String get link => 'អ្នកទទួលដែលមិនបានដំឡើង AloeChat.AI អាចទាញយកឯកសារដែលបានជ្រើសរើសដោយបើកតំណនៅក្នុងកម្មវិធី browser របស់ពួកគេ។';
 }
 
 // Path: settingsTab.general.brightnessOptions

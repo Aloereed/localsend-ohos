@@ -33,7 +33,7 @@ class TranslationsId extends Translations {
   @override
   String get locale => 'Indonesian';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralId general = _TranslationsGeneralId._(_root);
   @override
@@ -359,7 +359,7 @@ class _TranslationsReceiveOptionsPageId extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(folder LocalSend)';
+  String get appDirectory => '(folder AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageId extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN-nya adalah "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban.';
+  String get encryptionHint => 'AloeChat.AI menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban.';
   @override
   String pendingRequests({required Object n}) => 'Permintaan tertunda: ${n}';
 }
@@ -455,10 +455,10 @@ class _TranslationsAboutPageId extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Tentang LocalSend';
+  String get title => 'Tentang AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend adalah aplikasi gratis, open-source yang memungkinkan Anda untuk membagikan berkas dan pesan secara aman dengan perangkat lain yang terhubung pada jaringan lokal tanpa memerlukan koneksi internet atau paket data.',
+        'AloeChat.AI adalah aplikasi gratis, open-source yang memungkinkan Anda untuk membagikan berkas dan pesan secara aman dengan perangkat lain yang terhubung pada jaringan lokal tanpa memerlukan koneksi internet atau paket data.',
         'Aplikasi ini tersedia untuk Android, iOS, macOS, Windows, dan Linux. Semua opsi unduhan dapat ditemukan di situs resmi kami.',
       ];
   @override
@@ -484,7 +484,7 @@ class _TranslationsDonationPageId extends TranslationsDonationPageEn {
   String get title => 'Donasi';
   @override
   String get info =>
-      'LocalSend adalah aplikasi gratis, terbuka, dan bebas iklan. Jika Anda menyukai aplikasi ini, Anda bisa mendukung kami dengan memberikan donasi.';
+      'AloeChat.AI adalah aplikasi gratis, terbuka, dan bebas iklan. Jika Anda menyukai aplikasi ini, Anda bisa mendukung kami dengan memberikan donasi.';
   @override
   String donate({required Object amount}) => 'Donasi ${amount}';
   @override
@@ -593,7 +593,7 @@ class _TranslationsTrayId extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Tutup LocalSend';
+  String get close => 'Tutup AloeChat.AI';
   @override
   String get closeWindows => 'Keluar';
 }
@@ -886,7 +886,7 @@ class _TranslationsSettingsTabGeneralId extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Mulai otomatis: Berjalan di latar belakang';
   @override
-  String get showInContextMenu => 'Tampilkan LocalSend di menu konteks';
+  String get showInContextMenu => 'Tampilkan AloeChat.AI di menu konteks';
   @override
   String get animations => 'Animasi';
 }
@@ -988,7 +988,7 @@ class _TranslationsSettingsTabOtherId extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Lainnya';
   @override
-  String get support => 'Dukung LocalSend';
+  String get support => 'Dukung AloeChat.AI';
   @override
   String get donate => 'Donasi';
   @override
@@ -1299,7 +1299,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedId extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend tidak dapat menemukan perangkat lain tanpa izin untuk memindai jaringan lokal. Mohon berikan izin ini di pengaturan.';
+      'AloeChat.AI tidak dapat menemukan perangkat lain tanpa izin untuk memindai jaringan lokal. Mohon berikan izin ini di pengaturan.';
   @override
   String get gotoSettings => 'Pengaturan';
 }
@@ -1457,7 +1457,7 @@ class _TranslationsDialogsSendModeHelpId extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Mengirim berkas ke beberapa penerima. Pilihan tidak akan dihapus.';
   @override
-  String get link => 'Penerima yang tidak memiliki LocalSend dapat mengunduh berkas yang dipilih dengan membuka tautan di peramban mereka.';
+  String get link => 'Penerima yang tidak memiliki AloeChat.AI dapat mengunduh berkas yang dipilih dengan membuka tautan di peramban mereka.';
 }
 
 // Path: dialogs.zoom

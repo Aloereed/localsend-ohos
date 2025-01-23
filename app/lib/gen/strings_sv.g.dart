@@ -33,7 +33,7 @@ class TranslationsSv extends Translations {
   @override
   String get locale => 'Svenska';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralSv general = _TranslationsGeneralSv._(_root);
   @override
@@ -341,7 +341,7 @@ class _TranslationsReceiveOptionsPageSv extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend-mappen)';
+  String get appDirectory => '(AloeChat.AI-mappen)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -414,7 +414,7 @@ class _TranslationsWebSharePageSv extends TranslationsWebSharePageEn {
   @override
   String get encryption => _root.settingsTab.network.encryption;
   @override
-  String get encryptionHint => 'LocalSend använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren.';
+  String get encryptionHint => 'AloeChat.AI använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren.';
   @override
   String pendingRequests({required Object n}) => 'Väntande förfrågningar: ${n}';
 }
@@ -429,7 +429,7 @@ class _TranslationsAboutPageSv extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Om LocalSend';
+  String get title => 'Om AloeChat.AI';
 }
 
 // Path: changelogPage
@@ -587,7 +587,7 @@ class _TranslationsTraySv extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Avsluta LocalSend';
+  String get close => 'Avsluta AloeChat.AI';
 }
 
 // Path: web
@@ -1057,7 +1057,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedSv extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend kan inte hitta andra enheter utan att ha behörighet att skanna det lokala nätverket. Bevilja denna behörighet i inställningarna.';
+      'AloeChat.AI kan inte hitta andra enheter utan att ha behörighet att skanna det lokala nätverket. Bevilja denna behörighet i inställningarna.';
   @override
   String get gotoSettings => 'Inställningar';
 }
@@ -1189,7 +1189,7 @@ class _TranslationsDialogsSendModeHelpSv extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Skickar filer till flera mottagare. Valet rensas inte.';
   @override
-  String get link => 'Mottagare som inte har LocalSend installerat kan ladda ner de valda filerna genom att öppna länken i deras webbläsare.';
+  String get link => 'Mottagare som inte har AloeChat.AI installerat kan ladda ner de valda filerna genom att öppna länken i deras webbläsare.';
 }
 
 // Path: settingsTab.general.brightnessOptions

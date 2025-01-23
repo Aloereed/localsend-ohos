@@ -33,7 +33,7 @@ class TranslationsDa extends Translations {
   @override
   String get locale => 'Dansk';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralDa general = _TranslationsGeneralDa._(_root);
   @override
@@ -359,7 +359,7 @@ class _TranslationsReceiveOptionsPageDa extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend mappe)';
+  String get appDirectory => '(AloeChat.AI mappe)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageDa extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN-koden er "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend benytter et selvsigneret certifikat. Det skal accepteres i browseren.';
+  String get encryptionHint => 'AloeChat.AI benytter et selvsigneret certifikat. Det skal accepteres i browseren.';
   @override
   String pendingRequests({required Object n}) => 'Ventende forespørgsler: ${n}';
 }
@@ -455,10 +455,10 @@ class _TranslationsAboutPageDa extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Om LocalSend';
+  String get title => 'Om AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend er en gratis open-source app, som du kan bruge til sikkert at dele filer og beskeder med andre enheder i nærheden på dit lokale netværk, uden en internet forbindelse.',
+        'AloeChat.AI er en gratis open-source app, som du kan bruge til sikkert at dele filer og beskeder med andre enheder i nærheden på dit lokale netværk, uden en internet forbindelse.',
         'Appen findes til Android, iOS, macOS, Windows og Linux. Alle downloadmuligheder finder du på den officielle hjemmeside.',
       ];
   @override
@@ -483,7 +483,7 @@ class _TranslationsDonationPageDa extends TranslationsDonationPageEn {
   @override
   String get title => 'Donér';
   @override
-  String get info => 'LocalSend er gratis, open-source og reklamefri. Hvis du kan lide denne app, kan du støtte dens udvikling med en donation.';
+  String get info => 'AloeChat.AI er gratis, open-source og reklamefri. Hvis du kan lide denne app, kan du støtte dens udvikling med en donation.';
   @override
   String donate({required Object amount}) => 'Donér ${amount}';
   @override
@@ -603,7 +603,7 @@ class _TranslationsTrayDa extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Luk LocalSend';
+  String get close => 'Luk AloeChat.AI';
   @override
   String get closeWindows => 'Afslut';
 }
@@ -811,7 +811,7 @@ class _TranslationsSettingsTabGeneralDa extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Autostart: Skjult ved opstart';
   @override
-  String get showInContextMenu => 'Vis LocalSend i kontekstmenu';
+  String get showInContextMenu => 'Vis AloeChat.AI i kontekstmenu';
   @override
   String get animations => 'Animationer';
 }
@@ -909,7 +909,7 @@ class _TranslationsSettingsTabOtherDa extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Andet';
   @override
-  String get support => 'Støt LocalSend';
+  String get support => 'Støt AloeChat.AI';
   @override
   String get donate => 'Donér';
   @override
@@ -1219,7 +1219,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedDa extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend kan ikke finde andre enheder uden tilladelse til at scanne det lokale netværk. Giv venligst tilladelse i systemindstillingerne.';
+      'AloeChat.AI kan ikke finde andre enheder uden tilladelse til at scanne det lokale netværk. Giv venligst tilladelse i systemindstillingerne.';
   @override
   String get gotoSettings => 'Indstillinger';
 }
@@ -1377,7 +1377,7 @@ class _TranslationsDialogsSendModeHelpDa extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Send filer til flere modtagere. Filvalget vil ikke blive ryddet.';
   @override
-  String get link => 'Modtagere, der ikke har LocalSend installeret, kan downloade de valgte filer i en browser.';
+  String get link => 'Modtagere, der ikke har AloeChat.AI installeret, kan downloade de valgte filer i en browser.';
 }
 
 // Path: dialogs.zoom

@@ -33,7 +33,7 @@ class TranslationsFa extends Translations {
   @override
   String get locale => 'فارسی';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralFa general = _TranslationsGeneralFa._(_root);
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageFa extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'پین "${pin}" می‌باشد';
   @override
-  String get encryptionHint => 'LocalSend از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید.';
+  String get encryptionHint => 'AloeChat.AI از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید.';
   @override
   String pendingRequests({required Object n}) => 'درخواست های در حال انتظار: ${n}';
 }

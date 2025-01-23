@@ -33,7 +33,7 @@ class TranslationsVi extends Translations {
   @override
   String get locale => 'Tiếng Việt';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralVi general = _TranslationsGeneralVi._(_root);
   @override
@@ -361,7 +361,7 @@ class _TranslationsReceiveOptionsPageVi extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(Thư mục LocalSend)';
+  String get appDirectory => '(Thư mục AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -442,7 +442,7 @@ class _TranslationsWebSharePageVi extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'Mã PIN là "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend dùng chứng chỉ tự tạo. Bạn cần chấp thuận trong trình duyệt.';
+  String get encryptionHint => 'AloeChat.AI dùng chứng chỉ tự tạo. Bạn cần chấp thuận trong trình duyệt.';
   @override
   String pendingRequests({required Object n}) => 'Yêu cầu chờ: ${n}';
 }
@@ -457,10 +457,10 @@ class _TranslationsAboutPageVi extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Thông tin về LocalSend';
+  String get title => 'Thông tin về AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend là một phần mềm miễn phí mã nguồn mở, giúp bạn chia sẻ tập tin cũng như tin nhắn đến các thiết bị phụ cận một cách bảo mật thông qua mạng nội bộ mà không cần kết nối mạng đến bên ngoài.',
+        'AloeChat.AI là một phần mềm miễn phí mã nguồn mở, giúp bạn chia sẻ tập tin cũng như tin nhắn đến các thiết bị phụ cận một cách bảo mật thông qua mạng nội bộ mà không cần kết nối mạng đến bên ngoài.',
         'Ứng dụng có trên Android, iOS, macOS, Windows và Linux. Bạn có thể tìm thấy các tuỳ chọn tải ở trang chủ.',
       ];
   @override
@@ -486,7 +486,7 @@ class _TranslationsDonationPageVi extends TranslationsDonationPageEn {
   String get title => 'Ủng hộ';
   @override
   String get info =>
-      'LocalSend là ứng dụng miễn phí, mã nguồn mở, không chứa quảng cáo. Nếu bạn yêu thích ứng dụng này, bạn có thể hỗ trợ việc phát triển bằng việc ủng hộ.';
+      'AloeChat.AI là ứng dụng miễn phí, mã nguồn mở, không chứa quảng cáo. Nếu bạn yêu thích ứng dụng này, bạn có thể hỗ trợ việc phát triển bằng việc ủng hộ.';
   @override
   String donate({required Object amount}) => 'Ủng hộ ${amount}';
   @override
@@ -608,7 +608,7 @@ class _TranslationsTrayVi extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Đóng LocalSend';
+  String get close => 'Đóng AloeChat.AI';
   @override
   String get closeWindows => 'Thoát';
 }
@@ -833,7 +833,7 @@ class _TranslationsSettingsTabGeneralVi extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Tự khởi động: Khởi động ẩn';
   @override
-  String get showInContextMenu => 'Hiển thị LocalSend ở danh mục';
+  String get showInContextMenu => 'Hiển thị AloeChat.AI ở danh mục';
   @override
   String get animations => 'Hoạt ảnh';
 }
@@ -935,7 +935,7 @@ class _TranslationsSettingsTabOtherVi extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Khác';
   @override
-  String get support => 'Hỗ trợ LocalSend';
+  String get support => 'Hỗ trợ AloeChat.AI';
   @override
   String get donate => 'Ủng hộ';
   @override
@@ -1260,7 +1260,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedVi extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend không thể tìm kiếm thiết bị khác khi không được phép quét mạng nội bộ. Vui lòng trao quyền cho ứng dụng trong cài đặt.';
+      'AloeChat.AI không thể tìm kiếm thiết bị khác khi không được phép quét mạng nội bộ. Vui lòng trao quyền cho ứng dụng trong cài đặt.';
   @override
   String get gotoSettings => 'Cài đặt';
 }
@@ -1425,7 +1425,7 @@ class _TranslationsDialogsSendModeHelpVi extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Gửi tập tin tới nhiều người nhận. Lựa chọn sẽ không bị xoá.';
   @override
-  String get link => 'Người nhận chưa cài đặt LocalSend có thể nhận tập tin bằng cách mở liên kết trong trình duyệt.';
+  String get link => 'Người nhận chưa cài đặt AloeChat.AI có thể nhận tập tin bằng cách mở liên kết trong trình duyệt.';
 }
 
 // Path: dialogs.zoom

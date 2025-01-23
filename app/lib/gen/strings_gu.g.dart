@@ -33,7 +33,7 @@ class TranslationsGu extends Translations {
   @override
   String get locale => 'Gujarati';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralGu general = _TranslationsGeneralGu._(_root);
   @override
@@ -658,7 +658,7 @@ class _TranslationsTrayGu extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'LocalSend બંધ કરો';
+  String get close => 'AloeChat.AI બંધ કરો';
 }
 
 // Path: web
@@ -1370,7 +1370,7 @@ class _TranslationsDialogsSendModeHelpGu extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'ફાઈલોને ઘણા પ્રાપ્તકર્તાઓને મોકલવામાં આવે છે. પસંદગી સાફ કરવામાં આવશે નહીં.';
   @override
-  String get link => 'જે પ્રાપ્તકર્તાઓ પાસે LocalSend સ્થાપિત નથી તેઓ તેમના બ્રાઉઝરમાં લિંક ખોલીને પસંદ કરેલી ફાઈલો ડાઉનલોડ કરી શકે છે.';
+  String get link => 'જે પ્રાપ્તકર્તાઓ પાસે AloeChat.AI સ્થાપિત નથી તેઓ તેમના બ્રાઉઝરમાં લિંક ખોલીને પસંદ કરેલી ફાઈલો ડાઉનલોડ કરી શકે છે.';
 }
 
 // Path: dialogs.zoom

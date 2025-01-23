@@ -33,7 +33,7 @@ class TranslationsUk extends Translations {
   @override
   String get locale => 'Українська';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralUk general = _TranslationsGeneralUk._(_root);
   @override
@@ -359,7 +359,7 @@ class _TranslationsReceiveOptionsPageUk extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(Папка LocalSend)';
+  String get appDirectory => '(Папка AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageUk extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN-код: "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері.';
+  String get encryptionHint => 'AloeChat.AI використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері.';
   @override
   String pendingRequests({required Object n}) => 'Запити, що очікують на розгляд: ${n}';
 }
@@ -455,10 +455,10 @@ class _TranslationsAboutPageUk extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Про LocalSend';
+  String get title => 'Про AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend — це безплатна програма з відкритим вихідним кодом, яка дозволяє вам безпечно обмінюватися файлами та повідомленнями з пристроями поблизу через локальну мережу, без необхідності підключення до Інтернету.',
+        'AloeChat.AI — це безплатна програма з відкритим вихідним кодом, яка дозволяє вам безпечно обмінюватися файлами та повідомленнями з пристроями поблизу через локальну мережу, без необхідності підключення до Інтернету.',
         'Ця програма доступна для Android, iOS, macOS, Windows та Linux. Ви можете знайти всі варіанти завантаження на офіційній домашній сторінці.',
       ];
   @override
@@ -484,7 +484,7 @@ class _TranslationsDonationPageUk extends TranslationsDonationPageEn {
   String get title => 'Пожертвувати';
   @override
   String get info =>
-      'LocalSend — це безплатна програма з відкритим вихідним кодом та без реклами. Якщо вона вам подобається, ви можете підтримати її розробку пожертвою.';
+      'AloeChat.AI — це безплатна програма з відкритим вихідним кодом та без реклами. Якщо вона вам подобається, ви можете підтримати її розробку пожертвою.';
   @override
   String donate({required Object amount}) => 'Пожертвувати ${amount}';
   @override
@@ -604,7 +604,7 @@ class _TranslationsTrayUk extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Вийти з LocalSend';
+  String get close => 'Вийти з AloeChat.AI';
   @override
   String get closeWindows => 'Вийти';
 }
@@ -812,7 +812,7 @@ class _TranslationsSettingsTabGeneralUk extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Прихований автозапуск';
   @override
-  String get showInContextMenu => 'Відображати LocalSend в контекстному меню';
+  String get showInContextMenu => 'Відображати AloeChat.AI в контекстному меню';
   @override
   String get animations => 'Анімації';
 }
@@ -914,7 +914,7 @@ class _TranslationsSettingsTabOtherUk extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Інше';
   @override
-  String get support => 'Підтримати LocalSend';
+  String get support => 'Підтримати AloeChat.AI';
   @override
   String get donate => 'Пожертвувати';
   @override
@@ -1225,7 +1225,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedUk extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend не може знайти інші пристрої без дозволу на сканування локальної мережі. Будь ласка, надайте цей дозвіл у налаштуваннях.';
+      'AloeChat.AI не може знайти інші пристрої без дозволу на сканування локальної мережі. Будь ласка, надайте цей дозвіл у налаштуваннях.';
   @override
   String get gotoSettings => 'Налаштування';
 }
@@ -1384,7 +1384,7 @@ class _TranslationsDialogsSendModeHelpUk extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Надсилає файли декільком отримувачам. Вибірку не буде очищено після завершення передачі файлів.';
   @override
-  String get link => 'Отримувачі, у яких не встановлено LocalSend, можуть завантажити вибрані файли, відкривши посилання у своєму браузері.';
+  String get link => 'Отримувачі, у яких не встановлено AloeChat.AI, можуть завантажити вибрані файли, відкривши посилання у своєму браузері.';
 }
 
 // Path: dialogs.zoom

@@ -33,7 +33,7 @@ class TranslationsEu extends Translations {
   @override
   String get locale => 'Euskara';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralEu general = _TranslationsGeneralEu._(_root);
   @override
@@ -418,7 +418,7 @@ class _TranslationsWebSharePageEu extends TranslationsWebSharePageEn {
   @override
   String get encryption => _root.settingsTab.network.encryption;
   @override
-  String get encryptionHint => 'LocalSend-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu';
+  String get encryptionHint => 'AloeChat.AI-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu';
   @override
   String pendingRequests({required Object n}) => 'Eskerak: ${n}';
 }
@@ -433,7 +433,7 @@ class _TranslationsAboutPageEu extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'LocalSend buruz';
+  String get title => 'AloeChat.AI buruz';
 }
 
 // Path: changelogPage
@@ -523,7 +523,7 @@ class _TranslationsTrayEu extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Itxi LocalSend';
+  String get close => 'Itxi AloeChat.AI';
 }
 
 // Path: web
@@ -1051,7 +1051,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedEu extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'Sare lokala eskaneatzeko baimenik gabe, LocalSend-ek ezin ditu inguruko gailuak aurkitu. Mesedez, onartu baimen hau ezarpenetan.';
+      'Sare lokala eskaneatzeko baimenik gabe, AloeChat.AI-ek ezin ditu inguruko gailuak aurkitu. Mesedez, onartu baimen hau ezarpenetan.';
   @override
   String get gotoSettings => 'Ezarpenak';
 }
@@ -1184,7 +1184,7 @@ class _TranslationsDialogsSendModeHelpEu extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Bidali fitxategiak hartzaile anitzeri. Aukeraketa ez da garbituko.';
   @override
-  String get link => 'LocalSend instalatuta ez duten hartzaileak fitxategiak eskuratu ahali zango dituzte lotura nabigatzailean zabalduz.';
+  String get link => 'AloeChat.AI instalatuta ez duten hartzaileak fitxategiak eskuratu ahali zango dituzte lotura nabigatzailean zabalduz.';
 }
 
 // Path: settingsTab.general.brightnessOptions
