@@ -55,7 +55,7 @@ class _ReceivePageState extends State<ReceivePage> with Refena {
     final senderFavoriteEntry = ref.watch(favoritesProvider.select((state) => state.findDevice(vm.sender)));
 
     return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
+      onPopInvoked: (didPop) {
         if (didPop) {
           vm.onDecline();
         }

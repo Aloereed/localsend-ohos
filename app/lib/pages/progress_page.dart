@@ -200,7 +200,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
     final finishedCount = fileStatusMap.values.where((s) => s == FileStatus.finished).length;
 
     return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
+      onPopInvoked: (didPop) {
         if (didPop) {
           // Already popped.
           // Because the user cannot pop this page, we can safely assume that all sessions are closed if they should be.
