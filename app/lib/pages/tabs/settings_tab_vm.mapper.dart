@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
 // ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'settings_tab_vm.dart';
@@ -30,6 +30,8 @@ class SettingsTabVmMapper extends ClassMapperBase<SettingsTabVm> {
   static const Field<SettingsTabVm, TextEditingController> _f$deviceModelController = Field('deviceModelController', _$deviceModelController);
   static TextEditingController _$portController(SettingsTabVm v) => v.portController;
   static const Field<SettingsTabVm, TextEditingController> _f$portController = Field('portController', _$portController);
+  static TextEditingController _$timeoutController(SettingsTabVm v) => v.timeoutController;
+  static const Field<SettingsTabVm, TextEditingController> _f$timeoutController = Field('timeoutController', _$timeoutController);
   static TextEditingController _$multicastController(SettingsTabVm v) => v.multicastController;
   static const Field<SettingsTabVm, TextEditingController> _f$multicastController = Field('multicastController', _$multicastController);
   static SettingsState _$settings(SettingsTabVm v) => v.settings;
@@ -40,12 +42,26 @@ class SettingsTabVmMapper extends ClassMapperBase<SettingsTabVm> {
   static const Field<SettingsTabVm, DeviceInfoResult> _f$deviceInfo = Field('deviceInfo', _$deviceInfo);
   static List<ColorMode> _$colorModes(SettingsTabVm v) => v.colorModes;
   static const Field<SettingsTabVm, List<ColorMode>> _f$colorModes = Field('colorModes', _$colorModes);
+  static bool _$autoStart(SettingsTabVm v) => v.autoStart;
+  static const Field<SettingsTabVm, bool> _f$autoStart = Field('autoStart', _$autoStart);
+  static bool _$autoStartLaunchHidden(SettingsTabVm v) => v.autoStartLaunchHidden;
+  static const Field<SettingsTabVm, bool> _f$autoStartLaunchHidden = Field('autoStartLaunchHidden', _$autoStartLaunchHidden);
+  static bool _$showInContextMenu(SettingsTabVm v) => v.showInContextMenu;
+  static const Field<SettingsTabVm, bool> _f$showInContextMenu = Field('showInContextMenu', _$showInContextMenu);
   static void Function(BuildContext, ThemeMode) _$onChangeTheme(SettingsTabVm v) => v.onChangeTheme;
   static const Field<SettingsTabVm, void Function(BuildContext, ThemeMode)> _f$onChangeTheme = Field('onChangeTheme', _$onChangeTheme);
   static void Function(ColorMode) _$onChangeColorMode(SettingsTabVm v) => v.onChangeColorMode;
   static const Field<SettingsTabVm, void Function(ColorMode)> _f$onChangeColorMode = Field('onChangeColorMode', _$onChangeColorMode);
   static void Function(BuildContext) _$onTapLanguage(SettingsTabVm v) => v.onTapLanguage;
   static const Field<SettingsTabVm, void Function(BuildContext)> _f$onTapLanguage = Field('onTapLanguage', _$onTapLanguage);
+  static void Function(BuildContext) _$onToggleAutoStart(SettingsTabVm v) => v.onToggleAutoStart;
+  static const Field<SettingsTabVm, void Function(BuildContext)> _f$onToggleAutoStart = Field('onToggleAutoStart', _$onToggleAutoStart);
+  static void Function(BuildContext) _$onToggleAutoStartLaunchHidden(SettingsTabVm v) => v.onToggleAutoStartLaunchHidden;
+  static const Field<SettingsTabVm, void Function(BuildContext)> _f$onToggleAutoStartLaunchHidden =
+      Field('onToggleAutoStartLaunchHidden', _$onToggleAutoStartLaunchHidden);
+  static void Function(BuildContext) _$onToggleShowInContextMenu(SettingsTabVm v) => v.onToggleShowInContextMenu;
+  static const Field<SettingsTabVm, void Function(BuildContext)> _f$onToggleShowInContextMenu =
+      Field('onToggleShowInContextMenu', _$onToggleShowInContextMenu);
   static void Function(BuildContext) _$onTapRestartServer(SettingsTabVm v) => v.onTapRestartServer;
   static const Field<SettingsTabVm, void Function(BuildContext)> _f$onTapRestartServer = Field('onTapRestartServer', _$onTapRestartServer);
   static void Function(BuildContext) _$onTapStartServer(SettingsTabVm v) => v.onTapStartServer;
@@ -63,14 +79,21 @@ class SettingsTabVmMapper extends ClassMapperBase<SettingsTabVm> {
     #aliasController: _f$aliasController,
     #deviceModelController: _f$deviceModelController,
     #portController: _f$portController,
+    #timeoutController: _f$timeoutController,
     #multicastController: _f$multicastController,
     #settings: _f$settings,
     #serverState: _f$serverState,
     #deviceInfo: _f$deviceInfo,
     #colorModes: _f$colorModes,
+    #autoStart: _f$autoStart,
+    #autoStartLaunchHidden: _f$autoStartLaunchHidden,
+    #showInContextMenu: _f$showInContextMenu,
     #onChangeTheme: _f$onChangeTheme,
     #onChangeColorMode: _f$onChangeColorMode,
     #onTapLanguage: _f$onTapLanguage,
+    #onToggleAutoStart: _f$onToggleAutoStart,
+    #onToggleAutoStartLaunchHidden: _f$onToggleAutoStartLaunchHidden,
+    #onToggleShowInContextMenu: _f$onToggleShowInContextMenu,
     #onTapRestartServer: _f$onTapRestartServer,
     #onTapStartServer: _f$onTapStartServer,
     #onTapStopServer: _f$onTapStopServer,
@@ -84,14 +107,21 @@ class SettingsTabVmMapper extends ClassMapperBase<SettingsTabVm> {
         aliasController: data.dec(_f$aliasController),
         deviceModelController: data.dec(_f$deviceModelController),
         portController: data.dec(_f$portController),
+        timeoutController: data.dec(_f$timeoutController),
         multicastController: data.dec(_f$multicastController),
         settings: data.dec(_f$settings),
         serverState: data.dec(_f$serverState),
         deviceInfo: data.dec(_f$deviceInfo),
         colorModes: data.dec(_f$colorModes),
+        autoStart: data.dec(_f$autoStart),
+        autoStartLaunchHidden: data.dec(_f$autoStartLaunchHidden),
+        showInContextMenu: data.dec(_f$showInContextMenu),
         onChangeTheme: data.dec(_f$onChangeTheme),
         onChangeColorMode: data.dec(_f$onChangeColorMode),
         onTapLanguage: data.dec(_f$onTapLanguage),
+        onToggleAutoStart: data.dec(_f$onToggleAutoStart),
+        onToggleAutoStartLaunchHidden: data.dec(_f$onToggleAutoStartLaunchHidden),
+        onToggleShowInContextMenu: data.dec(_f$onToggleShowInContextMenu),
         onTapRestartServer: data.dec(_f$onTapRestartServer),
         onTapStartServer: data.dec(_f$onTapStartServer),
         onTapStopServer: data.dec(_f$onTapStopServer),
@@ -128,8 +158,7 @@ mixin SettingsTabVmMappable {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (runtimeType == other.runtimeType && SettingsTabVmMapper.ensureInitialized().isValueEqual(this as SettingsTabVm, other));
+    return SettingsTabVmMapper.ensureInitialized().equalsValue(this as SettingsTabVm, other);
   }
 
   @override
@@ -151,14 +180,21 @@ abstract class SettingsTabVmCopyWith<$R, $In extends SettingsTabVm, $Out> implem
       TextEditingController? aliasController,
       TextEditingController? deviceModelController,
       TextEditingController? portController,
+      TextEditingController? timeoutController,
       TextEditingController? multicastController,
       SettingsState? settings,
       ServerState? serverState,
       DeviceInfoResult? deviceInfo,
       List<ColorMode>? colorModes,
+      bool? autoStart,
+      bool? autoStartLaunchHidden,
+      bool? showInContextMenu,
       void Function(BuildContext, ThemeMode)? onChangeTheme,
       void Function(ColorMode)? onChangeColorMode,
       void Function(BuildContext)? onTapLanguage,
+      void Function(BuildContext)? onToggleAutoStart,
+      void Function(BuildContext)? onToggleAutoStartLaunchHidden,
+      void Function(BuildContext)? onToggleShowInContextMenu,
       void Function(BuildContext)? onTapRestartServer,
       void Function(BuildContext)? onTapStartServer,
       void Function()? onTapStopServer,
@@ -185,14 +221,21 @@ class _SettingsTabVmCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
           TextEditingController? aliasController,
           TextEditingController? deviceModelController,
           TextEditingController? portController,
+          TextEditingController? timeoutController,
           TextEditingController? multicastController,
           SettingsState? settings,
           Object? serverState = $none,
           DeviceInfoResult? deviceInfo,
           List<ColorMode>? colorModes,
+          bool? autoStart,
+          bool? autoStartLaunchHidden,
+          bool? showInContextMenu,
           void Function(BuildContext, ThemeMode)? onChangeTheme,
           void Function(ColorMode)? onChangeColorMode,
           void Function(BuildContext)? onTapLanguage,
+          void Function(BuildContext)? onToggleAutoStart,
+          void Function(BuildContext)? onToggleAutoStartLaunchHidden,
+          void Function(BuildContext)? onToggleShowInContextMenu,
           void Function(BuildContext)? onTapRestartServer,
           void Function(BuildContext)? onTapStartServer,
           void Function()? onTapStopServer,
@@ -202,14 +245,21 @@ class _SettingsTabVmCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
         if (aliasController != null) #aliasController: aliasController,
         if (deviceModelController != null) #deviceModelController: deviceModelController,
         if (portController != null) #portController: portController,
+        if (timeoutController != null) #timeoutController: timeoutController,
         if (multicastController != null) #multicastController: multicastController,
         if (settings != null) #settings: settings,
         if (serverState != $none) #serverState: serverState,
         if (deviceInfo != null) #deviceInfo: deviceInfo,
         if (colorModes != null) #colorModes: colorModes,
+        if (autoStart != null) #autoStart: autoStart,
+        if (autoStartLaunchHidden != null) #autoStartLaunchHidden: autoStartLaunchHidden,
+        if (showInContextMenu != null) #showInContextMenu: showInContextMenu,
         if (onChangeTheme != null) #onChangeTheme: onChangeTheme,
         if (onChangeColorMode != null) #onChangeColorMode: onChangeColorMode,
         if (onTapLanguage != null) #onTapLanguage: onTapLanguage,
+        if (onToggleAutoStart != null) #onToggleAutoStart: onToggleAutoStart,
+        if (onToggleAutoStartLaunchHidden != null) #onToggleAutoStartLaunchHidden: onToggleAutoStartLaunchHidden,
+        if (onToggleShowInContextMenu != null) #onToggleShowInContextMenu: onToggleShowInContextMenu,
         if (onTapRestartServer != null) #onTapRestartServer: onTapRestartServer,
         if (onTapStartServer != null) #onTapStartServer: onTapStartServer,
         if (onTapStopServer != null) #onTapStopServer: onTapStopServer,
@@ -221,14 +271,21 @@ class _SettingsTabVmCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
       aliasController: data.get(#aliasController, or: $value.aliasController),
       deviceModelController: data.get(#deviceModelController, or: $value.deviceModelController),
       portController: data.get(#portController, or: $value.portController),
+      timeoutController: data.get(#timeoutController, or: $value.timeoutController),
       multicastController: data.get(#multicastController, or: $value.multicastController),
       settings: data.get(#settings, or: $value.settings),
       serverState: data.get(#serverState, or: $value.serverState),
       deviceInfo: data.get(#deviceInfo, or: $value.deviceInfo),
       colorModes: data.get(#colorModes, or: $value.colorModes),
+      autoStart: data.get(#autoStart, or: $value.autoStart),
+      autoStartLaunchHidden: data.get(#autoStartLaunchHidden, or: $value.autoStartLaunchHidden),
+      showInContextMenu: data.get(#showInContextMenu, or: $value.showInContextMenu),
       onChangeTheme: data.get(#onChangeTheme, or: $value.onChangeTheme),
       onChangeColorMode: data.get(#onChangeColorMode, or: $value.onChangeColorMode),
       onTapLanguage: data.get(#onTapLanguage, or: $value.onTapLanguage),
+      onToggleAutoStart: data.get(#onToggleAutoStart, or: $value.onToggleAutoStart),
+      onToggleAutoStartLaunchHidden: data.get(#onToggleAutoStartLaunchHidden, or: $value.onToggleAutoStartLaunchHidden),
+      onToggleShowInContextMenu: data.get(#onToggleShowInContextMenu, or: $value.onToggleShowInContextMenu),
       onTapRestartServer: data.get(#onTapRestartServer, or: $value.onTapRestartServer),
       onTapStartServer: data.get(#onTapStartServer, or: $value.onTapStartServer),
       onTapStopServer: data.get(#onTapStopServer, or: $value.onTapStopServer),

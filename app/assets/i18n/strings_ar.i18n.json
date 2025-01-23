@@ -1,6 +1,6 @@
 {
   "locale": "العربية",
-  "appName": "AloeChat.AI",
+  "appName": "LocalSend",
   "general": {
     "accept": "قبول",
     "accepted": "تم قبولها",
@@ -111,6 +111,10 @@
       "saveToGallery": "حفظ الوسائط في المعرض",
       "saveToHistory": "حفظ في التاريخ"
     },
+    "send": {
+      "title": "أرسِل",
+      "shareViaLinkAutoAccept": "المشاركة عبر الرابط: قبول تلقائي"
+    },
     "network": {
       "title": "شبكة الاتصال",
       "needRestart": "أعد تشغيل الخادم لتطبيق الإعدادات!",
@@ -119,6 +123,7 @@
       "deviceType": "نوع الجهاز",
       "deviceModel": "نموذج الجهاز",
       "port": "منفذ",
+      "discoveryTimeout": "مهلة الاكتشاف",
       "portWarning": "ربما لا يتم الكشف عنك من قبل الأجهزة الأخرى لأنك تستخدم منفذ مخصص. (الافتراضي: {defaultPort})",
       "encryption": "التشفير",
       "multicastGroup": "فرق البث المتعدد",
@@ -126,7 +131,7 @@
     },
     "other": {
       "title": "أخرى",
-      "support": "دعم AloeChat.AI",
+      "support": "دعم LocalSend",
       "donate": "تبرّع",
       "privacyPolicy": "سياسة الخصوصيّة",
       "termsOfUse": "شروط الاستخدام"
@@ -180,7 +185,7 @@
   "receiveOptionsPage": {
     "title": "خيارات",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(AloeChat.AI folder)",
+    "appDirectory": "(LocalSend folder)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "تم إيقافه تلقائيًا لوجود دلائل."
   },
@@ -217,13 +222,14 @@
     "requests": "الطلبات",
     "noRequests": "لا يوجد طلبات حتى الآن.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "يستخدم تطبيق AloeChat.AI شهادة موقع ذاتية التوقيع. يجب عليك قبولها في المتصفح.",
+    "autoAccept": "قبول الطلبات تلقائيا",
+    "encryptionHint": "يستخدم تطبيق LocalSend شهادة موقع ذاتية التوقيع. يجب عليك قبولها في المتصفح.",
     "pendingRequests": "الطلبات المعلقة: {n}"
   },
   "aboutPage": {
-    "title": "عن AloeChat.AI",
+    "title": "عن LocalSend",
     "description": [
-      "AloeChat.AI هو تطبيق مجاني مفتوح المصدر يسمح لك بمشاركة الملفات والرسائل بشكل آمن مع الأجهزة القريبة عبر شبكتك المحلية دون الحاجة إلى اتصال بالإنترنت.",
+      "LocalSend هو تطبيق مجاني مفتوح المصدر يسمح لك بمشاركة الملفات والرسائل بشكل آمن مع الأجهزة القريبة عبر شبكتك المحلية دون الحاجة إلى اتصال بالإنترنت.",
       "هذا التطبيق متاح على أنظمة Android وiOS وmacOS وWindows وLinux. يمكنك العثور على جميع خيارات التنزيل على الصفحة الرئيسية الرسمية."
     ],
     "author": "المؤلف",
@@ -232,7 +238,7 @@
   },
   "donationPage": {
     "title": "تبرّع",
-    "info": "AloeChat.AI مجاني ومفتوح المصدر وبدون أي إعلانات. إذا أعجبك التطبيق، يمكنك دعم التطوير بالتبرع.",
+    "info": "LocalSend مجاني ومفتوح المصدر وبدون أي إعلانات. إذا أعجبك التطبيق، يمكنك دعم التطوير بالتبرع.",
     "donate": "تبرّع {amount}",
     "thanks": "شكراً جزيلاً!",
     "restore": "استعادة شراء"
@@ -374,7 +380,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "لا يمكن ل AloeChat.AI العثور على الأجهزة الأخرى بدون الإذن بفحص الشبكة المحلية. يرجى منح هذا الإذن في الإعدادات.",
+      "description": "لا يمكن ل LocalSend العثور على الأجهزة الأخرى بدون الإذن بفحص الشبكة المحلية. يرجى منح هذا الإذن في الإعدادات.",
       "gotoSettings": "الإعدادات"
     },
     "messageInput": {
@@ -412,13 +418,20 @@
       "title": "أوضاع الإرسال",
       "single": "يقوم بإرسال الملفات إلى مستلم واحد. ستتم مسح الاختيار بعد انتهاء نقل الملف.",
       "multiple": "يقوم بإرسال الملفات إلى مستلمين متعددين. لن يتم مسح الاختيار.",
-      "link": "يمكن للمستلمين الذين لا يحتوون على AloeChat.AI تنزيل الملفات المحددة عن طريق فتح الرابط في متصفحهم."
+      "link": "يمكن للمستلمين الذين لا يحتوون على LocalSend تنزيل الملفات المحددة عن طريق فتح الرابط في متصفحهم."
+    },
+    "zoom": {
+      "title": "URL"
     }
+  },
+  "sanitization": {
+    "empty": "لا يمكن أن يكون اسم الملف فارغًا",
+    "invalid": "يحتوي اسم الملف على أحرف غير صالحة"
   },
   "tray": {
     "@info": "إرشادات Apple صارمة للغاية بشأن صياغة 'الإغلاق'.",
     "open": "@:general.open",
-    "close": "أغلق AloeChat.AI"
+    "close": "أغلق LocalSend"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

@@ -32,7 +32,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 
 	// Translations
 	String get locale => 'English';
-	String get appName => 'AloeChat.AI';
+	String get appName => 'LocalSend';
 	late final _StringsGeneralEn general = _StringsGeneralEn._(_root);
 	late final _StringsReceiveTabEn receiveTab = _StringsReceiveTabEn._(_root);
 	late final _StringsSendTabEn sendTab = _StringsSendTabEn._(_root);
@@ -51,6 +51,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _StringsChangelogPageEn changelogPage = _StringsChangelogPageEn._(_root);
 	late final _StringsAliasGeneratorEn aliasGenerator = _StringsAliasGeneratorEn._(_root);
 	late final _StringsDialogsEn dialogs = _StringsDialogsEn._(_root);
+	late final _StringsSanitizationEn sanitization = _StringsSanitizationEn._(_root);
 	late final _StringsTrayEn tray = _StringsTrayEn._(_root);
 	late final _StringsWebEn web = _StringsWebEn._(_root);
 	late final _StringsAssetPickerEn assetPicker = _StringsAssetPickerEn._(_root);
@@ -226,10 +227,10 @@ class _StringsReceiveOptionsPageEn {
 
 	// Translations
 	String get title => 'Options';
-	String get destination => '${_root.settingsTab.receive.destination}';
-	String get appDirectory => '(AloeChat.AI folder)';
-	String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
-	String get saveToGalleryOff => 'Turned off automatically because there are directories.';
+	String get destination => _root.settingsTab.receive.destination;
+	String get appDirectory => '(LocalSend folder)';
+	String get saveToGallery => _root.settingsTab.receive.saveToGallery;
+	String get saveToGalleryOff => 'Turned off automatically because there are folders.';
 }
 
 // Path: sendPage
@@ -241,6 +242,7 @@ class _StringsSendPageEn {
 	// Translations
 	String get waiting => 'Waiting for response...';
 	String get rejected => 'The recipient has rejected the request.';
+	String get tooManyAttempts => _root.web.tooManyAttempts;
 	String get busy => 'The recipient is busy with another request.';
 }
 
@@ -274,9 +276,11 @@ class _StringsWebSharePageEn {
 	);
 	String get requests => 'Requests';
 	String get noRequests => 'No requests yet.';
-	String get encryption => '${_root.settingsTab.network.encryption}';
+	String get encryption => _root.settingsTab.network.encryption;
 	String get autoAccept => 'Automatically accept requests';
-	String get encryptionHint => 'AloeChat.AI uses a self-signed certificate. You need to accept it in your browser.';
+	String get requirePin => 'Require PIN';
+	String pinHint({required Object pin}) => 'The PIN is "${pin}"';
+	String get encryptionHint => 'LocalSend uses a self-signed certificate. You need to accept it in your browser.';
 	String pendingRequests({required Object n}) => 'Pending requests: ${n}';
 }
 
@@ -287,10 +291,10 @@ class _StringsAboutPageEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'About AloeChat.AI';
+	String get title => 'About LocalSend';
 	List<String> get description => [
-		'AloeChat.AI is a free, open-source app based on LocalSend that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
-		'This app can be used on HarmonyOS Next and interacts with LocalSend on Android, iOS, macOS, Windows, and Linux.  You can find all download options on the official homepage.',
+		'LocalSend is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
+		'This app is available on Android, iOS, macOS, Windows and Linux. You can find all download options on the official homepage.',
 	];
 	String get author => 'Author';
 	String get contributors => 'Contributors';
@@ -305,7 +309,7 @@ class _StringsDonationPageEn {
 
 	// Translations
 	String get title => 'Donate';
-	String get info => 'AloeChat.AI is free, open-source and without any ads. If you like the app, you can support the development with a donation.';
+	String get info => 'LocalSend is free, open-source and without any ads. If you like the app, you can support the development with a donation.';
 	String donate({required Object amount}) => 'Donate ${amount}';
 	String get thanks => 'Thank you very much!';
 	String get restore => 'Restore purchase';
@@ -428,7 +432,20 @@ class _StringsDialogsEn {
 	late final _StringsDialogsQrEn qr = _StringsDialogsQrEn._(_root);
 	late final _StringsDialogsQuickActionsEn quickActions = _StringsDialogsQuickActionsEn._(_root);
 	late final _StringsDialogsQuickSaveNoticeEn quickSaveNotice = _StringsDialogsQuickSaveNoticeEn._(_root);
+	late final _StringsDialogsPinEn pin = _StringsDialogsPinEn._(_root);
 	late final _StringsDialogsSendModeHelpEn sendModeHelp = _StringsDialogsSendModeHelpEn._(_root);
+	late final _StringsDialogsZoomEn zoom = _StringsDialogsZoomEn._(_root);
+}
+
+// Path: sanitization
+class _StringsSanitizationEn {
+	_StringsSanitizationEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get empty => 'Filename cannot be empty';
+	String get invalid => 'Filename contains invalid characters';
 }
 
 // Path: tray
@@ -438,8 +455,8 @@ class _StringsTrayEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get open => '${_root.general.open}';
-	String get close => 'Quit AloeChat.AI';
+	String get open => _root.general.open;
+	String get close => 'Quit LocalSend';
 }
 
 // Path: web
@@ -449,7 +466,10 @@ class _StringsWebEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get waiting => '${_root.sendPage.waiting}';
+	String get waiting => _root.sendPage.waiting;
+	String get enterPin => 'Enter PIN';
+	String get invalidPin => 'Invalid PIN';
+	String get tooManyAttempts => 'Too many attempts';
 	String get rejected => 'Rejected';
 	String get files => 'Files';
 	String get fileName => 'File name';
@@ -559,9 +579,10 @@ class _StringsSettingsTabGeneralEn {
 	String get language => 'Language';
 	late final _StringsSettingsTabGeneralLanguageOptionsEn languageOptions = _StringsSettingsTabGeneralLanguageOptionsEn._(_root);
 	String get saveWindowPlacement => 'Quit: Save window placement';
-	String get minimizeToTray => 'Quit: Minimize to Tray/Menu Bar';
+	String get minimizeToTray => 'Minimize to the System Tray/Menu Bar when closing';
 	String get launchAtStartup => 'Autostart after login';
 	String get launchMinimized => 'Autostart: Start hidden';
+	String get showInContextMenu => 'Show LocalSend in context menu';
 	String get animations => 'Animations';
 }
 
@@ -573,9 +594,10 @@ class _StringsSettingsTabReceiveEn {
 
 	// Translations
 	String get title => 'Receive';
-	String get quickSave => '${_root.general.quickSave}';
+	String get quickSave => _root.general.quickSave;
+	String get requirePin => _root.webSharePage.requirePin;
 	String get autoFinish => 'Auto Finish';
-	String get destination => 'Destination';
+	String get destination => 'Save to folder';
 	String get downloads => '(Downloads)';
 	String get saveToGallery => 'Save media to gallery';
 	String get saveToHistory => 'Save to history';
@@ -589,7 +611,7 @@ class _StringsSettingsTabSendEn {
 
 	// Translations
 	String get title => 'Send';
-	String get shareViaLinkAutoAccept => 'Share via link: Auto accept';
+	String get shareViaLinkAutoAccept => 'Automatically accept requests in \'Share via link\' mode';
 }
 
 // Path: settingsTab.network
@@ -606,6 +628,7 @@ class _StringsSettingsTabNetworkEn {
 	String get deviceType => 'Device type';
 	String get deviceModel => 'Device model';
 	String get port => 'Port';
+	String get discoveryTimeout => 'Discovery Timeout';
 	String portWarning({required Object defaultPort}) => 'You might not be detected by other devices because you are using a custom port. (default: ${defaultPort})';
 	String get encryption => 'Encryption';
 	String get multicastGroup => 'Multicast';
@@ -620,7 +643,7 @@ class _StringsSettingsTabOtherEn {
 
 	// Translations
 	String get title => 'Other';
-	String get support => 'Support AloeChat.AI';
+	String get support => 'Support LocalSend';
 	String get donate => 'Donate';
 	String get privacyPolicy => 'Privacy Policy';
 	String get termsOfUse => 'Terms of Use';
@@ -657,6 +680,7 @@ class _StringsReceiveHistoryPageEntryActionsEn {
 
 	// Translations
 	String get open => 'Open file';
+	String get showInFolder => 'Show in folder';
 	String get info => 'Information';
 	String get deleteFromHistory => 'Delete from history';
 }
@@ -738,7 +762,7 @@ class _StringsDialogsErrorDialogEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => '${_root.general.error}';
+	String get title => _root.general.error;
 }
 
 // Path: dialogs.favoriteDialog
@@ -823,8 +847,8 @@ class _StringsDialogsLocalNetworkUnauthorizedEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => '${_root.dialogs.noPermission.title}';
-	String get description => 'AloeChat.AI can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
+	String get title => _root.dialogs.noPermission.title;
+	String get description => 'LocalSend can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
 	String get gotoSettings => 'Settings';
 }
 
@@ -846,7 +870,7 @@ class _StringsDialogsNoFilesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'No file selected';
+	String get title => 'No files selected';
 	String get content => 'Please select at least one file.';
 }
 
@@ -904,8 +928,18 @@ class _StringsDialogsQuickSaveNoticeEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => '${_root.general.quickSave}';
+	String get title => _root.general.quickSave;
 	String get content => 'File requests are automatically accepted. Be aware that everyone on the local network can send you files.';
+}
+
+// Path: dialogs.pin
+class _StringsDialogsPinEn {
+	_StringsDialogsPinEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Enter PIN';
 }
 
 // Path: dialogs.sendModeHelp
@@ -918,7 +952,17 @@ class _StringsDialogsSendModeHelpEn {
 	String get title => 'Send modes';
 	String get single => 'Sends files to one recipient. Selection will be cleared after finished file transfer.';
 	String get multiple => 'Sends files to multiple recipients. Selection will not be cleared.';
-	String get link => 'Recipients who do not have AloeChat.AI installed can download the selected files by opening the link in their browser.';
+	String get link => 'Recipients who do not have LocalSend installed can download the selected files by opening the link in their browser.';
+}
+
+// Path: dialogs.zoom
+class _StringsDialogsZoomEn {
+	_StringsDialogsZoomEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'URL';
 }
 
 // Path: settingsTab.general.brightnessOptions

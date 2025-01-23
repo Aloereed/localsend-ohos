@@ -1,6 +1,6 @@
 {
   "locale": "Ελληνικά",
-  "appName": "AloeChat.AI",
+  "appName": "LocalSend",
   "general": {
     "accept": "Αποδοχή",
     "accepted": "Αποδεκτό",
@@ -105,11 +105,11 @@
     "receive": {
       "title": "Λήψη",
       "quickSave": "@:general.quickSave",
+      "autoFinish": "Αυτόματη ολοκλήρωση",
       "destination": "Προορισμός",
       "downloads": "(Λήψεις)",
       "saveToGallery": "Αποθήκευση μέσου στη συλλογή",
-      "saveToHistory": "Αποθήκευση στο ιστορικό",
-	  "autoFinish": "Αυτόματη ολοκλήρωση"
+      "saveToHistory": "Αποθήκευση στο ιστορικό"
     },
     "send": {
       "title": "Αποστολή",
@@ -128,14 +128,14 @@
       "multicastGroup": "Αναμετάδοση",
       "multicastGroupWarning": "Ενδέχεται να μην εντοπιστείτε από άλλες συσκευές επειδή χρησιμοποιείτε μια προσαρμοσμένη διεύθυνση αναμετάδοσης. (προεπιλογή: {defaultMulticast})"
     },
-    "advancedSettings": "Προχωρημένες ρυθμίσεις",
     "other": {
       "title": "Άλλα",
-      "support": "Υποστηρίξτε το AloeChat.AI",
+      "support": "Υποστηρίξτε το LocalSend",
       "donate": "Δωρεά",
       "privacyPolicy": "Πολιτική Απορρήτου",
       "termsOfUse": "Όροι Χρήσης"
-    }
+    },
+    "advancedSettings": "Προχωρημένες ρυθμίσεις"
   },
   "troubleshootPage": {
     "title": "Αντιμετώπιση προβλημάτων",
@@ -184,7 +184,7 @@
   "receiveOptionsPage": {
     "title": "Επιλογές",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(Φάκελος AloeChat.AI)",
+    "appDirectory": "(Φάκελος LocalSend)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Απενεργοποιήθηκε αυτόματα επειδή υπάρχουν κατάλογοι."
   },
@@ -221,19 +221,26 @@
     "requests": "Αιτήματα",
     "noRequests": "Κανένα αίτμηα ακόμα.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "Το AloeChat.AI χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή.",
-    "pendingRequests": "Αναμονή αιτημάτων: {n}",
-    "autoAccept": "Αυτόματη αποδοχή αιτημάτων"
+    "autoAccept": "Αυτόματη αποδοχή αιτημάτων",
+    "encryptionHint": "Το LocalSend χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή.",
+    "pendingRequests": "Αναμονή αιτημάτων: {n}"
   },
   "aboutPage": {
-    "title": "Σχετικά με το AloeChat.AI",
-	"description": [
-      "Το AloeChat.AI είναι μια δωρεάν εφαρμογή ανοιχτού κώδικα που σας επιτρέπει να μοιράζεστε με ασφάλεια αρχεία και μηνύματα με κοντινές συσκευές μέσω του τοπικού σας δικτύου χωρίς να χρειάζεστε σύνδεση στο διαδίκτυο.",
+    "title": "Σχετικά με το LocalSend",
+    "description": [
+      "Το LocalSend είναι μια δωρεάν εφαρμογή ανοιχτού κώδικα που σας επιτρέπει να μοιράζεστε με ασφάλεια αρχεία και μηνύματα με κοντινές συσκευές μέσω του τοπικού σας δικτύου χωρίς να χρειάζεστε σύνδεση στο διαδίκτυο.",
       "Αυτή η εφαρμογή είναι διαθέσιμη σε Android, iOS, macOS, Windows και Linux. Μπορείτε να βρείτε όλες τις επιλογές λήψης στην επίσημη αρχική σελίδα."
     ],
     "author": "Δημιουργός",
     "contributors": "Συντελεστές",
     "translators": "Μεταφραστές"
+  },
+  "donationPage": {
+    "title": "Δωρεά",
+    "info": "Το LocalSend είναι δωρεάν, ανοιχτού κώδικα και χωρίς διαφημίσεις. Εάν σας αρέσει η εφαρμογή, μπορείτε να υποστηρίξετε την ανάπτυξή της με μια δωρεά.",
+    "donate": "Δωρεά {amount}",
+    "thanks": "Ευχαριστούμε πολύ!",
+    "restore": "Ε[παναφορά αγοράς"
   },
   "changelogPage": {
     "title": "Καταγραφή αλλαγών"
@@ -372,7 +379,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "AloeChat.AI can't find other devices without having the permission to scan the local network. Please grant this permission in the settings.",
+      "description": "LocalSend can't find other devices without having the permission to scan the local network. Please grant this permission in the settings.",
       "gotoSettings": "Ρυθμίσεις"
     },
     "messageInput": {
@@ -410,13 +417,13 @@
       "title": "Λειτουργίες αποστολής",
       "single": "Στέλνει αρχεία σε έναν παραλήπτη. Η επιλογή θα διαγραφεί μετά την ολοκλήρωση της μεταφοράς του αρχείου.",
       "multiple": "Στέλνει αρχεία σε πολλούς παραλήπτες. Η επιλογή δεν θα διαγραφεί.",
-      "link": "Οι παραλήπτες που δεν έχουν εγκαταστήσει το AloeChat.AI μπορούν να πραγματοποιήσουν λήψη των επιλεγμένων αρχείων ανοίγοντας τον σύνδεσμο στον φυλλομετρητή τους."
+      "link": "Οι παραλήπτες που δεν έχουν εγκαταστήσει το LocalSend μπορούν να πραγματοποιήσουν λήψη των επιλεγμένων αρχείων ανοίγοντας τον σύνδεσμο στον φυλλομετρητή τους."
     }
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "Έξοδος από το AloeChat.AI"
+    "close": "Έξοδος από το LocalSend"
   },
   "web": {
     "waiting": "@:sendPage.waiting",
@@ -455,12 +462,5 @@
     "sActionUseCameraHint": "χρήση κάμερας",
     "sNameDurationLabel": "διάρκεια",
     "sUnitAssetCountLabel": "μετρητής"
-  },
-  "donationPage": {
-    "title": "Δωρεά",
-    "info": "Το AloeChat.AI είναι δωρεάν, ανοιχτού κώδικα και χωρίς διαφημίσεις. Εάν σας αρέσει η εφαρμογή, μπορείτε να υποστηρίξετε την ανάπτυξή της με μια δωρεά.",
-    "donate": "Δωρεά {amount}",
-    "thanks": "Ευχαριστούμε πολύ!",
-    "restore": "Ε[παναφορά αγοράς"
-  }  
+  }
 }

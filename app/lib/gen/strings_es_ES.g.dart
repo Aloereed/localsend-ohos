@@ -27,7 +27,7 @@ class _StringsEsEs extends Translations {
 
 	// Translations
 	@override String get locale => 'Español';
-	@override String get appName => 'AloeChat.AI';
+	@override String get appName => 'LocalSend';
 	@override late final _StringsGeneralEsEs general = _StringsGeneralEsEs._(_root);
 	@override late final _StringsReceiveTabEsEs receiveTab = _StringsReceiveTabEsEs._(_root);
 	@override late final _StringsSendTabEsEs sendTab = _StringsSendTabEsEs._(_root);
@@ -139,6 +139,7 @@ class _StringsSettingsTabEsEs extends _StringsSettingsTabEn {
 	@override String get title => 'Ajustes';
 	@override late final _StringsSettingsTabGeneralEsEs general = _StringsSettingsTabGeneralEsEs._(_root);
 	@override late final _StringsSettingsTabReceiveEsEs receive = _StringsSettingsTabReceiveEsEs._(_root);
+	@override late final _StringsSettingsTabSendEsEs send = _StringsSettingsTabSendEsEs._(_root);
 	@override late final _StringsSettingsTabNetworkEsEs network = _StringsSettingsTabNetworkEsEs._(_root);
 	@override late final _StringsSettingsTabOtherEsEs other = _StringsSettingsTabOtherEsEs._(_root);
 	@override String get advancedSettings => 'Configuración avanzada';
@@ -220,9 +221,9 @@ class _StringsReceiveOptionsPageEsEs extends _StringsReceiveOptionsPageEn {
 
 	// Translations
 	@override String get title => 'Opciones';
-	@override String get destination => '${_root.settingsTab.receive.destination}';
+	@override String get destination => _root.settingsTab.receive.destination;
 	@override String get appDirectory => '(carpeta ${_root.appName})';
-	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
+	@override String get saveToGallery => _root.settingsTab.receive.saveToGallery;
 	@override String get saveToGalleryOff => 'Desactivado automáticamente porque hay carpetas.';
 }
 
@@ -268,8 +269,9 @@ class _StringsWebSharePageEsEs extends _StringsWebSharePageEn {
 	);
 	@override String get requests => 'Solicitudes';
 	@override String get noRequests => 'Aún no hay solicitudes.';
-	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'AloeChat.AI utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador.';
+	@override String get encryption => _root.settingsTab.network.encryption;
+	@override String get autoAccept => 'Aceptar solicitudes automáticamente';
+	@override String get encryptionHint => 'LocalSend utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador.';
 	@override String pendingRequests({required Object n}) => 'Solicitudes pendientes: ${n}';
 }
 
@@ -280,9 +282,9 @@ class _StringsAboutPageEsEs extends _StringsAboutPageEn {
 	@override final _StringsEsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Sobre AloeChat.AI';
+	@override String get title => 'Sobre LocalSend';
 	@override List<String> get description => [
-		'AloeChat.AI es una aplicación libre, de código abierto, que te permite compartir archivos y mensajes de forma segura con dispositivos cercanos a través de tu red local sin necesidad de conexión a Internet.',
+		'LocalSend es una aplicación libre, de código abierto, que te permite compartir archivos y mensajes de forma segura con dispositivos cercanos a través de tu red local sin necesidad de conexión a Internet.',
 		'Está disponible para Android, iOS, macOS, Windows y Linux. Puedes encontrar todas las opciones de descarga en la página web oficial.',
 	];
 	@override String get author => 'Autor';
@@ -298,7 +300,7 @@ class _StringsDonationPageEsEs extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Donar';
-	@override String get info => 'AloeChat.AI es libre, open source y no contiene anuncios. Si te gusta la aplicación puedes ayudar al desarrollo con una donación.';
+	@override String get info => 'LocalSend es libre, open source y no contiene anuncios. Si te gusta la aplicación puedes ayudar al desarrollo con una donación.';
 	@override String donate({required Object amount}) => 'Donar ${amount}';
 	@override String get thanks => '¡Muchas gracias!';
 	@override String get restore => 'Restablecer compra';
@@ -360,8 +362,8 @@ class _StringsTrayEsEs extends _StringsTrayEn {
 	@override final _StringsEsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get open => '${_root.general.open}';
-	@override String get close => 'Cerrar AloeChat.AI';
+	@override String get open => _root.general.open;
+	@override String get close => 'Cerrar LocalSend';
 }
 
 // Path: web
@@ -371,7 +373,7 @@ class _StringsWebEsEs extends _StringsWebEn {
 	@override final _StringsEsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get waiting => '${_root.sendPage.waiting}';
+	@override String get waiting => _root.sendPage.waiting;
 	@override String get rejected => 'Rechazado';
 	@override String get files => 'Archivos';
 	@override String get fileName => 'Nombre del archivo';
@@ -495,12 +497,23 @@ class _StringsSettingsTabReceiveEsEs extends _StringsSettingsTabReceiveEn {
 
 	// Translations
 	@override String get title => 'Recibir';
-	@override String get quickSave => '${_root.general.quickSave}';
+	@override String get quickSave => _root.general.quickSave;
 	@override String get autoFinish => 'Auto finalizar';
 	@override String get destination => 'Destino';
 	@override String get downloads => '(Descargas)';
 	@override String get saveToGallery => 'Guardar media en la galería';
 	@override String get saveToHistory => 'Guardar en el historial';
+}
+
+// Path: settingsTab.send
+class _StringsSettingsTabSendEsEs extends _StringsSettingsTabSendEn {
+	_StringsSettingsTabSendEsEs._(_StringsEsEs root) : this._root = root, super._(root);
+
+	@override final _StringsEsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Enviar';
+	@override String get shareViaLinkAutoAccept => 'Enviar enlace: Aceptar automáticamente';
 }
 
 // Path: settingsTab.network
@@ -531,7 +544,7 @@ class _StringsSettingsTabOtherEsEs extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Otros';
-	@override String get support => 'Apoya a AloeChat.AI';
+	@override String get support => 'Apoya a LocalSend';
 	@override String get donate => 'Donar';
 	@override String get privacyPolicy => 'Política de privacidad';
 	@override String get termsOfUse => 'Condiciones de uso';
@@ -649,7 +662,7 @@ class _StringsDialogsErrorDialogEsEs extends _StringsDialogsErrorDialogEn {
 	@override final _StringsEsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.error}';
+	@override String get title => _root.general.error;
 }
 
 // Path: dialogs.favoriteDialog
@@ -734,8 +747,8 @@ class _StringsDialogsLocalNetworkUnauthorizedEsEs extends _StringsDialogsLocalNe
 	@override final _StringsEsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'AloeChat.AI no puede encontrar otros dispositivos sin tener permiso para escanear la red local. Por favor, concede este permiso en los ajustes.';
+	@override String get title => _root.dialogs.noPermission.title;
+	@override String get description => 'LocalSend no puede encontrar otros dispositivos sin tener permiso para escanear la red local. Por favor, concede este permiso en los ajustes.';
 	@override String get gotoSettings => 'Ajustes';
 }
 
@@ -815,7 +828,7 @@ class _StringsDialogsQuickSaveNoticeEsEs extends _StringsDialogsQuickSaveNoticeE
 	@override final _StringsEsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.quickSave}';
+	@override String get title => _root.general.quickSave;
 	@override String get content => 'Las solicitudes de archivos se aceptan automáticamente. Ten en cuenta que cualquiera en la red local podrá enviarte archivos.';
 }
 
@@ -829,7 +842,7 @@ class _StringsDialogsSendModeHelpEsEs extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Modos de envío';
 	@override String get single => 'Enviar archivos a un solo destino. La selección se borrará una vez finalizada la transferencia.';
 	@override String get multiple => 'Enviar archivos a múltiples destinos. La selección no se borrará.';
-	@override String get link => 'Los destinatarios que no tengan AloeChat.AI instalado pueden descargar los archivos seleccionados abriendo el enlace en su navegador.';
+	@override String get link => 'Los destinatarios que no tengan LocalSend instalado pueden descargar los archivos seleccionados abriendo el enlace en su navegador.';
 }
 
 // Path: settingsTab.general.brightnessOptions

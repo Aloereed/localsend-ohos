@@ -27,7 +27,7 @@ class _StringsFilPh extends Translations {
 
 	// Translations
 	@override String get locale => 'Filipino';
-	@override String get appName => 'AloeChat.AI';
+	@override String get appName => 'LocalSend';
 	@override late final _StringsGeneralFilPh general = _StringsGeneralFilPh._(_root);
 	@override late final _StringsReceiveTabFilPh receiveTab = _StringsReceiveTabFilPh._(_root);
 	@override late final _StringsSendTabFilPh sendTab = _StringsSendTabFilPh._(_root);
@@ -220,9 +220,9 @@ class _StringsReceiveOptionsPageFilPh extends _StringsReceiveOptionsPageEn {
 
 	// Translations
 	@override String get title => 'Options';
-	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(AloeChat.AI folder)';
-	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
+	@override String get destination => _root.settingsTab.receive.destination;
+	@override String get appDirectory => '(LocalSend folder)';
+	@override String get saveToGallery => _root.settingsTab.receive.saveToGallery;
 	@override String get saveToGalleryOff => 'Awtomatikong pinatay dahil mayroong mga directories.';
 }
 
@@ -268,8 +268,8 @@ class _StringsWebSharePageFilPh extends _StringsWebSharePageEn {
 	);
 	@override String get requests => 'Requests';
 	@override String get noRequests => 'Wala pang mga request.';
-	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'Ang AloeChat.AI ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser.';
+	@override String get encryption => _root.settingsTab.network.encryption;
+	@override String get encryptionHint => 'Ang LocalSend ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser.';
 	@override String pendingRequests({required Object n}) => 'Mga naka-pending na request: ${n}';
 }
 
@@ -280,9 +280,9 @@ class _StringsAboutPageFilPh extends _StringsAboutPageEn {
 	@override final _StringsFilPh _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Tungkol sa AloeChat.AI';
+	@override String get title => 'Tungkol sa LocalSend';
 	@override List<String> get description => [
-		'Ang AloeChat.AI ay isang libre at open-source na app na nagbibigay-daan sa secure na pagbabahagi ng mga file at mga message sa mga kalapit na device sa iyong local network nang hindi nangangailangan ng koneksyon sa internet.',
+		'Ang LocalSend ay isang libre at open-source na app na nagbibigay-daan sa secure na pagbabahagi ng mga file at mga message sa mga kalapit na device sa iyong local network nang hindi nangangailangan ng koneksyon sa internet.',
 		'Available ang app na ito sa Android, iOS, macOS, Windows, at Linux. Maaari mong mahanap ang lahat ng mga pagpipilian sa pag-download sa opisyal na homepage.',
 	];
 	@override String get author => 'Author';
@@ -298,7 +298,7 @@ class _StringsDonationPageFilPh extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Mag-donate';
-	@override String get info => 'Ang AloeChat.AI ay libre, open-source, at walang anumang mga ad. Kung iyong nagustuhan ang app, maaari mong suportahan ang development sa pamamagitan ng donasyon.';
+	@override String get info => 'Ang LocalSend ay libre, open-source, at walang anumang mga ad. Kung iyong nagustuhan ang app, maaari mong suportahan ang development sa pamamagitan ng donasyon.';
 	@override String donate({required Object amount}) => 'Mag-donate ng ${amount}';
 	@override String get thanks => 'Maraming salamat!';
 	@override String get restore => 'Restore purchase';
@@ -431,8 +431,8 @@ class _StringsTrayFilPh extends _StringsTrayEn {
 	@override final _StringsFilPh _root; // ignore: unused_field
 
 	// Translations
-	@override String get open => '${_root.general.open}';
-	@override String get close => 'Isara ang AloeChat.AI';
+	@override String get open => _root.general.open;
+	@override String get close => 'Isara ang LocalSend';
 }
 
 // Path: web
@@ -442,7 +442,7 @@ class _StringsWebFilPh extends _StringsWebEn {
 	@override final _StringsFilPh _root; // ignore: unused_field
 
 	// Translations
-	@override String get waiting => '${_root.sendPage.waiting}';
+	@override String get waiting => _root.sendPage.waiting;
 	@override String get rejected => 'Hindi Tinanggap';
 	@override String get files => 'Files';
 	@override String get fileName => 'Pangalan ng file';
@@ -566,7 +566,7 @@ class _StringsSettingsTabReceiveFilPh extends _StringsSettingsTabReceiveEn {
 
 	// Translations
 	@override String get title => 'Tumanggap';
-	@override String get quickSave => '${_root.general.quickSave}';
+	@override String get quickSave => _root.general.quickSave;
 	@override String get autoFinish => 'Auto Finish';
 	@override String get destination => 'Patutunguhan';
 	@override String get downloads => '(Downloads)';
@@ -602,7 +602,7 @@ class _StringsSettingsTabOtherFilPh extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Iba Pa';
-	@override String get support => 'Suportahan ang AloeChat.AI';
+	@override String get support => 'Suportahan ang LocalSend';
 	@override String get donate => 'Mag-donate';
 	@override String get privacyPolicy => 'Patakaran sa Privacy';
 	@override String get termsOfUse => 'Mga Tuntunin sa Paggamit';
@@ -720,7 +720,7 @@ class _StringsDialogsErrorDialogFilPh extends _StringsDialogsErrorDialogEn {
 	@override final _StringsFilPh _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.error}';
+	@override String get title => _root.general.error;
 }
 
 // Path: dialogs.favoriteDialog
@@ -805,8 +805,8 @@ class _StringsDialogsLocalNetworkUnauthorizedFilPh extends _StringsDialogsLocalN
 	@override final _StringsFilPh _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'Hindi makikita ng AloeChat.AI ang ibang devices hangga\'t hindi nabibigyan ng permission para mag-scan sa lokal na network. Mangyaring bigyan ito ng permission sa settings.';
+	@override String get title => _root.dialogs.noPermission.title;
+	@override String get description => 'Hindi makikita ng LocalSend ang ibang devices hangga\'t hindi nabibigyan ng permission para mag-scan sa lokal na network. Mangyaring bigyan ito ng permission sa settings.';
 	@override String get gotoSettings => 'Settings';
 }
 
@@ -886,7 +886,7 @@ class _StringsDialogsQuickSaveNoticeFilPh extends _StringsDialogsQuickSaveNotice
 	@override final _StringsFilPh _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.quickSave}';
+	@override String get title => _root.general.quickSave;
 	@override String get content => 'Ang mga file request ay awtomatikong tinatanggap. Mabatid lamang na ang lahat ng nasa lokal na network ay maaaring magpadala sa iyo ng mga file.';
 }
 
@@ -900,7 +900,7 @@ class _StringsDialogsSendModeHelpFilPh extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Send modes';
 	@override String get single => 'Magpadala ng mga file sa iisang recipient o tatanggap. Ang mga pagpipilian ay maaalis pagkatapos ipadala ang file.';
 	@override String get multiple => 'Magpadala ng mga file sa maraming recipient o tatanggap. Ang mga pagpipilian ay hindi maaalis.';
-	@override String get link => 'Ang mga recipient o tatanggap na walang nakainstall na AloeChat.AI ay maaaring mag download nang mga napiling file sa pamamagitan ng pagbukas ng link sa kanilang browser.';
+	@override String get link => 'Ang mga recipient o tatanggap na walang nakainstall na LocalSend ay maaaring mag download nang mga napiling file sa pamamagitan ng pagbukas ng link sa kanilang browser.';
 }
 
 // Path: settingsTab.general.brightnessOptions

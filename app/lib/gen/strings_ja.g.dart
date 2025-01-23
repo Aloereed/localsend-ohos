@@ -27,7 +27,7 @@ class _StringsJa extends Translations {
 
 	// Translations
 	@override String get locale => '日本語';
-	@override String get appName => 'AloeChat.AI';
+	@override String get appName => 'LocalSend';
 	@override late final _StringsGeneralJa general = _StringsGeneralJa._(_root);
 	@override late final _StringsReceiveTabJa receiveTab = _StringsReceiveTabJa._(_root);
 	@override late final _StringsSendTabJa sendTab = _StringsSendTabJa._(_root);
@@ -46,6 +46,7 @@ class _StringsJa extends Translations {
 	@override late final _StringsChangelogPageJa changelogPage = _StringsChangelogPageJa._(_root);
 	@override late final _StringsAliasGeneratorJa aliasGenerator = _StringsAliasGeneratorJa._(_root);
 	@override late final _StringsDialogsJa dialogs = _StringsDialogsJa._(_root);
+	@override late final _StringsSanitizationJa sanitization = _StringsSanitizationJa._(_root);
 	@override late final _StringsTrayJa tray = _StringsTrayJa._(_root);
 	@override late final _StringsWebJa web = _StringsWebJa._(_root);
 	@override late final _StringsAssetPickerJa assetPicker = _StringsAssetPickerJa._(_root);
@@ -221,9 +222,9 @@ class _StringsReceiveOptionsPageJa extends _StringsReceiveOptionsPageEn {
 
 	// Translations
 	@override String get title => 'オプション';
-	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(AloeChat.AI フォルダー)';
-	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
+	@override String get destination => _root.settingsTab.receive.destination;
+	@override String get appDirectory => '(LocalSend フォルダー)';
+	@override String get saveToGallery => _root.settingsTab.receive.saveToGallery;
 	@override String get saveToGalleryOff => 'ディレクトリーがあるため自動で無効になっています。';
 }
 
@@ -236,6 +237,7 @@ class _StringsSendPageJa extends _StringsSendPageEn {
 	// Translations
 	@override String get waiting => '返答を待っています...';
 	@override String get rejected => '受信者がリクエストを拒否しました。';
+	@override String get tooManyAttempts => _root.web.tooManyAttempts;
 	@override String get busy => '受信者は他のリクエストの処理中です。';
 }
 
@@ -269,9 +271,11 @@ class _StringsWebSharePageJa extends _StringsWebSharePageEn {
 	);
 	@override String get requests => 'リクエスト';
 	@override String get noRequests => 'リクエストはまだありません。';
-	@override String get encryption => '${_root.settingsTab.network.encryption}';
+	@override String get encryption => _root.settingsTab.network.encryption;
 	@override String get autoAccept => '自動でリクエストを承諾する';
-	@override String get encryptionHint => 'AloeChat.AIは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。';
+	@override String get requirePin => 'PINコードを要求';
+	@override String pinHint({required Object pin}) => 'PINコードは "${pin}" です';
+	@override String get encryptionHint => 'LocalSendは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。';
 	@override String pendingRequests({required Object n}) => '保留中のリクエスト数: ${n}';
 }
 
@@ -282,9 +286,9 @@ class _StringsAboutPageJa extends _StringsAboutPageEn {
 	@override final _StringsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'AloeChat.AIについて';
+	@override String get title => 'LocalSendについて';
 	@override List<String> get description => [
-		'AloeChat.AIは無料のオープンソースアプリで、インターネットに接続することなく、ローカルネットワーク経由で近くにあるデバイスとファイルやメッセージを安全に共有することができます。',
+		'LocalSendは無料のオープンソースアプリで、インターネットに接続することなく、ローカルネットワーク経由で近くにあるデバイスとファイルやメッセージを安全に共有することができます。',
 		'本アプリはAndroid、iOS、macOS、Windows、Linuxで利用でき、公式ホームページからダウンロードすることができます。',
 	];
 	@override String get author => '制作者';
@@ -300,7 +304,7 @@ class _StringsDonationPageJa extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => '寄付';
-	@override String get info => 'AloeChat.AIは無料かつオープンソースで、広告を一切含みません。もしアプリを気に入っていただけたら、寄付で開発を支援することができます。';
+	@override String get info => 'LocalSendは無料かつオープンソースで、広告を一切含みません。もしアプリを気に入っていただけたら、寄付で開発を支援することができます。';
 	@override String donate({required Object amount}) => '${amount} 寄付する';
 	@override String get thanks => 'ありがとうございます！';
 	@override String get restore => '購入を復元する';
@@ -352,7 +356,20 @@ class _StringsDialogsJa extends _StringsDialogsEn {
 	@override late final _StringsDialogsQrJa qr = _StringsDialogsQrJa._(_root);
 	@override late final _StringsDialogsQuickActionsJa quickActions = _StringsDialogsQuickActionsJa._(_root);
 	@override late final _StringsDialogsQuickSaveNoticeJa quickSaveNotice = _StringsDialogsQuickSaveNoticeJa._(_root);
+	@override late final _StringsDialogsPinJa pin = _StringsDialogsPinJa._(_root);
 	@override late final _StringsDialogsSendModeHelpJa sendModeHelp = _StringsDialogsSendModeHelpJa._(_root);
+	@override late final _StringsDialogsZoomJa zoom = _StringsDialogsZoomJa._(_root);
+}
+
+// Path: sanitization
+class _StringsSanitizationJa extends _StringsSanitizationEn {
+	_StringsSanitizationJa._(_StringsJa root) : this._root = root, super._(root);
+
+	@override final _StringsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get empty => 'ファイル名は空にできません';
+	@override String get invalid => 'ファイル名に無効な文字が含まれています';
 }
 
 // Path: tray
@@ -362,8 +379,8 @@ class _StringsTrayJa extends _StringsTrayEn {
 	@override final _StringsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get open => '${_root.general.open}';
-	@override String get close => 'AloeChat.AIを終了';
+	@override String get open => _root.general.open;
+	@override String get close => 'LocalSendを終了';
 }
 
 // Path: web
@@ -373,7 +390,10 @@ class _StringsWebJa extends _StringsWebEn {
 	@override final _StringsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get waiting => '${_root.sendPage.waiting}';
+	@override String get waiting => _root.sendPage.waiting;
+	@override String get enterPin => 'PINコードを入力';
+	@override String get invalidPin => 'PINコードが無効です';
+	@override String get tooManyAttempts => '試行回数が多すぎます';
 	@override String get rejected => '拒否済み';
 	@override String get files => 'ファイル';
 	@override String get fileName => 'ファイル名';
@@ -486,6 +506,7 @@ class _StringsSettingsTabGeneralJa extends _StringsSettingsTabGeneralEn {
 	@override String get minimizeToTray => '終了時: トレイに最小化';
 	@override String get launchAtStartup => 'ログイン時に自動で起動';
 	@override String get launchMinimized => '自動起動時: 隠れた状態で開始';
+	@override String get showInContextMenu => 'コンテキストメニューにLocalSendを表示';
 	@override String get animations => 'アニメーション';
 }
 
@@ -497,7 +518,8 @@ class _StringsSettingsTabReceiveJa extends _StringsSettingsTabReceiveEn {
 
 	// Translations
 	@override String get title => '受信';
-	@override String get quickSave => '${_root.general.quickSave}';
+	@override String get quickSave => _root.general.quickSave;
+	@override String get requirePin => _root.webSharePage.requirePin;
 	@override String get autoFinish => '自動で完了';
 	@override String get destination => '保存先';
 	@override String get downloads => '(ダウンロード)';
@@ -530,6 +552,7 @@ class _StringsSettingsTabNetworkJa extends _StringsSettingsTabNetworkEn {
 	@override String get deviceType => 'デバイスタイプ';
 	@override String get deviceModel => 'デバイスモデル';
 	@override String get port => 'ポート';
+	@override String get discoveryTimeout => '探索がタイムアウトしました';
 	@override String portWarning({required Object defaultPort}) => 'ポートが変更されているため、このデバイスが他のデバイスから検出されなくなる場合があります。(デフォルト: ${defaultPort})';
 	@override String get encryption => '暗号化';
 	@override String get multicastGroup => 'マルチキャスト';
@@ -544,7 +567,7 @@ class _StringsSettingsTabOtherJa extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'その他';
-	@override String get support => 'AloeChat.AIを支援';
+	@override String get support => 'LocalSendを支援';
 	@override String get donate => '寄付';
 	@override String get privacyPolicy => 'プライバシーポリシー';
 	@override String get termsOfUse => '利用規約';
@@ -581,6 +604,7 @@ class _StringsReceiveHistoryPageEntryActionsJa extends _StringsReceiveHistoryPag
 
 	// Translations
 	@override String get open => 'ファイルを開く';
+	@override String get showInFolder => 'フォルダーに表示';
 	@override String get info => '情報';
 	@override String get deleteFromHistory => '履歴から削除';
 }
@@ -662,7 +686,7 @@ class _StringsDialogsErrorDialogJa extends _StringsDialogsErrorDialogEn {
 	@override final _StringsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.error}';
+	@override String get title => _root.general.error;
 }
 
 // Path: dialogs.favoriteDialog
@@ -747,8 +771,8 @@ class _StringsDialogsLocalNetworkUnauthorizedJa extends _StringsDialogsLocalNetw
 	@override final _StringsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'ローカルネットワークをスキャンする権限がないと、AloeChat.AIは他のデバイスを見つけることができません。設定よりこの権限を付与してください。';
+	@override String get title => _root.dialogs.noPermission.title;
+	@override String get description => 'ローカルネットワークをスキャンする権限がないと、LocalSendは他のデバイスを見つけることができません。設定よりこの権限を付与してください。';
 	@override String get gotoSettings => '設定';
 }
 
@@ -828,8 +852,18 @@ class _StringsDialogsQuickSaveNoticeJa extends _StringsDialogsQuickSaveNoticeEn 
 	@override final _StringsJa _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.quickSave}';
+	@override String get title => _root.general.quickSave;
 	@override String get content => 'ファイルリクエストが自動で承諾されます。ローカルネットワーク内の全員がファイルを送信できるので注意してください。';
+}
+
+// Path: dialogs.pin
+class _StringsDialogsPinJa extends _StringsDialogsPinEn {
+	_StringsDialogsPinJa._(_StringsJa root) : this._root = root, super._(root);
+
+	@override final _StringsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'PINコードを入力';
 }
 
 // Path: dialogs.sendModeHelp
@@ -842,7 +876,17 @@ class _StringsDialogsSendModeHelpJa extends _StringsDialogsSendModeHelpEn {
 	@override String get title => '送信モード';
 	@override String get single => '単一の受信者にファイルを送信します。ファイルの転送完了後、選択は解除されます。';
 	@override String get multiple => '複数の受信者にファイルを送信します。ファイルの選択は解除されません。';
-	@override String get link => 'AloeChat.AIをインストールしていない受信者でも、ブラウザでリンクを開くことで選択したファイルをダウンロードできます。';
+	@override String get link => 'LocalSendをインストールしていない受信者でも、ブラウザでリンクを開くことで選択したファイルをダウンロードできます。';
+}
+
+// Path: dialogs.zoom
+class _StringsDialogsZoomJa extends _StringsDialogsZoomEn {
+	_StringsDialogsZoomJa._(_StringsJa root) : this._root = root, super._(root);
+
+	@override final _StringsJa _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'URL';
 }
 
 // Path: settingsTab.general.brightnessOptions

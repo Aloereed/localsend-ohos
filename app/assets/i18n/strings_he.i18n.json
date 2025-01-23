@@ -1,6 +1,6 @@
 {
   "locale": "עברית",
-  "appName": "AloeChat.AI",
+  "appName": "LocalSend",
   "general": {
     "accept": "אישור",
     "accepted": "התקבל",
@@ -100,11 +100,13 @@
       "minimizeToTray": "יציאה: מזעור למגש",
       "launchAtStartup": "הפעלה אוטומטית לאחר הכניסה",
       "launchMinimized": "הפעלה אוטומטית: התחל מוסתר",
+      "showInContextMenu": "הצג את LocalSend בתפריט ההקשר",
       "animations": "אנימציות"
     },
     "receive": {
       "title": "קבלה",
       "quickSave": "@:general.quickSave",
+      "requirePin": "@:webSharePage.requirePin",
       "autoFinish": "סיום אוטומטי",
       "destination": "יעד",
       "downloads": "(הורדות)",
@@ -123,6 +125,7 @@
       "deviceType": "סוג המכשיר",
       "deviceModel": "דגם המכשיר",
       "port": "יציאה",
+      "discoveryTimeout": "זמן קצוב לגילוי",
       "portWarning": "יתכן שלא יזוהו מכשירים אחרים בגלל שאתה משתמש ביציאה מותאמת אישית. (ברירת־מחדל: {defaultPort})",
       "encryption": "הצפנה",
       "multicastGroup": "מולטיקאסט",
@@ -130,7 +133,7 @@
     },
     "other": {
       "title": "אחר",
-      "support": "תמיכה ב-AloeChat.AI",
+      "support": "תמיכה ב-LocalSend",
       "donate": "תרומה",
       "privacyPolicy": "מדיניות פרטיות",
       "termsOfUse": "תנאי השימוש"
@@ -159,6 +162,7 @@
     "empty": "ההיסטוריה ריקה.",
     "entryActions": {
       "open": "פתח קובץ",
+      "showInFolder": "הצג בתיקייה",
       "info": "מידע",
       "deleteFromHistory": "מחק מההיסטוריה"
     }
@@ -184,13 +188,14 @@
   "receiveOptionsPage": {
     "title": "אפשרויות",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(תיקיית AloeChat.AI)",
+    "appDirectory": "(תיקיית LocalSend)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "כבוי באופן אוטומטי בשל קיום ספריות."
   },
   "sendPage": {
     "waiting": "ממתין לתגובה...",
     "rejected": "הנמען דחה את הבקשה.",
+    "tooManyAttempts": "@:web.tooManyAttempts",
     "busy": "הנמען תפוס בבקשה אחרת."
   },
   "progressPage": {
@@ -222,13 +227,15 @@
     "noRequests": "אין כרגע בקשות.",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "אישור בקשות באופן אוטומטי",
-    "encryptionHint": "AloeChat.AI משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן.",
+    "requirePin": "דרוש סיסמה",
+    "pinHint": "הסיסמה היא \"{pin}\"",
+    "encryptionHint": "LocalSend משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן.",
     "pendingRequests": "בקשות בהמתנה: {n}"
   },
   "aboutPage": {
-    "title": "אודות AloeChat.AI",
+    "title": "אודות LocalSend",
     "description": [
-      "AloeChat.AI היא אפליקציית קוד פתוח חינמית המאפשרת לשתף קבצים והודעות בצורה מאובטחת עם מכשירים קרובים דרך הרשת המקומית מבלי להזדקק לחיבור לאינטרנט.",
+      "LocalSend היא אפליקציית קוד פתוח חינמית המאפשרת לשתף קבצים והודעות בצורה מאובטחת עם מכשירים קרובים דרך הרשת המקומית מבלי להזדקק לחיבור לאינטרנט.",
       "אפליקציה זו זמינה באנדרואיד, iOS, macOS, Windows ו-Linux. אתה יכול למצוא את כל אפשרויות ההורדה בדף הבית הרשמי."
     ],
     "author": "יוצר",
@@ -237,7 +244,7 @@
   },
   "donationPage": {
     "title": "תרומה",
-    "info": "אפליקציית AloeChat.AI היא חינמית, קוד פתוח וללא פרסומות. אם אתה אוהב את האפליקציה, אתה יכול לתמוך בפיתוח באמצעות תרומה.",
+    "info": "אפליקציית LocalSend היא חינמית, קוד פתוח וללא פרסומות. אם אתה אוהב את האפליקציה, אתה יכול לתמוך בפיתוח באמצעות תרומה.",
     "donate": "תרומת {amount}",
     "thanks": "תודה רבה!",
     "restore": "שחזור רכישה"
@@ -309,7 +316,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "ל־AloeChat.AI אין אפשרות למצוא מכשירים אחרים ללא הרשאה לסריקת הרשת המקומית. אנא הענק את ההרשאה הזו בהגדרות.",
+      "description": "ל־LocalSend אין אפשרות למצוא מכשירים אחרים ללא הרשאה לסריקת הרשת המקומית. אנא הענק את ההרשאה הזו בהגדרות.",
       "gotoSettings": "הגדרות"
     },
     "messageInput": {
@@ -343,20 +350,33 @@
       "title": "@:general.quickSave",
       "content": "בקשות שליחה מתקבלות אוטומטית. שים לב שכל אחד ברשת המקומית יוכל לשלוח לך קבצים."
     },
+    "pin": {
+      "title": "הזן סיסמה"
+    },
     "sendModeHelp": {
       "title": "מצבי שליחה",
       "single": "שליחת קבצים למקבל בודד. בחירת הקבצים תתאפס לאחר השליחה.",
       "multiple": "שליחת קבצים למקבלים מרובים. בחירת הקבצים לא תתאפס.",
-      "link": "מקבלים ש-AloeChat.AI לא מותקן אצלם יוכלו להוריד את הקבצים שנבחרו על ידי פתיחת הקישור בדפדפן שלהם."
+      "link": "מקבלים ש-LocalSend לא מותקן אצלם יוכלו להוריד את הקבצים שנבחרו על ידי פתיחת הקישור בדפדפן שלהם."
+    },
+    "zoom": {
+      "title": "URL"
     }
+  },
+  "sanitization": {
+    "empty": "שם הקובץ לא יכול להיות ריק",
+    "invalid": "שם הקובץ מכיל תווים לא חוקיים"
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "צא מ-AloeChat.AI"
+    "close": "צא מ-LocalSend"
   },
   "web": {
     "waiting": "@:sendPage.waiting",
+    "enterPin": "הזן סיסמה",
+    "invalidPin": "סיסמה לא חוקית",
+    "tooManyAttempts": "בוצעו יותר מידי ניסיונות כושלים",
     "rejected": "נדחה",
     "files": "קבצים",
     "fileName": "שם קובץ",

@@ -1,6 +1,6 @@
 {
   "locale": "Español",
-  "appName": "AloeChat.AI",
+  "appName": "LocalSend",
   "general": {
     "accept": "Aceptar",
     "accepted": "Aceptado",
@@ -111,6 +111,10 @@
       "saveToGallery": "Guardar media en la galería",
       "saveToHistory": "Guardar en el historial"
     },
+    "send": {
+      "title": "Enviar",
+      "shareViaLinkAutoAccept": "Enviar enlace: Aceptar automáticamente"
+    },
     "network": {
       "title": "Red",
       "needRestart": "Reiniciar el servidor para aplicar los ajustes.",
@@ -126,7 +130,7 @@
     },
     "other": {
       "title": "Otros",
-      "support": "Apoya a AloeChat.AI",
+      "support": "Apoya a LocalSend",
       "donate": "Donar",
       "privacyPolicy": "Política de privacidad",
       "termsOfUse": "Condiciones de uso"
@@ -217,13 +221,14 @@
     "requests": "Solicitudes",
     "noRequests": "Aún no hay solicitudes.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "AloeChat.AI utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador.",
+    "autoAccept": "Aceptar solicitudes automáticamente",
+    "encryptionHint": "LocalSend utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador.",
     "pendingRequests": "Solicitudes pendientes: {n}"
   },
   "aboutPage": {
-    "title": "Sobre AloeChat.AI",
+    "title": "Sobre LocalSend",
     "description": [
-      "AloeChat.AI es una aplicación libre, de código abierto, que te permite compartir archivos y mensajes de forma segura con dispositivos cercanos a través de tu red local sin necesidad de conexión a Internet.",
+      "LocalSend es una aplicación libre, de código abierto, que te permite compartir archivos y mensajes de forma segura con dispositivos cercanos a través de tu red local sin necesidad de conexión a Internet.",
       "Está disponible para Android, iOS, macOS, Windows y Linux. Puedes encontrar todas las opciones de descarga en la página web oficial."
     ],
     "author": "Autor",
@@ -232,7 +237,7 @@
   },
   "donationPage": {
     "title": "Donar",
-    "info": "AloeChat.AI es libre, open source y no contiene anuncios. Si te gusta la aplicación puedes ayudar al desarrollo con una donación.",
+    "info": "LocalSend es libre, open source y no contiene anuncios. Si te gusta la aplicación puedes ayudar al desarrollo con una donación.",
     "donate": "Donar {amount}",
     "thanks": "¡Muchas gracias!",
     "restore": "Restablecer compra"
@@ -304,7 +309,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "AloeChat.AI no puede encontrar otros dispositivos sin tener permiso para escanear la red local. Por favor, concede este permiso en los ajustes.",
+      "description": "LocalSend no puede encontrar otros dispositivos sin tener permiso para escanear la red local. Por favor, concede este permiso en los ajustes.",
       "gotoSettings": "Ajustes"
     },
     "messageInput": {
@@ -342,13 +347,13 @@
       "title": "Modos de envío",
       "single": "Enviar archivos a un solo destino. La selección se borrará una vez finalizada la transferencia.",
       "multiple": "Enviar archivos a múltiples destinos. La selección no se borrará.",
-      "link": "Los destinatarios que no tengan AloeChat.AI instalado pueden descargar los archivos seleccionados abriendo el enlace en su navegador."
+      "link": "Los destinatarios que no tengan LocalSend instalado pueden descargar los archivos seleccionados abriendo el enlace en su navegador."
     }
   },
   "tray": {
     "@info": "Las directrices de Apple son muy estrictas en cuanto a la expresión 'cerrar'.",
     "open": "@:general.open",
-    "close": "Cerrar AloeChat.AI"
+    "close": "Cerrar LocalSend"
   },
   "web": {
     "waiting": "@:sendPage.waiting",

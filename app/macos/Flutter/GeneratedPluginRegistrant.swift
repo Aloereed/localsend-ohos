@@ -20,8 +20,8 @@ import photo_manager
 import screen_retriever
 import share_plus
 import shared_preferences_foundation
-import system_tray
 import tray_manager
+import uri_content
 import url_launcher_macos
 import video_player_avfoundation
 import wakelock_plus
@@ -43,8 +43,8 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   ScreenRetrieverPlugin.register(with: registry.registrar(forPlugin: "ScreenRetrieverPlugin"))
   SharePlusMacosPlugin.register(with: registry.registrar(forPlugin: "SharePlusMacosPlugin"))
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
-  SystemTrayPlugin.register(with: registry.registrar(forPlugin: "SystemTrayPlugin"))
   TrayManagerPlugin.register(with: registry.registrar(forPlugin: "TrayManagerPlugin"))
+  UriContentPlugin.register(with: registry.registrar(forPlugin: "UriContentPlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
   FVPVideoPlayerPlugin.register(with: registry.registrar(forPlugin: "FVPVideoPlayerPlugin"))
   WakelockPlusMacosPlugin.register(with: registry.registrar(forPlugin: "WakelockPlusMacosPlugin"))

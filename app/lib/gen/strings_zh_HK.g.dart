@@ -26,8 +26,8 @@ class _StringsZhHk extends Translations {
 	@override late final _StringsZhHk _root = this; // ignore: unused_field
 
 	// Translations
-	@override String get locale => '繁體中文 – 中國香港';
-	@override String get appName => 'AloeChat.AI';
+	@override String get locale => '繁體中文 – 香港';
+	@override String get appName => 'LocalSend';
 	@override late final _StringsGeneralZhHk general = _StringsGeneralZhHk._(_root);
 	@override late final _StringsReceiveTabZhHk receiveTab = _StringsReceiveTabZhHk._(_root);
 	@override late final _StringsSendTabZhHk sendTab = _StringsSendTabZhHk._(_root);
@@ -46,6 +46,7 @@ class _StringsZhHk extends Translations {
 	@override late final _StringsChangelogPageZhHk changelogPage = _StringsChangelogPageZhHk._(_root);
 	@override late final _StringsAliasGeneratorZhHk aliasGenerator = _StringsAliasGeneratorZhHk._(_root);
 	@override late final _StringsDialogsZhHk dialogs = _StringsDialogsZhHk._(_root);
+	@override late final _StringsSanitizationZhHk sanitization = _StringsSanitizationZhHk._(_root);
 	@override late final _StringsTrayZhHk tray = _StringsTrayZhHk._(_root);
 	@override late final _StringsWebZhHk web = _StringsWebZhHk._(_root);
 	@override late final _StringsAssetPickerZhHk assetPicker = _StringsAssetPickerZhHk._(_root);
@@ -104,7 +105,7 @@ class _StringsReceiveTabZhHk extends _StringsReceiveTabEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '接收';
+	@override String get title => _root.settingsTab.receive.title;
 	@override late final _StringsReceiveTabInfoBoxZhHk infoBox = _StringsReceiveTabInfoBoxZhHk._(_root);
 }
 
@@ -115,7 +116,7 @@ class _StringsSendTabZhHk extends _StringsSendTabEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '傳送';
+	@override String get title => _root.settingsTab.send.title;
 	@override late final _StringsSendTabSelectionZhHk selection = _StringsSendTabSelectionZhHk._(_root);
 	@override late final _StringsSendTabPickerZhHk picker = _StringsSendTabPickerZhHk._(_root);
 	@override String get shareIntentInfo => '用你裝置嘅「分享」功能以更方便揀選檔案。';
@@ -136,9 +137,10 @@ class _StringsSettingsTabZhHk extends _StringsSettingsTabEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.settings}';
+	@override String get title => _root.general.settings;
 	@override late final _StringsSettingsTabGeneralZhHk general = _StringsSettingsTabGeneralZhHk._(_root);
 	@override late final _StringsSettingsTabReceiveZhHk receive = _StringsSettingsTabReceiveZhHk._(_root);
+	@override late final _StringsSettingsTabSendZhHk send = _StringsSettingsTabSendZhHk._(_root);
 	@override late final _StringsSettingsTabNetworkZhHk network = _StringsSettingsTabNetworkZhHk._(_root);
 	@override late final _StringsSettingsTabOtherZhHk other = _StringsSettingsTabOtherZhHk._(_root);
 	@override String get advancedSettings => '進階設定';
@@ -219,10 +221,10 @@ class _StringsReceiveOptionsPageZhHk extends _StringsReceiveOptionsPageEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.settings}';
-	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '（AloeChat.AI 資料夾）';
-	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
+	@override String get title => _root.general.settings;
+	@override String get destination => _root.settingsTab.receive.destination;
+	@override String get appDirectory => '（LocalSend 資料夾）';
+	@override String get saveToGallery => _root.settingsTab.receive.saveToGallery;
 	@override String get saveToGalleryOff => '因為有資料夾存在而自動閂咗';
 }
 
@@ -235,6 +237,7 @@ class _StringsSendPageZhHk extends _StringsSendPageEn {
 	// Translations
 	@override String get waiting => '等緊回應……';
 	@override String get rejected => '對方拒絕咗個請求。';
+	@override String get tooManyAttempts => _root.web.tooManyAttempts;
 	@override String get busy => '對方忙緊另一個請求。';
 }
 
@@ -258,7 +261,7 @@ class _StringsWebSharePageZhHk extends _StringsWebSharePageEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.sendTab.sendModes.link}';
+	@override String get title => _root.sendTab.sendModes.link;
 	@override String get loading => '開緊個 server……';
 	@override String get stopping => '閂緊個 server……';
 	@override String get error => '開 server 嗰陣發生錯誤。';
@@ -268,8 +271,11 @@ class _StringsWebSharePageZhHk extends _StringsWebSharePageEn {
 	);
 	@override String get requests => '請求';
 	@override String get noRequests => '未有';
-	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'AloeChat.AI 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。';
+	@override String get encryption => _root.settingsTab.network.encryption;
+	@override String get autoAccept => '自動接受請求';
+	@override String get requirePin => '需要密碼';
+	@override String pinHint({required Object pin}) => '密碼為「${pin}」';
+	@override String get encryptionHint => 'LocalSend 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。';
 	@override String pendingRequests({required Object n}) => '仲有 ${n} 個請求未處理';
 }
 
@@ -280,10 +286,10 @@ class _StringsAboutPageZhHk extends _StringsAboutPageEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '關於 AloeChat.AI';
+	@override String get title => '關於 LocalSend';
 	@override List<String> get description => [
-		'AloeChat. AI蘆薈流轉助手系一款基於LocalSend嘅免費開源應用程式，可畀你通過本地網絡與附近嘅設備安全噉共亯檔案同資訊，而無使互聯網連結。',
-		'本程式可喺鴻蒙Next上使用，兼夾與Android、iOS、macOS、Windows同Linux上嘅LocalSend互動。 你可以喺官方主頁揾到所有下載選項',
+		'LocalSend 係一款免費嘅開源應用程式，佢可以透過區域網路幫你安全噉將檔案同訊息分享畀附近嘅裝置，全程無需互聯網連線。',
+		'呢個 app 喺 Android、iOS、macOS、Windows 同 Linux 都用得㗎。你可以喺我哋嘅網站揾到呢個 app 所有平台嘅版本同其他下載方式。',
 	];
 	@override String get author => '作者';
 	@override String get contributors => '貢獻者';
@@ -297,8 +303,8 @@ class _StringsDonationPageZhHk extends _StringsDonationPageEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.settingsTab.other.donate}';
-	@override String get info => 'AloeChat.AI 唔單只免費、開源，仲係冇廣告添㗎！如果你鍾意呢個 app，不妨捐款贊助我哋開發？';
+	@override String get title => _root.settingsTab.other.donate;
+	@override String get info => 'LocalSend 唔單只免費、開源，仲係冇廣告添㗎！如果你鍾意呢個 app，不妨捐款贊助我哋開發？';
 	@override String donate({required Object amount}) => '捐 ${amount}';
 	@override String get thanks => '多謝支持！';
 	@override String get restore => '還原 app 內購買';
@@ -350,7 +356,20 @@ class _StringsDialogsZhHk extends _StringsDialogsEn {
 	@override late final _StringsDialogsQrZhHk qr = _StringsDialogsQrZhHk._(_root);
 	@override late final _StringsDialogsQuickActionsZhHk quickActions = _StringsDialogsQuickActionsZhHk._(_root);
 	@override late final _StringsDialogsQuickSaveNoticeZhHk quickSaveNotice = _StringsDialogsQuickSaveNoticeZhHk._(_root);
+	@override late final _StringsDialogsPinZhHk pin = _StringsDialogsPinZhHk._(_root);
 	@override late final _StringsDialogsSendModeHelpZhHk sendModeHelp = _StringsDialogsSendModeHelpZhHk._(_root);
+	@override late final _StringsDialogsZoomZhHk zoom = _StringsDialogsZoomZhHk._(_root);
+}
+
+// Path: sanitization
+class _StringsSanitizationZhHk extends _StringsSanitizationEn {
+	_StringsSanitizationZhHk._(_StringsZhHk root) : this._root = root, super._(root);
+
+	@override final _StringsZhHk _root; // ignore: unused_field
+
+	// Translations
+	@override String get empty => '檔案名稱唔可以係吉嘅。';
+	@override String get invalid => '檔案名稱唔可以包括唔用得嘅字元。';
 }
 
 // Path: tray
@@ -360,8 +379,8 @@ class _StringsTrayZhHk extends _StringsTrayEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get open => '${_root.general.open}';
-	@override String get close => '退出 AloeChat.AI';
+	@override String get open => _root.general.open;
+	@override String get close => '退出 LocalSend';
 }
 
 // Path: web
@@ -371,9 +390,12 @@ class _StringsWebZhHk extends _StringsWebEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get waiting => '${_root.sendPage.waiting}';
+	@override String get waiting => _root.sendPage.waiting;
+	@override String get enterPin => '輸入密碼';
+	@override String get invalidPin => '密碼無效。';
+	@override String get tooManyAttempts => '嘗試次數過多，請稍後再試。';
 	@override String get rejected => '已遭對方拒絕';
-	@override String get files => '${_root.general.files}';
+	@override String get files => _root.general.files;
 	@override String get fileName => '檔案名稱';
 	@override String get size => '大細';
 }
@@ -385,9 +407,9 @@ class _StringsAssetPickerZhHk extends _StringsAssetPickerEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get confirm => '${_root.general.confirm}';
-	@override String get cancel => '${_root.general.cancel}';
-	@override String get edit => '${_root.general.edit}';
+	@override String get confirm => _root.general.confirm;
+	@override String get cancel => _root.general.cancel;
+	@override String get edit => _root.general.edit;
 	@override String get gifIndicator => 'GIF';
 	@override String get loadFailed => '載入失敗';
 	@override String get original => '原始檔案';
@@ -407,8 +429,8 @@ class _StringsAssetPickerZhHk extends _StringsAssetPickerEn {
 	@override String get sTypeVideoLabel => '影片';
 	@override String get sTypeOtherLabel => '其他媒體';
 	@override String get sActionPlayHint => '播放';
-	@override String get sActionPreviewHint => '${_root.assetPicker.preview}';
-	@override String get sActionSelectHint => '${_root.assetPicker.select}';
+	@override String get sActionPreviewHint => _root.assetPicker.preview;
+	@override String get sActionSelectHint => _root.assetPicker.select;
 	@override String get sActionSwitchPathLabel => '更改路徑';
 	@override String get sActionUseCameraHint => '影相';
 	@override String get sNameDurationLabel => '持續時間';
@@ -484,6 +506,7 @@ class _StringsSettingsTabGeneralZhHk extends _StringsSettingsTabGeneralEn {
 	@override String get minimizeToTray => '退出嗰陣縮細做通知圖示';
 	@override String get launchAtStartup => '開機自動啟動';
 	@override String get launchMinimized => '自動啟動成通知圖示';
+	@override String get showInContextMenu => '喺檔案功能表嘅「傳送到」項目顯示 LocalSend';
 	@override String get animations => '動畫';
 }
 
@@ -495,12 +518,24 @@ class _StringsSettingsTabReceiveZhHk extends _StringsSettingsTabReceiveEn {
 
 	// Translations
 	@override String get title => '接收';
-	@override String get quickSave => '${_root.general.quickSave}';
+	@override String get quickSave => _root.general.quickSave;
+	@override String get requirePin => _root.webSharePage.requirePin;
 	@override String get autoFinish => '完成後自動關閉傳輸畫面';
 	@override String get destination => '儲存位置';
 	@override String get downloads => '（下載資料夾）';
 	@override String get saveToGallery => 'Save 落相簿';
 	@override String get saveToHistory => 'Save 去歷史紀錄';
+}
+
+// Path: settingsTab.send
+class _StringsSettingsTabSendZhHk extends _StringsSettingsTabSendEn {
+	_StringsSettingsTabSendZhHk._(_StringsZhHk root) : this._root = root, super._(root);
+
+	@override final _StringsZhHk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '傳送';
+	@override String get shareViaLinkAutoAccept => '用 link 分享檔案嗰陣自動接收';
 }
 
 // Path: settingsTab.network
@@ -517,6 +552,7 @@ class _StringsSettingsTabNetworkZhHk extends _StringsSettingsTabNetworkEn {
 	@override String get deviceType => '裝置類型';
 	@override String get deviceModel => '裝置型號';
 	@override String get port => 'Port';
+	@override String get discoveryTimeout => '裝置搜尋逾時';
 	@override String portWarning({required Object defaultPort}) => '改 port 嘅話其他裝置有機會偵測唔到你。（預設：${defaultPort}）';
 	@override String get encryption => '加密傳送';
 	@override String get multicastGroup => '多播 IP 地址';
@@ -531,7 +567,7 @@ class _StringsSettingsTabOtherZhHk extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => '其他';
-	@override String get support => '支援 AloeChat.AI';
+	@override String get support => '支援 LocalSend';
 	@override String get donate => '捐款';
 	@override String get privacyPolicy => '私隱權政策';
 	@override String get termsOfUse => '服務條款';
@@ -568,6 +604,7 @@ class _StringsReceiveHistoryPageEntryActionsZhHk extends _StringsReceiveHistoryP
 
 	// Translations
 	@override String get open => '開啟檔案';
+	@override String get showInFolder => '喺檔案瀏覽器顯示';
 	@override String get info => '資訊';
 	@override String get deleteFromHistory => '刪走呢筆記錄';
 }
@@ -649,7 +686,7 @@ class _StringsDialogsErrorDialogZhHk extends _StringsDialogsErrorDialogEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.error}';
+	@override String get title => _root.general.error;
 }
 
 // Path: dialogs.favoriteDialog
@@ -661,7 +698,7 @@ class _StringsDialogsFavoriteDialogZhHk extends _StringsDialogsFavoriteDialogEn 
 	// Translations
 	@override String get title => '收藏';
 	@override String get noFavorites => '未收藏任何裝置';
-	@override String get addFavorite => '${_root.general.add}';
+	@override String get addFavorite => _root.general.add;
 }
 
 // Path: dialogs.favoriteDeleteDialog
@@ -734,8 +771,8 @@ class _StringsDialogsLocalNetworkUnauthorizedZhHk extends _StringsDialogsLocalNe
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => '喺冇權掃描區域網路嘅情況下 AloeChat.AI 唔會偵測到其他裝置。麻煩你喺系統設定開返呢個權限。';
+	@override String get title => _root.dialogs.noPermission.title;
+	@override String get description => '喺冇權掃描區域網路嘅情況下 LocalSend 唔會偵測到其他裝置。麻煩你喺系統設定開返呢個權限。';
 	@override String get gotoSettings => '開啟系統設定';
 }
 
@@ -815,8 +852,18 @@ class _StringsDialogsQuickSaveNoticeZhHk extends _StringsDialogsQuickSaveNoticeE
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.quickSave}';
+	@override String get title => _root.general.quickSave;
 	@override String get content => '自動接受所有檔案傳輸請求。留意返，噉樣會令呢個網路嘅所有人都 send 得嘢畀你。';
+}
+
+// Path: dialogs.pin
+class _StringsDialogsPinZhHk extends _StringsDialogsPinEn {
+	_StringsDialogsPinZhHk._(_StringsZhHk root) : this._root = root, super._(root);
+
+	@override final _StringsZhHk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => _root.web.enterPin;
 }
 
 // Path: dialogs.sendModeHelp
@@ -826,10 +873,20 @@ class _StringsDialogsSendModeHelpZhHk extends _StringsDialogsSendModeHelpEn {
 	@override final _StringsZhHk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.sendTab.sendMode}';
+	@override String get title => _root.sendTab.sendMode;
 	@override String get single => '淨係 send 畀一部裝置，傳輸完成後會清除揀選項目。';
 	@override String get multiple => '一次過 send 畀多部裝置，揀選項目會一路保留。';
-	@override String get link => '冇裝 AloeChat.AI 嘅裝置可以透過條 link 嚟 download 返揀選嘅項目。';
+	@override String get link => '冇裝 LocalSend 嘅裝置可以透過條 link 嚟 download 返揀選嘅項目。';
+}
+
+// Path: dialogs.zoom
+class _StringsDialogsZoomZhHk extends _StringsDialogsZoomEn {
+	_StringsDialogsZoomZhHk._(_StringsZhHk root) : this._root = root, super._(root);
+
+	@override final _StringsZhHk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '網址';
 }
 
 // Path: settingsTab.general.brightnessOptions

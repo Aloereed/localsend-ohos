@@ -1,6 +1,6 @@
 {
   "locale": "Français",
-  "appName": "AloeChat.AI",
+  "appName": "LocalSend",
   "general": {
     "accept": "Accepter",
     "accepted": "Acceptée",
@@ -100,16 +100,22 @@
       "minimizeToTray": "Quitter : Réduire à la barre des tâches",
       "launchAtStartup": "Démarrage automatique : Après la connexion",
       "launchMinimized": "Démarrage automatique : Minimiser",
+      "showInContextMenu": "Montrer LocalSend dans le menu contextuel",
       "animations": "Animations"
     },
     "receive": {
       "title": "Reçu",
       "quickSave": "@:general.quickSave",
+      "requirePin": "@:webSharePage.requirePin",
       "autoFinish": "Finir automatiquement",
       "destination": "Destination",
       "downloads": "(Téléchargements)",
       "saveToGallery": "Sauvegarder les médias dans la galerie",
       "saveToHistory": "Enregistrer dans l'historique"
+    },
+    "send": {
+      "title": "Envoyer",
+      "shareViaLinkAutoAccept": "Envoyer via un lien: Accepter automatiquement"
     },
     "network": {
       "title": "Réseau",
@@ -119,6 +125,7 @@
       "deviceType": "Type d'appareil",
       "deviceModel": "Modèle d'appareil",
       "port": "Port",
+      "discoveryTimeout": "Temps maximal de recherche",
       "portWarning": "Il se peut que vous ne soyez pas détecté par d'autres appareils car vous utilisez un port personnalisé. (par défaut : {defaultPort})",
       "encryption": "Chiffrement",
       "multicastGroup": "Multicast",
@@ -126,7 +133,7 @@
     },
     "other": {
       "title": "Autre",
-      "support": "Supporter AloeChat.AI",
+      "support": "Supporter LocalSend",
       "donate": "Faire une donation",
       "privacyPolicy": "Politique de confidentialité",
       "termsOfUse": "Conditions d'utilisation"
@@ -155,6 +162,7 @@
     "empty": "L'historique est vide.",
     "entryActions": {
       "open": "Ouvrir le fichier",
+      "showInFolder": "Ouvrir le dossier",
       "info": "Information",
       "deleteFromHistory": "Supprimer de l'historique"
     }
@@ -180,13 +188,14 @@
   "receiveOptionsPage": {
     "title": "Options",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(AloeChat.AI folder)",
+    "appDirectory": "(LocalSend folder)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Désactivé automatiquement car des dossiers sont présents."
   },
   "sendPage": {
     "waiting": "En attente d'une réponse...",
     "rejected": "Le destinataire a rejeté la demande.",
+    "tooManyAttempts": "@:web.tooManyAttempts",
     "busy": "Le destinataire est occupé avec une autre requête."
   },
   "progressPage": {
@@ -217,11 +226,14 @@
     "requests": "Requêtes",
     "noRequests": "Aucune requête en attente.",
     "encryption": "@:settingsTab.network.encryption",
-    "encryptionHint": "AloeChat.AI utilise un certificat auto-signé. Vous devez l'accepter dans le navigateur.",
+    "autoAccept": "Accepter automatiquement les requêtes",
+    "requirePin": "Code PIN nécessaire",
+    "pinHint": "Le code PIN est \"{pin}\"",
+    "encryptionHint": "LocalSend utilise un certificat auto-signé. Vous devez l'accepter dans le navigateur.",
     "pendingRequests": "Requêtes en attente: {n}"
   },
   "aboutPage": {
-    "title": "A propos de AloeChat.AI",
+    "title": "A propos de LocalSend",
     "description": [
       "Localsend est un logiciel gratuit et open-source qui vous permet de partager de manière sécurisée des fichers et des messages avec d'autres appareils sur votre réseau local, sans même avoir besoin d'une connexion à internet.",
       "Localsend est disponible sur Android, iOS, macOS, Windows et Linux. Vous pouvez accéder à ces téléchargements sur la page officielle."
@@ -232,7 +244,7 @@
   },
   "donationPage": {
     "title": "Faire une donation",
-    "info": "AloeChat.AI est gratuit, open-source and sans aucune pub. Si vous aimez ce logiciel, vous pouvez faire un don pour supporter son développement.",
+    "info": "LocalSend est gratuit, open-source and sans aucune pub. Si vous aimez ce logiciel, vous pouvez faire un don pour supporter son développement.",
     "donate": "Donner {amount}",
     "thanks": "Merci beaucoup!",
     "restore": "Restaurer les achats"
@@ -304,7 +316,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "AloeChat.AI ne peut pas trouver d'autres appareils sans la permission de scanner votre réseau local. Veuillez autoriser cette permission à AloeChat.AI dans les paramètres.",
+      "description": "LocalSend ne peut pas trouver d'autres appareils sans la permission de scanner votre réseau local. Veuillez autoriser cette permission à LocalSend dans les paramètres.",
       "gotoSettings": "Paramètres"
     },
     "messageInput": {
@@ -338,20 +350,33 @@
       "title": "@:general.quickSave",
       "content": "Les demandes de fichiers sont automatiquement acceptées. Sachez que tous les membres du réseau local peuvent vous envoyer des fichiers."
     },
+    "pin": {
+      "title": "Entrez le code PIN"
+    },
     "sendModeHelp": {
       "title": "Modes d'envoi",
       "single": "Envoyer des fichiers à un récipient. La sélection sera effacée une fois l'envoi du fichier terminé.",
       "multiple": "Envoyer des fichiers à plusieurs récipients. La sélection ne sera pas effacée.",
-      "link": "Les récipients n'ayant pas AloeChat.AI installé peuvent télécharger les fichiers sélectionnés en ouvrant le lien dans leur navigateur."
+      "link": "Les récipients n'ayant pas LocalSend installé peuvent télécharger les fichiers sélectionnés en ouvrant le lien dans leur navigateur."
+    },
+    "zoom": {
+      "title": "URL"
     }
+  },
+  "sanitization": {
+    "empty": "Le nom du fichier ne peut pas être vide",
+    "invalid": "Le nom du fichier contient des caractères non valides"
   },
   "tray": {
     "@info": "Les directives d'Apple sont très strictes en ce qui concerne le terme \"fermer\".",
     "open": "@:general.open",
-    "close": "Quitter AloeChat.AI"
+    "close": "Quitter LocalSend"
   },
   "web": {
     "waiting": "@:sendPage.waiting",
+    "enterPin": "Entrez le code PIN",
+    "invalidPin": "Code PIN Invalide",
+    "tooManyAttempts": "Trop d'essais infructueux",
     "rejected": "Rejeté",
     "files": "Fichiers",
     "fileName": "Nom du fichier",

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, unnecessary_cast
+// ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
 // ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'settings_state.dart';
@@ -43,14 +43,12 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
   static const Field<SettingsState, bool> _f$saveToHistory = Field('saveToHistory', _$saveToHistory);
   static bool _$quickSave(SettingsState v) => v.quickSave;
   static const Field<SettingsState, bool> _f$quickSave = Field('quickSave', _$quickSave);
+  static String? _$receivePin(SettingsState v) => v.receivePin;
+  static const Field<SettingsState, String> _f$receivePin = Field('receivePin', _$receivePin);
   static bool _$autoFinish(SettingsState v) => v.autoFinish;
   static const Field<SettingsState, bool> _f$autoFinish = Field('autoFinish', _$autoFinish);
   static bool _$minimizeToTray(SettingsState v) => v.minimizeToTray;
   static const Field<SettingsState, bool> _f$minimizeToTray = Field('minimizeToTray', _$minimizeToTray);
-  static bool _$launchAtStartup(SettingsState v) => v.launchAtStartup;
-  static const Field<SettingsState, bool> _f$launchAtStartup = Field('launchAtStartup', _$launchAtStartup);
-  static bool _$autoStartLaunchMinimized(SettingsState v) => v.autoStartLaunchMinimized;
-  static const Field<SettingsState, bool> _f$autoStartLaunchMinimized = Field('autoStartLaunchMinimized', _$autoStartLaunchMinimized);
   static bool _$https(SettingsState v) => v.https;
   static const Field<SettingsState, bool> _f$https = Field('https', _$https);
   static SendMode _$sendMode(SettingsState v) => v.sendMode;
@@ -65,6 +63,8 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
   static const Field<SettingsState, String> _f$deviceModel = Field('deviceModel', _$deviceModel);
   static bool _$shareViaLinkAutoAccept(SettingsState v) => v.shareViaLinkAutoAccept;
   static const Field<SettingsState, bool> _f$shareViaLinkAutoAccept = Field('shareViaLinkAutoAccept', _$shareViaLinkAutoAccept);
+  static int _$discoveryTimeout(SettingsState v) => v.discoveryTimeout;
+  static const Field<SettingsState, int> _f$discoveryTimeout = Field('discoveryTimeout', _$discoveryTimeout);
 
   @override
   final MappableFields<SettingsState> fields = const {
@@ -79,10 +79,9 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
     #saveToGallery: _f$saveToGallery,
     #saveToHistory: _f$saveToHistory,
     #quickSave: _f$quickSave,
+    #receivePin: _f$receivePin,
     #autoFinish: _f$autoFinish,
     #minimizeToTray: _f$minimizeToTray,
-    #launchAtStartup: _f$launchAtStartup,
-    #autoStartLaunchMinimized: _f$autoStartLaunchMinimized,
     #https: _f$https,
     #sendMode: _f$sendMode,
     #saveWindowPlacement: _f$saveWindowPlacement,
@@ -90,6 +89,7 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
     #deviceType: _f$deviceType,
     #deviceModel: _f$deviceModel,
     #shareViaLinkAutoAccept: _f$shareViaLinkAutoAccept,
+    #discoveryTimeout: _f$discoveryTimeout,
   };
 
   static SettingsState _instantiate(DecodingData data) {
@@ -105,17 +105,17 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
         saveToGallery: data.dec(_f$saveToGallery),
         saveToHistory: data.dec(_f$saveToHistory),
         quickSave: data.dec(_f$quickSave),
+        receivePin: data.dec(_f$receivePin),
         autoFinish: data.dec(_f$autoFinish),
         minimizeToTray: data.dec(_f$minimizeToTray),
-        launchAtStartup: data.dec(_f$launchAtStartup),
-        autoStartLaunchMinimized: data.dec(_f$autoStartLaunchMinimized),
         https: data.dec(_f$https),
         sendMode: data.dec(_f$sendMode),
         saveWindowPlacement: data.dec(_f$saveWindowPlacement),
         enableAnimations: data.dec(_f$enableAnimations),
         deviceType: data.dec(_f$deviceType),
         deviceModel: data.dec(_f$deviceModel),
-        shareViaLinkAutoAccept: data.dec(_f$shareViaLinkAutoAccept));
+        shareViaLinkAutoAccept: data.dec(_f$shareViaLinkAutoAccept),
+        discoveryTimeout: data.dec(_f$discoveryTimeout));
   }
 
   @override
@@ -148,8 +148,7 @@ mixin SettingsStateMappable {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (runtimeType == other.runtimeType && SettingsStateMapper.ensureInitialized().isValueEqual(this as SettingsState, other));
+    return SettingsStateMapper.ensureInitialized().equalsValue(this as SettingsState, other);
   }
 
   @override
@@ -175,17 +174,17 @@ abstract class SettingsStateCopyWith<$R, $In extends SettingsState, $Out> implem
       bool? saveToGallery,
       bool? saveToHistory,
       bool? quickSave,
+      String? receivePin,
       bool? autoFinish,
       bool? minimizeToTray,
-      bool? launchAtStartup,
-      bool? autoStartLaunchMinimized,
       bool? https,
       SendMode? sendMode,
       bool? saveWindowPlacement,
       bool? enableAnimations,
       DeviceType? deviceType,
       String? deviceModel,
-      bool? shareViaLinkAutoAccept});
+      bool? shareViaLinkAutoAccept,
+      int? discoveryTimeout});
   SettingsStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -208,17 +207,17 @@ class _SettingsStateCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
           bool? saveToGallery,
           bool? saveToHistory,
           bool? quickSave,
+          Object? receivePin = $none,
           bool? autoFinish,
           bool? minimizeToTray,
-          bool? launchAtStartup,
-          bool? autoStartLaunchMinimized,
           bool? https,
           SendMode? sendMode,
           bool? saveWindowPlacement,
           bool? enableAnimations,
           Object? deviceType = $none,
           Object? deviceModel = $none,
-          bool? shareViaLinkAutoAccept}) =>
+          bool? shareViaLinkAutoAccept,
+          int? discoveryTimeout}) =>
       $apply(FieldCopyWithData({
         if (showToken != null) #showToken: showToken,
         if (alias != null) #alias: alias,
@@ -231,17 +230,17 @@ class _SettingsStateCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
         if (saveToGallery != null) #saveToGallery: saveToGallery,
         if (saveToHistory != null) #saveToHistory: saveToHistory,
         if (quickSave != null) #quickSave: quickSave,
+        if (receivePin != $none) #receivePin: receivePin,
         if (autoFinish != null) #autoFinish: autoFinish,
         if (minimizeToTray != null) #minimizeToTray: minimizeToTray,
-        if (launchAtStartup != null) #launchAtStartup: launchAtStartup,
-        if (autoStartLaunchMinimized != null) #autoStartLaunchMinimized: autoStartLaunchMinimized,
         if (https != null) #https: https,
         if (sendMode != null) #sendMode: sendMode,
         if (saveWindowPlacement != null) #saveWindowPlacement: saveWindowPlacement,
         if (enableAnimations != null) #enableAnimations: enableAnimations,
         if (deviceType != $none) #deviceType: deviceType,
         if (deviceModel != $none) #deviceModel: deviceModel,
-        if (shareViaLinkAutoAccept != null) #shareViaLinkAutoAccept: shareViaLinkAutoAccept
+        if (shareViaLinkAutoAccept != null) #shareViaLinkAutoAccept: shareViaLinkAutoAccept,
+        if (discoveryTimeout != null) #discoveryTimeout: discoveryTimeout
       }));
   @override
   SettingsState $make(CopyWithData data) => SettingsState(
@@ -256,17 +255,17 @@ class _SettingsStateCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
       saveToGallery: data.get(#saveToGallery, or: $value.saveToGallery),
       saveToHistory: data.get(#saveToHistory, or: $value.saveToHistory),
       quickSave: data.get(#quickSave, or: $value.quickSave),
+      receivePin: data.get(#receivePin, or: $value.receivePin),
       autoFinish: data.get(#autoFinish, or: $value.autoFinish),
       minimizeToTray: data.get(#minimizeToTray, or: $value.minimizeToTray),
-      launchAtStartup: data.get(#launchAtStartup, or: $value.launchAtStartup),
-      autoStartLaunchMinimized: data.get(#autoStartLaunchMinimized, or: $value.autoStartLaunchMinimized),
       https: data.get(#https, or: $value.https),
       sendMode: data.get(#sendMode, or: $value.sendMode),
       saveWindowPlacement: data.get(#saveWindowPlacement, or: $value.saveWindowPlacement),
       enableAnimations: data.get(#enableAnimations, or: $value.enableAnimations),
       deviceType: data.get(#deviceType, or: $value.deviceType),
       deviceModel: data.get(#deviceModel, or: $value.deviceModel),
-      shareViaLinkAutoAccept: data.get(#shareViaLinkAutoAccept, or: $value.shareViaLinkAutoAccept));
+      shareViaLinkAutoAccept: data.get(#shareViaLinkAutoAccept, or: $value.shareViaLinkAutoAccept),
+      discoveryTimeout: data.get(#discoveryTimeout, or: $value.discoveryTimeout));
 
   @override
   SettingsStateCopyWith<$R2, SettingsState, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) => _SettingsStateCopyWithImpl($value, $cast, t);

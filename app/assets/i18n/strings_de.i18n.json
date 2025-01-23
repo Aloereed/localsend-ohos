@@ -1,6 +1,6 @@
 {
   "locale": "Deutsch",
-  "appName": "AloeChat.AI",
+  "appName": "LocalSend",
   "general": {
     "accept": "Akzeptieren",
     "accepted": "Akzeptiert",
@@ -100,15 +100,17 @@
       "minimizeToTray": "Schließen: in Symbolleiste minimieren",
       "launchAtStartup": "Autostart nach Login",
       "launchMinimized": "Autostart: versteckt starten",
+      "showInContextMenu": "LocalSend im Kontextmenü anzeigen",
       "animations": "Animationen"
     },
     "receive": {
       "title": "Empfangen",
       "quickSave": "@:general.quickSave",
+      "requirePin": "@:webSharePage.requirePin",
       "autoFinish": "Autom. beenden",
       "destination": "Ziel-Ordner",
       "downloads": "(Downloads)",
-      "saveToGallery": "Medien in die Gallerie speichern",
+      "saveToGallery": "Medien in die Galerie speichern",
       "saveToHistory": "In Verlauf speichern"
     },
     "send": {
@@ -123,6 +125,7 @@
       "deviceType": "Gerätetyp",
       "deviceModel": "Gerätemodell",
       "port": "Port",
+      "discoveryTimeout": "Erkennungs-Timeout",
       "portWarning": "Möglicherweise wirst du von anderen Geräten nicht erkannt, weil du einen benutzerdefinierten Port verwendest. (Standard: {defaultPort})",
       "encryption": "Verschlüsselung",
       "multicastGroup": "Multicast",
@@ -130,7 +133,7 @@
     },
     "other": {
       "title": "Weitere",
-      "support": "AloeChat.AI unterstützen",
+      "support": "LocalSend unterstützen",
       "donate": "Spenden",
       "privacyPolicy": "Datenschutzerklärung",
       "termsOfUse": "Nutzungsbedingungen"
@@ -159,6 +162,7 @@
     "empty": "Der Verlauf ist leer.",
     "entryActions": {
       "open": "Datei öffnen",
+      "showInFolder": "Im Ordner anzeigen",
       "info": "Information",
       "deleteFromHistory": "Vom Verlauf entfernen"
     }
@@ -184,13 +188,14 @@
   "receiveOptionsPage": {
     "title": "Optionen",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(AloeChat.AI-Ordner)",
+    "appDirectory": "(LocalSend-Ordner)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
     "saveToGalleryOff": "Aufgrund von Ordnern automatisch ausgeschaltet."
   },
   "sendPage": {
     "waiting": "Warte auf Antwort...",
     "rejected": "Der Empfänger hat die Anfrage abgelehnt.",
+    "tooManyAttempts": "@:web.tooManyAttempts",
     "busy": "Der Empfänger ist mit einer anderen Anfrage beschäftigt."
   },
   "progressPage": {
@@ -222,13 +227,15 @@
     "noRequests": "Bisher keine Anfragen erhalten.",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "Anfragen automatisch aktzeptieren",
-    "encryptionHint": "AloeChat.AI verwendet ein selbstsigniertes Zertifikat. Sie müssen es im Browser akzeptieren.",
+    "requirePin": "PIN erforderlich",
+    "pinHint": "Die PIN lautet \"{pin}\"",
+    "encryptionHint": "LocalSend verwendet ein selbstsigniertes Zertifikat. Sie müssen es im Browser akzeptieren.",
     "pendingRequests": "Offene Anfragen: {n}"
   },
   "aboutPage": {
-    "title": "Über AloeChat.AI",
+    "title": "Über LocalSend",
     "description": [
-      "AloeChat.AI ist eine kostenlose Open-Source-App, mit der du Dateien und Nachrichten sicher über dein lokales Netzwerk mit Geräten in der Nähe teilen kannst, ohne dass eine Internetverbindung erforderlich ist.",
+      "LocalSend ist eine kostenlose Open-Source-App, mit der du Dateien und Nachrichten sicher über dein lokales Netzwerk mit Geräten in der Nähe teilen kannst, ohne dass eine Internetverbindung erforderlich ist.",
       "Diese App ist für Android, iOS, macOS, Windows und Linux verfügbar. Alle Downloadmöglichkeiten findest du auf der offiziellen Homepage."
     ],
     "author": "Autor",
@@ -237,7 +244,7 @@
   },
   "donationPage": {
     "title": "Spenden",
-    "info": "AloeChat.AI ist kostenlos, open-source und frei von Werbung. Wenn dir diese App gefällt, kannst du die Entwicklung mit einer Spende unterstützen.",
+    "info": "LocalSend ist kostenlos, open-source und frei von Werbung. Wenn dir diese App gefällt, kannst du die Entwicklung mit einer Spende unterstützen.",
     "donate": "Spende {amount}",
     "thanks": "Vielen Dank für deine Unterstützung!",
     "restore": "Käufe Wiederherstellen"
@@ -309,7 +316,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "AloeChat.AI kann nicht auf das lokale Netzwerk zugreifen. Bitte erlaube AloeChat.AI den Zugriff auf das lokale Netzwerk in den Einstellungen.",
+      "description": "LocalSend kann nicht auf das lokale Netzwerk zugreifen. Bitte erlaube LocalSend den Zugriff auf das lokale Netzwerk in den Einstellungen.",
       "gotoSettings": "Einstellungen"
     },
     "messageInput": {
@@ -343,20 +350,33 @@
       "title": "@:general.quickSave",
       "content": "Dateianfragen werden automatisch akzeptiert. Beachte, dass jeder im lokalen Netzwerk dir Dateien senden kann."
     },
+    "pin": {
+      "title": "PIN eingeben"
+    },
     "sendModeHelp": {
       "title": "Sendemodus",
       "single": "Sende Dateien an einen Empfänger. Die Auswahl wird nach Abschluss der Dateiübertragung gelöscht.",
       "multiple": "Sende Dateien an mehrere Empfänger. Die Auswahl bleibt erhalten.",
-      "link": "Empfänger, die AloeChat.AI nicht installiert haben, können die ausgewählten Dateien herunterladen, in dem sie den Link im Browser öffnen."
+      "link": "Empfänger, die LocalSend nicht installiert haben, können die ausgewählten Dateien herunterladen, in dem sie den Link im Browser öffnen."
+    },
+    "zoom": {
+      "title": "URL"
     }
+  },
+  "sanitization": {
+    "empty": "Dateiname darf nicht leer sein",
+    "invalid": "Dateiname enthält ungültige Zeichen"
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "AloeChat.AI beenden"
+    "close": "LocalSend beenden"
   },
   "web": {
     "waiting": "@:sendPage.waiting",
+    "enterPin": "PIN eingeben",
+    "invalidPin": "Ungültige PIN",
+    "tooManyAttempts": "Zu viele Versuche",
     "rejected": "Abgelehnt",
     "files": "Dateien",
     "fileName": "Dateiname",

@@ -8,17 +8,22 @@ import 'package:localsend_app/model/state/send/send_session_state.dart';
 import 'package:localsend_app/model/state/server/receive_session_state.dart';
 import 'package:localsend_app/model/state/server/receiving_file.dart';
 import 'package:localsend_app/pages/home_page.dart';
+import 'package:localsend_app/pages/home_page_controller.dart';
 import 'package:localsend_app/pages/progress_page.dart';
 import 'package:localsend_app/pages/receive_page.dart';
+import 'package:localsend_app/pages/receive_page_controller.dart';
 import 'package:localsend_app/provider/device_info_provider.dart';
 import 'package:localsend_app/provider/dio_provider.dart';
 import 'package:localsend_app/provider/favorites_provider.dart';
 import 'package:localsend_app/provider/logging/discovery_logs_provider.dart';
 import 'package:localsend_app/provider/network/nearby_devices_provider.dart';
 import 'package:localsend_app/provider/network/send_provider.dart';
+import 'package:localsend_app/provider/network/server/controller/common.dart';
 import 'package:localsend_app/provider/network/server/server_utils.dart';
 import 'package:localsend_app/provider/progress_provider.dart';
 import 'package:localsend_app/provider/receive_history_provider.dart';
+import 'package:localsend_app/provider/selection/selected_receiving_files_provider.dart';
+import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
 import 'package:localsend_app/util/api_route_builder.dart';
 import 'package:localsend_app/util/native/directories.dart';
@@ -26,6 +31,7 @@ import 'package:localsend_app/util/native/file_saver.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
 import 'package:localsend_app/util/native/tray_helper.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as p;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:routerino/routerino.dart';
 import 'package:shelf/shelf.dart';
@@ -176,9 +182,19 @@ class ReceiveController {
       return server.responseJson(409, message: 'Blocked by another session');
     }
 
-    final payload = await request.readAsString();
+    final pinResponse = handlePin(
+      server: server,
+      pin: server.ref.read(settingsProvider).receivePin,
+      pinAttempts: server.getState().pinAttempts,
+      request: request,
+    );
+    if (pinResponse != null) {
+      return pinResponse;
+    }
+
     final PrepareUploadRequestDto dto;
     try {
+      final payload = await request.readAsString();
       dto = PrepareUploadRequestDto.fromJson(jsonDecode(payload));
     } catch (e) {
       return server.responseJson(400, message: 'Request body malformed');
@@ -238,6 +254,26 @@ class ReceiveController {
       if (checkPlatformHasTray() && (await windowManager.isMinimized() || !(await windowManager.isVisible()) || !(await windowManager.isFocused()))) {
         await showFromTray();
       }
+
+      final message = server.getState().session?.message;
+      if (message != null) {
+        // Message already received
+        await server.ref.redux(receiveHistoryProvider).dispatchAsync(AddHistoryEntryAction(
+              entryId: const Uuid().v4(),
+              fileName: message,
+              fileType: FileType.text,
+              path: null,
+              savedToGallery: false,
+              isMessage: true,
+              fileSize: message.length,
+              senderAlias: server.getState().session!.senderAlias,
+              timestamp: DateTime.now().toUtc(),
+            ));
+      } else {
+        server.ref.notifier(selectedReceivingFilesProvider).setFiles(server.getState().session!.files.values.map((f) => f.file).toList());
+      }
+
+      server.ref.redux(receivePageControllerProvider).dispatch(InitReceivePageAction());
 
       // ignore: use_build_context_synchronously, unawaited_futures
       Routerino.context.push(() => const ReceivePage());
@@ -307,12 +343,12 @@ class ReceiveController {
 
     if (checkPlatform([TargetPlatform.android, TargetPlatform.iOS])) {
       if (checkPlatform([TargetPlatform.android]) && !server.getState().session!.destinationDirectory.startsWith('/storage/emulated/0/Download')) {
-        // Android requires manageExternalStorage permission to save files outside of the Download directory
+        // Android requires more permission to save files outside of the Download directory
         try {
-          final result = await Permission.manageExternalStorage.request();
-          _logger.info('manageExternalStorage permission: $result');
+          final result = await Permission.storage.request();
+          _logger.info('storage permission: $result');
         } catch (e) {
-          _logger.warning('Could not request manageExternalStorage permission', e);
+          _logger.warning('Could not request storage permission', e);
         }
       }
       try {
@@ -398,11 +434,13 @@ class ReceiveController {
         fileName: receivingFile.desiredName!,
       );
 
+      final finalName = p.basename(destinationPath);
+
       _logger.info('Saving ${receivingFile.file.fileName} to $destinationPath');
 
       await saveFile(
         destinationPath: destinationPath,
-        name: receivingFile.desiredName!,
+        name: finalName,
         saveToGallery: saveToGallery,
         isImage: fileType == FileType.image,
         stream: request.read(),
@@ -439,6 +477,7 @@ class ReceiveController {
             fileType: receivingFile.file.fileType,
             path: saveToGallery ? null : destinationPath,
             savedToGallery: saveToGallery,
+            isMessage: false,
             fileSize: receivingFile.file.size,
             senderAlias: receiveState.senderAlias,
             timestamp: DateTime.now().toUtc(),
@@ -582,6 +621,21 @@ class ReceiveController {
         // don't wait for it
         _logger.severe('Failed to show from tray', e);
       });
+
+      // ignore: discarded_futures
+      request.readAsString().then((body) async {
+        if (body.isEmpty) {
+          return;
+        }
+
+        final Map<String, dynamic> jsonBody = jsonDecode(body);
+        final List<String> args = (jsonBody['args'] as List?)?.cast<String>() ?? <String>[];
+        final filesAdded = await server.ref.redux(selectedSendingFilesProvider).dispatchAsyncTakeResult(LoadSelectionFromArgsAction(args));
+        if (filesAdded) {
+          server.ref.redux(homePageControllerProvider).dispatch(ChangeTabAction(HomeTab.send));
+        }
+      });
+
       return server.responseJson(200);
     }
 

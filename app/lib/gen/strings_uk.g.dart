@@ -27,7 +27,7 @@ class _StringsUk extends Translations {
 
 	// Translations
 	@override String get locale => 'Українська';
-	@override String get appName => 'AloeChat.AI';
+	@override String get appName => 'LocalSend';
 	@override late final _StringsGeneralUk general = _StringsGeneralUk._(_root);
 	@override late final _StringsReceiveTabUk receiveTab = _StringsReceiveTabUk._(_root);
 	@override late final _StringsSendTabUk sendTab = _StringsSendTabUk._(_root);
@@ -46,6 +46,7 @@ class _StringsUk extends Translations {
 	@override late final _StringsChangelogPageUk changelogPage = _StringsChangelogPageUk._(_root);
 	@override late final _StringsAliasGeneratorUk aliasGenerator = _StringsAliasGeneratorUk._(_root);
 	@override late final _StringsDialogsUk dialogs = _StringsDialogsUk._(_root);
+	@override late final _StringsSanitizationUk sanitization = _StringsSanitizationUk._(_root);
 	@override late final _StringsTrayUk tray = _StringsTrayUk._(_root);
 	@override late final _StringsWebUk web = _StringsWebUk._(_root);
 	@override late final _StringsAssetPickerUk assetPicker = _StringsAssetPickerUk._(_root);
@@ -125,8 +126,8 @@ class _StringsSendTabUk extends _StringsSendTabEn {
 	@override String get sendMode => 'Режим надсилання';
 	@override late final _StringsSendTabSendModesUk sendModes = _StringsSendTabSendModesUk._(_root);
 	@override String get sendModeHelp => 'Довідка';
-	@override String get help => 'Будь ласка, переконайтесь, що одержувач перебуває в тій же ж Wi-Fi мережі, що і відправник.';
-	@override String get placeItems => 'Додайте сюди файли, щоб поділитися.';
+	@override String get help => 'Будь ласка, переконайтеся, що одержувач перебуває в тій же ж Wi-Fi мережі, що і відправник.';
+	@override String get placeItems => 'Додайте файли, щоб поділитися.';
 }
 
 // Path: settingsTab
@@ -168,7 +169,7 @@ class _StringsReceiveHistoryPageUk extends _StringsReceiveHistoryPageEn {
 
 	// Translations
 	@override String get title => 'Історія';
-	@override String get openFolder => 'Відкрити теку';
+	@override String get openFolder => 'Відкрити папку';
 	@override String get deleteHistory => 'Очистити історію';
 	@override String get empty => 'Історія порожня.';
 	@override late final _StringsReceiveHistoryPageEntryActionsUk entryActions = _StringsReceiveHistoryPageEntryActionsUk._(_root);
@@ -221,10 +222,10 @@ class _StringsReceiveOptionsPageUk extends _StringsReceiveOptionsPageEn {
 
 	// Translations
 	@override String get title => 'Параметри отримання';
-	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(Тека AloeChat.AI)';
-	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
-	@override String get saveToGalleryOff => 'Вимкнено автоматично, оскільки є каталоги.';
+	@override String get destination => _root.settingsTab.receive.destination;
+	@override String get appDirectory => '(Папка LocalSend)';
+	@override String get saveToGallery => _root.settingsTab.receive.saveToGallery;
+	@override String get saveToGalleryOff => 'Вимкнено автоматично, оскільки є папки.';
 }
 
 // Path: sendPage
@@ -236,6 +237,7 @@ class _StringsSendPageUk extends _StringsSendPageEn {
 	// Translations
 	@override String get waiting => 'Очікування відповіді...';
 	@override String get rejected => 'Отримувач відхилив запит.';
+	@override String get tooManyAttempts => _root.web.tooManyAttempts;
 	@override String get busy => 'Одержувач зайнятий іншим запитом.';
 }
 
@@ -269,9 +271,11 @@ class _StringsWebSharePageUk extends _StringsWebSharePageEn {
 	);
 	@override String get requests => 'Запити';
 	@override String get noRequests => 'Запитів поки що немає.';
-	@override String get encryption => '${_root.settingsTab.network.encryption}';
+	@override String get encryption => _root.settingsTab.network.encryption;
 	@override String get autoAccept => 'Автоматично приймати запити';
-	@override String get encryptionHint => 'AloeChat.AI використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері.';
+	@override String get requirePin => 'Вимагати PIN-код';
+	@override String pinHint({required Object pin}) => 'PIN-код: "${pin}"';
+	@override String get encryptionHint => 'LocalSend використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері.';
 	@override String pendingRequests({required Object n}) => 'Запити, що очікують на розгляд: ${n}';
 }
 
@@ -282,10 +286,10 @@ class _StringsAboutPageUk extends _StringsAboutPageEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Про AloeChat.AI';
+	@override String get title => 'Про LocalSend';
 	@override List<String> get description => [
-		'AloeChat.AI — це безкоштовний додаток з відкритим вихідним кодом, який дозволяє безпечно обмінюватися файлами та повідомленнями з пристроями поблизу через локальну мережу без підключення до Інтернету.',
-		'Цей додаток доступний для Android, iOS, macOS, Windows і Linux. Ви можете знайти всі варіанти завантаження на офіційній домашній сторінці.',
+		'LocalSend — це безкоштовний додаток з відкритим вихідним кодом, який дозволяє безпечно обмінюватися файлами та повідомленнями з пристроями поблизу через локальну мережу без підключення до Інтернету.',
+		'Цей додаток доступний для Android, iOS, macOS, Windows та Linux. Ви можете знайти всі варіанти завантаження на офіційній домашній сторінці.',
 	];
 	@override String get author => 'Автор';
 	@override String get contributors => 'Учасники';
@@ -300,7 +304,7 @@ class _StringsDonationPageUk extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Пожертвувати';
-	@override String get info => 'AloeChat.AI є безкоштовним, із відкритим вихідним кодом і без реклами. Якщо вам подобається додаток, ви можете підтримати його розробку пожертвою.';
+	@override String get info => 'LocalSend є безкоштовним, із відкритим вихідним кодом і без реклами. Якщо вам подобається додаток, ви можете підтримати його розробку пожертвою.';
 	@override String donate({required Object amount}) => 'Пожертвувати ${amount}';
 	@override String get thanks => 'Велике спасибі!';
 	@override String get restore => 'Відновити покупку';
@@ -352,7 +356,20 @@ class _StringsDialogsUk extends _StringsDialogsEn {
 	@override late final _StringsDialogsQrUk qr = _StringsDialogsQrUk._(_root);
 	@override late final _StringsDialogsQuickActionsUk quickActions = _StringsDialogsQuickActionsUk._(_root);
 	@override late final _StringsDialogsQuickSaveNoticeUk quickSaveNotice = _StringsDialogsQuickSaveNoticeUk._(_root);
+	@override late final _StringsDialogsPinUk pin = _StringsDialogsPinUk._(_root);
 	@override late final _StringsDialogsSendModeHelpUk sendModeHelp = _StringsDialogsSendModeHelpUk._(_root);
+	@override late final _StringsDialogsZoomUk zoom = _StringsDialogsZoomUk._(_root);
+}
+
+// Path: sanitization
+class _StringsSanitizationUk extends _StringsSanitizationEn {
+	_StringsSanitizationUk._(_StringsUk root) : this._root = root, super._(root);
+
+	@override final _StringsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get empty => 'Ім\'я файлу не може бути порожнім';
+	@override String get invalid => 'Ім\'я файлу містить неприпустимі символи';
 }
 
 // Path: tray
@@ -362,8 +379,8 @@ class _StringsTrayUk extends _StringsTrayEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get open => '${_root.general.open}';
-	@override String get close => 'Вихід із AloeChat.AI';
+	@override String get open => _root.general.open;
+	@override String get close => 'Вихід із LocalSend';
 }
 
 // Path: web
@@ -373,7 +390,10 @@ class _StringsWebUk extends _StringsWebEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get waiting => '${_root.sendPage.waiting}';
+	@override String get waiting => _root.sendPage.waiting;
+	@override String get enterPin => 'Введіть PIN-код';
+	@override String get invalidPin => 'Неправильний PIN-код';
+	@override String get tooManyAttempts => 'Занадто багато спроб';
 	@override String get rejected => 'Відхилено';
 	@override String get files => 'Файлів';
 	@override String get fileName => 'Ім\'я файлу';
@@ -391,7 +411,7 @@ class _StringsAssetPickerUk extends _StringsAssetPickerEn {
 	@override String get cancel => 'Скасувати';
 	@override String get edit => 'Редагувати';
 	@override String get gifIndicator => 'GIF';
-	@override String get loadFailed => 'Помилка завантаження';
+	@override String get loadFailed => 'Не вдалося завантажити';
 	@override String get original => 'Оригінал';
 	@override String get preview => 'Попередній перегляд';
 	@override String get select => 'Вибрати';
@@ -449,7 +469,7 @@ class _StringsSendTabPickerUk extends _StringsSendTabPickerEn {
 
 	// Translations
 	@override String get file => 'Файл';
-	@override String get folder => 'Тека';
+	@override String get folder => 'Папка';
 	@override String get media => 'Медіа';
 	@override String get text => 'Текст';
 	@override String get app => 'Додаток';
@@ -482,10 +502,11 @@ class _StringsSettingsTabGeneralUk extends _StringsSettingsTabGeneralEn {
 	@override late final _StringsSettingsTabGeneralColorOptionsUk colorOptions = _StringsSettingsTabGeneralColorOptionsUk._(_root);
 	@override String get language => 'Мова';
 	@override late final _StringsSettingsTabGeneralLanguageOptionsUk languageOptions = _StringsSettingsTabGeneralLanguageOptionsUk._(_root);
-	@override String get saveWindowPlacement => 'Зберегти розташування вікна після закриття';
-	@override String get minimizeToTray => 'Закрити: згорнути в системний трей/смугу меню';
+	@override String get saveWindowPlacement => 'Зберігати розташування вікна після закриття';
+	@override String get minimizeToTray => 'Згортати в системний трей/смугу меню при закритті';
 	@override String get launchAtStartup => 'Автозапуск';
 	@override String get launchMinimized => 'Прихований автозапуск';
+	@override String get showInContextMenu => 'Відображати LocalSend в контекстному меню';
 	@override String get animations => 'Анімації';
 }
 
@@ -497,9 +518,10 @@ class _StringsSettingsTabReceiveUk extends _StringsSettingsTabReceiveEn {
 
 	// Translations
 	@override String get title => 'Отримання';
-	@override String get quickSave => '${_root.general.quickSave}';
+	@override String get quickSave => _root.general.quickSave;
+	@override String get requirePin => _root.webSharePage.requirePin;
 	@override String get autoFinish => 'Автозавершення';
-	@override String get destination => 'Зберігати в теку';
+	@override String get destination => 'Зберігати в папку';
 	@override String get downloads => '(Завантаження)';
 	@override String get saveToGallery => 'Зберігати медіафайли до галереї';
 	@override String get saveToHistory => 'Зберігати історію';
@@ -512,8 +534,8 @@ class _StringsSettingsTabSendUk extends _StringsSettingsTabSendEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Надіслати';
-	@override String get shareViaLinkAutoAccept => 'Поділитися через посилання: Приймати автоматично';
+	@override String get title => 'Надсилання';
+	@override String get shareViaLinkAutoAccept => 'Автоматично приймати запити в режимі \'Поділитися через посилання\'';
 }
 
 // Path: settingsTab.network
@@ -530,6 +552,7 @@ class _StringsSettingsTabNetworkUk extends _StringsSettingsTabNetworkEn {
 	@override String get deviceType => 'Тип пристрою';
 	@override String get deviceModel => 'Модель пристрою';
 	@override String get port => 'Порт';
+	@override String get discoveryTimeout => 'Тайм-аут виявлення';
 	@override String portWarning({required Object defaultPort}) => 'Інші пристрої можуть вас не виявити, оскільки ви використовуєте інший, власний порт. (default: ${defaultPort})';
 	@override String get encryption => 'Шифрування';
 	@override String get multicastGroup => 'Групова передача';
@@ -544,7 +567,7 @@ class _StringsSettingsTabOtherUk extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Інше';
-	@override String get support => 'Підтримати AloeChat.AI';
+	@override String get support => 'Підтримати LocalSend';
 	@override String get donate => 'Пожертвувати';
 	@override String get privacyPolicy => 'Політика конфіденційності';
 	@override String get termsOfUse => 'Умови використання';
@@ -581,6 +604,7 @@ class _StringsReceiveHistoryPageEntryActionsUk extends _StringsReceiveHistoryPag
 
 	// Translations
 	@override String get open => 'Відкрити файл';
+	@override String get showInFolder => 'Показати в папці';
 	@override String get info => 'Інформація';
 	@override String get deleteFromHistory => 'Видалити з історії';
 }
@@ -605,7 +629,7 @@ class _StringsDialogsAddFileUk extends _StringsDialogsAddFileEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Додати до обраних';
+	@override String get title => 'Додати до вибірки';
 	@override String get content => 'Що ви бажаєте додати?';
 }
 
@@ -662,7 +686,7 @@ class _StringsDialogsErrorDialogUk extends _StringsDialogsErrorDialogEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.error}';
+	@override String get title => _root.general.error;
 }
 
 // Path: dialogs.favoriteDialog
@@ -747,8 +771,8 @@ class _StringsDialogsLocalNetworkUnauthorizedUk extends _StringsDialogsLocalNetw
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'AloeChat.AI не може знайти інші пристрої, не маючи дозволу на сканування в локальній мережі. Надайте цей дозвіл у налаштуваннях.';
+	@override String get title => _root.dialogs.noPermission.title;
+	@override String get description => 'LocalSend не може знайти інші пристрої, не маючи дозволу на сканування в локальній мережі. Надайте цей дозвіл у налаштуваннях.';
 	@override String get gotoSettings => 'Налаштування';
 }
 
@@ -770,7 +794,7 @@ class _StringsDialogsNoFilesUk extends _StringsDialogsNoFilesEn {
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Файли не обрано';
+	@override String get title => 'Не вибрано жодного файлу';
 	@override String get content => 'Будь ласка, додайте як мінімум один файл.';
 }
 
@@ -828,8 +852,18 @@ class _StringsDialogsQuickSaveNoticeUk extends _StringsDialogsQuickSaveNoticeEn 
 	@override final _StringsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.quickSave}';
+	@override String get title => _root.general.quickSave;
 	@override String get content => 'Запити на отримання файлів відтепер приймаються автоматично. Будьте обережні, всі користувачі цієї локальної мережі можуть надсилати вам файли.';
+}
+
+// Path: dialogs.pin
+class _StringsDialogsPinUk extends _StringsDialogsPinEn {
+	_StringsDialogsPinUk._(_StringsUk root) : this._root = root, super._(root);
+
+	@override final _StringsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Введіть PIN-код';
 }
 
 // Path: dialogs.sendModeHelp
@@ -842,7 +876,17 @@ class _StringsDialogsSendModeHelpUk extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Режими надсилання';
 	@override String get single => 'Надсилає файли одному одержувачу. Вибірку буде очищено після завершення передачі файлів.';
 	@override String get multiple => 'Надсилає файли кільком одержувачам. Вибірку не буде очищено.';
-	@override String get link => 'Одержувачі, у яких не встановлений AloeChat.AI, можуть завантажити вибрані файли відкривши посилання у своєму браузері.';
+	@override String get link => 'Одержувачі, у яких не встановлений LocalSend, можуть завантажити вибрані файли відкривши посилання у своєму браузері.';
+}
+
+// Path: dialogs.zoom
+class _StringsDialogsZoomUk extends _StringsDialogsZoomEn {
+	_StringsDialogsZoomUk._(_StringsUk root) : this._root = root, super._(root);
+
+	@override final _StringsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'URL-адреса';
 }
 
 // Path: settingsTab.general.brightnessOptions

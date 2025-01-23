@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/persistence/receive_history_entry.dart';
+import 'package:localsend_app/pages/receive_page.dart';
+import 'package:localsend_app/pages/receive_page_controller.dart';
 import 'package:localsend_app/provider/receive_history_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
 import 'package:localsend_app/theme.dart';
@@ -17,24 +21,23 @@ import 'package:localsend_app/widget/responsive_list_view.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io';
+import 'package:routerino/routerino.dart';
 
 enum _EntryOption {
   open,
+  showInFolder,
   info,
   delete,
   deleteFile;
 
   String get label {
-    switch (this) {
-      case _EntryOption.open:
-        return t.receiveHistoryPage.entryActions.open;
-      case _EntryOption.info:
-        return t.receiveHistoryPage.entryActions.info;
-      case _EntryOption.delete:
-        return t.receiveHistoryPage.entryActions.deleteFromHistory;
-      case _EntryOption.deleteFile:
-        return t.receiveHistoryPage.entryActions.deleteFromHistory + "并删除缓存文件";
-    }
+    return switch (this) {
+      _EntryOption.open => t.receiveHistoryPage.entryActions.open,
+      _EntryOption.showInFolder => t.receiveHistoryPage.entryActions.showInFolder,
+      _EntryOption.info => t.receiveHistoryPage.entryActions.info,
+      _EntryOption.delete => t.receiveHistoryPage.entryActions.deleteFromHistory,
+      _EntryOption.deleteFile=>t.receiveHistoryPage.entryActions.deleteFromHistory + "并删除缓存文件",
+    };
   }
 }
 
@@ -209,9 +212,17 @@ class ReceiveHistoryPage extends StatelessWidget {
                   splashFactory: NoSplash.splashFactory,
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
-                  onTap: entry.path != null
-                      ? () async => _openFile(
-                          context, entry, context.redux(receiveHistoryProvider))
+                  onTap: entry.path != null || entry.isMessage
+                      ? () async {
+                          if (entry.isMessage) {
+                            context.redux(receivePageControllerProvider).dispatch(InitReceivePageFromHistoryMessageAction(entry: entry));
+                            // ignore: unawaited_futures
+                            context.push(() => const ReceivePage());
+                            return;
+                          }
+
+                          await _openFile(context, entry, context.redux(receiveHistoryProvider));
+                        }
                       : null,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,6 +261,11 @@ class ReceiveHistoryPage extends StatelessWidget {
                             case _EntryOption.open:
                               await _openFile(context, entry,
                                   context.redux(receiveHistoryProvider));
+                              break;
+                            case _EntryOption.showInFolder:
+                              if (entry.path != null) {
+                                await openFolder(File(entry.path!).parent.path);
+                              }
                               break;
                             case _EntryOption.info:
                               // ignore: use_build_context_synchronously

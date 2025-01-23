@@ -4,11 +4,11 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/init.dart';
+import 'package:localsend_app/pages/home_page_controller.dart';
 import 'package:localsend_app/pages/tabs/receive_tab.dart';
 import 'package:localsend_app/pages/tabs/send_tab.dart';
 import 'package:localsend_app/pages/tabs/settings_tab.dart';
 import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
-import 'package:localsend_app/provider/ui/home_tab_provider.dart';
 import 'package:localsend_app/theme.dart';
 import 'package:localsend_app/util/native/cross_file_converters.dart';
 import 'package:localsend_app/widget/responsive_builder.dart';
@@ -66,22 +66,9 @@ class _HomePageState extends State<HomePage> with Refena {
   void initState() {
     super.initState();
 
-    _pageController = PageController(initialPage: widget.initialTab.index);
-    _currentTab = widget.initialTab;
-
     ensureRef((ref) async {
-      ref.redux(homeTabProvider).dispatch(SetHomeTabAction(widget.initialTab));
-      await postInit(context, ref, widget.appStart, _goToPage);
-    });
-    // _checkPrivacyPolicyStatus();
-  }
-
-  void _goToPage(int index) {
-    final tab = HomeTab.values[index];
-    ref.redux(homeTabProvider).dispatch(SetHomeTabAction(tab));
-    setState(() {
-      _currentTab = tab;
-      _pageController.jumpToPage(_currentTab.index);
+      ref.redux(homePageControllerProvider).dispatch(ChangeTabAction(widget.initialTab));
+      await postInit(context, ref, widget.appStart);
     });
   }
 
@@ -90,6 +77,8 @@ class _HomePageState extends State<HomePage> with Refena {
   @override
   Widget build(BuildContext context) {
     Translations.of(context); // rebuild on locale change
+    final vm = context.watch(homePageControllerProvider);
+
     return DropTarget(
       onDragEntered: (_) {
         setState(() {
@@ -117,7 +106,7 @@ class _HomePageState extends State<HomePage> with Refena {
                 converter: CrossFileConverters.convertXFile,
               ));
         }
-        _goToPage(HomeTab.send.index);
+        vm.changeTab(HomeTab.send);
       },
       child: ResponsiveBuilder(
         builder: (sizingInformation) {
@@ -126,8 +115,8 @@ class _HomePageState extends State<HomePage> with Refena {
               children: [
                 if (false && !sizingInformation.isMobile)
                   NavigationRail(
-                    selectedIndex: _currentTab.index,
-                    onDestinationSelected: _goToPage,
+                    selectedIndex: vm.currentTab.index,
+                    onDestinationSelected: (index) => vm.changeTab(HomeTab.values[index]),
                     extended: sizingInformation.isDesktop,
                     backgroundColor: Theme.of(context).cardColorWithElevation,
                     leading: sizingInformation.isDesktop
@@ -157,7 +146,7 @@ class _HomePageState extends State<HomePage> with Refena {
                     child: Stack(
                       children: [
                         PageView(
-                          controller: _pageController,
+                          controller: vm.controller,
                           physics: const NeverScrollableScrollPhysics(),
                           children: const [
                             ReceiveTab(),
@@ -188,15 +177,12 @@ class _HomePageState extends State<HomePage> with Refena {
                 ),
               ],
             ),
-            bottomNavigationBar: true || sizingInformation.isMobile
-                ? BottomNavigationBar(
-                    currentIndex: _currentTab.index,
-                    onTap: _goToPage,
-                    items: HomeTab.values.map((tab) {
-                      return BottomNavigationBarItem(
-                        icon: Icon(tab.icon),
-                        label: tab.label,
-                      );
+            bottomNavigationBar: sizingInformation.isMobile
+                ? NavigationBar(
+                    selectedIndex: vm.currentTab.index,
+                    onDestinationSelected: (index) => vm.changeTab(HomeTab.values[index]),
+                    destinations: HomeTab.values.map((tab) {
+                      return NavigationDestination(icon: Icon(tab.icon), label: tab.label);
                     }).toList(),
                   )
                 : null,

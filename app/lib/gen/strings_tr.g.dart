@@ -27,7 +27,7 @@ class _StringsTr extends Translations {
 
 	// Translations
 	@override String get locale => 'Türkçe';
-	@override String get appName => 'AloeChat.AI';
+	@override String get appName => 'LocalSend';
 	@override late final _StringsGeneralTr general = _StringsGeneralTr._(_root);
 	@override late final _StringsReceiveTabTr receiveTab = _StringsReceiveTabTr._(_root);
 	@override late final _StringsSendTabTr sendTab = _StringsSendTabTr._(_root);
@@ -46,6 +46,7 @@ class _StringsTr extends Translations {
 	@override late final _StringsChangelogPageTr changelogPage = _StringsChangelogPageTr._(_root);
 	@override late final _StringsAliasGeneratorTr aliasGenerator = _StringsAliasGeneratorTr._(_root);
 	@override late final _StringsDialogsTr dialogs = _StringsDialogsTr._(_root);
+	@override late final _StringsSanitizationTr sanitization = _StringsSanitizationTr._(_root);
 	@override late final _StringsTrayTr tray = _StringsTrayTr._(_root);
 	@override late final _StringsWebTr web = _StringsWebTr._(_root);
 	@override late final _StringsAssetPickerTr assetPicker = _StringsAssetPickerTr._(_root);
@@ -139,9 +140,10 @@ class _StringsSettingsTabTr extends _StringsSettingsTabEn {
 	@override String get title => 'Ayarlar';
 	@override late final _StringsSettingsTabGeneralTr general = _StringsSettingsTabGeneralTr._(_root);
 	@override late final _StringsSettingsTabReceiveTr receive = _StringsSettingsTabReceiveTr._(_root);
+	@override late final _StringsSettingsTabSendTr send = _StringsSettingsTabSendTr._(_root);
 	@override late final _StringsSettingsTabNetworkTr network = _StringsSettingsTabNetworkTr._(_root);
-	@override String get advancedSettings => 'Gelişmiş ayarlar';
 	@override late final _StringsSettingsTabOtherTr other = _StringsSettingsTabOtherTr._(_root);
+	@override String get advancedSettings => 'Gelişmiş ayarlar';
 }
 
 // Path: troubleshootPage
@@ -220,9 +222,9 @@ class _StringsReceiveOptionsPageTr extends _StringsReceiveOptionsPageEn {
 
 	// Translations
 	@override String get title => 'Seçenekler';
-	@override String get destination => '${_root.settingsTab.receive.destination}';
-	@override String get appDirectory => '(AloeChat.AI klasörü)';
-	@override String get saveToGallery => '${_root.settingsTab.receive.saveToGallery}';
+	@override String get destination => _root.settingsTab.receive.destination;
+	@override String get appDirectory => '(LocalSend klasörü)';
+	@override String get saveToGallery => _root.settingsTab.receive.saveToGallery;
 	@override String get saveToGalleryOff => 'Otomatik olarak kapanır çünkü bunlar klasör.';
 }
 
@@ -235,6 +237,7 @@ class _StringsSendPageTr extends _StringsSendPageEn {
 	// Translations
 	@override String get waiting => 'Alıcıdan cevap bekleniyor...';
 	@override String get rejected => 'Alıcı isteği reddetti.';
+	@override String get tooManyAttempts => _root.web.tooManyAttempts;
 	@override String get busy => 'Alıcı başka bir istekle meşgul.';
 }
 
@@ -268,8 +271,11 @@ class _StringsWebSharePageTr extends _StringsWebSharePageEn {
 	);
 	@override String get requests => 'İstekler';
 	@override String get noRequests => 'Henüz istek yok.';
-	@override String get encryption => '${_root.settingsTab.network.encryption}';
-	@override String get encryptionHint => 'AloeChat.AI, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.';
+	@override String get encryption => _root.settingsTab.network.encryption;
+	@override String get autoAccept => 'İstekleri otomatik olarak kabul et';
+	@override String get requirePin => 'PIN gerektir';
+	@override String pinHint({required Object pin}) => 'PIN "${pin}"';
+	@override String get encryptionHint => 'LocalSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.';
 	@override String pendingRequests({required Object n}) => 'Bekleyen istekler: ${n}';
 }
 
@@ -280,9 +286,9 @@ class _StringsAboutPageTr extends _StringsAboutPageEn {
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'AloeChat.AI hakkında';
+	@override String get title => 'LocalSend hakkında';
 	@override List<String> get description => [
-		'AloeChat.AI, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.',
+		'LocalSend, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.',
 		'Bu uygulama Android, iOS, macOS, Windows ve Linux\'ta mevcuttur. Tüm indirme seçeneklerini resmi ana sayfada bulabilirsiniz.',
 	];
 	@override String get author => 'Yazar';
@@ -298,7 +304,7 @@ class _StringsDonationPageTr extends _StringsDonationPageEn {
 
 	// Translations
 	@override String get title => 'Bağış yap';
-	@override String get info => 'AloeChat.AI ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.';
+	@override String get info => 'LocalSend ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.';
 	@override String donate({required Object amount}) => 'Bağışta bulun ${amount}';
 	@override String get thanks => 'Çok teşekkür ederim!';
 	@override String get restore => 'Satın alınanları geri yükle';
@@ -341,6 +347,7 @@ class _StringsDialogsTr extends _StringsDialogsEn {
 	@override late final _StringsDialogsFavoriteEditDialogTr favoriteEditDialog = _StringsDialogsFavoriteEditDialogTr._(_root);
 	@override late final _StringsDialogsFileInfoTr fileInfo = _StringsDialogsFileInfoTr._(_root);
 	@override late final _StringsDialogsFileNameInputTr fileNameInput = _StringsDialogsFileNameInputTr._(_root);
+	@override late final _StringsDialogsHistoryClearDialogTr historyClearDialog = _StringsDialogsHistoryClearDialogTr._(_root);
 	@override late final _StringsDialogsLocalNetworkUnauthorizedTr localNetworkUnauthorized = _StringsDialogsLocalNetworkUnauthorizedTr._(_root);
 	@override late final _StringsDialogsMessageInputTr messageInput = _StringsDialogsMessageInputTr._(_root);
 	@override late final _StringsDialogsNoFilesTr noFiles = _StringsDialogsNoFilesTr._(_root);
@@ -349,8 +356,20 @@ class _StringsDialogsTr extends _StringsDialogsEn {
 	@override late final _StringsDialogsQrTr qr = _StringsDialogsQrTr._(_root);
 	@override late final _StringsDialogsQuickActionsTr quickActions = _StringsDialogsQuickActionsTr._(_root);
 	@override late final _StringsDialogsQuickSaveNoticeTr quickSaveNotice = _StringsDialogsQuickSaveNoticeTr._(_root);
+	@override late final _StringsDialogsPinTr pin = _StringsDialogsPinTr._(_root);
 	@override late final _StringsDialogsSendModeHelpTr sendModeHelp = _StringsDialogsSendModeHelpTr._(_root);
-	@override late final _StringsDialogsHistoryClearDialogTr historyClearDialog = _StringsDialogsHistoryClearDialogTr._(_root);
+	@override late final _StringsDialogsZoomTr zoom = _StringsDialogsZoomTr._(_root);
+}
+
+// Path: sanitization
+class _StringsSanitizationTr extends _StringsSanitizationEn {
+	_StringsSanitizationTr._(_StringsTr root) : this._root = root, super._(root);
+
+	@override final _StringsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get empty => 'Dosya ismi boş olamaz';
+	@override String get invalid => 'Dosya ismi geçersiz karakter bulunduruyor';
 }
 
 // Path: tray
@@ -360,8 +379,8 @@ class _StringsTrayTr extends _StringsTrayEn {
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get open => '${_root.general.open}';
-	@override String get close => 'AloeChat.AI\'den çık';
+	@override String get open => _root.general.open;
+	@override String get close => 'LocalSend\'den çık';
 }
 
 // Path: web
@@ -371,7 +390,10 @@ class _StringsWebTr extends _StringsWebEn {
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get waiting => '${_root.sendPage.waiting}';
+	@override String get waiting => _root.sendPage.waiting;
+	@override String get enterPin => 'PIN girin';
+	@override String get invalidPin => 'Geçersiz PIN';
+	@override String get tooManyAttempts => 'Çok fazla deneme';
 	@override String get rejected => 'Reddedildi';
 	@override String get files => 'Dosyalar';
 	@override String get fileName => 'Dosya adı';
@@ -484,6 +506,7 @@ class _StringsSettingsTabGeneralTr extends _StringsSettingsTabGeneralEn {
 	@override String get minimizeToTray => 'Çıkış: Simge durumuna küçült';
 	@override String get launchAtStartup => 'Giriş yapıldıktan sonra otomatik başlat';
 	@override String get launchMinimized => 'Otomatik başlatma: Gizli Başlatma';
+	@override String get showInContextMenu => 'LocalSend\'i bağlam menüsünde göster';
 	@override String get animations => 'Animasyonlar';
 }
 
@@ -495,12 +518,24 @@ class _StringsSettingsTabReceiveTr extends _StringsSettingsTabReceiveEn {
 
 	// Translations
 	@override String get title => 'Alım';
-	@override String get quickSave => '${_root.general.quickSave}';
+	@override String get quickSave => _root.general.quickSave;
+	@override String get requirePin => _root.webSharePage.requirePin;
+	@override String get autoFinish => 'Otomatik bitir';
 	@override String get destination => 'Hedef klasör';
 	@override String get downloads => '(İndirilenler)';
 	@override String get saveToGallery => 'Medyayı galeriye kaydet';
 	@override String get saveToHistory => 'Geçmişe kaydet';
-	@override String get autoFinish => 'Otomatik bitir';
+}
+
+// Path: settingsTab.send
+class _StringsSettingsTabSendTr extends _StringsSettingsTabSendEn {
+	_StringsSettingsTabSendTr._(_StringsTr root) : this._root = root, super._(root);
+
+	@override final _StringsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Gönder';
+	@override String get shareViaLinkAutoAccept => 'Link aracılığıyla paylaş: Otomatik olarak kabul et';
 }
 
 // Path: settingsTab.network
@@ -517,6 +552,7 @@ class _StringsSettingsTabNetworkTr extends _StringsSettingsTabNetworkEn {
 	@override String get deviceType => 'Cihaz tipi';
 	@override String get deviceModel => 'Cihaz modeli';
 	@override String get port => 'Port';
+	@override String get discoveryTimeout => 'Arama zaman aşımına uğradı';
 	@override String portWarning({required Object defaultPort}) => 'Kişiselleştirilmiş bir port kullanıyorsanız ağınızdaki diğer cihazlar tarafından bulunamayabilirsiniz. (varsayılan: ${defaultPort})';
 	@override String get encryption => 'Şifreleme';
 	@override String get multicastGroup => 'Çoklu yayın';
@@ -531,7 +567,7 @@ class _StringsSettingsTabOtherTr extends _StringsSettingsTabOtherEn {
 
 	// Translations
 	@override String get title => 'Diğer';
-	@override String get support => 'AloeChat.AI\'i destekle';
+	@override String get support => 'LocalSend\'i destekle';
 	@override String get donate => 'Bağış yap';
 	@override String get privacyPolicy => 'Gizlilik politikası';
 	@override String get termsOfUse => 'Kullanım koşulları';
@@ -568,6 +604,7 @@ class _StringsReceiveHistoryPageEntryActionsTr extends _StringsReceiveHistoryPag
 
 	// Translations
 	@override String get open => 'Dosya aç';
+	@override String get showInFolder => 'Klasörde göster';
 	@override String get info => 'Bilgi';
 	@override String get deleteFromHistory => 'Geçmişten sil';
 }
@@ -649,7 +686,7 @@ class _StringsDialogsErrorDialogTr extends _StringsDialogsErrorDialogEn {
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.error}';
+	@override String get title => _root.general.error;
 }
 
 // Path: dialogs.favoriteDialog
@@ -716,6 +753,17 @@ class _StringsDialogsFileNameInputTr extends _StringsDialogsFileNameInputEn {
 	@override String original({required Object original}) => 'Orijinal: ${original}';
 }
 
+// Path: dialogs.historyClearDialog
+class _StringsDialogsHistoryClearDialogTr extends _StringsDialogsHistoryClearDialogEn {
+	_StringsDialogsHistoryClearDialogTr._(_StringsTr root) : this._root = root, super._(root);
+
+	@override final _StringsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Geçmişi temizle';
+	@override String get content => 'Gerçekten tüm geçmişi silmek istiyor musunuz?';
+}
+
 // Path: dialogs.localNetworkUnauthorized
 class _StringsDialogsLocalNetworkUnauthorizedTr extends _StringsDialogsLocalNetworkUnauthorizedEn {
 	_StringsDialogsLocalNetworkUnauthorizedTr._(_StringsTr root) : this._root = root, super._(root);
@@ -723,8 +771,8 @@ class _StringsDialogsLocalNetworkUnauthorizedTr extends _StringsDialogsLocalNetw
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.dialogs.noPermission.title}';
-	@override String get description => 'AloeChat.AI, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.';
+	@override String get title => _root.dialogs.noPermission.title;
+	@override String get description => 'LocalSend, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.';
 	@override String get gotoSettings => 'Ayarlar';
 }
 
@@ -804,8 +852,18 @@ class _StringsDialogsQuickSaveNoticeTr extends _StringsDialogsQuickSaveNoticeEn 
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '${_root.general.quickSave}';
+	@override String get title => _root.general.quickSave;
 	@override String get content => 'Dosya gönderim istekleri otomatik olarak gerçekleşir. Yerel ağınızdaki herkesin size dosya gönderebileceğinin farkında olunuz.';
+}
+
+// Path: dialogs.pin
+class _StringsDialogsPinTr extends _StringsDialogsPinEn {
+	_StringsDialogsPinTr._(_StringsTr root) : this._root = root, super._(root);
+
+	@override final _StringsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'PIN girin';
 }
 
 // Path: dialogs.sendModeHelp
@@ -818,18 +876,17 @@ class _StringsDialogsSendModeHelpTr extends _StringsDialogsSendModeHelpEn {
 	@override String get title => 'Gönderme Modu';
 	@override String get single => 'Dosyaları bir alıcıya gönderir. Seçim, bitmiş dosya aktarımından sonra temizlenir.';
 	@override String get multiple => 'Dosyaları birden çok alıcıya gönderir. Seçim temizlenmeyecektir.';
-	@override String get link => 'AloeChat.AI yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir.';
+	@override String get link => 'LocalSend yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir.';
 }
 
-// Path: dialogs.historyClearDialog
-class _StringsDialogsHistoryClearDialogTr extends _StringsDialogsHistoryClearDialogEn {
-	_StringsDialogsHistoryClearDialogTr._(_StringsTr root) : this._root = root, super._(root);
+// Path: dialogs.zoom
+class _StringsDialogsZoomTr extends _StringsDialogsZoomEn {
+	_StringsDialogsZoomTr._(_StringsTr root) : this._root = root, super._(root);
 
 	@override final _StringsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Geçmişi temizle';
-	@override String get content => 'Gerçekten tüm geçmişi silmek istiyor musunuz?';
+	@override String get title => 'URL';
 }
 
 // Path: settingsTab.general.brightnessOptions

@@ -1,6 +1,6 @@
 {
   "locale": "English",
-  "appName": "AloeChat.AI",
+  "appName": "LocalSend",
   "general": {
     "accept": "Accept",
     "accepted": "Accepted",
@@ -97,23 +97,25 @@
         "system": "System"
       },
       "saveWindowPlacement": "Quit: Save window placement",
-      "minimizeToTray": "Quit: Minimize to Tray/Menu Bar",
+      "minimizeToTray": "Minimize to the System Tray/Menu Bar when closing",
       "launchAtStartup": "Autostart after login",
       "launchMinimized": "Autostart: Start hidden",
+      "showInContextMenu": "Show LocalSend in context menu",
       "animations": "Animations"
     },
     "receive": {
       "title": "Receive",
       "quickSave": "@:general.quickSave",
+      "requirePin": "@:webSharePage.requirePin",
       "autoFinish": "Auto Finish",
-      "destination": "Destination",
+      "destination": "Save to folder",
       "downloads": "(Downloads)",
       "saveToGallery": "Save media to gallery",
       "saveToHistory": "Save to history"
     },
     "send": {
       "title": "Send",
-      "shareViaLinkAutoAccept": "Share via link: Auto accept"
+      "shareViaLinkAutoAccept": "Automatically accept requests in 'Share via link' mode"
     },
     "network": {
       "title": "Network",
@@ -123,6 +125,7 @@
       "deviceType": "Device type",
       "deviceModel": "Device model",
       "port": "Port",
+      "discoveryTimeout": "Discovery Timeout",
       "portWarning": "You might not be detected by other devices because you are using a custom port. (default: {defaultPort})",
       "encryption": "Encryption",
       "multicastGroup": "Multicast",
@@ -130,7 +133,7 @@
     },
     "other": {
       "title": "Other",
-      "support": "Support AloeChat.AI",
+      "support": "Support LocalSend",
       "donate": "Donate",
       "privacyPolicy": "Privacy Policy",
       "termsOfUse": "Terms of Use"
@@ -159,6 +162,7 @@
     "empty": "The history is empty.",
     "entryActions": {
       "open": "Open file",
+      "showInFolder": "Show in folder",
       "info": "Information",
       "deleteFromHistory": "Delete from history"
     }
@@ -184,13 +188,14 @@
   "receiveOptionsPage": {
     "title": "Options",
     "destination": "@:settingsTab.receive.destination",
-    "appDirectory": "(AloeChat.AI folder)",
+    "appDirectory": "(LocalSend folder)",
     "saveToGallery": "@:settingsTab.receive.saveToGallery",
-    "saveToGalleryOff": "Turned off automatically because there are directories."
+    "saveToGalleryOff": "Turned off automatically because there are folders."
   },
   "sendPage": {
     "waiting": "Waiting for response...",
     "rejected": "The recipient has rejected the request.",
+    "tooManyAttempts": "@:web.tooManyAttempts",
     "busy": "The recipient is busy with another request."
   },
   "progressPage": {
@@ -222,13 +227,15 @@
     "noRequests": "No requests yet.",
     "encryption": "@:settingsTab.network.encryption",
     "autoAccept": "Automatically accept requests",
-    "encryptionHint": "AloeChat.AI uses a self-signed certificate. You need to accept it in your browser.",
+    "requirePin": "Require PIN",
+    "pinHint": "The PIN is \"{pin}\"",
+    "encryptionHint": "LocalSend uses a self-signed certificate. You need to accept it in your browser.",
     "pendingRequests": "Pending requests: {n}"
   },
   "aboutPage": {
-    "title": "About AloeChat.AI",
+    "title": "About LocalSend",
     "description": [
-      "AloeChat.AI is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.",
+      "LocalSend is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.",
       "This app is available on Android, iOS, macOS, Windows and Linux. You can find all download options on the official homepage."
     ],
     "author": "Author",
@@ -237,7 +244,7 @@
   },
   "donationPage": {
     "title": "Donate",
-    "info": "AloeChat.AI is free, open-source and without any ads. If you like the app, you can support the development with a donation.",
+    "info": "LocalSend is free, open-source and without any ads. If you like the app, you can support the development with a donation.",
     "donate": "Donate {amount}",
     "thanks": "Thank you very much!",
     "restore": "Restore purchase"
@@ -379,7 +386,7 @@
     },
     "localNetworkUnauthorized": {
       "title": "@:dialogs.noPermission.title",
-      "description": "AloeChat.AI can't find other devices without having the permission to scan the local network. Please grant this permission in the settings.",
+      "description": "LocalSend can't find other devices without having the permission to scan the local network. Please grant this permission in the settings.",
       "gotoSettings": "Settings"
     },
     "messageInput": {
@@ -387,7 +394,7 @@
       "multiline": "Multiline"
     },
     "noFiles": {
-      "title": "No file selected",
+      "title": "No files selected",
       "content": "Please select at least one file."
     },
     "noPermission": {
@@ -413,20 +420,33 @@
       "title": "@:general.quickSave",
       "content": "File requests are automatically accepted. Be aware that everyone on the local network can send you files."
     },
+    "pin": {
+      "title": "Enter PIN"
+    },
     "sendModeHelp": {
       "title": "Send modes",
       "single": "Sends files to one recipient. Selection will be cleared after finished file transfer.",
       "multiple": "Sends files to multiple recipients. Selection will not be cleared.",
-      "link": "Recipients who do not have AloeChat.AI installed can download the selected files by opening the link in their browser."
+      "link": "Recipients who do not have LocalSend installed can download the selected files by opening the link in their browser."
+    },
+    "zoom": {
+      "title": "URL"
     }
+  },
+  "sanitization": {
+    "empty": "Filename cannot be empty",
+    "invalid": "Filename contains invalid characters"
   },
   "tray": {
     "@info": "Apple Guidelines are very strict about the 'close' wording.",
     "open": "@:general.open",
-    "close": "Quit AloeChat.AI"
+    "close": "Quit LocalSend"
   },
   "web": {
     "waiting": "@:sendPage.waiting",
+    "enterPin": "Enter PIN",
+    "invalidPin": "Invalid PIN",
+    "tooManyAttempts": "Too many attempts",
     "rejected": "Rejected",
     "files": "Files",
     "fileName": "File name",
