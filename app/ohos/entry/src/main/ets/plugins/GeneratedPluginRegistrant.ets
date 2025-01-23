@@ -5,6 +5,7 @@ import FilePickerPlugin from 'file_picker_ohos';
 import FileSelectorOhosPlugin from 'file_selector_ohos';
 import FluttertoastPlugin from 'fluttertoast';
 import ImagePickerPlugin from 'image_picker_ohos';
+import InAppPurchasePlugin from 'in_app_purchase_ohos';
 import OpenFilePlugin from 'open_filex';
 import PackageInfoPlugin from 'package_info_plus';
 import PathProviderPlugin from 'path_provider_ohos';
@@ -32,6 +33,7 @@ export class GeneratedPluginRegistrant {
       flutterEngine.getPlugins()?.add(new FileSelectorOhosPlugin());
       flutterEngine.getPlugins()?.add(new FluttertoastPlugin());
       flutterEngine.getPlugins()?.add(new ImagePickerPlugin());
+      flutterEngine.getPlugins()?.add(new InAppPurchasePlugin());
       flutterEngine.getPlugins()?.add(new OpenFilePlugin());
       flutterEngine.getPlugins()?.add(new PackageInfoPlugin());
       flutterEngine.getPlugins()?.add(new PathProviderPlugin());

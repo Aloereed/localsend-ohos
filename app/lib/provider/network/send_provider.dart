@@ -6,6 +6,7 @@ import 'package:common/common.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:localsend_app/model/cross_file.dart';
+import 'package:localsend_app/util/native/platform_check.dart';
 import 'package:localsend_app/model/send_mode.dart';
 import 'package:localsend_app/model/state/send/send_session_state.dart';
 import 'package:localsend_app/model/state/send/sending_file.dart';
@@ -218,7 +219,7 @@ class SendNotifier extends Notifier<Map<String, SendSessionState>> {
     if (response == null) {
       return;
     }
-
+    print("got response here.");
     final Map<String, String> fileMap;
     if (target.version == '1.0') {
       fileMap = (response.data as Map).cast<String, String>();
@@ -303,15 +304,18 @@ class SendNotifier extends Notifier<Map<String, SendSessionState>> {
   Future<void> _send(String sessionId, Dio dio, Device target, Map<String, SendingFile> files) async {
     bool hasError = false;
     final remoteSessionId = state[sessionId]!.remoteSessionId;
-
     state = state.updateSession(
       sessionId: sessionId,
       state: (s) => s?.copyWith(startTime: DateTime.now().millisecondsSinceEpoch),
     );
-
-    final uriContent = UriContent();
+    dynamic? uriContent;
+    if(!checkPlatform([TargetPlatform.ohos]))
+      uriContent = UriContent();
+    else
+      uriContent = null;
     for (final file in files.values) {
       final token = file.token;
+
       if (token == null) {
         continue;
       }
@@ -348,7 +352,7 @@ class SendNotifier extends Notifier<Map<String, SendSessionState>> {
           ),
           data: file.path != null
               ? file.path!.startsWith('content://')
-                  ? uriContent.getContentStream(Uri.parse(file.path!))
+                  ? (uriContent!=null?uriContent.getContentStream(Uri.parse(file.path!)):null)
                   : File(file.path!).openRead().asBroadcastStream()
               : file.bytes!,
           onSendProgress: (curr, total) {

@@ -20,6 +20,7 @@
     "fluttertoast": "file:../har/fluttertoast.har",
     "webview_flutter_ohos": "file:../har/webview_flutter_ohos.har",
     "file_picker_ohos": "file:../har/file_picker_ohos.har",
-    "photo_manager": "file:../har/photo_manager.har"
+    "photo_manager": "file:../har/photo_manager.har",
+    "in_app_purchase_ohos": "file:../har/in_app_purchase_ohos.har"
   }
 }

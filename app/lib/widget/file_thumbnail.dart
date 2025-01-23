@@ -96,9 +96,15 @@ class _FilePathThumbnailState extends State<FilePathThumbnail> {
   void initState() {
     super.initState();
 
-    if (widget.fileType == FileType.image && widget.path != null && widget.path!.startsWith('content://')) {
+    if (widget.fileType == FileType.image &&
+        widget.path != null &&
+        widget.path!.startsWith('content://')) {
       // ignore: discarded_futures
-      _future = UriContent().from(Uri.parse(widget.path!));
+      try {
+        _future = UriContent().from(Uri.parse(widget.path!));
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
@@ -119,7 +125,8 @@ class _FilePathThumbnailState extends State<FilePathThumbnail> {
 
               return Image.memory(
                 snapshot.data!,
-                cacheWidth: 64, // reduce memory with low cached size; do not set cacheHeight because the image must keep its ratio
+                cacheWidth:
+                    64, // reduce memory with low cached size; do not set cacheHeight because the image must keep its ratio
                 errorBuilder: (_, __, ___) => Padding(
                   padding: const EdgeInsets.all(10),
                   child: Icon(widget.fileType.icon, size: 32),
@@ -129,7 +136,8 @@ class _FilePathThumbnailState extends State<FilePathThumbnail> {
       } else {
         thumbnail = Image.file(
           File(widget.path!),
-          cacheWidth: 64, // reduce memory with low cached size; do not set cacheHeight because the image must keep its ratio
+          cacheWidth:
+              64, // reduce memory with low cached size; do not set cacheHeight because the image must keep its ratio
           errorBuilder: (_, __, ___) => Padding(
             padding: const EdgeInsets.all(10),
             child: Icon(widget.fileType.icon, size: 32),
@@ -163,7 +171,9 @@ class MemoryThumbnail extends StatelessWidget {
     final Widget? thumbnail;
     if (bytes != null) {
       thumbnail = Padding(
-        padding: fileType == FileType.apk ? const EdgeInsets.all(50) : EdgeInsets.zero,
+        padding: fileType == FileType.apk
+            ? const EdgeInsets.all(50)
+            : EdgeInsets.zero,
         child: Image.memory(
           bytes!,
           errorBuilder: (_, __, ___) => Padding(

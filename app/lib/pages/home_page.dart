@@ -67,12 +67,12 @@ class _HomePageState extends State<HomePage> with Refena {
     super.initState();
 
     ensureRef((ref) async {
-      ref.redux(homePageControllerProvider).dispatch(ChangeTabAction(widget.initialTab));
+      ref
+          .redux(homePageControllerProvider)
+          .dispatch(ChangeTabAction(widget.initialTab));
       await postInit(context, ref, widget.appStart);
     });
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +116,8 @@ class _HomePageState extends State<HomePage> with Refena {
                 if (false && !sizingInformation.isMobile)
                   NavigationRail(
                     selectedIndex: vm.currentTab.index,
-                    onDestinationSelected: (index) => vm.changeTab(HomeTab.values[index]),
+                    onDestinationSelected: (index) =>
+                        vm.changeTab(HomeTab.values[index]),
                     extended: sizingInformation.isDesktop,
                     backgroundColor: Theme.of(context).cardColorWithElevation,
                     leading: sizingInformation.isDesktop
@@ -177,15 +178,16 @@ class _HomePageState extends State<HomePage> with Refena {
                 ),
               ],
             ),
-            bottomNavigationBar: sizingInformation.isMobile
-                ? NavigationBar(
-                    selectedIndex: vm.currentTab.index,
-                    onDestinationSelected: (index) => vm.changeTab(HomeTab.values[index]),
-                    destinations: HomeTab.values.map((tab) {
-                      return NavigationDestination(icon: Icon(tab.icon), label: tab.label);
-                    }).toList(),
-                  )
-                : null,
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: vm.currentTab.index,
+              onTap: (index) => vm.changeTab(HomeTab.values[index]),
+              items: HomeTab.values.map((tab) {
+                return BottomNavigationBarItem(
+                  icon: Icon(tab.icon),
+                  label: tab.label,
+                );
+              }).toList(),
+            ),
           );
         },
       ),
