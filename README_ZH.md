@@ -1,3 +1,8 @@
+# 芦荟流转助手
+<!-- AloeChat.AI is an adaptation of LocalSend for HarmonyOS Next.   -->
+芦荟流转助手是一个用于HarmonyOS Next的LocalSend适配。  
+[从AppGallery下载](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai)  
+
 # LocalSend
 
 [![CI状态][ci-badge]][ci-workflow]
@@ -19,22 +24,24 @@
 
 LocalSend 是一个免费、开源的应用程序，允许你在本地网络上安全地与附近设备共享文件和消息，无需互联网连接。
 
-- [关于](#关于)
-- [截图](#截图)
-- [下载](#下载)
-- [设置](#设置)
-- [工作原理](#工作原理)
-- [开始使用](#开始使用)
-- [贡献](#贡献)
-  - [翻译](#翻译)
-  - [Bug修复和改进](#bug修复和改进)
-- [构建](#构建)
-  - [Android](#android)
-  - [iOS](#ios)
-  - [macOS](#macos)
-  - [Windows](#windows)
-  - [Linux](#linux)
-- [贡献者](#贡献者)
+- [芦荟流转助手](#芦荟流转助手)
+- [LocalSend](#localsend)
+  - [关于](#关于)
+  - [截图](#截图)
+  - [下载](#下载)
+  - [设置](#设置)
+  - [工作原理](#工作原理)
+  - [开始使用](#开始使用)
+  - [贡献](#贡献)
+    - [翻译](#翻译)
+    - [Bug修复和改进](#bug修复和改进)
+  - [构建](#构建)
+    - [Android](#android)
+    - [iOS](#ios)
+    - [macOS](#macos)
+    - [Windows](#windows)
+    - [Linux](#linux)
+  - [贡献者](#贡献者)
 
 ## 关于
 
