@@ -2,24 +2,24 @@ import 'package:localsend_app/util/native/content_uri_helper.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('getFolderPathFromContentUri', () {
+  group('getPathFromTreeUri', () {
     test('should return the root folder path from the content uri', () {
       expect(
-        ContentUriHelper.getFolderPathFromContentUri('content://com.android.externalstorage.documents/tree/primary%3ADocuments'),
+        ContentUriHelper.getPathFromTreeUri('content://com.android.externalstorage.documents/tree/primary%3ADocuments'),
         'primary:Documents',
       );
     });
 
     test('should return the folder path from the content uri', () {
       expect(
-        ContentUriHelper.getFolderPathFromContentUri('content://com.android.externalstorage.documents/tree/primary%3ADocuments%2FOffice%20Lens'),
+        ContentUriHelper.getPathFromTreeUri('content://com.android.externalstorage.documents/tree/primary%3ADocuments%2FOffice%20Lens'),
         'primary:Documents/Office Lens',
       );
     });
 
     test('should return folder path from content uri in SD card', () {
       expect(
-        ContentUriHelper.getFolderPathFromContentUri('content://com.android.externalstorage.documents/tree/1234-5678:Documents'),
+        ContentUriHelper.getPathFromTreeUri('content://com.android.externalstorage.documents/tree/1234-5678:Documents'),
         '1234-5678:Documents',
       );
     });
@@ -83,6 +83,51 @@ void main() {
           uri: 'content://com.android.externalstorage.documents/tree/1234-5678:Documents/document/1234-5678:Documents%2FTest.pdf',
         ),
         'Documents/Test.pdf',
+      );
+    });
+
+    test('should return the relative path from the picked file content uri in SD card root', () {
+      expect(
+        ContentUriHelper.guessRelativePathFromPickedFileContentUri(
+          folderContentUri: 'content://com.android.externalstorage.documents/tree/1234-5678%3A',
+          basePath: '1234-5678:',
+          folderName: '1234-5678',
+          uri: 'content://com.android.externalstorage.documents/tree/1234-5678%3A/document/1234-5678%3ATest.pdf',
+        ),
+        '1234-5678/Test.pdf',
+      );
+    });
+  });
+
+  group('convertTreeUriToDocumentUri', () {
+    test('should return the document uri from the tree uri', () {
+      expect(
+        ContentUriHelper.convertTreeUriToDocumentUri(treeUri: 'content://com.android.externalstorage.documents/tree/primary%3ALocalSend'),
+        'content://com.android.externalstorage.documents/tree/primary%3ALocalSend/document/primary%3ALocalSend',
+      );
+    });
+
+    test('should return the document uri from the tree uri with a folder', () {
+      expect(
+        ContentUriHelper.convertTreeUriToDocumentUri(
+            treeUri: 'content://com.android.externalstorage.documents/tree/primary%3ALocalSend', suffix: 'subFolder'),
+        'content://com.android.externalstorage.documents/tree/primary%3ALocalSend/document/primary%3ALocalSend%2FsubFolder',
+      );
+    });
+  });
+
+  group('encodeTreeUri', () {
+    test('should return the encoded tree uri', () {
+      expect(
+        ContentUriHelper.encodeTreeUri('content://com.android.externalstorage.documents/tree/primary%3ALocalSend/subFolder'),
+        'content://com.android.externalstorage.documents/tree/primary%3ALocalSend%2FsubFolder',
+      );
+    });
+
+    test('should return the encoded tree uri with a folder in SD card', () {
+      expect(
+        ContentUriHelper.encodeTreeUri('content://com.android.externalstorage.documents/tree/1234-5678:LocalSend/subFolder'),
+        'content://com.android.externalstorage.documents/tree/1234-5678%3ALocalSend%2FsubFolder',
       );
     });
   });

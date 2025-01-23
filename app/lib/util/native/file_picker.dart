@@ -1,23 +1,27 @@
 import 'dart:async';
 
-import 'package:common/common.dart';
+// import 'package:common/common.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
 import 'package:file_selector/file_selector.dart' as file_selector;
+import 'package:common/model/file_type.dart';
+import 'package:common/util/sleep.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
+import 'package:localsend_app/model/cross_file.dart';
 import 'package:localsend_app/pages/apk_picker_page.dart';
+import 'package:localsend_app/provider/device_info_provider.dart';
 import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
-import 'package:localsend_app/theme.dart';
 import 'package:localsend_app/util/determine_image_type.dart';
+import 'package:localsend_app/util/file_path_helper.dart';
+import 'package:localsend_app/util/native/android_saf.dart';
 import 'package:localsend_app/util/native/cross_file_converters.dart';
-import 'package:localsend_app/util/native/pick_directory.dart';
 import 'package:localsend_app/util/native/pick_directory_path.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
-import 'package:localsend_app/util/sleep.dart';
 import 'package:localsend_app/util/ui/asset_picker_translated_text_delegate.dart';
 import 'package:localsend_app/widget/dialogs/loading_dialog.dart';
 import 'package:localsend_app/widget/dialogs/message_input_dialog.dart';
@@ -28,9 +32,11 @@ import 'package:pasteboard/pasteboard.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:routerino/routerino.dart';
+import 'package:uri_content/uri_content.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 final _logger = Logger('FilePickerHelper');
+final _uriContent = UriContent();
 
 enum FilePickerOption {
   file(Icons.description),
@@ -69,6 +75,7 @@ enum FilePickerOption {
       return [
         FilePickerOption.media,
         FilePickerOption.text,
+        FilePickerOption.clipboard,
         FilePickerOption.file,
         FilePickerOption.folder,
       ];
@@ -78,6 +85,7 @@ enum FilePickerOption {
       return [
         FilePickerOption.file,
         FilePickerOption.media,
+        FilePickerOption.clipboard,
         FilePickerOption.text,
         FilePickerOption.folder,
         FilePickerOption.app,
@@ -178,13 +186,19 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
             ));
       }
     } else {
-      final result = await file_selector.openFiles();
+      final result = await openFiles();
       await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
             files: result,
             converter: CrossFileConverters.convertXFile,
           ));
     }
   } catch (e) {
+    if (e is PlatformException && e.code == 'CANCELED') {
+      // User canceled the file picker
+      _logger.info('User canceled file picker');
+      return;
+    }
+
     // ignore: use_build_context_synchronously
     await showDialog(
         context: context, builder: (_) => const NoPermissionDialog());
@@ -216,7 +230,8 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
   );
   await sleepAsync(200); // Wait for the dialog to be shown
   try {
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    if (defaultTargetPlatform == TargetPlatform.android && (ref.read(deviceInfoProvider).androidSdkInt ?? 0) >= contentUriMinSdk) {
+      // Android 8 and above have more predictable content URIs that we can parse.
       final result = await pickDirectoryAndroid();
       if (result != null) {
         await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddAndroidDirectoryAction(result));
@@ -228,6 +243,12 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
       }
     }
   } catch (e) {
+    if (e is PlatformException && e.code == 'CANCELED') {
+      // User canceled the file picker
+      _logger.info('User canceled file picker');
+      return;
+    }
+
     _logger.warning('Failed to pick directory', e);
     // ignore: use_build_context_synchronously
     await showDialog(
@@ -319,36 +340,32 @@ Future<void> _pickClipboard(BuildContext context, Ref ref) async {
     }
     return;
   }
-  late List<String> files = [];
-  for (final file in await Pasteboard.files()) {
-    files.add(file);
-  }
+
+
+  final List<String> files = await Pasteboard.files();
   if (files.isNotEmpty) {
-    await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
-          files: files.map((e) => XFile(e)).toList(),
-          converter: CrossFileConverters.convertXFile,
-        ));
-    return;
-  }
-
-  final data = await Clipboard.getData(Clipboard.kTextPlain);
-  if (data?.text != null) {
-    ref
-        .redux(selectedSendingFilesProvider)
-        .dispatch(AddMessageAction(message: data!.text!));
-    return;
-  }
-
-  final image = await Pasteboard.image;
-  if (image != null) {
-    final now = DateTime.now();
-    final fileName =
-        'clipboard_${now.year}-${now.month.twoDigitString}-${now.day.twoDigitString}_${now.hour.twoDigitString}-${now.minute.twoDigitString}.${determineImageType(image)}';
-    ref.redux(selectedSendingFilesProvider).dispatch(AddBinaryAction(
-          bytes: image,
-          fileType: FileType.image,
-          fileName: fileName,
-        ));
+    await ref.redux(selectedSendingFilesProvider).dispatchAsync(
+          AddFilesAction(
+            files: files.map((e) => XFile(e)).toList(),
+            converter: (file) async {
+              if (!file.path.startsWith('content://')) {
+                return CrossFileConverters.convertXFile(file);
+              }
+              // handle content uri
+              return CrossFile(
+                name: file.name,
+                fileType: file.name.guessFileType(),
+                size: await _uriContent.getContentLength(Uri.parse(file.path)) ?? -1,
+                path: file.path,
+                thumbnail: null,
+                asset: null,
+                bytes: null,
+                lastModified: null,
+                lastAccessed: null,
+              );
+            },
+          ),
+        );
     return;
   }
 

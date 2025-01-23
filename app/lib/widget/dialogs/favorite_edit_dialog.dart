@@ -1,11 +1,11 @@
-import 'package:common/common.dart';
+import 'package:common/isolate.dart';
+import 'package:common/model/device.dart';
 import 'package:flutter/material.dart';
+import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/persistence/favorite_device.dart';
 import 'package:localsend_app/provider/favorites_provider.dart';
-import 'package:localsend_app/provider/network/targeted_discovery_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
-import 'package:localsend_app/theme.dart';
 import 'package:localsend_app/widget/dialogs/favorite_delete_dialog.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:routerino/routerino.dart';
@@ -56,64 +56,67 @@ class _FavoriteEditDialogState extends State<FavoriteEditDialog> with Refena {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(widget.favorite != null ? t.dialogs.favoriteEditDialog.titleEdit : t.dialogs.favoriteEditDialog.titleAdd),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(t.dialogs.favoriteEditDialog.name),
-          const SizedBox(height: 5),
-          TextFormField(
-            controller: _aliasController,
-            decoration: InputDecoration(
-              hintText: t.dialogs.favoriteEditDialog.auto,
-            ),
-            enabled: !_fetching,
-          ),
-          const SizedBox(height: 16),
-          Text(t.dialogs.favoriteEditDialog.ip),
-          const SizedBox(height: 5),
-          TextFormField(
-            controller: _ipController,
-            autofocus: widget.favorite == null && widget.prefilledDevice == null,
-            enabled: !_fetching,
-          ),
-          const SizedBox(height: 16),
-          Text(t.dialogs.favoriteEditDialog.port),
-          const SizedBox(height: 5),
-          TextFormField(
-            controller: _portController,
-            enabled: !_fetching,
-            keyboardType: TextInputType.number,
-          ),
-          if (widget.favorite != null) ...[
-            const SizedBox(height: 16),
-            TextButton.icon(
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.warning,
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(t.dialogs.favoriteEditDialog.name),
+            const SizedBox(height: 5),
+            TextFormField(
+              controller: _aliasController,
+              decoration: InputDecoration(
+                hintText: t.dialogs.favoriteEditDialog.auto,
               ),
-              onPressed: () async {
-                final result = await showDialog<bool>(
-                  context: context,
-                  builder: (_) => FavoriteDeleteDialog(widget.favorite!),
-                );
+              enabled: !_fetching,
+            ),
+            const SizedBox(height: 16),
+            Text(t.dialogs.favoriteEditDialog.ip),
+            const SizedBox(height: 5),
+            TextFormField(
+              controller: _ipController,
+              autofocus: widget.favorite == null && widget.prefilledDevice == null,
+              enabled: !_fetching,
+            ),
+            const SizedBox(height: 16),
+            Text(t.dialogs.favoriteEditDialog.port),
+            const SizedBox(height: 5),
+            TextFormField(
+              controller: _portController,
+              enabled: !_fetching,
+              keyboardType: TextInputType.number,
+            ),
+            if (widget.favorite != null) ...[
+              const SizedBox(height: 16),
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.warning,
+                ),
+                onPressed: () async {
+                  final result = await showDialog<bool>(
+                    context: context,
+                    builder: (_) => FavoriteDeleteDialog(widget.favorite!),
+                  );
 
-                if (mounted && result == true) {
-                  await context.ref.redux(favoritesProvider).dispatchAsync(RemoveFavoriteAction(deviceFingerprint: widget.favorite!.fingerprint));
-                  if (mounted) {
-                    context.pop();
+                  if (context.mounted && result == true) {
+                    await context.ref.redux(favoritesProvider).dispatchAsync(RemoveFavoriteAction(deviceFingerprint: widget.favorite!.fingerprint));
+                    if (context.mounted) {
+                      context.pop();
+                    }
                   }
-                }
-              },
-              icon: const Icon(Icons.delete),
-              label: Text(t.general.delete),
-            ),
+                },
+                icon: const Icon(Icons.delete),
+                label: Text(t.general.delete),
+              ),
+            ],
+            if (_failed)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(t.general.error, style: TextStyle(color: Theme.of(context).colorScheme.warning)),
+              ),
           ],
-          if (_failed)
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(t.general.error, style: TextStyle(color: Theme.of(context).colorScheme.warning)),
-            ),
-        ],
+        ),
       ),
       actions: [
         TextButton(
@@ -154,7 +157,11 @@ class _FavoriteEditDialogState extends State<FavoriteEditDialog> with Refena {
                     setState(() {
                       _fetching = true;
                     });
-                    final result = await ref.read(targetedDiscoveryProvider).discover(ip: ip, port: port, https: https);
+                    final result = await ref.redux(parentIsolateProvider).dispatchAsyncTakeResult(IsolateTargetHttpDiscoveryAction(
+                          ip: ip,
+                          port: port,
+                          https: https,
+                        ));
                     if (result == null) {
                       setState(() {
                         _fetching = false;
@@ -173,7 +180,7 @@ class _FavoriteEditDialogState extends State<FavoriteEditDialog> with Refena {
                         )));
                   }
 
-                  if (mounted) {
+                  if (context.mounted) {
                     context.pop();
                   }
                 },

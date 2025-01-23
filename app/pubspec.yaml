@@ -1,44 +1,53 @@
 dependencies:
-  app_group_directory: 2.0.0
   basic_utils: 5.7.0
   collection: ^1.17.2
   common:
     path: ../common
   dart_mappable: 4.2.2
-  desktop_drop: 0.4.4
+  desktop_drop: 0.5.0
   device_apps: 2.2.0
-  dio: 5.4.3+1
+  device_info_plus: 10.1.2
+  dio: 5.7.0
   dynamic_color: 1.7.0
+  file_picker: 8.1.2
+  file_selector: 1.0.3
   flutter:
     sdk: flutter
   flutter_displaymode: 0.6.0
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: 0.6.19
+  flutter_markdown: 0.7.3+1
   gal: 2.3.0
-  
-  launch_at_startup: 0.2.2
+  image_picker: 1.1.2
+  in_app_purchase: 3.2.0 # [FOSS_REMOVE]
+  intl: ^0.19.0 # allow newer versions, so it can compile with newer Flutter versions
   legalize: ^1.2.2
   logging: 1.2.0
-  mime: 1.0.4
+  # https://github.com/NightFeather0615/macos_dock_progress/issues/1
+  # macos_dock_progress: 1.1.0
+  mime: 1.0.6
   nanoid2: 2.0.1
-  network_info_plus: 5.0.3
-  pasteboard: ^0.2.0
-  path: 1.8.3
+  network_info_plus: 6.0.1
+  open_filex: 4.5.0
+  package_info_plus: 8.0.2
+  pasteboard: 0.3.0
+  path: 1.9.0
+  path_provider: 2.1.4
+  path_provider_foundation: 2.4.0
+  permission_handler: 11.3.1
   pretty_qr_code: 3.3.0
   refena_flutter: 2.1.1
   refena_inspector_client: 2.0.0
   routerino: 0.8.0
-  saf_stream: 0.4.0
+  saf_stream: 0.7.5
   screen_retriever: 0.1.9
   share_handler: 0.0.19
-  share_handler_ios: 0.0.12
+  share_handler_ios: 0.0.12 # Keep iOS <14 support
+  shared_preferences: 2.3.2
   shared_preferences_platform_interface: any
   shared_storage: 0.8.1
-  shelf: 1.4.1
-  shelf_router: 1.1.4
-  slang: 3.31.1
-  slang_flutter: 3.31.0
+  slang: 4.1.0
+  slang_flutter: 4.1.0
   system_settings: 2.1.0
   tray_manager: 0.2.3
   uri_content: 2.2.0
@@ -121,10 +130,10 @@ dependency_overrides:
       url: https://gitee.com/openharmony-sig/flutter_packages.git
 description: An open source cross-platform alternative to AirDrop
 dev_dependencies:
-  build_runner: 2.4.9
+  build_runner: 2.4.12
   dart_mappable_builder: 4.2.3
-  flutter_gen_runner: 5.6.0
-  flutter_lints: 3.0.1
+  flutter_gen_runner: 5.7.0
+  flutter_lints: 4.0.0
   mockito: 5.4.4
   refena_inspector: 2.0.0
   slang_build_runner: 3.31.0
@@ -158,4 +167,4 @@ msix_config:
     task_id: localsend
 name: localsend_app
 publish_to: none
-version: 1.15.0+49
+version: 1.15.4+54

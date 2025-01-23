@@ -34,6 +34,7 @@ const _translators = <AppLocale, List<String>>{
   ],
   AppLocale.filPh: [
     'Bryan James Ilaga (@BryanJames16)',
+    'Linwel Colmo (@leanwell)',
   ],
   AppLocale.fr: [
     '@Nixuge',
@@ -46,6 +47,7 @@ const _translators = <AppLocale, List<String>>{
   ],
   AppLocale.it: [
     'Francesco Marastoni (@Francesco146)',
+    'Dario Landucci (@LandOfDar)',
   ],
   AppLocale.ja: [
     'soya_daizu (@soya-daizu)',
@@ -55,6 +57,11 @@ const _translators = <AppLocale, List<String>>{
   ],
   AppLocale.ko: [
     '@mgmix',
+  ],
+  AppLocale.nl: [
+    'Martijn van Berkel (@Flitskikker)',
+    '@stijnphr',
+    '@jan-vandenberg',
   ],
   AppLocale.pl: [
     '@Radplay',

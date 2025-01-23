@@ -2,12 +2,12 @@
  * @Author: 
  * @Date: 2024-12-21 15:37:26
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-01-13 13:32:41
+ * @LastEditTime: 2025-01-23 17:39:40
  * @Description: file content
  */
 import 'dart:io';
 
-import 'package:common/common.dart';
+import 'package:common/model/file_type.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
@@ -15,7 +15,8 @@ import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localsend_app/model/cross_file.dart';
 import 'package:localsend_app/util/file_path_helper.dart';
-import 'package:localsend_app/util/native/pick_directory.dart';
+import 'package:localsend_app/util/native/android_saf.dart';
+import 'package:localsend_app/util/native/platform_check.dart';
 import 'package:share_handler/share_handler.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
@@ -31,6 +32,8 @@ class CrossFileConverters {
       asset: null,
       path: kIsWeb ? null : file.path,
       bytes: kIsWeb ? file.bytes! : null,
+      lastModified: null,
+      lastAccessed: null,
     );
   }
 
@@ -44,6 +47,8 @@ class CrossFileConverters {
       asset: null,
       path: kIsWeb ? null : file.path,
       bytes: kIsWeb ? file.bytes! : null,
+      lastModified: null,
+      lastAccessed: null,
     );
   }
 
@@ -57,6 +62,8 @@ class CrossFileConverters {
       asset: asset,
       path: file.path,
       bytes: null,
+      lastModified: file.lastModifiedSync().toUtc(),
+      lastAccessed: file.lastAccessedSync().toUtc(),
     );
   }
 
@@ -77,6 +84,8 @@ class CrossFileConverters {
       bytes: kIsWeb
           ? await file.readAsBytes()
           : null, // we can fetch it now because in Web it is already there
+      lastModified: kIsWeb || checkPlatform([TargetPlatform.ohos]) ? null : await file.lastModified(),
+      lastAccessed: null,
     );
   }
 
@@ -89,6 +98,8 @@ class CrossFileConverters {
       asset: null,
       path: file.path,
       bytes: null,
+      lastModified: file.lastModifiedSync().toUtc(),
+      lastAccessed: file.lastAccessedSync().toUtc(),
     );
   }
 
@@ -101,6 +112,8 @@ class CrossFileConverters {
       asset: null,
       path: file.uri,
       bytes: null,
+      lastModified: DateTime.fromMillisecondsSinceEpoch(file.lastModified, isUtc: true),
+      lastAccessed: null,
     );
   }
 
@@ -115,6 +128,8 @@ class CrossFileConverters {
       asset: null,
       path: file.path,
       bytes: null,
+      lastModified: file.lastModifiedSync().toUtc(),
+      lastAccessed: file.lastAccessedSync().toUtc(),
     );
   }
 
@@ -128,6 +143,8 @@ class CrossFileConverters {
       asset: null,
       path: app.apkFilePath,
       bytes: null,
+      lastModified: null,
+      lastAccessed: null,
     );
   }
 }

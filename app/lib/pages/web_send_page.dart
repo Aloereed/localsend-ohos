@@ -1,19 +1,20 @@
+import 'package:common/util/sleep.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/cross_file.dart';
 import 'package:localsend_app/provider/local_ip_provider.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
-import 'package:localsend_app/theme.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
-import 'package:localsend_app/util/sleep.dart';
 import 'package:localsend_app/util/ui/snackbar.dart';
 import 'package:localsend_app/widget/dialogs/pin_dialog.dart';
 import 'package:localsend_app/widget/dialogs/qr_dialog.dart';
 import 'package:localsend_app/widget/dialogs/zoom_dialog.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
 import 'package:refena_flutter/refena_flutter.dart';
+import 'package:routerino/routerino.dart';
 
 enum _ServerState { initializing, running, error, stopping }
 
@@ -41,7 +42,7 @@ class _WebSendPageState extends State<WebSendPage> with Refena {
 
   void _init({required bool encrypted}) async {
     final settings = ref.read(settingsProvider);
-    final beforePin = ref.read(serverProvider)?.webSendState?.pin;
+    final (beforeAutoAccept, beforePin) = ref.read(serverProvider.select((state) => (state?.webSendState?.autoAccept, state?.webSendState?.pin)));
     setState(() {
       _stateEnum = _ServerState.initializing;
       _encrypted = encrypted;
@@ -55,6 +56,9 @@ class _WebSendPageState extends State<WebSendPage> with Refena {
             https: _encrypted,
           );
       await ref.notifier(serverProvider).initializeWebSend(widget.files);
+      if (beforeAutoAccept != null) {
+        ref.notifier(serverProvider).setWebSendAutoAccept(beforeAutoAccept);
+      }
       ref.notifier(serverProvider).setWebSendPin(beforePin);
       setState(() {
         _stateEnum = _ServerState.running;
@@ -76,16 +80,20 @@ class _WebSendPageState extends State<WebSendPage> with Refena {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvokedWithResult: (_, __) async {
         setState(() {
           _stateEnum = _ServerState.stopping;
         });
         await sleepAsync(250);
         await _revertServerState();
         await sleepAsync(250);
-        return true;
+
+        if (context.mounted) {
+          context.pop();
+        }
       },
+      canPop: false,
       child: Scaffold(
         appBar: AppBar(
           title: Text(t.webSharePage.title),
@@ -156,7 +164,7 @@ class _WebSendPageState extends State<WebSendPage> with Refena {
                                 InkWell(
                                   onTap: () async {
                                     await Clipboard.setData(ClipboardData(text: url));
-                                    if (mounted && checkPlatformIsDesktop()) {
+                                    if (context.mounted && checkPlatformIsDesktop()) {
                                       context.showSnackBar(t.general.copiedToClipboard);
                                     }
                                   },

@@ -70,12 +70,14 @@
         <string>fil-PH</string>
         <string>fr</string>
         <string>he</string>
+        <string>hi</string>
         <string>hu</string>
         <string>id</string>
         <string>it</string>
         <string>ja</string>
         <string>km</string>
         <string>ko</string>
+        <string>ms</string>
         <string>ne</string>
         <string>nl</string>
         <string>pl</string>
@@ -83,6 +85,8 @@
         <string>pt-PT</string>
         <string>ro</string>
         <string>ru</string>
+        <string>sk</string>
+        <string>sl</string>
         <string>sr</string>
         <string>sr-Cyrl</string>
         <string>sv</string>

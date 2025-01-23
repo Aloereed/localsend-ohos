@@ -1,4 +1,4 @@
-import 'package:common/common.dart';
+import 'package:common/model/device.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:localsend_app/gen/strings.g.dart';
@@ -20,6 +20,7 @@ class SettingsState with SettingsStateMappable {
   final bool saveToGallery; // only Android, iOS
   final bool saveToHistory;
   final bool quickSave; // automatically accept file requests
+  final bool quickSaveFromFavorites; // automatically accept file requests from favorites
   final String? receivePin; // null = disabled
   final bool autoFinish; // automatically finish sessions
   final bool minimizeToTray; // minimize to tray instead of exiting the app
@@ -31,6 +32,7 @@ class SettingsState with SettingsStateMappable {
   final String? deviceModel;
   final bool shareViaLinkAutoAccept;
   final int discoveryTimeout;
+  final bool advancedSettings;
 
   const SettingsState({
     required this.showToken,
@@ -44,6 +46,7 @@ class SettingsState with SettingsStateMappable {
     required this.saveToGallery,
     required this.saveToHistory,
     required this.quickSave,
+    required this.quickSaveFromFavorites,
     required this.receivePin,
     required this.autoFinish,
     required this.minimizeToTray,
@@ -55,5 +58,6 @@ class SettingsState with SettingsStateMappable {
     required this.deviceModel,
     required this.shareViaLinkAutoAccept,
     required this.discoveryTimeout,
+    required this.advancedSettings,
   });
 }

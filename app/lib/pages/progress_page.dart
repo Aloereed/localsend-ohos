@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:common/common.dart';
+import 'package:common/model/dto/file_dto.dart';
+import 'package:common/model/file_status.dart';
+import 'package:common/model/session_status.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/provider/network/send_provider.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
 import 'package:localsend_app/provider/progress_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
-import 'package:localsend_app/theme.dart';
 import 'package:localsend_app/util/file_size_helper.dart';
 import 'package:localsend_app/util/file_speed_helper.dart';
 import 'package:localsend_app/util/native/open_file.dart';
@@ -47,6 +49,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
   String? _remainingTime;
   List<FileDto> _files = []; // also contains declined files (files without token)
   Set<String> _selectedFiles = {};
+  SessionStatus? _lastStatus;
 
   // If [autoFinish] is enabled, we wait a few seconds before automatically closing the session.
   int _finishCounter = 3;
@@ -66,10 +69,13 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
 
       if (ref.read(settingsProvider).autoFinish) {
         _finishTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          if (ref.read(progressProvider).getFinishedCount(widget.sessionId) == _selectedFiles.length) {
+          final finished = ref.read(serverProvider)?.session?.files.values.map((e) => e.status).isFinishedOrSkipped ??
+              ref.read(sendProvider)[widget.sessionId]?.files.values.map((e) => e.status).isFinishedOrSkipped ??
+              true;
+          if (finished) {
             if (_finishCounter == 1) {
               timer.cancel();
-              exit();
+              _exit(closeSession: true);
             } else {
               setState(() {
                 _finishCounter--;
@@ -99,11 +105,12 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
     });
   }
 
-  void exit() async {
+  void _exit({required bool closeSession}) async {
     final receiveSession = ref.read(serverProvider.select((s) => s?.session));
     final sendSession = ref.read(sendProvider)[widget.sessionId];
     final SessionStatus? status = receiveSession?.status ?? sendSession?.status;
-    final result = status == null || await _askCancelConfirmation(status);
+    final keepSession = !closeSession && (status == SessionStatus.sending || status == SessionStatus.finishedWithErrors);
+    final result = status == null || keepSession || await _askCancelConfirmation(status);
 
     if (result && mounted) {
       // ignore: unawaited_futures
@@ -111,32 +118,11 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _finishTimer?.cancel();
-    unawaited(TaskbarHelper.clearProgressBar());
-    try {
-      unawaited(WakelockPlus.disable());
-    } catch (_) {}
-  }
-
-  Future<bool> _onWillPop() async {
-    final receiveSession = ref.read(serverProvider.select((s) => s?.session));
-    final sendSession = ref.read(sendProvider)[widget.sessionId];
-    final SessionStatus? status = receiveSession?.status ?? sendSession?.status;
-    if (status == null) {
-      return true;
-    }
-    if (!widget.closeSessionOnClose && (status == SessionStatus.sending || status == SessionStatus.finishedWithErrors)) {
-      // keep session except [closeSessionOnClose] is true and the session is active
-      return true;
-    }
-    return _askCancelConfirmation(status);
-  }
-
   Future<bool> _askCancelConfirmation(SessionStatus status) async {
-    final bool result = status == SessionStatus.sending ? await context.pushBottomSheet(() => const CancelSessionDialog()) : true;
+    final bool result = switch (status == SessionStatus.sending) {
+      true => (await context.pushBottomSheet(() => const CancelSessionDialog())) == true,
+      false => true,
+    };
     if (result) {
       final receiveSession = ref.read(serverProvider)?.session;
       final sendState = ref.read(sendProvider)[widget.sessionId];
@@ -159,17 +145,35 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _finishTimer?.cancel();
+    TaskbarHelper.clearProgressBar(); // ignore: discarded_futures
+    try {
+      WakelockPlus.disable(); // ignore: discarded_futures
+    } catch (_) {}
+  }
+
+  @override
   Widget build(BuildContext context) {
     final progressNotifier = ref.watch(progressProvider);
     final currBytes = _files.fold<int>(
         0, (prev, curr) => prev + ((progressNotifier.getProgress(sessionId: widget.sessionId, fileId: curr.id) * curr.size).round()));
 
-    unawaited(TaskbarHelper.setProgressBar(currBytes, _totalBytes));
-
     final receiveSession = ref.watch(serverProvider.select((s) => s?.session));
     final sendSession = ref.watch(sendProvider)[widget.sessionId];
 
     final SessionStatus? status = receiveSession?.status ?? sendSession?.status;
+
+    if (status == SessionStatus.sending) {
+      // ignore: discarded_futures
+      TaskbarHelper.setProgressBar(currBytes, _totalBytes);
+    } else if (status != _lastStatus) {
+      _lastStatus = status;
+      // ignore: discarded_futures
+      TaskbarHelper.visualizeStatus(status);
+    }
+
     if (status == null) {
       return Scaffold(
         body: Container(),
@@ -192,13 +196,19 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
       speedInBytes = null;
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (await _onWillPop() && mounted) {
-          return true;
+    final fileStatusMap = receiveSession?.files.map((k, f) => MapEntry(k, f.status)) ?? sendSession!.files.map((k, f) => MapEntry(k, f.status));
+    final finishedCount = fileStatusMap.values.where((s) => s == FileStatus.finished).length;
+
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          // Already popped.
+          // Because the user cannot pop this page, we can safely assume that all sessions are closed if they should be.
+          return;
         }
-        return false;
+        _exit(closeSession: widget.closeSessionOnClose);
       },
+      canPop: false,
       child: Scaffold(
         appBar: widget.showAppBar
             ? AppBar(
@@ -272,7 +282,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                 final file = _files[index - 2];
                 final String fileName = receiveSession?.files[file.id]?.desiredName ?? file.fileName;
 
-                final fileStatus = receiveSession?.files[file.id]?.status ?? sendSession!.files[file.id]!.status;
+                final fileStatus = fileStatusMap[file.id]!;
                 final savedToGallery = receiveSession?.files[file.id]?.savedToGallery ?? false;
 
                 final String? filePath;
@@ -376,6 +386,17 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                             ],
                           ),
                         ),
+                        if (sendSession != null && fileStatus == FileStatus.failed)
+                          IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () async {
+                              await ref.notifier(sendProvider).sendFile(
+                                    sessionId: widget.sessionId,
+                                    file: sendSession.files[file.id]!,
+                                    isRetry: true,
+                                  );
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -416,7 +437,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(t.progressPage.total.count(
-                                    curr: progressNotifier.getFinishedCount(widget.sessionId),
+                                    curr: finishedCount,
                                     n: _selectedFiles.length,
                                   )),
                                   Text(t.progressPage.total.size(
@@ -445,7 +466,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                               ),
                               TextButton.icon(
                                 style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onSurface),
-                                onPressed: exit,
+                                onPressed: () => _exit(closeSession: true),
                                 icon: Icon(status == SessionStatus.sending ? Icons.close : Icons.check_circle),
                                 label: Text(status == SessionStatus.sending
                                     ? t.general.cancel

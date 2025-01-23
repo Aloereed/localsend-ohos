@@ -7,10 +7,11 @@ import 'package:localsend_app/pages/debug/http_logs_page.dart';
 import 'package:localsend_app/pages/debug/security_debug_page.dart';
 import 'package:localsend_app/provider/app_arguments_provider.dart';
 import 'package:localsend_app/provider/persistence_provider.dart';
-import 'package:localsend_app/util/native/open_file_receiver.dart';
+import 'package:localsend_app/util/shared_preferences/shared_preferences_file.dart';
 import 'package:localsend_app/widget/debug_entry.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:routerino/routerino.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
@@ -19,6 +20,8 @@ class DebugPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final appArguments = context.watch(appArgumentsProvider);
     final portableMode = context.watch(persistenceProvider.select((state) => state.isPortableMode()));
+    final store = SharedPreferencesStorePlatform.instance;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Debugging'),
@@ -39,22 +42,18 @@ class DebugPage extends StatelessWidget {
             value: Platform.resolvedExecutable,
           ),
           DebugEntry(
+            name: 'Working Directory',
+            value: Directory.current.path,
+          ),
+          if (store is SharedPreferencesFile)
+            DebugEntry(
+              name: 'Settings Path',
+              value: store.getPath(),
+            ),
+          DebugEntry(
             name: 'App Arguments',
             value: appArguments.isEmpty ? null : appArguments.map((e) => '"$e"').join(' '),
           ),
-          if (defaultTargetPlatform == TargetPlatform.macOS)
-            FutureBuilder(
-              // ignore: discarded_futures
-              future: getOpenedFiles().onError((error, stackTrace) async {
-                return <String>[error.toString()];
-              }),
-              builder: (context, snapshot) {
-                return DebugEntry(
-                  name: 'Opened Files',
-                  value: snapshot.hasData ? snapshot.data.toString() : 'Loading...',
-                );
-              },
-            ),
           DebugEntry(
             name: 'Dart SDK',
             value: Platform.version,

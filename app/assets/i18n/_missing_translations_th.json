@@ -3,49 +3,46 @@
     "Here are translations that exist in <en> but not in <th>.",
     "After editing this file, you can run 'dart run slang apply --locale=th' to quickly apply the newly added translations."
   ],
+  "general": {
+    "quickSaveFromFavorites": "Quick Save for \"Favorites\""
+  },
+  "receiveTab": {
+    "quickSave": {
+      "off": "@:general.off",
+      "favorites": "Favorites",
+      "on": "@:general.on"
+    }
+  },
+  "sendTab": {
+    "manualSending": "Manual sending"
+  },
   "settingsTab": {
     "general": {
-      "showInContextMenu": "Show LocalSend in context menu"
+      "saveWindowPlacementWindows": "Save window position after exit"
     },
     "receive": {
-      "requirePin": "@:webSharePage.requirePin"
-    },
-    "send": {
-      "title": "Send",
-      "shareViaLinkAutoAccept": "Automatically accept requests in 'Share via link' mode"
+      "quickSaveFromFavorites": "@:general.quickSaveFromFavorites"
     },
     "network": {
-      "discoveryTimeout": "Discovery Timeout"
+      "useSystemName": "Use system name",
+      "generateRandomAlias": "Generate random alias"
     }
-  },
-  "receiveHistoryPage": {
-    "entryActions": {
-      "showInFolder": "Show in folder"
-    }
-  },
-  "sendPage": {
-    "tooManyAttempts": "@:web.tooManyAttempts"
-  },
-  "webSharePage": {
-    "autoAccept": "Automatically accept requests",
-    "requirePin": "Require PIN",
-    "pinHint": "The PIN is \"{pin}\""
   },
   "dialogs": {
-    "pin": {
-      "title": "Enter PIN"
+    "openFile": {
+      "title": "Open file",
+      "content": "Do you want to open the received file?"
     },
-    "zoom": {
-      "title": "URL"
+    "quickSaveFromFavoritesNotice": {
+      "title": "@:general.quickSaveFromFavorites",
+      "content": [
+        "File requests are now accepted automatically from devices in your favorites list.",
+        "Warning: This is currently not entirely secure because a hacker who knows the fingerprint of your favorite devices can still send you files.",
+        "However, this option is still more secure than allowing any device."
+      ]
     }
   },
-  "sanitization": {
-    "empty": "Filename cannot be empty",
-    "invalid": "Filename contains invalid characters"
-  },
-  "web": {
-    "enterPin": "Enter PIN",
-    "invalidPin": "Invalid PIN",
-    "tooManyAttempts": "Too many attempts"
+  "tray": {
+    "closeWindows": "Exit"
   }
 }

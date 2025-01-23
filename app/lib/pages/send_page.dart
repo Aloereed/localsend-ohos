@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:common/common.dart';
+import 'package:common/model/device.dart';
+import 'package:common/model/session_status.dart';
 import 'package:flutter/material.dart';
+import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/provider/device_info_provider.dart';
 import 'package:localsend_app/provider/favorites_provider.dart';
 import 'package:localsend_app/provider/network/send_provider.dart';
-import 'package:localsend_app/theme.dart';
 import 'package:localsend_app/util/favorites.dart';
 import 'package:localsend_app/util/native/taskbar_helper.dart';
 import 'package:localsend_app/widget/animations/initial_fade_transition.dart';
@@ -16,7 +17,6 @@ import 'package:localsend_app/widget/list_tile/device_list_tile.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:routerino/routerino.dart';
-import 'package:windows_taskbar/windows_taskbar.dart';
 
 class SendPage extends StatefulWidget {
   final bool showAppBar;
@@ -60,7 +60,14 @@ class _SendPageState extends State<SendPage> with Refena {
 
   @override
   Widget build(BuildContext context) {
-    final sendState = ref.watch(sendProvider)[widget.sessionId];
+    final sendState = ref.watch(sendProvider.select((state) => state[widget.sessionId]), listener: (prev, next) {
+      final prevStatus = prev[widget.sessionId]?.status;
+      final nextStatus = next[widget.sessionId]?.status;
+      if (prevStatus != nextStatus) {
+        // ignore: discarded_futures
+        TaskbarHelper.visualizeStatus(nextStatus);
+      }
+    });
     if (sendState == null && _myDevice == null && _targetDevice == null) {
       return Scaffold(
         body: Container(),
@@ -71,19 +78,13 @@ class _SendPageState extends State<SendPage> with Refena {
     final targetFavoriteEntry = ref.watch(favoritesProvider.select((state) => state.findDevice(targetDevice)));
     final waiting = sendState?.status == SessionStatus.waiting;
 
-    if (sendState?.status == SessionStatus.declined || sendState?.status == SessionStatus.finishedWithErrors) {
-      unawaited(TaskbarHelper.setProgressBarMode(TaskbarProgressMode.error));
-    } else {
-      unawaited(TaskbarHelper.setProgressBarMode(TaskbarProgressMode.indeterminate));
-    }
-
-    return WillPopScope(
-      onWillPop: () async {
-        if (widget.closeSessionOnClose) {
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop && widget.closeSessionOnClose) {
           _cancel();
         }
-        return true;
       },
+      canPop: true,
       child: Scaffold(
         appBar: widget.showAppBar ? AppBar() : null,
         body: SafeArea(

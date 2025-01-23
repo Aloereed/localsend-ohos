@@ -1,4 +1,5 @@
-import 'package:common/common.dart';
+import 'package:common/isolate.dart';
+import 'package:common/model/device.dart';
 import 'package:flutter/material.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/persistence/color_mode.dart';
@@ -9,6 +10,16 @@ import 'package:refena_flutter/refena_flutter.dart';
 
 final settingsProvider = NotifierProvider<SettingsService, SettingsState>((ref) {
   return SettingsService(ref.read(persistenceProvider));
+}, onChanged: (_, next, ref) {
+  final syncState = ref.read(parentIsolateProvider).syncState;
+  if (syncState.multicastGroup == next.multicastGroup && syncState.discoveryTimeout == next.discoveryTimeout) {
+    return;
+  }
+
+  ref.redux(parentIsolateProvider).dispatch(IsolateSyncSettingsAction(
+        multicastGroup: next.multicastGroup,
+        discoveryTimeout: next.discoveryTimeout,
+      ));
 });
 
 class SettingsService extends PureNotifier<SettingsState> {
@@ -29,6 +40,7 @@ class SettingsService extends PureNotifier<SettingsState> {
         saveToGallery: _persistence.isSaveToGallery(),
         saveToHistory: _persistence.isSaveToHistory(),
         quickSave: _persistence.isQuickSave(),
+        quickSaveFromFavorites: _persistence.isQuickSaveFromFavorites(),
         receivePin: _persistence.getReceivePin(),
         autoFinish: _persistence.isAutoFinish(),
         minimizeToTray: _persistence.isMinimizeToTray(),
@@ -40,6 +52,7 @@ class SettingsService extends PureNotifier<SettingsState> {
         deviceModel: _persistence.getDeviceModel(),
         shareViaLinkAutoAccept: _persistence.getShareViaLinkAutoAccept(),
         discoveryTimeout: _persistence.getDiscoveryTimeout(),
+        advancedSettings: _persistence.getAdvancedSettingsEnabled(),
       );
 
   Future<void> setAlias(String alias) async {
@@ -60,6 +73,13 @@ class SettingsService extends PureNotifier<SettingsState> {
     await _persistence.setColorMode(mode);
     state = state.copyWith(
       colorMode: mode,
+    );
+  }
+
+  Future<void> setAdvancedSettingsEnabled(bool isEnabled) async {
+    await _persistence.setAdvancedSettingsEnabled(isEnabled);
+    state = state.copyWith(
+      advancedSettings: isEnabled,
     );
   }
 
@@ -116,6 +136,13 @@ class SettingsService extends PureNotifier<SettingsState> {
     await _persistence.setQuickSave(quickSave);
     state = state.copyWith(
       quickSave: quickSave,
+    );
+  }
+
+  Future<void> setQuickSaveFromFavorites(bool quickSaveFromFavorites) async {
+    await _persistence.setQuickSaveFromFavorites(quickSaveFromFavorites);
+    state = state.copyWith(
+      quickSaveFromFavorites: quickSaveFromFavorites,
     );
   }
 

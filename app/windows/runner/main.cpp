@@ -1,3 +1,10 @@
+/*
+ * @Author: 
+ * @Date: 2025-01-23 15:53:38
+ * @LastEditors: 
+ * @LastEditTime: 2025-01-23 17:45:16
+ * @Description: file content
+ */
 #include <flutter/dart_project.h>
 #include <flutter/flutter_view_controller.h>
 #include <windows.h>
@@ -27,7 +34,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(500, 600);
-  if (!window.CreateAndShow(L"AloeChatAI", origin, size)) {
+  if (!window.CreateAndShow(L"AloeChat.AI", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

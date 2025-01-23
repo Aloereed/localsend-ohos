@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:common/common.dart';
+import 'package:common/constants.dart';
+import 'package:common/model/device.dart';
+import 'package:common/model/stored_security_context.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localsend_app/gen/strings.g.dart';
@@ -18,7 +20,6 @@ import 'package:localsend_app/util/native/platform_check.dart';
 import 'package:localsend_app/util/security_helper.dart';
 import 'package:localsend_app/util/shared_preferences/shared_preferences_file.dart';
 import 'package:localsend_app/util/shared_preferences/shared_preferences_portable.dart';
-import 'package:localsend_app/util/ui/dynamic_colors.dart';
 import 'package:logging/logging.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,12 +32,12 @@ final _logger = Logger('PersistenceService');
 
 String get _windowsFile {
   final appData = Platform.environment['APPDATA'];
-  return '$appData/LocalSend/settings.json';
+  return '$appData\\LocalSend\\settings.json';
 }
 
 String get _windowsLegacyFile {
   final appData = Platform.environment['APPDATA'];
-  return '$appData/org.localsend/localsend_app/shared_preferences.json';
+  return '$appData\\org.localsend\\localsend_app\\shared_preferences.json';
 }
 
 // Version of the storage
@@ -71,6 +72,7 @@ const _destinationKey = 'ls_destination';
 const _saveToGallery = 'ls_save_to_gallery';
 const _saveToHistory = 'ls_save_to_history';
 const _quickSave = 'ls_quick_save';
+const _quickSaveFromFavorites = 'ls_quick_save_from_favorites';
 const _receivePin = 'ls_receive_pin';
 const _autoFinish = 'ls_auto_finish';
 const _minimizeToTray = 'ls_minimize_to_tray';
@@ -80,6 +82,7 @@ const _enableAnimations = 'ls_enable_animations';
 const _deviceType = 'ls_device_type';
 const _deviceModel = 'ls_device_model';
 const _shareViaLinkAutoAccept = 'ls_share_via_link_auto_accept';
+const _advancedSettingsKey = 'ls_advanced_settings';
 
 final persistenceProvider = Provider<PersistenceService>((ref) {
   throw Exception('persistenceProvider not initialized');
@@ -92,10 +95,13 @@ class PersistenceService {
 
   PersistenceService._(this._prefs, this.isFirstAppStart);
 
-  static Future<PersistenceService> initialize(DynamicColors? dynamicColors) async {
+  static Future<PersistenceService> initialize({
+    required bool supportsDynamicColors,
+  }) async {
     SharedPreferences prefs;
 
     final portableStore = SharedPreferencesPortable();
+    bool usingLegacyStore = false;
     if (checkPlatform(const [TargetPlatform.windows, TargetPlatform.linux, TargetPlatform.macOS]) && portableStore.exists()) {
       _logger.info('Using portable settings.');
       SharedPreferencesStorePlatform.instance = portableStore;
@@ -104,6 +110,7 @@ class PersistenceService {
       if (legacyStore.exists()) {
         _logger.info('Using legacy settings. Will migrate in the next step.');
         SharedPreferencesStorePlatform.instance = legacyStore;
+        usingLegacyStore = true;
       } else {
         SharedPreferencesStorePlatform.instance = SharedPreferencesFile(filePath: _windowsFile);
       }
@@ -112,13 +119,14 @@ class PersistenceService {
     final bool isFirstAppStart;
     final existingVersion = (await SharedPreferencesStorePlatform.instance.getAll())['flutter.$_version'] as int?;
     _logger.info('Existing version: $existingVersion');
-    if (existingVersion == null) {
+    if (existingVersion == null && !usingLegacyStore) {
       isFirstAppStart = true;
       await SharedPreferencesStorePlatform.instance.setValue('Int', 'flutter.$_version', _latestVersion);
     } else {
       isFirstAppStart = false;
-      if (existingVersion < _latestVersion) {
-        await _runMigrations(existingVersion);
+      final fromVersion = existingVersion ?? 1;
+      if (fromVersion < _latestVersion) {
+        await _runMigrations(fromVersion);
       }
     }
 
@@ -137,9 +145,9 @@ class PersistenceService {
     // Locale configuration upon persistence initialisation to prevent unlocalised Alias generation
     final persistedLocale = prefs.getString(_localeKey);
     if (persistedLocale == null) {
-      LocaleSettings.useDeviceLocale();
+      await LocaleSettings.useDeviceLocale();
     } else {
-      LocaleSettings.setLocaleRaw(persistedLocale);
+      await LocaleSettings.setLocaleRaw(persistedLocale);
     }
 
     if (prefs.getString(_showToken) == null) {
@@ -154,7 +162,6 @@ class PersistenceService {
       await prefs.setString(_securityContext, jsonEncode(generateSecurityContext()));
     }
 
-    final supportsDynamicColors = dynamicColors != null;
     if (prefs.getString(_colorKey) == null) {
       await _initColorSetting(prefs, supportsDynamicColors);
     } else {
@@ -181,7 +188,9 @@ class PersistenceService {
 
   static Future<void> _initColorSetting(SharedPreferences prefs, bool supportsDynamicColors) async {
     await prefs.setString(
-        _colorKey, checkPlatform([TargetPlatform.android]) && supportsDynamicColors ? ColorMode.system.name : ColorMode.localsend.name);
+      _colorKey,
+      checkPlatform([TargetPlatform.android]) && supportsDynamicColors ? ColorMode.system.name : ColorMode.localsend.name,
+    );
   }
 
   bool isPortableMode() {
@@ -329,12 +338,28 @@ class PersistenceService {
     await _prefs.setBool(_saveToHistory, saveToHistory);
   }
 
+  bool getAdvancedSettingsEnabled() {
+    return _prefs.getBool(_advancedSettingsKey) ?? false;
+  }
+
+  Future<void> setAdvancedSettingsEnabled(bool isEnabled) async {
+    await _prefs.setBool(_advancedSettingsKey, isEnabled);
+  }
+
   bool isQuickSave() {
     return _prefs.getBool(_quickSave) ?? false;
   }
 
   Future<void> setQuickSave(bool quickSave) async {
     await _prefs.setBool(_quickSave, quickSave);
+  }
+
+  bool isQuickSaveFromFavorites() {
+    return _prefs.getBool(_quickSaveFromFavorites) ?? false;
+  }
+
+  Future<void> setQuickSaveFromFavorites(bool quickSaveFromFavorites) async {
+    await _prefs.setBool(_quickSaveFromFavorites, quickSaveFromFavorites);
   }
 
   String? getReceivePin() {
