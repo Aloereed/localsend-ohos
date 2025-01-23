@@ -56,7 +56,7 @@ Future<DeviceInfoResult> getDeviceInfo() async {
         break;
       case TargetPlatform.ohos:
         final deviceInfo = await plugin.ohosInfo;
-        deviceModel = deviceInfo.productModel;
+        deviceModel = deviceInfo.marketName;
         break;
       case TargetPlatform.linux:
         deviceModel = 'Linux';

@@ -55,9 +55,7 @@ dependency_overrides:
       path: packages/connectivity_plus/connectivity_plus
       url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
   device_info_plus:
-    git:
-      path: packages/device_info_plus/device_info_plus
-      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+    path: ./device_info_plus/device_info_plus
   file_picker:
     git:
       url: https://gitee.com/openharmony-sig/fluttertpc_file_picker.git

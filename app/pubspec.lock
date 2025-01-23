@@ -332,11 +332,9 @@ packages:
   device_info_plus:
     dependency: "direct overridden"
     description:
-      path: "packages/device_info_plus/device_info_plus"
-      ref: HEAD
-      resolved-ref: c361adfe56bd39e43521929c88aef80e096b1243
-      url: "https://gitee.com/openharmony-sig/flutter_plus_plugins.git"
-    source: git
+      path: "device_info_plus/device_info_plus"
+      relative: true
+    source: path
     version: "9.1.0"
   device_info_plus_platform_interface:
     dependency: transitive
