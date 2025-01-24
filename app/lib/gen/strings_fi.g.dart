@@ -33,7 +33,7 @@ class TranslationsFi extends Translations {
   @override
   String get locale => 'Finnish';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'LocalSend';
   @override
   late final _TranslationsGeneralFi general = _TranslationsGeneralFi._(_root);
   @override
@@ -142,6 +142,8 @@ class _TranslationsGeneralFi extends TranslationsGeneralEn {
   @override
   String get quickSave => 'Pikatallennus';
   @override
+  String get quickSaveFromFavorites => 'Pikatallennus suosikeiksi';
+  @override
   String get renamed => 'Nimetty uudelleen';
   @override
   String get reset => 'Nollaa';
@@ -178,6 +180,8 @@ class _TranslationsReceiveTabFi extends TranslationsReceiveTabEn {
   String get title => 'Ota Vastaan';
   @override
   late final _TranslationsReceiveTabInfoBoxFi infoBox = _TranslationsReceiveTabInfoBoxFi._(_root);
+  @override
+  late final _TranslationsReceiveTabQuickSaveFi quickSave = _TranslationsReceiveTabQuickSaveFi._(_root);
 }
 
 // Path: sendTab
@@ -203,6 +207,8 @@ class _TranslationsSendTabFi extends TranslationsSendTabEn {
   String get thisDevice => 'Tämä laite';
   @override
   String get scan => 'Etsi laitteita';
+  @override
+  String get manualSending => 'Manuaalinen lähetys';
   @override
   String get sendMode => 'Lähetystapa';
   @override
@@ -259,6 +265,8 @@ class _TranslationsTroubleshootPageFi extends TranslationsTroubleshootPageEn {
   String get fixButton => 'Automaattinen korjaus';
   @override
   late final _TranslationsTroubleshootPageFirewallFi firewall = _TranslationsTroubleshootPageFirewallFi._(_root);
+  @override
+  late final _TranslationsTroubleshootPageNoDiscoveryFi noDiscovery = _TranslationsTroubleshootPageNoDiscoveryFi._(_root);
   @override
   late final _TranslationsTroubleshootPageNoConnectionFi noConnection = _TranslationsTroubleshootPageNoConnectionFi._(_root);
 }
@@ -353,7 +361,7 @@ class _TranslationsReceiveOptionsPageFi extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(AloeChat.AI-kansio)';
+  String get appDirectory => '(LocalSend-kansio)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -428,7 +436,11 @@ class _TranslationsWebSharePageFi extends TranslationsWebSharePageEn {
   @override
   String get autoAccept => 'Hyväksy pyynnöt automaattisesti';
   @override
-  String get encryptionHint => 'AloeChat.AI käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi.';
+  String get requirePin => 'Vaadi PIN';
+  @override
+  String pinHint({required Object pin}) => 'PIN-koodi on "${pin}"';
+  @override
+  String get encryptionHint => 'LocalSend käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi.';
   @override
   String pendingRequests({required Object n}) => 'Odottavat pyynnöt: ${n}';
 }
@@ -443,16 +455,18 @@ class _TranslationsAboutPageFi extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Tietoja AloeChat.AIista';
+  String get title => 'Tietoja LocalSendista';
   @override
   List<String> get description => [
-        'AloeChat.AI on ilmainen, avoimen lähdekoodin sovellus, jonka avulla voit turvallisesti jakaa tiedostoja ja viestejä läheisten laitteiden kanssa paikallisverkossasi ilman internet-yhteyttä.',
+        'LocalSend on ilmainen, avoimen lähdekoodin sovellus, jonka avulla voit turvallisesti jakaa tiedostoja ja viestejä läheisten laitteiden kanssa paikallisverkossasi ilman internet-yhteyttä.',
         'Tämä sovellus on saatavilla Androidille, iOS:lle, macOS:lle, Windowsille ja Linuxille. Kaikki latausvaihtoehdot löytyvät virallisilta kotisivuilta.',
       ];
   @override
   String get author => 'Tekijä';
   @override
   String get contributors => 'Avustajat';
+  @override
+  String get packagers => 'Pakkaajat';
   @override
   String get translators => 'Kääntäjät';
 }
@@ -470,7 +484,7 @@ class _TranslationsDonationPageFi extends TranslationsDonationPageEn {
   String get title => 'Lahjoita';
   @override
   String get info =>
-      'AloeChat.AI on ilmainen, avoimen lähdekoodin sovellus ilman mainoksia. Jos pidät sovelluksesta, voit tukea kehitystä lahjoituksella.';
+      'LocalSend on ilmainen, avoimen lähdekoodin sovellus ilman mainoksia. Jos pidät sovelluksesta, voit tukea kehitystä lahjoituksella.';
   @override
   String donate({required Object amount}) => 'Lahjoita ${amount}';
   @override
@@ -596,6 +610,8 @@ class _TranslationsDialogsFi extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsAddFileFi addFile = _TranslationsDialogsAddFileFi._(_root);
   @override
+  late final _TranslationsDialogsOpenFileFi openFile = _TranslationsDialogsOpenFileFi._(_root);
+  @override
   late final _TranslationsDialogsAddressInputFi addressInput = _TranslationsDialogsAddressInputFi._(_root);
   @override
   late final _TranslationsDialogsCancelSessionFi cancelSession = _TranslationsDialogsCancelSessionFi._(_root);
@@ -634,6 +650,11 @@ class _TranslationsDialogsFi extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsQuickSaveNoticeFi quickSaveNotice = _TranslationsDialogsQuickSaveNoticeFi._(_root);
   @override
+  late final _TranslationsDialogsQuickSaveFromFavoritesNoticeFi quickSaveFromFavoritesNotice =
+      _TranslationsDialogsQuickSaveFromFavoritesNoticeFi._(_root);
+  @override
+  late final _TranslationsDialogsPinFi pin = _TranslationsDialogsPinFi._(_root);
+  @override
   late final _TranslationsDialogsSendModeHelpFi sendModeHelp = _TranslationsDialogsSendModeHelpFi._(_root);
   @override
   late final _TranslationsDialogsZoomFi zoom = _TranslationsDialogsZoomFi._(_root);
@@ -666,7 +687,9 @@ class _TranslationsTrayFi extends TranslationsTrayEn {
   @override
   String get open => 'Avaa';
   @override
-  String get close => 'Lopeta AloeChat.AI';
+  String get close => 'Lopeta LocalSend';
+  @override
+  String get closeWindows => 'Poistu';
 }
 
 // Path: web
@@ -680,6 +703,12 @@ class _TranslationsWebFi extends TranslationsWebEn {
   // Translations
   @override
   String get waiting => 'Odotetaan vastausta...';
+  @override
+  String get enterPin => 'Syötä PIN-koodi';
+  @override
+  String get invalidPin => 'Virheellinen PIN-koodi';
+  @override
+  String get tooManyAttempts => 'Liian monta yritystä';
   @override
   String get rejected => 'Hylätty';
   @override
@@ -775,6 +804,19 @@ class _TranslationsReceiveTabInfoBoxFi extends TranslationsReceiveTabInfoBoxEn {
   String get alias => 'Laitteen nimi:';
 }
 
+// Path: receiveTab.quickSave
+class _TranslationsReceiveTabQuickSaveFi extends TranslationsReceiveTabQuickSaveEn {
+  _TranslationsReceiveTabQuickSaveFi._(TranslationsFi root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFi _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get favorites => 'Suosikit';
+}
+
 // Path: sendTab.selection
 class _TranslationsSendTabSelectionFi extends TranslationsSendTabSelectionEn {
   _TranslationsSendTabSelectionFi._(TranslationsFi root)
@@ -858,11 +900,15 @@ class _TranslationsSettingsTabGeneralFi extends TranslationsSettingsTabGeneralEn
   @override
   String get saveWindowPlacement => 'Poistu: Tallenna ikkunan sijainti';
   @override
+  String get saveWindowPlacementWindows => 'Tallenna ikkunan sijainti poistumisen jälkeen';
+  @override
   String get minimizeToTray => 'Poistu: Minimoi ilmoitusalueelle';
   @override
   String get launchAtStartup => 'Automaattinen käynnistys';
   @override
   String get launchMinimized => 'Automaattinen käynnistys: Käynnistä piiilotettuna';
+  @override
+  String get showInContextMenu => 'Näytä LocalSend kontekstivalikossa';
   @override
   String get animations => 'Animaatiot';
 }
@@ -919,7 +965,7 @@ class _TranslationsSettingsTabNetworkFi extends TranslationsSettingsTabNetworkEn
   @override
   String get title => 'Verkko';
   @override
-  String get needRestart => 'UUdelleenkäynistä sovellus, jotta muutokset tallennetaan.';
+  String get needRestart => 'Uudelleenkäynistä sovellus, jotta muutokset tallennetaan.';
   @override
   String get server => 'Palvelin';
   @override
@@ -932,6 +978,10 @@ class _TranslationsSettingsTabNetworkFi extends TranslationsSettingsTabNetworkEn
   String get port => 'Portti';
   @override
   String get discoveryTimeout => 'Laitteiden etsintäaika';
+  @override
+  String get useSystemName => 'Käytä järjestelmän nimeä';
+  @override
+  String get generateRandomAlias => 'Luo satunnainen alias';
   @override
   String portWarning({required Object defaultPort}) =>
       'Sinua ei ehkä havaita muiden laitteiden toimesta, koska käytät mukautettua porttia. (oletus: ${defaultPort})';
@@ -956,7 +1006,7 @@ class _TranslationsSettingsTabOtherFi extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Muut';
   @override
-  String get support => 'Tue AloeChat.AIia';
+  String get support => 'Tue LocalSendia';
   @override
   String get donate => 'Lahjoita';
   @override
@@ -982,6 +1032,22 @@ class _TranslationsTroubleshootPageFirewallFi extends TranslationsTroubleshootPa
       'Tämä on todennäköisesti palomuuriongelma. Voit ratkaista tämän sallimalla saapuvat yhteydet (UDP ja TCP) porttiin ${port}.';
   @override
   String get openFirewall => 'Avaa palomuuri';
+}
+
+// Path: troubleshootPage.noDiscovery
+class _TranslationsTroubleshootPageNoDiscoveryFi extends TranslationsTroubleshootPageNoDiscoveryEn {
+  _TranslationsTroubleshootPageNoDiscoveryFi._(TranslationsFi root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFi _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get symptom => 'Tämä laite ei pysty löytämään muita laitteita.';
+  @override
+  String get solution =>
+      'Varmista, että kaikki laitteet ovat samassa Wi-Fi-verkossa ja jakavat saman kokoonpanon (portti, monilähetysosoite, salaus). Voit yrittää kirjoittaa kohdelaitteen IP-osoitteen manuaalisesti. Jos tämä toimii, harkitse tämän laitteen lisäämistä suosikkeihin, jotta se voidaan löytää automaattisesti tulevaisuudessa.';
 }
 
 // Path: troubleshootPage.noConnection
@@ -1011,6 +1077,8 @@ class _TranslationsReceiveHistoryPageEntryActionsFi extends TranslationsReceiveH
   // Translations
   @override
   String get open => 'Avaa tiedosto';
+  @override
+  String get showInFolder => 'Näytä kansiossa';
   @override
   String get info => 'Tiedot';
   @override
@@ -1049,6 +1117,21 @@ class _TranslationsDialogsAddFileFi extends TranslationsDialogsAddFileEn {
   String get title => 'Lisää valintaan';
   @override
   String get content => 'Mitä haluat lisätä?';
+}
+
+// Path: dialogs.openFile
+class _TranslationsDialogsOpenFileFi extends TranslationsDialogsOpenFileEn {
+  _TranslationsDialogsOpenFileFi._(TranslationsFi root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFi _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Avaa tiedosto';
+  @override
+  String get content => 'Haluatko avata vastaanotetun tiedoston?';
 }
 
 // Path: dialogs.addressInput
@@ -1248,7 +1331,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedFi extends TranslationsDialogs
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => 'AloeChat.AI ei löydä muita laitteita ilman lupaa skannata paikallisverkkoa. Anna tämä lupa asetuksissa.';
+  String get description => 'LocalSend ei löydä muita laitteita ilman lupaa skannata paikallisverkkoa. Anna tämä lupa asetuksissa.';
   @override
   String get gotoSettings => 'Asetukset';
 }
@@ -1364,6 +1447,36 @@ class _TranslationsDialogsQuickSaveNoticeFi extends TranslationsDialogsQuickSave
   String get content => 'Tiedostopyynnöt hyväksytään automaattisesti. Huomaa, että kuka tahansa paikallisverkossa voi lähettää sinulle tiedostoja.';
 }
 
+// Path: dialogs.quickSaveFromFavoritesNotice
+class _TranslationsDialogsQuickSaveFromFavoritesNoticeFi extends TranslationsDialogsQuickSaveFromFavoritesNoticeEn {
+  _TranslationsDialogsQuickSaveFromFavoritesNoticeFi._(TranslationsFi root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFi _root; // ignore: unused_field
+
+  // Translations
+  @override
+  List<String> get content => [
+        'Tiedostopyynnöt hyväksytään nyt automaattisesti suosikkiluettelossasi olevilta laitteilta.',
+        'Varoitus! Tällä hetkellä tämä ei ole täysin turvallista, koska hakkeri, jolla on minkä tahansa suosikkiluettelosi laitteen sormenjälki, voi lähettää sinulle tiedostoja ilman rajoituksia.',
+        'Tämä vaihtoehto on kuitenkin turvallisempi kuin sallia kaikkien paikallisverkon käyttäjien lähettää sinulle tiedostoja ilman rajoituksia.',
+      ];
+}
+
+// Path: dialogs.pin
+class _TranslationsDialogsPinFi extends TranslationsDialogsPinEn {
+  _TranslationsDialogsPinFi._(TranslationsFi root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsFi _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Syötä PIN-koodi';
+}
+
 // Path: dialogs.sendModeHelp
 class _TranslationsDialogsSendModeHelpFi extends TranslationsDialogsSendModeHelpEn {
   _TranslationsDialogsSendModeHelpFi._(TranslationsFi root)
@@ -1380,7 +1493,7 @@ class _TranslationsDialogsSendModeHelpFi extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Lähettää tiedostoja useille vastaanottajille. Valinta ei tyhjene.';
   @override
-  String get link => 'Vastaanottajat, joilla ei ole AloeChat.AIia asennettuna, voivat ladata valitut tiedostot avaamalla linkin selaimessaan.';
+  String get link => 'Vastaanottajat, joilla ei ole LocalSendia asennettuna, voivat ladata valitut tiedostot avaamalla linkin selaimessaan.';
 }
 
 // Path: dialogs.zoom

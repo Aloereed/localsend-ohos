@@ -33,7 +33,7 @@ class TranslationsEl extends Translations {
   @override
   String get locale => 'Ελληνικά';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'LocalSend';
   @override
   late final _TranslationsGeneralEl general = _TranslationsGeneralEl._(_root);
   @override
@@ -128,11 +128,11 @@ class _TranslationsGeneralEl extends TranslationsGeneralEn {
   @override
   String get hide => 'Απόκρυψη';
   @override
-  String get off => 'Απενεργοποίηση';
+  String get off => 'Ανενεργή';
   @override
   String get offline => 'Εκτός σύνδεσης';
   @override
-  String get on => 'Ενεργοποίηση';
+  String get on => 'Ενεργή';
   @override
   String get online => 'Σε σύνδεση';
   @override
@@ -141,6 +141,8 @@ class _TranslationsGeneralEl extends TranslationsGeneralEn {
   String get queue => 'Ουρά';
   @override
   String get quickSave => 'Γρήγορη Αποθήκευση';
+  @override
+  String get quickSaveFromFavorites => 'Γρήγορη Αποθήκευση των "Αγαπημένων"';
   @override
   String get renamed => 'Μετονομάστηκε';
   @override
@@ -163,8 +165,6 @@ class _TranslationsGeneralEl extends TranslationsGeneralEn {
   String get unknown => 'Αγνωστο';
   @override
   String get noItemInClipboard => 'Κανένα στοιχείο στο Πρόχειρο';
-  @override
-  String get quickSaveFromFavorites => 'Γρήγορη Αποθήκευση των "Αγαπημένων"';
 }
 
 // Path: receiveTab
@@ -209,6 +209,8 @@ class _TranslationsSendTabEl extends TranslationsSendTabEn {
   @override
   String get scan => 'Αναζήτηση για συσκευές';
   @override
+  String get manualSending => 'Χειροκίνητη αποστολή';
+  @override
   String get sendMode => 'Λειτουργία αποστολής';
   @override
   late final _TranslationsSendTabSendModesEl sendModes = _TranslationsSendTabSendModesEl._(_root);
@@ -218,8 +220,6 @@ class _TranslationsSendTabEl extends TranslationsSendTabEn {
   String get help => 'Βεβαιωθείτε ότι ο επιθυμητός παραλήπτης βρίσκεται επίσης στο ίδιο δίκτυο Wi-Fi.';
   @override
   String get placeItems => 'Τοποθετήστε στοιχεία για διαμοιρασμό.';
-  @override
-  String get manualSending => 'Χειροκίνητη αποστολή';
 }
 
 // Path: settingsTab
@@ -267,9 +267,9 @@ class _TranslationsTroubleshootPageEl extends TranslationsTroubleshootPageEn {
   @override
   late final _TranslationsTroubleshootPageFirewallEl firewall = _TranslationsTroubleshootPageFirewallEl._(_root);
   @override
-  late final _TranslationsTroubleshootPageNoConnectionEl noConnection = _TranslationsTroubleshootPageNoConnectionEl._(_root);
-  @override
   late final _TranslationsTroubleshootPageNoDiscoveryEl noDiscovery = _TranslationsTroubleshootPageNoDiscoveryEl._(_root);
+  @override
+  late final _TranslationsTroubleshootPageNoConnectionEl noConnection = _TranslationsTroubleshootPageNoConnectionEl._(_root);
 }
 
 // Path: receiveHistoryPage
@@ -362,7 +362,7 @@ class _TranslationsReceiveOptionsPageEl extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(Φάκελος AloeChat.AI)';
+  String get appDirectory => '(Φάκελος LocalSend)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -383,9 +383,9 @@ class _TranslationsSendPageEl extends TranslationsSendPageEn {
   @override
   String get rejected => 'Ο παραλήπτης απέρριψε το αίτημα.';
   @override
-  String get busy => 'Ο παραλήπτης είναι απασχολημένος με άλλο αίτημα.';
-  @override
   String get tooManyAttempts => _root.web.tooManyAttempts;
+  @override
+  String get busy => 'Ο παραλήπτης είναι απασχολημένος με άλλο αίτημα.';
 }
 
 // Path: progressPage
@@ -439,13 +439,13 @@ class _TranslationsWebSharePageEl extends TranslationsWebSharePageEn {
   @override
   String get autoAccept => 'Αυτόματη αποδοχή αιτημάτων';
   @override
-  String get encryptionHint => 'Το AloeChat.AI χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή.';
-  @override
-  String pendingRequests({required Object n}) => 'Αναμονή αιτημάτων: ${n}';
-  @override
   String get requirePin => 'Απαίτηση PIN';
   @override
   String pinHint({required Object pin}) => 'Το PIN είναι "${pin}"';
+  @override
+  String get encryptionHint => 'Το LocalSend χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή.';
+  @override
+  String pendingRequests({required Object n}) => 'Αναμονή αιτημάτων: ${n}';
 }
 
 // Path: aboutPage
@@ -458,10 +458,10 @@ class _TranslationsAboutPageEl extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Σχετικά με το AloeChat.AI';
+  String get title => 'Σχετικά με το LocalSend';
   @override
   List<String> get description => [
-        'Το AloeChat.AI είναι μια δωρεάν εφαρμογή ανοιχτού κώδικα που σας επιτρέπει να μοιράζεστε με ασφάλεια αρχεία και μηνύματα με κοντινές συσκευές μέσω του τοπικού σας δικτύου χωρίς να χρειάζεστε σύνδεση στο διαδίκτυο.',
+        'Το LocalSend είναι μια δωρεάν εφαρμογή ανοιχτού κώδικα που σας επιτρέπει να μοιράζεστε με ασφάλεια αρχεία και μηνύματα με κοντινές συσκευές μέσω του τοπικού σας δικτύου χωρίς να χρειάζεστε σύνδεση στο διαδίκτυο.',
         'Αυτή η εφαρμογή είναι διαθέσιμη σε Android, iOS, macOS, Windows και Linux. Μπορείτε να βρείτε όλες τις επιλογές λήψης στην επίσημη αρχική σελίδα.',
       ];
   @override
@@ -469,9 +469,9 @@ class _TranslationsAboutPageEl extends TranslationsAboutPageEn {
   @override
   String get contributors => 'Συντελεστές';
   @override
-  String get translators => 'Μεταφραστές';
-  @override
   String get packagers => 'Συσκευαστές';
+  @override
+  String get translators => 'Μεταφραστές';
 }
 
 // Path: donationPage
@@ -487,13 +487,13 @@ class _TranslationsDonationPageEl extends TranslationsDonationPageEn {
   String get title => 'Δωρεά';
   @override
   String get info =>
-      'Το AloeChat.AI είναι δωρεάν, ανοιχτού κώδικα και χωρίς διαφημίσεις. Εάν σας αρέσει η εφαρμογή, μπορείτε να υποστηρίξετε την ανάπτυξή της με μια δωρεά.';
+      'Το LocalSend είναι δωρεάν, ανοιχτού κώδικα και χωρίς διαφημίσεις. Εάν σας αρέσει η εφαρμογή, μπορείτε να υποστηρίξετε την ανάπτυξή της με μια δωρεά.';
   @override
   String donate({required Object amount}) => 'Δωρεά ${amount}';
   @override
   String get thanks => 'Ευχαριστούμε πολύ!';
   @override
-  String get restore => 'Ε[παναφορά αγοράς';
+  String get restore => 'Επαναφορά αγοράς';
 }
 
 // Path: changelogPage
@@ -606,6 +606,8 @@ class _TranslationsDialogsEl extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsAddFileEl addFile = _TranslationsDialogsAddFileEl._(_root);
   @override
+  late final _TranslationsDialogsOpenFileEl openFile = _TranslationsDialogsOpenFileEl._(_root);
+  @override
   late final _TranslationsDialogsAddressInputEl addressInput = _TranslationsDialogsAddressInputEl._(_root);
   @override
   late final _TranslationsDialogsCancelSessionEl cancelSession = _TranslationsDialogsCancelSessionEl._(_root);
@@ -644,14 +646,12 @@ class _TranslationsDialogsEl extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsQuickSaveNoticeEl quickSaveNotice = _TranslationsDialogsQuickSaveNoticeEl._(_root);
   @override
-  late final _TranslationsDialogsSendModeHelpEl sendModeHelp = _TranslationsDialogsSendModeHelpEl._(_root);
-  @override
-  late final _TranslationsDialogsOpenFileEl openFile = _TranslationsDialogsOpenFileEl._(_root);
-  @override
   late final _TranslationsDialogsQuickSaveFromFavoritesNoticeEl quickSaveFromFavoritesNotice =
       _TranslationsDialogsQuickSaveFromFavoritesNoticeEl._(_root);
   @override
   late final _TranslationsDialogsPinEl pin = _TranslationsDialogsPinEl._(_root);
+  @override
+  late final _TranslationsDialogsSendModeHelpEl sendModeHelp = _TranslationsDialogsSendModeHelpEl._(_root);
   @override
   late final _TranslationsDialogsZoomEl zoom = _TranslationsDialogsZoomEl._(_root);
 }
@@ -683,7 +683,7 @@ class _TranslationsTrayEl extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Έξοδος από το AloeChat.AI';
+  String get close => 'Έξοδος από το LocalSend';
   @override
   String get closeWindows => 'Έξοδος';
 }
@@ -700,6 +700,12 @@ class _TranslationsWebEl extends TranslationsWebEn {
   @override
   String get waiting => _root.sendPage.waiting;
   @override
+  String get enterPin => 'Εισαγωγή PIN';
+  @override
+  String get invalidPin => 'Μη έγκυρο PIN';
+  @override
+  String get tooManyAttempts => 'Πάρα πολλές προσπάθειες';
+  @override
   String get rejected => 'Απορρίφθηκε';
   @override
   String get files => 'Αρχεία';
@@ -707,12 +713,6 @@ class _TranslationsWebEl extends TranslationsWebEn {
   String get fileName => 'Όνομα αρχείου';
   @override
   String get size => 'Μέγεθος';
-  @override
-  String get enterPin => 'Εισαγωγή PIN';
-  @override
-  String get invalidPin => 'Μη έγκυρο PIN';
-  @override
-  String get tooManyAttempts => 'Πάρα πολλές προσπάθειες';
 }
 
 // Path: assetPicker
@@ -900,17 +900,17 @@ class _TranslationsSettingsTabGeneralEl extends TranslationsSettingsTabGeneralEn
   @override
   String get saveWindowPlacement => 'Έξοδος: Αποθήκευση θέσης παραθύρου';
   @override
+  String get saveWindowPlacementWindows => 'Αποθήκευση της θέσης του παραθύρου κατά την έξοδο';
+  @override
   String get minimizeToTray => 'Έξοδος: Ελαχιστοποίηση στη γραμμή εργασιών/μενού';
   @override
   String get launchAtStartup => 'Αυτόματη εκκίνηση μετά τη σύνδεση';
   @override
   String get launchMinimized => 'Αυτόματη εκκίνηση: Έναρξη ελαχιστοποιημένο';
   @override
+  String get showInContextMenu => 'Προβολή του LocalSend στο μενού του περιβάλλοντος εργασίας';
+  @override
   String get animations => 'Οπτικά εφέ';
-  @override
-  String get saveWindowPlacementWindows => 'Αποθήκευση της θέσης του παραθύρου κατά την έξοδο';
-  @override
-  String get showInContextMenu => 'Προβολή του AloeChat.AI στο μενού του περιβάλλοντος εργασίας';
 }
 
 // Path: settingsTab.receive
@@ -927,6 +927,10 @@ class _TranslationsSettingsTabReceiveEl extends TranslationsSettingsTabReceiveEn
   @override
   String get quickSave => _root.general.quickSave;
   @override
+  String get quickSaveFromFavorites => _root.general.quickSaveFromFavorites;
+  @override
+  String get requirePin => _root.webSharePage.requirePin;
+  @override
   String get autoFinish => 'Αυτόματη ολοκλήρωση';
   @override
   String get destination => 'Προορισμός';
@@ -936,10 +940,6 @@ class _TranslationsSettingsTabReceiveEl extends TranslationsSettingsTabReceiveEn
   String get saveToGallery => 'Αποθήκευση μέσου στη συλλογή';
   @override
   String get saveToHistory => 'Αποθήκευση στο ιστορικό';
-  @override
-  String get quickSaveFromFavorites => _root.general.quickSaveFromFavorites;
-  @override
-  String get requirePin => _root.webSharePage.requirePin;
 }
 
 // Path: settingsTab.send
@@ -981,6 +981,12 @@ class _TranslationsSettingsTabNetworkEl extends TranslationsSettingsTabNetworkEn
   @override
   String get port => 'Θύρα';
   @override
+  String get discoveryTimeout => 'Λήξη χρόνου ανακάλυψης';
+  @override
+  String get useSystemName => 'Χρήση του ονόματος του συστήματος';
+  @override
+  String get generateRandomAlias => 'Δημιουργία τυχαίου ψευδώνυμου';
+  @override
   String portWarning({required Object defaultPort}) =>
       'Ενδέχεται να μην εντοπιστείτε από άλλες συσκευές επειδή χρησιμοποιείτε μια προσαρμοσμένη θύρα. (προεπιλογή: ${defaultPort})';
   @override
@@ -990,12 +996,6 @@ class _TranslationsSettingsTabNetworkEl extends TranslationsSettingsTabNetworkEn
   @override
   String multicastGroupWarning({required Object defaultMulticast}) =>
       'Ενδέχεται να μην εντοπιστείτε από άλλες συσκευές επειδή χρησιμοποιείτε μια προσαρμοσμένη διεύθυνση αναμετάδοσης. (προεπιλογή: ${defaultMulticast})';
-  @override
-  String get discoveryTimeout => 'Λήξη χρόνου ανακάλυψης';
-  @override
-  String get useSystemName => 'Χρήση του ονόματος του συστήματος';
-  @override
-  String get generateRandomAlias => 'Δημιουργία τυχαίου ψευδώνυμου';
 }
 
 // Path: settingsTab.other
@@ -1010,7 +1010,7 @@ class _TranslationsSettingsTabOtherEl extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Άλλα';
   @override
-  String get support => 'Υποστηρίξτε το AloeChat.AI';
+  String get support => 'Υποστηρίξτε το LocalSend';
   @override
   String get donate => 'Δωρεά';
   @override
@@ -1038,22 +1038,6 @@ class _TranslationsTroubleshootPageFirewallEl extends TranslationsTroubleshootPa
   String get openFirewall => 'Άνοιγμα Τείχους Προστασίας';
 }
 
-// Path: troubleshootPage.noConnection
-class _TranslationsTroubleshootPageNoConnectionEl extends TranslationsTroubleshootPageNoConnectionEn {
-  _TranslationsTroubleshootPageNoConnectionEl._(TranslationsEl root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsEl _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get symptom => 'Και οι δύο συσκευές δεν μπορούν να ανακαλύψουν η μία την άλλη ούτε μπορούν να μοιραστούν αρχεία.';
-  @override
-  String get solution =>
-      'Υπάρχει το πρόβλημα και από τις δύο πλευρές; Πρέπει να βεβαιωθείτε ότι και οι δύο συσκευές βρίσκονται στο ίδιο δίκτυο Wi-Fi και μοιράζονται την ίδια διαμόρφωση (θύρα, διεύθυνση αναμετάδοσης, κρυπτογράφηση). Το wifi ενδέχεται να μην επιτρέπει την επικοινωνία μεταξύ των συμμετεχόντων. Σε αυτήν την περίπτωση, αυτή η επιλογή πρέπει να είναι ενεργοποιημένη στο δρομολογητή.';
-}
-
 // Path: troubleshootPage.noDiscovery
 class _TranslationsTroubleshootPageNoDiscoveryEl extends TranslationsTroubleshootPageNoDiscoveryEn {
   _TranslationsTroubleshootPageNoDiscoveryEl._(TranslationsEl root)
@@ -1070,6 +1054,22 @@ class _TranslationsTroubleshootPageNoDiscoveryEl extends TranslationsTroubleshoo
       'Βεβαιωθείτε ότι όλες οι συσκευές βρίσκονται στο ίδιο δίκτυο Wi-Fi και μοιράζονται την ίδια διαμόρφωση (θύρα, διεύθυνση multicast, κρυπτογράφηση). Μπορείτε να προσπαθήσετε να πληκτρολογήσετε τη διεύθυνση IP της συσκευής προορισμού με μη αυτόματο τρόπο. Εάν αυτό λειτουργεί, εξετάστε το ενδεχόμενο να προσθέσετε αυτήν τη συσκευή στα αγαπημένα, ώστε να μπορεί να ανακαλυφθεί αυτόματα στο μέλλον.';
 }
 
+// Path: troubleshootPage.noConnection
+class _TranslationsTroubleshootPageNoConnectionEl extends TranslationsTroubleshootPageNoConnectionEn {
+  _TranslationsTroubleshootPageNoConnectionEl._(TranslationsEl root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEl _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get symptom => 'Και οι δύο συσκευές δεν μπορούν να ανακαλύψουν η μία την άλλη ούτε μπορούν να μοιραστούν αρχεία.';
+  @override
+  String get solution =>
+      'Υπάρχει το πρόβλημα και από τις δύο πλευρές; Πρέπει να βεβαιωθείτε ότι και οι δύο συσκευές βρίσκονται στο ίδιο δίκτυο Wi-Fi και μοιράζονται την ίδια διαμόρφωση (θύρα, διεύθυνση αναμετάδοσης, κρυπτογράφηση). Το wifi ενδέχεται να μην επιτρέπει την επικοινωνία μεταξύ των συμμετεχόντων. Σε αυτήν την περίπτωση, αυτή η επιλογή πρέπει να είναι ενεργοποιημένη στο δρομολογητή.';
+}
+
 // Path: receiveHistoryPage.entryActions
 class _TranslationsReceiveHistoryPageEntryActionsEl extends TranslationsReceiveHistoryPageEntryActionsEn {
   _TranslationsReceiveHistoryPageEntryActionsEl._(TranslationsEl root)
@@ -1082,11 +1082,11 @@ class _TranslationsReceiveHistoryPageEntryActionsEl extends TranslationsReceiveH
   @override
   String get open => 'Άνοιγμα αρχείου';
   @override
+  String get showInFolder => 'Προβολή στον φάκελο';
+  @override
   String get info => 'Πληροφορίες';
   @override
   String get deleteFromHistory => 'Διαγραφή από το ιστορικό';
-  @override
-  String get showInFolder => 'Προβολή στον φάκελο';
 }
 
 // Path: progressPage.total
@@ -1121,6 +1121,21 @@ class _TranslationsDialogsAddFileEl extends TranslationsDialogsAddFileEn {
   String get title => 'Προσθήκη στις επιλογές';
   @override
   String get content => 'Τι θέλετε να προστεθεί;';
+}
+
+// Path: dialogs.openFile
+class _TranslationsDialogsOpenFileEl extends TranslationsDialogsOpenFileEn {
+  _TranslationsDialogsOpenFileEl._(TranslationsEl root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEl _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Άνοιγμα αρχείου';
+  @override
+  String get content => 'Θέλετε να ανοιχτεί το ληφθέν αρχείο;';
 }
 
 // Path: dialogs.addressInput
@@ -1322,7 +1337,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedEl extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'AloeChat.AI can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
+      'LocalSend can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
   @override
   String get gotoSettings => 'Ρυθμίσεις';
 }
@@ -1438,41 +1453,6 @@ class _TranslationsDialogsQuickSaveNoticeEl extends TranslationsDialogsQuickSave
   String get content => 'Τα αιτήματα αρχείων γίνονται αυτόματα δεκτά. Έχετε υπόψη σας ότι όλοι στο τοπικό δίκτυο μπορούν να σας στείλουν αρχεία.';
 }
 
-// Path: dialogs.sendModeHelp
-class _TranslationsDialogsSendModeHelpEl extends TranslationsDialogsSendModeHelpEn {
-  _TranslationsDialogsSendModeHelpEl._(TranslationsEl root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsEl _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => 'Λειτουργίες αποστολής';
-  @override
-  String get single => 'Στέλνει αρχεία σε έναν παραλήπτη. Η επιλογή θα διαγραφεί μετά την ολοκλήρωση της μεταφοράς του αρχείου.';
-  @override
-  String get multiple => 'Στέλνει αρχεία σε πολλούς παραλήπτες. Η επιλογή δεν θα διαγραφεί.';
-  @override
-  String get link =>
-      'Οι παραλήπτες που δεν έχουν εγκαταστήσει το AloeChat.AI μπορούν να πραγματοποιήσουν λήψη των επιλεγμένων αρχείων ανοίγοντας τον σύνδεσμο στον φυλλομετρητή τους.';
-}
-
-// Path: dialogs.openFile
-class _TranslationsDialogsOpenFileEl extends TranslationsDialogsOpenFileEn {
-  _TranslationsDialogsOpenFileEl._(TranslationsEl root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsEl _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => 'Άνοιγμα αρχείου';
-  @override
-  String get content => 'Θέλετε να ανοιχτεί το ληφθέν αρχείο;';
-}
-
 // Path: dialogs.quickSaveFromFavoritesNotice
 class _TranslationsDialogsQuickSaveFromFavoritesNoticeEl extends TranslationsDialogsQuickSaveFromFavoritesNoticeEn {
   _TranslationsDialogsQuickSaveFromFavoritesNoticeEl._(TranslationsEl root)
@@ -1503,6 +1483,26 @@ class _TranslationsDialogsPinEl extends TranslationsDialogsPinEn {
   // Translations
   @override
   String get title => 'Εισαγωγή PIN';
+}
+
+// Path: dialogs.sendModeHelp
+class _TranslationsDialogsSendModeHelpEl extends TranslationsDialogsSendModeHelpEn {
+  _TranslationsDialogsSendModeHelpEl._(TranslationsEl root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEl _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Λειτουργίες αποστολής';
+  @override
+  String get single => 'Στέλνει αρχεία σε έναν παραλήπτη. Η επιλογή θα διαγραφεί μετά την ολοκλήρωση της μεταφοράς του αρχείου.';
+  @override
+  String get multiple => 'Στέλνει αρχεία σε πολλούς παραλήπτες. Η επιλογή δεν θα διαγραφεί.';
+  @override
+  String get link =>
+      'Οι παραλήπτες που δεν έχουν εγκαταστήσει το LocalSend μπορούν να πραγματοποιήσουν λήψη των επιλεγμένων αρχείων ανοίγοντας τον σύνδεσμο στον φυλλομετρητή τους.';
 }
 
 // Path: dialogs.zoom

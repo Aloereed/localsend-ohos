@@ -82,6 +82,9 @@ class _WebSendPageState extends State<WebSendPage> with Refena {
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvoked: (_) async {
+        if (_stateEnum != _ServerState.running) {
+          return;
+        }
         setState(() {
           _stateEnum = _ServerState.stopping;
         });

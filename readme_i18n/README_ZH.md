@@ -12,7 +12,7 @@
 
 [主页][homepage] • [Discord][discord] • [GitHub][github] • [Codeberg][codeberg]
 
-[English](/README.md) • [中文](README_ZH.md) • [日本語](README_JA.md) • [ภาษาไทย](README_TH.md) • [Filipino](README_PH.md) • [Polski](README_PL.md) • [Español](README_ES.md) • [Tiếng Việt](README_VI.md) • [Portugês Brasil](README_PT_BR.md) • [Italiano](README_IT.md) • [Indonesia](README_ID.md) • [ភាសាខ្មែរ](README_KM.md)
+[English (Default)](/README.md) • [Español](README_ES.md) • [فارسی](README_FA.md) • [Filipino](README_PH.md) • [Français](README_FR.md) • [Indonesia](README_ID.md) • [Italiano](README_IT.md) • [日本語](README_JA.md) • [ភាសាខ្មែរ](README_KM.md) • [한국어](README_KO.md) • [Polski](README_PL.md) • [Portugês Brasil](README_PT_BR.md) • [Русский](README_RU.md) • [ภาษาไทย](README_TH.md) • [Turkish](README_TR.md) • [Українська](README_UK.md) • [Tiếng Việt](README_VI.md) • [中文](README_ZH.md)
 
 > 注意：中文文档更新可能不够及时，请以英文文档为准。
 
@@ -111,10 +111,11 @@ LocalSend 使用安全通信协议，允许设备通过 REST API 进行通信。
 要从源代码编译 LocalSend，请按照以下步骤进行操作：
 
 1. 安装 [Flutter](https://flutter.dev)。
-2. 克隆 LocalSend 代码库。
-3. 执行 `cd app` 进入 app 目录。
-4. 运行 `flutter pub get` 下载依赖项。
-5. 运行 `flutter run` 启动应用程序。
+2. 安装 [Rust](https://www.rust-lang.org/tools/install)。
+3. 克隆 LocalSend 代码库。
+4. 执行 `cd app` 进入 app 目录。
+5. 运行 `flutter pub get` 下载依赖项。
+6. 运行 `flutter run` 启动应用程序。
 
 可能的问题是所需的 Flutter 版本与已安装的 Flutter 版本不匹配。
 

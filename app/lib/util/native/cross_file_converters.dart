@@ -2,7 +2,7 @@
  * @Author: 
  * @Date: 2024-12-21 15:37:26
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-01-23 17:39:40
+ * @LastEditTime: 2025-01-24 15:01:32
  * @Description: file content
  */
 import 'dart:io';
@@ -15,10 +15,10 @@ import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localsend_app/model/cross_file.dart';
 import 'package:localsend_app/util/file_path_helper.dart';
-import 'package:localsend_app/util/native/android_saf.dart';
-import 'package:localsend_app/util/native/platform_check.dart';
+import 'package:localsend_app/util/native/channel/android_channel.dart' as android_channel;
 import 'package:share_handler/share_handler.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:localsend_app/util/native/platform_check.dart';
 
 /// Utility functions to convert third party models to common [CrossFile] model.
 class CrossFileConverters {
@@ -103,7 +103,7 @@ class CrossFileConverters {
     );
   }
 
-  static Future<CrossFile> convertFileInfo(FileInfo file) async {
+  static Future<CrossFile> convertFileInfo(android_channel.FileInfo file) async {
     return CrossFile(
       name: file.name,
       fileType: file.name.guessFileType(),

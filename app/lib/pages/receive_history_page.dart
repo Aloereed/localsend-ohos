@@ -18,6 +18,7 @@ import 'package:localsend_app/widget/dialogs/file_info_dialog.dart';
 import 'package:localsend_app/widget/dialogs/history_clear_dialog.dart';
 import 'package:localsend_app/widget/file_thumbnail.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
+import 'package:path/path.dart' as path;
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:io';
@@ -163,7 +164,7 @@ class ReceiveHistoryPage extends StatelessWidget {
                                 final result = await _platform
                                     .invokeMethod<String>('openFileManager');
                               }
-                              await openFolder(destination);
+                              await openFolder(folderPath: destination);
                             },
                       icon: const Icon(Icons.folder),
                       label: Text(t.receiveHistoryPage.openFolder),
@@ -292,7 +293,10 @@ class ReceiveHistoryPage extends StatelessWidget {
                                 break;
                               }
                               if (entry.path != null) {
-                                await openFolder(File(entry.path!).parent.path);
+                                await openFolder(
+                                  folderPath: File(entry.path!).parent.path,
+                                  fileName: path.basename(entry.path!),
+                                );
                               }
                               break;
                             case _EntryOption.info:

@@ -33,7 +33,7 @@ class TranslationsEsEs extends Translations {
   @override
   String get locale => 'Español';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'LocalSend';
   @override
   late final _TranslationsGeneralEsEs general = _TranslationsGeneralEsEs._(_root);
   @override
@@ -140,7 +140,7 @@ class _TranslationsGeneralEsEs extends TranslationsGeneralEn {
   @override
   String get queue => 'Cola';
   @override
-  String get quickSave => 'Guardado Rápido';
+  String get quickSave => 'Guardado rápido';
   @override
   String get quickSaveFromFavorites => 'Guardado rápido en "Favoritos"';
   @override
@@ -164,7 +164,7 @@ class _TranslationsGeneralEsEs extends TranslationsGeneralEn {
   @override
   String get unknown => 'Desconocido';
   @override
-  String get noItemInClipboard => 'No hay ningún elemento en el portapapeles';
+  String get noItemInClipboard => 'No hay ningún elemento en el portapapeles.';
 }
 
 // Path: receiveTab
@@ -180,6 +180,8 @@ class _TranslationsReceiveTabEsEs extends TranslationsReceiveTabEn {
   String get title => 'Recibir';
   @override
   late final _TranslationsReceiveTabInfoBoxEsEs infoBox = _TranslationsReceiveTabInfoBoxEsEs._(_root);
+  @override
+  late final _TranslationsReceiveTabQuickSaveEsEs quickSave = _TranslationsReceiveTabQuickSaveEsEs._(_root);
 }
 
 // Path: sendTab
@@ -214,7 +216,7 @@ class _TranslationsSendTabEsEs extends TranslationsSendTabEn {
   @override
   String get sendModeHelp => 'Explicación';
   @override
-  String get help => 'Asegúrate de que el destino elegido esté en la misma red Wi-Fi.';
+  String get help => 'Asegúrate que el destino elegido esté en la misma red Wi-Fi.';
   @override
   String get placeItems => 'Selecciona items para compartir.';
 }
@@ -376,7 +378,7 @@ class _TranslationsSendPageEsEs extends TranslationsSendPageEn {
 
   // Translations
   @override
-  String get waiting => 'Esperando respuesta...';
+  String get waiting => 'Esperando respuesta…';
   @override
   String get rejected => 'El destino ha rechazado la petición.';
   @override
@@ -416,9 +418,9 @@ class _TranslationsWebSharePageEsEs extends TranslationsWebSharePageEn {
   @override
   String get title => 'Compartir mediante enlace';
   @override
-  String get loading => 'Iniciando servidor...';
+  String get loading => 'Iniciando servidor…';
   @override
-  String get stopping => 'Deteniendo servidor...';
+  String get stopping => 'Deteniendo servidor…';
   @override
   String get error => 'Se ha producido un error al iniciar el servidor.';
   @override
@@ -440,7 +442,7 @@ class _TranslationsWebSharePageEsEs extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'El PIN es "${pin}"';
   @override
-  String get encryptionHint => 'AloeChat.AI utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador.';
+  String get encryptionHint => 'LocalSend utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador.';
   @override
   String pendingRequests({required Object n}) => 'Solicitudes pendientes: ${n}';
 }
@@ -455,10 +457,10 @@ class _TranslationsAboutPageEsEs extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Sobre AloeChat.AI';
+  String get title => 'Sobre LocalSend';
   @override
   List<String> get description => [
-        'AloeChat.AI es una aplicación libre, de código abierto, que te permite compartir archivos y mensajes de forma segura con dispositivos cercanos a través de tu red local sin necesidad de conexión a Internet.',
+        'LocalSend es una aplicación libre, de código abierto, que te permite compartir archivos y mensajes de forma segura con dispositivos cercanos a través de tu red local sin necesidad de conexión a Internet.',
         'Está disponible para Android, iOS, macOS, Windows y Linux. Puedes encontrar todas las opciones de descarga en la página web oficial.',
       ];
   @override
@@ -484,7 +486,7 @@ class _TranslationsDonationPageEsEs extends TranslationsDonationPageEn {
   String get title => 'Donar';
   @override
   String get info =>
-      'AloeChat.AI es libre, open source y no contiene anuncios. Si te gusta la aplicación puedes ayudar al desarrollo con una donación.';
+      'LocalSend es libre, open source y no contiene anuncios. Si te gusta la aplicación puedes ayudar al desarrollo con una donación.';
   @override
   String donate({required Object amount}) => 'Donar ${amount}';
   @override
@@ -528,6 +530,8 @@ class _TranslationsDialogsEsEs extends TranslationsDialogsEn {
   // Translations
   @override
   late final _TranslationsDialogsAddFileEsEs addFile = _TranslationsDialogsAddFileEsEs._(_root);
+  @override
+  late final _TranslationsDialogsOpenFileEsEs openFile = _TranslationsDialogsOpenFileEsEs._(_root);
   @override
   late final _TranslationsDialogsAddressInputEsEs addressInput = _TranslationsDialogsAddressInputEsEs._(_root);
   @override
@@ -604,7 +608,7 @@ class _TranslationsTrayEsEs extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Cerrar AloeChat.AI';
+  String get close => 'Cerrar LocalSend';
   @override
   String get closeWindows => 'Cerrar';
 }
@@ -666,7 +670,7 @@ class _TranslationsAssetPickerEsEs extends TranslationsAssetPickerEn {
   @override
   String get unSupportedAssetType => 'Tipo de archivo no soportado.';
   @override
-  String get unableToAccessAll => 'No se puede acceder a los archivos del dispositivo.';
+  String get unableToAccessAll => 'No se puede acceder a todos los archivos del dispositivo';
   @override
   String get viewingLimitedAssetsTip => 'Ver solo los archivos y álbumes accesibles para la aplicación.';
   @override
@@ -719,6 +723,23 @@ class _TranslationsReceiveTabInfoBoxEsEs extends TranslationsReceiveTabInfoBoxEn
   String get port => 'Puerto:';
   @override
   String get alias => 'Alias:';
+}
+
+// Path: receiveTab.quickSave
+class _TranslationsReceiveTabQuickSaveEsEs extends TranslationsReceiveTabQuickSaveEn {
+  _TranslationsReceiveTabQuickSaveEsEs._(TranslationsEsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get off => _root.general.off;
+  @override
+  String get favorites => 'Favoritos';
+  @override
+  String get on => _root.general.on;
 }
 
 // Path: sendTab.selection
@@ -812,7 +833,7 @@ class _TranslationsSettingsTabGeneralEsEs extends TranslationsSettingsTabGeneral
   @override
   String get launchMinimized => 'Inicio automático: Iniciar minimizado';
   @override
-  String get showInContextMenu => 'Mostrar AloeChat.AI en el menú contextual';
+  String get showInContextMenu => 'Mostrar LocalSend en el menú contextual';
   @override
   String get animations => 'Animaciones';
 }
@@ -873,7 +894,7 @@ class _TranslationsSettingsTabNetworkEsEs extends TranslationsSettingsTabNetwork
   @override
   String get title => 'Red';
   @override
-  String get needRestart => 'Reiniciar el servidor para aplicar los ajustes.';
+  String get needRestart => '¡Reinicia el servidor para aplicar los ajustes!';
   @override
   String get server => 'Servidor';
   @override
@@ -914,7 +935,7 @@ class _TranslationsSettingsTabOtherEsEs extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Otros';
   @override
-  String get support => 'Apoya a AloeChat.AI';
+  String get support => 'Apoya a LocalSend';
   @override
   String get donate => 'Donar';
   @override
@@ -933,7 +954,7 @@ class _TranslationsTroubleshootPageFirewallEsEs extends TranslationsTroubleshoot
 
   // Translations
   @override
-  String get symptom => 'Esta aplicación puede enviar archivos a otros dispositivos pero otros dispositivos no pueden enviar archivos a este.';
+  String get symptom => 'Este dispositivo puede enviar archivos a otros, pero otros dispositivos no pueden enviar archivos a este.';
   @override
   String solution({required Object port}) =>
       'Lo más probable es que se trate de un problema con el firewall, puedes solucionarlo permitiendo las conexiones entrantes (UDP y TCP) en el puerto ${port}.';
@@ -954,7 +975,7 @@ class _TranslationsTroubleshootPageNoDiscoveryEsEs extends TranslationsTroublesh
   String get symptom => 'Este dispositivo no puede descubrir otros dispositivos.';
   @override
   String get solution =>
-      'Asegúrese de que todos los dispositivos estén en la misma red Wi-Fi y compartan la misma configuración (puerto, dirección de multidifusión, cifrado). Puede intentar escribir la dirección IP del dispositivo de destino manualmente. Si esto funciona, considere agregar este dispositivo a los favoritos para que pueda detectarse automáticamente en el futuro.';
+      'Asegúrese que todos los dispositivos estén en la misma red Wi-Fi y compartan la misma configuración (puerto, dirección de multidifusión, cifrado). Puede intentar escribir la dirección IP del dispositivo de destino manualmente. Si esto funciona, considere agregar este dispositivo a los favoritos para que pueda detectarse automáticamente en el futuro.';
 }
 
 // Path: troubleshootPage.noConnection
@@ -970,7 +991,7 @@ class _TranslationsTroubleshootPageNoConnectionEsEs extends TranslationsTroubles
   String get symptom => 'Ambos dispositivos no pueden descubrirse ni compartir archivos.';
   @override
   String get solution =>
-      '¿El problema existe en ambos lados? Tienes que asegurarte que los dispositivos están en la misma red wifi y comparten la misma configuración (puerto, dirección multicast, encriptación). Es posible que el wifi no permita la comunicación entre los dispositivos. En este caso, hay que activar esta opción en el router.';
+      '¿El problema existe en ambos lados? Tienes que asegurarte que los dispositivos están en la misma red Wi-Fi y comparten la misma configuración (puerto, dirección multicast, encriptación). Es posible que el Wi-Fi no permita la comunicación entre los dispositivos. En este caso, hay que activar esta opción en el router.';
 }
 
 // Path: receiveHistoryPage.entryActions
@@ -1024,6 +1045,21 @@ class _TranslationsDialogsAddFileEsEs extends TranslationsDialogsAddFileEn {
   String get title => 'Añadir a selección';
   @override
   String get content => '¿Qué quieres añadir?';
+}
+
+// Path: dialogs.openFile
+class _TranslationsDialogsOpenFileEsEs extends TranslationsDialogsOpenFileEn {
+  _TranslationsDialogsOpenFileEsEs._(TranslationsEsEs root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEsEs _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Abrir archivo';
+  @override
+  String get content => '¿Quieres abrir el archivo recibido?';
 }
 
 // Path: dialogs.addressInput
@@ -1225,7 +1261,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedEsEs extends TranslationsDialo
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'AloeChat.AI no puede encontrar otros dispositivos sin tener permiso para escanear la red local. Por favor, concede este permiso en los ajustes.';
+      'LocalSend no puede encontrar otros dispositivos sin tener permiso para escanear la red local. Por favor, concede este permiso en los ajustes.';
   @override
   String get gotoSettings => 'Ajustes';
 }
@@ -1353,6 +1389,12 @@ class _TranslationsDialogsQuickSaveFromFavoritesNoticeEsEs extends TranslationsD
   // Translations
   @override
   String get title => _root.general.quickSaveFromFavorites;
+  @override
+  List<String> get content => [
+        'Se aceptarán automáticamente los archivos recibidos de los dispositivos incluidos en su lista de favoritos.',
+        'Advertencia: esta opción no es completamente segura, cualquiera que conozca la huella digital de sus dispositivos favoritos aún puede enviarle archivos.',
+        'Sin embargo, esta opción sigue siendo más segura que permitir que todos los usuarios en la red local te envíen archivos sin restricción.',
+      ];
 }
 
 // Path: dialogs.pin
@@ -1385,7 +1427,7 @@ class _TranslationsDialogsSendModeHelpEsEs extends TranslationsDialogsSendModeHe
   String get multiple => 'Enviar archivos a múltiples destinos. La selección no se borrará.';
   @override
   String get link =>
-      'Los destinatarios que no tengan AloeChat.AI instalado pueden descargar los archivos seleccionados abriendo el enlace en su navegador.';
+      'Los destinatarios que no tengan LocalSend instalado pueden descargar los archivos seleccionados abriendo el enlace en su navegador.';
 }
 
 // Path: dialogs.zoom

@@ -15,7 +15,7 @@ import 'package:refena/refena.dart';
 
 final _idProvider = IdProvider();
 
-class IsolateTargetHttpDiscoveryAction extends AsyncReduxActionWithResult<IsolateController, ParentIsolateState, Device?> {
+class IsolateTargetHttpDiscoveryAction extends AsyncReduxActionWithResult<IsolateController, ParentIsolateState, Device> {
   final String ip;
   final int port;
   final bool https;
@@ -27,7 +27,7 @@ class IsolateTargetHttpDiscoveryAction extends AsyncReduxActionWithResult<Isolat
   });
 
   @override
-  Future<(ParentIsolateState, Device?)> reduce() async {
+  Future<(ParentIsolateState, Device)> reduce() async {
     final connection = state.httpTargetDiscovery;
     if (connection == null) {
       throw StateError('httpTargetDiscovery is not initialized');
@@ -52,11 +52,16 @@ class IsolateTargetHttpDiscoveryAction extends AsyncReduxActionWithResult<Isolat
 
     await for (final result in connection.receiveFromIsolate) {
       if (result.id == task.id) {
-        return (state, result.data);
+        switch (result) {
+          case IsolateTaskSuccessResult<Device>():
+            return (state, result.data);
+          case IsolateTaskErrorResult<Device>():
+            throw result.error;
+        }
       }
     }
 
-    return (state, null);
+    throw StateError('Unexpected end of stream');
   }
 }
 
@@ -126,8 +131,6 @@ class IsolateFavoriteHttpDiscoveryAction extends ReduxActionWithResult<IsolateCo
 }
 
 class IsolateSendMulticastAnnouncementAction extends ReduxAction<IsolateController, ParentIsolateState> {
-  IsolateSendMulticastAnnouncementAction();
-
   @override
   ParentIsolateState reduce() {
     final connection = state.multicastDiscovery;
@@ -138,6 +141,23 @@ class IsolateSendMulticastAnnouncementAction extends ReduxAction<IsolateControll
     connection.sendToIsolate(SendToIsolateData(
       syncState: null,
       data: MulticastAnnouncementTask.instance,
+    ));
+
+    return state;
+  }
+}
+
+class IsolateSendMulticastRestartListenerAction extends ReduxAction<IsolateController, ParentIsolateState> {
+  @override
+  ParentIsolateState reduce() {
+    final connection = state.multicastDiscovery;
+    if (connection == null) {
+      throw StateError('multicastDiscovery is not initialized');
+    }
+
+    connection.sendToIsolate(SendToIsolateData(
+      syncState: null,
+      data: MulticastRestartListenerTask.instance,
     ));
 
     return state;

@@ -18,7 +18,8 @@ import 'package:localsend_app/provider/device_info_provider.dart';
 import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
 import 'package:localsend_app/util/determine_image_type.dart';
 import 'package:localsend_app/util/file_path_helper.dart';
-import 'package:localsend_app/util/native/android_saf.dart';
+import 'package:localsend_app/util/image_converter.dart';
+import 'package:localsend_app/util/native/channel/android_channel.dart' as android_channel;
 import 'package:localsend_app/util/native/cross_file_converters.dart';
 import 'package:localsend_app/util/native/pick_directory_path.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
@@ -167,7 +168,7 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
   }
   try {
     if (defaultTargetPlatform == TargetPlatform.android) {
-      final result = await pickFilesAndroid();
+      final result = await android_channel.pickFilesAndroid();
       if (result != null) {
         await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
               files: result,
@@ -230,9 +231,9 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
   );
   await sleepAsync(200); // Wait for the dialog to be shown
   try {
-    if (defaultTargetPlatform == TargetPlatform.android && (ref.read(deviceInfoProvider).androidSdkInt ?? 0) >= contentUriMinSdk) {
+    if (defaultTargetPlatform == TargetPlatform.android && (ref.read(deviceInfoProvider).androidSdkInt ?? 0) >= android_channel.contentUriMinSdk) {
       // Android 8 and above have more predictable content URIs that we can parse.
-      final result = await pickDirectoryAndroid();
+      final result = await android_channel.pickDirectoryAndroid();
       if (result != null) {
         await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddAndroidDirectoryAction(result));
       }
@@ -310,7 +311,7 @@ Future<void> _pickText(BuildContext context, Ref ref) async {
 }
 
 Future<void> _pickClipboard(BuildContext context, Ref ref) async {
-  if (checkPlatform([TargetPlatform.ohos])) {
+   if (checkPlatform([TargetPlatform.ohos])) {
     try {
       // 从剪贴板读取文本
       final ClipboardData? clipboardData =
@@ -338,6 +339,39 @@ Future<void> _pickClipboard(BuildContext context, Ref ref) async {
         SnackBar(content: Text('无法读取剪贴板: $e')),
       );
     }
+    return;
+  }
+  final data = await Clipboard.getData(Clipboard.kTextPlain);
+  if (data?.text != null) {
+    ref.redux(selectedSendingFilesProvider).dispatch(AddMessageAction(message: data!.text!));
+    return;
+  }
+
+  final image = await Pasteboard.image;
+  if (image != null) {
+    // Adding temporary variable because Dart analyzer somehow doesn't properly downcast Uint8List? to Uint8List
+    Uint8List currImage = image;
+    String imageType = determineImageType(image);
+
+    // On Windows, Pasteboard read image from clipboard as BMP which is large and inefficient. Attempt to convert to PNG
+    if (imageType == 'bmp') {
+      try {
+        final pngImage = await convertBmpToPng(image);
+        currImage = pngImage;
+        imageType = 'png';
+      } catch (e) {
+        // Fail to convert to png, proceed with existing bmp
+      }
+    }
+
+    final now = DateTime.now();
+    final fileName =
+        'clipboard_${now.year}-${now.month.twoDigitString}-${now.day.twoDigitString}_${now.hour.twoDigitString}-${now.minute.twoDigitString}.$imageType';
+    ref.redux(selectedSendingFilesProvider).dispatch(AddBinaryAction(
+          bytes: currImage,
+          fileType: FileType.image,
+          fileName: fileName,
+        ));
     return;
   }
 

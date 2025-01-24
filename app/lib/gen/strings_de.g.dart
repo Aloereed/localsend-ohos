@@ -378,7 +378,7 @@ class _TranslationsSendPageDe extends TranslationsSendPageEn {
 
   // Translations
   @override
-  String get waiting => 'Warte auf Antwort...';
+  String get waiting => 'Warte auf Antwort…';
   @override
   String get rejected => 'Der Empfänger hat die Anfrage abgelehnt.';
   @override
@@ -418,9 +418,9 @@ class _TranslationsWebSharePageDe extends TranslationsWebSharePageEn {
   @override
   String get title => 'Per Link teilen';
   @override
-  String get loading => 'Starte Server...';
+  String get loading => 'Starte Server…';
   @override
-  String get stopping => 'Stoppe server...';
+  String get stopping => 'Stoppe server…';
   @override
   String get error => 'Ein Fehler ist beim Starten des Servers aufgetreten.';
   @override
@@ -677,7 +677,7 @@ class _TranslationsAssetPickerDe extends TranslationsAssetPickerEn {
   String get changeAccessibleLimitedAssets => 'Tippen, um erlaubte Dateien zu aktualisieren';
   @override
   String get accessAllTip =>
-      'Die App kann nur auf einige der Dateien auf dem Gerät zugreifen. Öffne die Systemeinstellungen und erlauben der App, \nauf alle Dateien auf dem Gerät zuzugreifen';
+      'Die App kann nur auf einige der Dateien auf dem Gerät zugreifen. Öffne die Systemeinstellungen und erlaube der App, auf alle Dateien auf dem Gerät zuzugreifen.';
   @override
   String get goToSystemSettings => 'Gehe zu den Systemeinstellungen';
   @override

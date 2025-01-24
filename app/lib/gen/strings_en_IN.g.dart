@@ -33,7 +33,7 @@ class TranslationsEnIn extends Translations {
   @override
   String get locale => 'English(India)';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'LocalSend';
   @override
   late final _TranslationsGeneralEnIn general = _TranslationsGeneralEnIn._(_root);
   @override
@@ -142,6 +142,8 @@ class _TranslationsGeneralEnIn extends TranslationsGeneralEn {
   @override
   String get quickSave => 'Quick Save';
   @override
+  String get quickSaveFromFavorites => 'Quick Save for "Favourites"';
+  @override
   String get renamed => 'Renamed';
   @override
   String get reset => 'Reset';
@@ -162,7 +164,7 @@ class _TranslationsGeneralEnIn extends TranslationsGeneralEn {
   @override
   String get unknown => 'Unknown';
   @override
-  String get noItemInClipboard => 'No items in Clipboard';
+  String get noItemInClipboard => 'No items in Clipboard.';
 }
 
 // Path: receiveTab
@@ -178,6 +180,8 @@ class _TranslationsReceiveTabEnIn extends TranslationsReceiveTabEn {
   String get title => 'Receive';
   @override
   late final _TranslationsReceiveTabInfoBoxEnIn infoBox = _TranslationsReceiveTabInfoBoxEnIn._(_root);
+  @override
+  late final _TranslationsReceiveTabQuickSaveEnIn quickSave = _TranslationsReceiveTabQuickSaveEnIn._(_root);
 }
 
 // Path: sendTab
@@ -203,6 +207,8 @@ class _TranslationsSendTabEnIn extends TranslationsSendTabEn {
   String get thisDevice => 'This Device';
   @override
   String get scan => 'Look for devices';
+  @override
+  String get manualSending => 'Manual Sending';
   @override
   String get sendMode => 'Send mode';
   @override
@@ -259,6 +265,8 @@ class _TranslationsTroubleshootPageEnIn extends TranslationsTroubleshootPageEn {
   String get fixButton => 'Fix automatically';
   @override
   late final _TranslationsTroubleshootPageFirewallEnIn firewall = _TranslationsTroubleshootPageFirewallEnIn._(_root);
+  @override
+  late final _TranslationsTroubleshootPageNoDiscoveryEnIn noDiscovery = _TranslationsTroubleshootPageNoDiscoveryEnIn._(_root);
   @override
   late final _TranslationsTroubleshootPageNoConnectionEnIn noConnection = _TranslationsTroubleshootPageNoConnectionEnIn._(_root);
 }
@@ -353,7 +361,7 @@ class _TranslationsReceiveOptionsPageEnIn extends TranslationsReceiveOptionsPage
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(AloeChat.AI folder)';
+  String get appDirectory => '(LocalSend folder)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -370,7 +378,7 @@ class _TranslationsSendPageEnIn extends TranslationsSendPageEn {
 
   // Translations
   @override
-  String get waiting => 'Waiting for response...';
+  String get waiting => 'Waiting for response…';
   @override
   String get rejected => 'The recipient has rejected the request.';
   @override
@@ -410,9 +418,9 @@ class _TranslationsWebSharePageEnIn extends TranslationsWebSharePageEn {
   @override
   String get title => 'Share via link';
   @override
-  String get loading => 'Starting server...';
+  String get loading => 'Starting server…';
   @override
-  String get stopping => 'Stopping server...';
+  String get stopping => 'Stopping server…';
   @override
   String get error => 'An error occurred while starting the server.';
   @override
@@ -434,7 +442,7 @@ class _TranslationsWebSharePageEnIn extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'The PIN is "${pin}"';
   @override
-  String get encryptionHint => 'AloeChat.AI uses a self-signed certificate. You need to accept it in your browser.';
+  String get encryptionHint => 'LocalSend uses a self-signed certificate. You need to accept it in your browser.';
   @override
   String pendingRequests({required Object n}) => 'Pending requests: ${n}';
 }
@@ -449,16 +457,18 @@ class _TranslationsAboutPageEnIn extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'About AloeChat.AI';
+  String get title => 'About LocalSend';
   @override
   List<String> get description => [
-        'AloeChat.AI is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
+        'LocalSend is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
         'This app is available on Android, iOS, macOS, Windows and Linux. You can find all download options on the official homepage.',
       ];
   @override
   String get author => 'Author';
   @override
   String get contributors => 'Contributors';
+  @override
+  String get packagers => 'Packagers';
   @override
   String get translators => 'Translators';
 }
@@ -475,7 +485,7 @@ class _TranslationsDonationPageEnIn extends TranslationsDonationPageEn {
   @override
   String get title => 'Donate';
   @override
-  String get info => 'AloeChat.AI is free, open-source and without any ads. If you like the app, you can support the development with a donation.';
+  String get info => 'LocalSend is free, open-source and without any ads. If you like the app, you can support the development with a donation.';
   @override
   String donate({required Object amount}) => 'Donate ${amount}';
   @override
@@ -594,6 +604,8 @@ class _TranslationsDialogsEnIn extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsAddFileEnIn addFile = _TranslationsDialogsAddFileEnIn._(_root);
   @override
+  late final _TranslationsDialogsOpenFileEnIn openFile = _TranslationsDialogsOpenFileEnIn._(_root);
+  @override
   late final _TranslationsDialogsAddressInputEnIn addressInput = _TranslationsDialogsAddressInputEnIn._(_root);
   @override
   late final _TranslationsDialogsCancelSessionEnIn cancelSession = _TranslationsDialogsCancelSessionEnIn._(_root);
@@ -632,6 +644,9 @@ class _TranslationsDialogsEnIn extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsQuickSaveNoticeEnIn quickSaveNotice = _TranslationsDialogsQuickSaveNoticeEnIn._(_root);
   @override
+  late final _TranslationsDialogsQuickSaveFromFavoritesNoticeEnIn quickSaveFromFavoritesNotice =
+      _TranslationsDialogsQuickSaveFromFavoritesNoticeEnIn._(_root);
+  @override
   late final _TranslationsDialogsPinEnIn pin = _TranslationsDialogsPinEnIn._(_root);
   @override
   late final _TranslationsDialogsSendModeHelpEnIn sendModeHelp = _TranslationsDialogsSendModeHelpEnIn._(_root);
@@ -666,7 +681,9 @@ class _TranslationsTrayEnIn extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Quit AloeChat.AI';
+  String get close => 'Quit LocalSend';
+  @override
+  String get closeWindows => 'Exit';
 }
 
 // Path: web
@@ -781,6 +798,23 @@ class _TranslationsReceiveTabInfoBoxEnIn extends TranslationsReceiveTabInfoBoxEn
   String get alias => 'Device name:';
 }
 
+// Path: receiveTab.quickSave
+class _TranslationsReceiveTabQuickSaveEnIn extends TranslationsReceiveTabQuickSaveEn {
+  _TranslationsReceiveTabQuickSaveEnIn._(TranslationsEnIn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEnIn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get off => _root.general.off;
+  @override
+  String get favorites => 'Favourites';
+  @override
+  String get on => _root.general.on;
+}
+
 // Path: sendTab.selection
 class _TranslationsSendTabSelectionEnIn extends TranslationsSendTabSelectionEn {
   _TranslationsSendTabSelectionEnIn._(TranslationsEnIn root)
@@ -864,13 +898,15 @@ class _TranslationsSettingsTabGeneralEnIn extends TranslationsSettingsTabGeneral
   @override
   String get saveWindowPlacement => 'Quit: Save window placement';
   @override
+  String get saveWindowPlacementWindows => 'Save window position after exit';
+  @override
   String get minimizeToTray => 'Quit: Minimize to Tray/Menu Bar';
   @override
   String get launchAtStartup => 'Autostart after login';
   @override
   String get launchMinimized => 'Autostart: Start hidden';
   @override
-  String get showInContextMenu => 'Show AloeChat.AI in context menu';
+  String get showInContextMenu => 'Show LocalSend in context menu';
   @override
   String get animations => 'Animations';
 }
@@ -888,6 +924,8 @@ class _TranslationsSettingsTabReceiveEnIn extends TranslationsSettingsTabReceive
   String get title => 'Receive';
   @override
   String get quickSave => _root.general.quickSave;
+  @override
+  String get quickSaveFromFavorites => _root.general.quickSaveFromFavorites;
   @override
   String get requirePin => _root.webSharePage.requirePin;
   @override
@@ -943,6 +981,10 @@ class _TranslationsSettingsTabNetworkEnIn extends TranslationsSettingsTabNetwork
   @override
   String get discoveryTimeout => 'Discovery Timeout';
   @override
+  String get useSystemName => 'Use system name';
+  @override
+  String get generateRandomAlias => 'Generate random alias';
+  @override
   String portWarning({required Object defaultPort}) =>
       'You might not be detected by other devices because you are using a custom port. (default: ${defaultPort})';
   @override
@@ -966,7 +1008,7 @@ class _TranslationsSettingsTabOtherEnIn extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Other';
   @override
-  String get support => 'Support AloeChat.AI';
+  String get support => 'Support LocalSend';
   @override
   String get donate => 'Donate';
   @override
@@ -991,6 +1033,22 @@ class _TranslationsTroubleshootPageFirewallEnIn extends TranslationsTroubleshoot
       'This is most likely a firewall issue. You can solve this by allowing incoming connections (UDP and TCP) on port ${port}.';
   @override
   String get openFirewall => 'Open Firewall';
+}
+
+// Path: troubleshootPage.noDiscovery
+class _TranslationsTroubleshootPageNoDiscoveryEnIn extends TranslationsTroubleshootPageNoDiscoveryEn {
+  _TranslationsTroubleshootPageNoDiscoveryEnIn._(TranslationsEnIn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEnIn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get symptom => 'This device cannot discover other devices.';
+  @override
+  String get solution =>
+      'Please make sure that all devices are on the same Wi-Fi network and share the same configuration (port, multicast address, encryption). You can try to type the IP address of the target device manually. If this works, consider adding this device to the favourites so it can be automatically discovered in the future.';
 }
 
 // Path: troubleshootPage.noConnection
@@ -1060,6 +1118,21 @@ class _TranslationsDialogsAddFileEnIn extends TranslationsDialogsAddFileEn {
   String get title => 'Add to selection';
   @override
   String get content => 'What do you want to add?';
+}
+
+// Path: dialogs.openFile
+class _TranslationsDialogsOpenFileEnIn extends TranslationsDialogsOpenFileEn {
+  _TranslationsDialogsOpenFileEnIn._(TranslationsEnIn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEnIn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Open file';
+  @override
+  String get content => 'Do you want to open the received file?';
 }
 
 // Path: dialogs.addressInput
@@ -1260,7 +1333,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedEnIn extends TranslationsDialo
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'AloeChat.AI can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
+      'LocalSend can\'t find other devices without having the permission to scan the local network. Please grant this permission in the settings.';
   @override
   String get gotoSettings => 'Settings';
 }
@@ -1376,6 +1449,25 @@ class _TranslationsDialogsQuickSaveNoticeEnIn extends TranslationsDialogsQuickSa
   String get content => 'File requests are automatically accepted. Be aware that everyone on the local network can send you files.';
 }
 
+// Path: dialogs.quickSaveFromFavoritesNotice
+class _TranslationsDialogsQuickSaveFromFavoritesNoticeEnIn extends TranslationsDialogsQuickSaveFromFavoritesNoticeEn {
+  _TranslationsDialogsQuickSaveFromFavoritesNoticeEnIn._(TranslationsEnIn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsEnIn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => _root.general.quickSaveFromFavorites;
+  @override
+  List<String> get content => [
+        'File requests are now accepted automatically from devices in your favourites list.',
+        'Warning! Currently, this is not entirely secure, as a hacker who has the fingerprint of any device from your favourites list can send you files without restriction.',
+        'However, this option is still safer than allowing all users on the local network to send you files without restriction.',
+      ];
+}
+
 // Path: dialogs.pin
 class _TranslationsDialogsPinEnIn extends TranslationsDialogsPinEn {
   _TranslationsDialogsPinEnIn._(TranslationsEnIn root)
@@ -1405,7 +1497,7 @@ class _TranslationsDialogsSendModeHelpEnIn extends TranslationsDialogsSendModeHe
   @override
   String get multiple => 'Sends files to multiple recipients. Selection will not be cleared.';
   @override
-  String get link => 'Recipients who do not have AloeChat.AI installed can download the selected files by opening the link in their browser.';
+  String get link => 'Recipients who do not have LocalSend installed can download the selected files by opening the link in their browser.';
 }
 
 // Path: dialogs.zoom
