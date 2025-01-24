@@ -33,10 +33,13 @@ enum _EntryOption {
   String get label {
     return switch (this) {
       _EntryOption.open => t.receiveHistoryPage.entryActions.open,
-      _EntryOption.showInFolder => t.receiveHistoryPage.entryActions.showInFolder,
+      _EntryOption.showInFolder =>
+        t.receiveHistoryPage.entryActions.showInFolder,
       _EntryOption.info => t.receiveHistoryPage.entryActions.info,
-      _EntryOption.delete => t.receiveHistoryPage.entryActions.deleteFromHistory,
-      _EntryOption.deleteFile=>t.receiveHistoryPage.entryActions.deleteFromHistory + "并删除缓存文件",
+      _EntryOption.delete =>
+        t.receiveHistoryPage.entryActions.deleteFromHistory,
+      _EntryOption.deleteFile =>
+        t.receiveHistoryPage.entryActions.deleteFromHistory + "并删除缓存文件",
     };
   }
 }
@@ -142,23 +145,23 @@ class ReceiveHistoryPage extends StatelessWidget {
 
                               if (destination ==
                                   "/storage/Users/currentUser/Download/com.aloereed.aloechatai") {
-                                 Fluttertoast.showToast(
+                                Fluttertoast.showToast(
                                   msg: "请自行打开“/下载/AloeChat.AI”。",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
                                   backgroundColor: Colors.green,
                                   textColor: Colors.white,
-                                  fontSize: 16.0,);
+                                  fontSize: 16.0,
+                                );
                                 // 延时2秒
                                 await Future.delayed(Duration(seconds: 2));
                                 // 创建实例
                                 final _platform = const MethodChannel(
                                     'samples.flutter.dev/downloadplugin');
                                 // 调用方法 getBatteryLevel
-                                final result =
-                                    await _platform.invokeMethod<String>(
-                                        'openFileManager');
+                                final result = await _platform
+                                    .invokeMethod<String>('openFileManager');
                               }
                               await openFolder(destination);
                             },
@@ -215,13 +218,18 @@ class ReceiveHistoryPage extends StatelessWidget {
                   onTap: entry.path != null || entry.isMessage
                       ? () async {
                           if (entry.isMessage) {
-                            context.redux(receivePageControllerProvider).dispatch(InitReceivePageFromHistoryMessageAction(entry: entry));
+                            context
+                                .redux(receivePageControllerProvider)
+                                .dispatch(
+                                    InitReceivePageFromHistoryMessageAction(
+                                        entry: entry));
                             // ignore: unawaited_futures
                             context.push(() => const ReceivePage());
                             return;
                           }
 
-                          await _openFile(context, entry, context.redux(receiveHistoryProvider));
+                          await _openFile(context, entry,
+                              context.redux(receiveHistoryProvider));
                         }
                       : null,
                   child: Row(
@@ -263,6 +271,26 @@ class ReceiveHistoryPage extends StatelessWidget {
                                   context.redux(receiveHistoryProvider));
                               break;
                             case _EntryOption.showInFolder:
+                              if (checkPlatform([TargetPlatform.ohos])) {
+                                Fluttertoast.showToast(
+                                  msg: "请自行打开“/下载/AloeChat.AI”。",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                                // 延时2秒
+                                await Future.delayed(Duration(seconds: 2));
+                                // 创建实例
+                                final _platform = const MethodChannel(
+                                    'samples.flutter.dev/downloadplugin');
+                                // 调用方法 getBatteryLevel
+                                final result = await _platform
+                                    .invokeMethod<String>('openFileManager');
+                                break;
+                              }
                               if (entry.path != null) {
                                 await openFolder(File(entry.path!).parent.path);
                               }

@@ -180,6 +180,8 @@ class _TranslationsReceiveTabZhCn extends TranslationsReceiveTabEn {
   String get title => '接收';
   @override
   late final _TranslationsReceiveTabInfoBoxZhCn infoBox = _TranslationsReceiveTabInfoBoxZhCn._(_root);
+  @override
+  late final _TranslationsReceiveTabQuickSaveZhCn quickSave = _TranslationsReceiveTabQuickSaveZhCn._(_root);
 }
 
 // Path: sendTab
@@ -404,6 +406,22 @@ class _TranslationsProgressPageZhCn extends TranslationsProgressPageEn {
   late final _TranslationsProgressPageTotalZhCn total = _TranslationsProgressPageTotalZhCn._(_root);
 }
 
+
+// Path: dialogs.openFile
+class _TranslationsDialogsOpenFileZhCn extends TranslationsDialogsOpenFileEn {
+  _TranslationsDialogsOpenFileZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '打开文件';
+  @override
+  String get content => '你要现在打开文件吗？';
+}
+
 // Path: webSharePage
 class _TranslationsWebSharePageZhCn extends TranslationsWebSharePageEn {
   _TranslationsWebSharePageZhCn._(TranslationsZhCn root)
@@ -608,6 +626,8 @@ class _TranslationsDialogsZhCn extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsEncryptionDisabledNoticeZhCn encryptionDisabledNotice = _TranslationsDialogsEncryptionDisabledNoticeZhCn._(_root);
   @override
+  late final _TranslationsDialogsOpenFileZhCn openFile = _TranslationsDialogsOpenFileZhCn._(_root);
+  @override
   late final _TranslationsDialogsErrorDialogZhCn errorDialog = _TranslationsDialogsErrorDialogZhCn._(_root);
   @override
   late final _TranslationsDialogsFavoriteDialogZhCn favoriteDialog = _TranslationsDialogsFavoriteDialogZhCn._(_root);
@@ -789,6 +809,23 @@ class _TranslationsReceiveTabInfoBoxZhCn extends TranslationsReceiveTabInfoBoxEn
   String get port => '端口：';
   @override
   String get alias => '别名：';
+}
+
+// Path: receiveTab.quickSave
+class _TranslationsReceiveTabQuickSaveZhCn extends TranslationsReceiveTabQuickSaveEn {
+  _TranslationsReceiveTabQuickSaveZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get off => _root.general.off;
+  @override
+  String get favorites => '收藏夹';
+  @override
+  String get on => _root.general.on;
 }
 
 // Path: sendTab.selection

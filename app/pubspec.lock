@@ -300,11 +300,9 @@ packages:
   device_info_plus:
     dependency: "direct overridden"
     description:
-      path: "packages/device_info_plus/device_info_plus"
-      ref: HEAD
-      resolved-ref: ff774d947bd15d9be08629e3ccfb29dda2e864bd
-      url: "https://gitee.com/openharmony-sig/flutter_plus_plugins.git"
-    source: git
+      path: "device_info_plus/device_info_plus"
+      relative: true
+    source: path
     version: "9.1.0"
   device_info_plus_platform_interface:
     dependency: transitive
@@ -726,12 +724,11 @@ packages:
   in_app_purchase:
     dependency: "direct overridden"
     description:
-      path: "packages/in_app_purchase/in_app_purchase"
-      ref: HEAD
-      resolved-ref: "8c61f19e816168efc212cca5c4fbf9ac183ee90e"
-      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
-    source: git
-    version: "3.1.11"
+      name: in_app_purchase
+      sha256: "960f26a08d9351fb8f89f08901f8a829d41b04d45a694b8f776121d9e41dcad6"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.0"
   in_app_purchase_android:
     dependency: transitive
     description:
@@ -740,15 +737,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.6+7"
-  in_app_purchase_ohos:
-    dependency: transitive
-    description:
-      path: "packages\\in_app_purchase\\in_app_purchase_ohos"
-      ref: HEAD
-      resolved-ref: "8c61f19e816168efc212cca5c4fbf9ac183ee90e"
-      url: "https://gitee.com/openharmony-sig/flutter_packages.git"
-    source: git
-    version: "0.1.0"
   in_app_purchase_platform_interface:
     dependency: transitive
     description:
