@@ -48,6 +48,8 @@ class AppDelegate: FlutterAppDelegate {
         DockProgress.style = .squircle(color: localsendBrandColor)
         
         isLaunchedAsLoginItem = LaunchAtLogin.wasLaunchedAtLogin
+        
+        restoreDestinationFolderAccess()
     }
     
     override func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -165,6 +167,17 @@ class AppDelegate: FlutterAppDelegate {
             let i18n = call.arguments as! [String: String]
             setupStatusBarItem(i18n: i18n)
             result(nil)
+        case "removeDestinationFolderAccess":
+            removeExistingDestinationAccess()
+            result(nil)
+        case "persistDestinationFolderAccess":
+            let folderPath = call.arguments as! String
+            do {
+                try saveDestinationFolderAccess(folderPath)
+                result(nil)
+            } catch {
+                result(FlutterError(code: "REQUEST_FOLDER_ACCESS_FAILED", message: "An error occurred while requesting folder access", details: nil))
+            }
         case "updateDockProgress":
             let progress = call.arguments as! Double
             DockProgress.progress = progress
@@ -195,6 +208,37 @@ class AppDelegate: FlutterAppDelegate {
             result(isLaunchedAsLoginItem)
         default:
             result(FlutterMethodNotImplemented)
+        }
+    }
+    
+    private func saveDestinationFolderAccess(_ folderPath: String) throws {
+        let folderURL = URL(fileURLWithPath: folderPath)
+        let bookmarkData = try folderURL.bookmarkData(
+            options: [.withSecurityScope],
+            includingResourceValuesForKeys: nil,
+            relativeTo: nil
+        )
+        Defaults[.destinationFolderBookmark] = bookmarkData
+    }
+    
+    private func removeExistingDestinationAccess() {
+        guard let existingBookmarkData = Defaults[.destinationFolderBookmark] else { return }
+        if let url = SecurityScopedResourceManager.shared.startAccessing(bookmark: existingBookmarkData) {
+            SecurityScopedResourceManager.shared.stopAccessing(url: url)
+            Defaults[.destinationFolderBookmark] = nil
+        }
+    }
+    
+    private func restoreDestinationFolderAccess() {
+        guard let bookmarkData = Defaults[.destinationFolderBookmark] else { return }
+        do {
+            var isStale = false
+            let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, bookmarkDataIsStale: &isStale)
+            if !isStale {
+                let _ = url.startAccessingSecurityScopedResource()
+            }
+        } catch {
+            print("Failed to restore folder access: \(error)")
         }
     }
     

@@ -65,6 +65,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.4.1"
+  build_cli_annotations:
+    dependency: transitive
+    description:
+      name: build_cli_annotations
+      sha256: b59d2769769efd6c9ff6d4c4cede0be115a566afc591705c2040b707534b1172
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   build_config:
     dependency: transitive
     description:
@@ -1232,6 +1240,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
+  rhttp:
+    dependency: "direct main"
+    description:
+      name: rhttp
+      sha256: "8dc4e1b50cbbd4422a3da93accfd40ea96227fb7d2264d6856754122aedfb194"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
   routerino:
     dependency: "direct main"
     description:

@@ -14,6 +14,14 @@ Future<void> setupStatusBar() async {
   });
 }
 
+Future<void> removeExistingDestinationAccess() async {
+  await _methodChannel.invokeMethod('removeExistingDestinationAccess');
+}
+
+Future<void> persistDestinationFolderAccess(String path) async {
+  await _methodChannel.invokeMethod('persistDestinationFolderAccess', path);
+}
+
 Future<void> updateDockProgress(double progress) async {
   await _methodChannel.invokeMethod('updateDockProgress', progress);
 }
