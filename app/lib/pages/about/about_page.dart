@@ -138,6 +138,12 @@ class AboutPage extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () async {
+                  await launchUrl(Uri.parse('https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai'), mode: LaunchMode.externalApplication);
+                },
+                child: const Text('去AppGallery查看AloeChat.AI'),
+              ),
+              TextButton(
+                onPressed: () async {
                   await launchUrl(Uri.parse('https://www.aloereed.com'), mode: LaunchMode.externalApplication);
                 },
                 child: const Text('主页'),
