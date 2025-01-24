@@ -1,10 +1,3 @@
-/*
- * @Author: 
- * @Date: 2025-01-24 14:52:52
- * @LastEditors: 
- * @LastEditTime: 2025-01-24 15:03:49
- * @Description: file content
- */
 #
 # Generated file, do not edit.
 #
@@ -19,6 +12,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   pasteboard
   permission_handler_windows
   screen_retriever_windows
+  share_plus
   tray_manager
   uri_content
   url_launcher_windows
