@@ -36,7 +36,12 @@
         skills: [
           {
             entities: ["entity.system.home"],
-            actions: ["action.system.home"],
+            actions: ["action.system.home","ohos.want.action.sendData"],
+            uris:[{
+            "scheme": "file",
+            "utd": "general.object",
+            "maxFileSupported": 20
+          },]
           },
         ],
       },

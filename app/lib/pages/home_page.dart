@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> with Refena {
   HomeTab _currentTab = HomeTab.receive;
   bool _isPolicyAccepted = false;
   bool _dragAndDropIndicator = false;
+  final EventChannel _eventChannel2 = EventChannel('com.example.app/events');
 
   @override
   void initState() {
@@ -72,6 +73,30 @@ class _HomePageState extends State<HomePage> with Refena {
           .dispatch(ChangeTabAction(widget.initialTab));
       await postInit(context, ref, widget.appStart);
     });
+    _eventChannel2
+        .receiveBroadcastStream()
+        .listen(_onEventOpenuri, onError: _onErrorOpenuri);
+  }
+  
+  void _onEventOpenuri(dynamic event) async {
+    print('Received event!');
+    if (event is String && event.isNotEmpty) {
+      print('Received event: $event');
+      await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddFilesAction(
+              files: [event],
+              converter: CrossFileConverters.convertUriOhos,
+            ));
+      print('Added: $event');
+       ref
+          .redux(homePageControllerProvider)
+          .dispatch(ChangeTabAction(HomeTab.send));
+    }
+  }
+
+  void _onErrorOpenuri(Object error) {
+    print('Error receiving event: $error');
   }
 
   @override

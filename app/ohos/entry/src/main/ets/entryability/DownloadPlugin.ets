@@ -36,7 +36,13 @@ const TAG = "DownloadPluginTag";
 export default class DownloadPlugin implements FlutterPlugin {
   private channel?: MethodChannel;
   private eventSink?: EventSink;
+  private eventChannel?: EventChannel;
   private api = new DownloadApi();
+  sendWant(uri:string): void {
+    if(this.eventSink){
+      this.eventSink.success(uri);
+    }
+  }
 
   onAttachedToEngine(binding: FlutterPluginBinding): void {
     this.channel = new MethodChannel(binding.getBinaryMessenger(), "samples.flutter.dev/downloadplugin");
@@ -60,6 +66,17 @@ export default class DownloadPlugin implements FlutterPlugin {
         }
       }
     })
+    this.eventChannel = new EventChannel(binding.getBinaryMessenger(), "com.example.app/events");
+    this.eventChannel.setStreamHandler({
+      onListen(args: Any, events: EventSink): void {
+        that.eventSink = events; // 将 events 赋值给外部的 eventSink
+        Log.i(TAG, "onListen: " + args);
+      },
+      onCancel(args: Any): void {
+        that.eventSink = undefined; // 取消 eventSink
+        Log.i(TAG, "onCancel: " + args);
+      }
+    });
 
   }
 

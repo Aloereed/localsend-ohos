@@ -49,12 +49,34 @@ import 'package:refena_flutter/refena_flutter.dart';
 import 'package:rhttp/rhttp.dart';
 import 'package:share_handler/share_handler.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:localsend_app/util/native/platform_check.dart';
 
 final _logger = Logger('Init');
 
 /// Will be called before the MaterialApp started
-Future<RefenaContainer> preInit(List<String> args) async {
+Future<RefenaContainer> preInit(List<String> args_) async {
   WidgetsFlutterBinding.ensureInitialized();
+  // _args是个定长数组，先复制为可变数组
+  final args = List<String>.from(args_);
+
+  if(checkPlatform([TargetPlatform.ohos])){
+    // 尝试读取 "/data/storage/el2/base/openuri.txt" 如果有
+    // 每一行都是一个uri
+    // 加入args
+    final file = File("/data/storage/el2/base/openuri.txt");
+    if (file.existsSync()) {
+      final lines = file.readAsLinesSync();
+      // 对每一行执行Uri.decodeFull(uri.replaceFirst(RegExp(r"file://(media|docs)"), ""))
+      // 然后加入args
+      for (var line in lines) {
+        final path = Uri.decodeFull(line.replaceFirst(RegExp(r"file://(media|docs)"), ""));
+        args.add(path);
+      }
+      file.deleteSync();
+    }
+    // 删除该文件
+    
+  }
 
   initLogger(args.contains('-v') || args.contains('--verbose') ? Level.ALL : Level.INFO);
   MapperContainer.globals.use(const FileDtoMapper());

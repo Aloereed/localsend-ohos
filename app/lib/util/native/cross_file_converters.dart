@@ -2,7 +2,7 @@
  * @Author: 
  * @Date: 2024-12-21 15:37:26
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-01-24 15:01:32
+ * @LastEditTime: 2025-01-27 13:18:22
  * @Description: file content
  */
 import 'dart:io';
@@ -47,6 +47,25 @@ class CrossFileConverters {
       asset: null,
       path: kIsWeb ? null : file.path,
       bytes: kIsWeb ? file.bytes! : null,
+      lastModified: null,
+      lastAccessed: null,
+    );
+  }
+
+  static Future<CrossFile> convertUriOhos(
+      String uri) async {
+    final path = Uri.decodeFull(uri.replaceFirst(RegExp(r"file://(media|docs)"), ""));
+    final file = File(path);
+    print("start convert:"+path);
+    return CrossFile(
+      name: path.fileName,
+      fileType: path.fileName.guessFileType(),
+      size: await file.length(),
+      thumbnail: null,
+      asset: null,
+      path: kIsWeb ? null : Uri.decodeFull(
+              file.path.replaceFirst(RegExp(r"file://(media|docs)"), "")),
+      bytes: null,
       lastModified: null,
       lastAccessed: null,
     );

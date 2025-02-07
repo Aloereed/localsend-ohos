@@ -130,6 +130,7 @@ class AddFilesAction<T> extends AsyncReduxAction<SelectedSendingFilesNotifier, L
       //  https://github.com/fluttercandies/flutter_photo_manager/issues/589
 
       final crossFile = await converter(file);
+      print("convert done.");
       final isAlreadySelect = state.any((element) => element.isSameFile(otherFile: crossFile));
       if (!isAlreadySelect) {
         newFiles.add(crossFile);
