@@ -31,6 +31,8 @@ import { EventSink } from '@ohos/flutter_ohos/src/main/ets/plugin/common/EventCh
 import { picker } from '@kit.CoreFileKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { common , Want } from '@kit.AbilityKit';
+import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
+import { wantAgent, WantAgent } from '@kit.AbilityKit';
 const TAG = "DownloadPluginTag";
 
 export default class DownloadPlugin implements FlutterPlugin {
@@ -55,6 +57,12 @@ export default class DownloadPlugin implements FlutterPlugin {
             break;
           case "openFileManager":
             that.api.openFileManager(result);
+            break;
+          case "startContinuousTask":
+            that.api.startContinuousTask(result);
+            break;
+          case "stopContinuousTask":
+            that.api.stopContinuousTask(result);
             break;
           case "callEvent":
             that.eventSink?.success("Success at " + new Date());
@@ -120,6 +128,50 @@ class DownloadApi {
     }
     Log.i(TAG, "getDownloadPermission finish");
   }
+  startContinuousTask(result: MethodResult) {
+    console.info("start a continuous task")
+    let context = getContext(this) as common.UIAbilityContext; 
+     let wantAgentInfo: wantAgent.WantAgentInfo = {
+       // 点击通知后，将要执行的动作列表
+       // 添加需要被拉起应用的bundleName和abilityName
+       wants: [
+         {
+           bundleName: "com.aloereed.aloechatai",
+           abilityName: "EntryAbility"
+         }
+       ],
+       // 指定点击通知栏消息后的动作是拉起ability
+       actionType: wantAgent.OperationType.START_ABILITY,
+       // 使用者自定义的一个私有值
+       requestCode: 0,
+       // 点击通知后，动作执行属性
+       actionFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG]
+     };
+
+     // 通过wantAgent模块下getWantAgent方法获取WantAgent对象
+     wantAgent.getWantAgent(wantAgentInfo).then((wantAgentObj: WantAgent) => {
+       backgroundTaskManager.startBackgroundRunning(context,
+         backgroundTaskManager.BackgroundMode.DATA_TRANSFER, wantAgentObj).then(() => {
+         // 此处执行具体的长时任务逻辑，如放音等。
+         result.success("Success at " + new Date());
+         console.info(`Succeeded in operationing startBackgroundRunning.`);
+       }).catch((err: BusinessError) => {
+         result.success("UNAVAILABLE")
+         console.error(`Failed to operation startBackgroundRunning. Code is ${err.code}, message is ${err.message}`);
+       });
+     });
+   }
+
+   stopContinuousTask(result: MethodResult) {
+    let context = getContext(this) as common.UIAbilityContext; 
+      backgroundTaskManager.stopBackgroundRunning(context).then(() => {
+        result.success("Success at " + new Date());
+        console.info(`Succeeded in operationing stopBackgroundRunning.`);
+      }).catch((err: BusinessError) => {
+        result.success("UNAVAILABLE")
+        console.error(`Failed to operation stopBackgroundRunning. Code is ${err.code}, message is ${err.message}`);
+      });
+   }
   openFileManager(result: MethodResult) {
     let context = getContext(this) as common.UIAbilityContext;
     let uri = 'Open FE.';

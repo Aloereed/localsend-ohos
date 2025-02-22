@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:common/model/device.dart';
 import 'package:common/model/session_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/provider/device_info_provider.dart';
@@ -38,9 +39,25 @@ class _SendPageState extends State<SendPage> with Refena {
   Device? _targetDevice;
 
   @override
-  void dispose() {
+  void initState() async{
+    super.initState();
+    // 创建实例
+    final _platform = const MethodChannel(
+        'samples.flutter.dev/downloadplugin');
+    // 调用方法 getBatteryLevel
+    final result = await _platform
+        .invokeMethod<String>('startContinuousTask');
+  }
+
+  @override
+  void dispose() async{
     super.dispose();
     unawaited(TaskbarHelper.clearProgressBar());
+    // final _platform = const MethodChannel(
+    //     'samples.flutter.dev/downloadplugin');
+    // // 调用方法 getBatteryLevel
+    // final result = await _platform
+    //     .invokeMethod<String>('stopContinuousTask');
   }
 
   void _cancel() {
@@ -56,8 +73,31 @@ class _SendPageState extends State<SendPage> with Refena {
       _targetDevice = sendState.target;
     });
     ref.notifier(sendProvider).cancelSession(widget.sessionId);
+    // final _platform = const MethodChannel(
+    //     'samples.flutter.dev/downloadplugin');
+    // // 调用方法 getBatteryLevel
+    // final result = await _platform
+    //     .invokeMethod<String>('stopContinuousTask');
   }
+  void _cancelWithStopBgTask() async{
+    // the state will be lost so we store them temporarily (only for UI)
+    final myDevice = ref.read(deviceFullInfoProvider);
+    final sendState = ref.read(sendProvider)[widget.sessionId];
+    if (sendState == null) {
+      return;
+    }
 
+    setState(() {
+      _myDevice = myDevice;
+      _targetDevice = sendState.target;
+    });
+    ref.notifier(sendProvider).cancelSession(widget.sessionId);
+    final _platform = const MethodChannel(
+        'samples.flutter.dev/downloadplugin');
+    // 调用方法 getBatteryLevel
+    final result = await _platform
+        .invokeMethod<String>('stopContinuousTask');
+  }
   @override
   Widget build(BuildContext context) {
     final sendState = ref.watch(sendProvider.select((state) => state[widget.sessionId]), listener: (prev, next) {
@@ -182,7 +222,8 @@ class _SendPageState extends State<SendPage> with Refena {
                             Center(
                               child: FilledButton.icon(
                                 onPressed: () {
-                                  _cancel();
+                                  // _cancel();
+                                  _cancelWithStopBgTask();
                                   context.pop();
                                 },
                                 icon: Icon(waiting ? Icons.close : Icons.check_circle),

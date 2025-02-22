@@ -31,8 +31,9 @@ class ReceivePage extends StatefulWidget {
 }
 
 class _ReceivePageState extends State<ReceivePage> with Refena {
+
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
     unawaited(TaskbarHelper.clearProgressBar());
   }

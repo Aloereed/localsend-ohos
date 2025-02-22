@@ -711,7 +711,7 @@ class _TranslationsNetworkInterfacesPageZhTw extends TranslationsNetworkInterfac
 
   // Translations
   @override
-  String get info => 'LocalSend 預設使用所有可用的網路介面，您可於此處排除不想使用的網路。您需要重新啟動伺服器以套用變更。';
+  String get info => 'AloeChat.AI 預設使用所有可用的網路介面，您可於此處排除不想使用的網路。您需要重新啟動伺服器以套用變更。';
   @override
   String get title => '網路介面';
   @override

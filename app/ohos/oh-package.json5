@@ -29,7 +29,7 @@
     "fluttertoast": "file:./har/fluttertoast.har",
     "webview_flutter_ohos": "file:./har/webview_flutter_ohos.har",
     "file_picker_ohos": "file:./har/file_picker_ohos.har",
-    "photo_manager": "../../../../FlutterCache/hosted/pub.flutter-io.cn/photo_manager-3.6.0/ohos",
+    "photo_manager": "../../../../FlutterCache/hosted/pub.flutter-io.cn/photo_manager-3.6.3/ohos",
     "in_app_purchase_ohos": "file:./har/in_app_purchase_ohos.har",
     "rhttp": "file:./har/rhttp.har"
   }

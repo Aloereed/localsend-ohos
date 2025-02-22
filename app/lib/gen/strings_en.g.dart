@@ -183,7 +183,7 @@ class TranslationsNetworkInterfacesPageEn {
   // Translations
   String get title => 'Network Interfaces';
   String get info =>
-      'By default, LocalSend uses all available network interfaces. You can exclude unwanted networks here. You need to restart the server to apply the changes.';
+      'By default, AloeChat.AI uses all available network interfaces. You can exclude unwanted networks here. You need to restart the server to apply the changes.';
   String get preview => 'Preview';
   String get whitelist => 'Whitelist';
   String get blacklist => 'Blacklist';

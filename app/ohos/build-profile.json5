@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storePassword": "0000001C61893196AACA48BFE1F09681F9FC4315CBE46263970DD93925C8F482EA473910C65A48E73D9808B6",
-          "certpath": "D:/ZHENGSHU/aloechatai.cer",
+          "storePassword": "0000001C3A331776A1AEC8E54A0E486D26255C0A8B20D9E389FAB27E41004B91887F7679367F278F3D48C786",
+          "certpath": "C:/Users/huzheng/Downloads/aloechatai.cer",
           "keyAlias": "aloechatai",
-          "keyPassword": "0000001C688C30DFFD8190715C8F1702EAA08ACA2DB1F0636092F0E11B5AC2C1666D643308DC40EC1D40058D",
-          "profile": "D:/ZHENGSHU/aloechataiRelease.p7b",
+          "keyPassword": "0000001C64AED4610AAD44D9C1020FBBDF24DD71D898B47DC31CBCDE6599AB2FF3FB9892452B7429E25BF079",
+          "profile": "C:/Users/huzheng/Downloads/aloechataiRelease.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "D:/ZHENGSHU/aloechatai.p12"
+          "storeFile": "C:/Users/huzheng/aloechatai.p12"
         }
       }
     ],
@@ -39,7 +39,7 @@
     },
     {
       "name": "photo_manager",
-      "srcPath": "../../../../FlutterCache/hosted/pub.flutter-io.cn/photo_manager-3.6.0/ohos",
+      "srcPath": "../../../../FlutterCache/hosted/pub.flutter-io.cn/photo_manager-3.6.3/ohos",
       "targets": [
         {
           "name": "default",

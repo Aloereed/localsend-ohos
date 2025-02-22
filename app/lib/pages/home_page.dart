@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> with Refena {
   final EventChannel _eventChannel2 = EventChannel('com.example.app/events');
 
   @override
-  void initState() {
+  void initState() async{
     super.initState();
 
     ensureRef((ref) async {

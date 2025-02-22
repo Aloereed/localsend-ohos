@@ -18,6 +18,7 @@ import { Log } from '@ohos/flutter_ohos';
 import { common, UIAbility, Want } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { FileInfo, FileInfoBuilder } from './FileInfo'
+import { BusinessError } from '@kit.BasicServicesKit';
 import util from '@ohos.util';
 
 export class FileUtils {
@@ -56,6 +57,19 @@ export class FileUtils {
     return result as string
   }
 
+  static async getVideoSize(fd: number): Promise<number> {
+    return new Promise((resolve, reject) => {
+      fs.stat(fd, (err: BusinessError, stat: fs.Stat) => {
+        if (err) {
+          reject('app.string.unknown_size'); // Rejecting the promise
+        } else {
+          const size = stat.size;
+          resolve(size); // Resolving the promise with the size
+        }
+      });
+    });
+  }
+
   static async openFileStream(context: common.UIAbilityContext, uri: string, withData: boolean): Promise<FileInfo | null> {
     const fileInfo: FileInfoBuilder = new FileInfoBuilder();
     let fileName: string = FileUtils.getFileName(uri, context) as string;
@@ -69,15 +83,15 @@ export class FileUtils {
       let inputFile = fs.openSync(path);
 
       // Calculate the file size
-      let totalRead = 0;
-      let buf = new ArrayBuffer(4096);
-      while (true) {
-        let size = fs.readSync(inputFile.fd, buf);
-        if (size <= 0) {
-          break;
-        }
-        totalRead += size;
-      }
+      let totalRead = await FileUtils.getVideoSize(inputFile.fd);
+      // let buf = new ArrayBuffer(4096);
+      // while (true) {
+      //   let size = fs.readSync(inputFile.fd, buf);
+      //   if (size <= 0) {
+      //     break;
+      //   }
+      //   totalRead += size;
+      // }
       
 
       // Close the file

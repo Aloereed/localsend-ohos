@@ -13,21 +13,15 @@ import 'strings.g.dart';
 class TranslationsZhCn extends Translations {
   /// You can call this constructor and build your own translation instance of this locale.
   /// Constructing via the enum [AppLocale.build] is preferred.
-  TranslationsZhCn(
-      {Map<String, Node>? overrides,
-      PluralResolver? cardinalResolver,
-      PluralResolver? ordinalResolver})
-      : assert(overrides == null,
-            'Set "translation_overrides: true" in order to enable this feature.'),
+  TranslationsZhCn({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+      : assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
         $meta = TranslationMetadata(
           locale: AppLocale.zhCn,
           overrides: overrides ?? {},
           cardinalResolver: cardinalResolver,
           ordinalResolver: ordinalResolver,
         ),
-        super(
-            cardinalResolver: cardinalResolver,
-            ordinalResolver: ordinalResolver);
+        super(cardinalResolver: cardinalResolver, ordinalResolver: ordinalResolver);
 
   /// Metadata for the translations of <zh-CN>.
   @override
@@ -41,65 +35,43 @@ class TranslationsZhCn extends Translations {
   @override
   String get appName => 'AloeChat.AI';
   @override
-  late final _TranslationsGeneralZhCn general =
-      _TranslationsGeneralZhCn._(_root);
+  late final _TranslationsGeneralZhCn general = _TranslationsGeneralZhCn._(_root);
   @override
-  late final _TranslationsReceiveTabZhCn receiveTab =
-      _TranslationsReceiveTabZhCn._(_root);
+  late final _TranslationsReceiveTabZhCn receiveTab = _TranslationsReceiveTabZhCn._(_root);
   @override
-  late final _TranslationsSendTabZhCn sendTab =
-      _TranslationsSendTabZhCn._(_root);
+  late final _TranslationsSendTabZhCn sendTab = _TranslationsSendTabZhCn._(_root);
   @override
-  late final _TranslationsSettingsTabZhCn settingsTab =
-      _TranslationsSettingsTabZhCn._(_root);
+  late final _TranslationsSettingsTabZhCn settingsTab = _TranslationsSettingsTabZhCn._(_root);
   @override
-  late final _TranslationsTroubleshootPageZhCn troubleshootPage =
-      _TranslationsTroubleshootPageZhCn._(_root);
+  late final _TranslationsTroubleshootPageZhCn troubleshootPage = _TranslationsTroubleshootPageZhCn._(_root);
   @override
-  late final _TranslationsNetworkInterfacesPageZhCn networkInterfacesPage =
-      _TranslationsNetworkInterfacesPageZhCn._(_root);
+  late final _TranslationsReceiveHistoryPageZhCn receiveHistoryPage = _TranslationsReceiveHistoryPageZhCn._(_root);
   @override
-  late final _TranslationsReceiveHistoryPageZhCn receiveHistoryPage =
-      _TranslationsReceiveHistoryPageZhCn._(_root);
+  late final _TranslationsApkPickerPageZhCn apkPickerPage = _TranslationsApkPickerPageZhCn._(_root);
   @override
-  late final _TranslationsApkPickerPageZhCn apkPickerPage =
-      _TranslationsApkPickerPageZhCn._(_root);
+  late final _TranslationsSelectedFilesPageZhCn selectedFilesPage = _TranslationsSelectedFilesPageZhCn._(_root);
   @override
-  late final _TranslationsSelectedFilesPageZhCn selectedFilesPage =
-      _TranslationsSelectedFilesPageZhCn._(_root);
+  late final _TranslationsReceivePageZhCn receivePage = _TranslationsReceivePageZhCn._(_root);
   @override
-  late final _TranslationsReceivePageZhCn receivePage =
-      _TranslationsReceivePageZhCn._(_root);
+  late final _TranslationsReceiveOptionsPageZhCn receiveOptionsPage = _TranslationsReceiveOptionsPageZhCn._(_root);
   @override
-  late final _TranslationsReceiveOptionsPageZhCn receiveOptionsPage =
-      _TranslationsReceiveOptionsPageZhCn._(_root);
+  late final _TranslationsSendPageZhCn sendPage = _TranslationsSendPageZhCn._(_root);
   @override
-  late final _TranslationsSendPageZhCn sendPage =
-      _TranslationsSendPageZhCn._(_root);
+  late final _TranslationsProgressPageZhCn progressPage = _TranslationsProgressPageZhCn._(_root);
   @override
-  late final _TranslationsProgressPageZhCn progressPage =
-      _TranslationsProgressPageZhCn._(_root);
+  late final _TranslationsWebSharePageZhCn webSharePage = _TranslationsWebSharePageZhCn._(_root);
   @override
-  late final _TranslationsWebSharePageZhCn webSharePage =
-      _TranslationsWebSharePageZhCn._(_root);
+  late final _TranslationsAboutPageZhCn aboutPage = _TranslationsAboutPageZhCn._(_root);
   @override
-  late final _TranslationsAboutPageZhCn aboutPage =
-      _TranslationsAboutPageZhCn._(_root);
+  late final _TranslationsDonationPageZhCn donationPage = _TranslationsDonationPageZhCn._(_root);
   @override
-  late final _TranslationsDonationPageZhCn donationPage =
-      _TranslationsDonationPageZhCn._(_root);
+  late final _TranslationsChangelogPageZhCn changelogPage = _TranslationsChangelogPageZhCn._(_root);
   @override
-  late final _TranslationsChangelogPageZhCn changelogPage =
-      _TranslationsChangelogPageZhCn._(_root);
+  late final _TranslationsAliasGeneratorZhCn aliasGenerator = _TranslationsAliasGeneratorZhCn._(_root);
   @override
-  late final _TranslationsAliasGeneratorZhCn aliasGenerator =
-      _TranslationsAliasGeneratorZhCn._(_root);
+  late final _TranslationsDialogsZhCn dialogs = _TranslationsDialogsZhCn._(_root);
   @override
-  late final _TranslationsDialogsZhCn dialogs =
-      _TranslationsDialogsZhCn._(_root);
-  @override
-  late final _TranslationsSanitizationZhCn sanitization =
-      _TranslationsSanitizationZhCn._(_root);
+  late final _TranslationsSanitizationZhCn sanitization = _TranslationsSanitizationZhCn._(_root);
   @override
   late final _TranslationsTrayZhCn tray = _TranslationsTrayZhCn._(_root);
   @override
@@ -209,11 +181,9 @@ class _TranslationsReceiveTabZhCn extends TranslationsReceiveTabEn {
   @override
   String get title => '接收';
   @override
-  late final _TranslationsReceiveTabInfoBoxZhCn infoBox =
-      _TranslationsReceiveTabInfoBoxZhCn._(_root);
+  late final _TranslationsReceiveTabInfoBoxZhCn infoBox = _TranslationsReceiveTabInfoBoxZhCn._(_root);
   @override
-  late final _TranslationsReceiveTabQuickSaveZhCn quickSave =
-      _TranslationsReceiveTabQuickSaveZhCn._(_root);
+  late final _TranslationsReceiveTabQuickSaveZhCn quickSave = _TranslationsReceiveTabQuickSaveZhCn._(_root);
 }
 
 // Path: sendTab
@@ -228,11 +198,9 @@ class _TranslationsSendTabZhCn extends TranslationsSendTabEn {
   @override
   String get title => '发送';
   @override
-  late final _TranslationsSendTabSelectionZhCn selection =
-      _TranslationsSendTabSelectionZhCn._(_root);
+  late final _TranslationsSendTabSelectionZhCn selection = _TranslationsSendTabSelectionZhCn._(_root);
   @override
-  late final _TranslationsSendTabPickerZhCn picker =
-      _TranslationsSendTabPickerZhCn._(_root);
+  late final _TranslationsSendTabPickerZhCn picker = _TranslationsSendTabPickerZhCn._(_root);
   @override
   String get shareIntentInfo => '你也可以通过移动设备中的“分享”功能更简单地发送文件。';
   @override
@@ -246,12 +214,11 @@ class _TranslationsSendTabZhCn extends TranslationsSendTabEn {
   @override
   String get sendMode => '发送模式';
   @override
-  late final _TranslationsSendTabSendModesZhCn sendModes =
-      _TranslationsSendTabSendModesZhCn._(_root);
+  late final _TranslationsSendTabSendModesZhCn sendModes = _TranslationsSendTabSendModesZhCn._(_root);
   @override
   String get sendModeHelp => '提示';
   @override
-  String get help => '请确保目标连接的是同一个 WLAN 网络';
+  String get help => '请确保目标连接的是同一个 Wi‑Fi 网络。';
   @override
   String get placeItems => '列出要分享的项目';
 }
@@ -268,20 +235,15 @@ class _TranslationsSettingsTabZhCn extends TranslationsSettingsTabEn {
   @override
   String get title => '设置';
   @override
-  late final _TranslationsSettingsTabGeneralZhCn general =
-      _TranslationsSettingsTabGeneralZhCn._(_root);
+  late final _TranslationsSettingsTabGeneralZhCn general = _TranslationsSettingsTabGeneralZhCn._(_root);
   @override
-  late final _TranslationsSettingsTabReceiveZhCn receive =
-      _TranslationsSettingsTabReceiveZhCn._(_root);
+  late final _TranslationsSettingsTabReceiveZhCn receive = _TranslationsSettingsTabReceiveZhCn._(_root);
   @override
-  late final _TranslationsSettingsTabSendZhCn send =
-      _TranslationsSettingsTabSendZhCn._(_root);
+  late final _TranslationsSettingsTabSendZhCn send = _TranslationsSettingsTabSendZhCn._(_root);
   @override
-  late final _TranslationsSettingsTabNetworkZhCn network =
-      _TranslationsSettingsTabNetworkZhCn._(_root);
+  late final _TranslationsSettingsTabNetworkZhCn network = _TranslationsSettingsTabNetworkZhCn._(_root);
   @override
-  late final _TranslationsSettingsTabOtherZhCn other =
-      _TranslationsSettingsTabOtherZhCn._(_root);
+  late final _TranslationsSettingsTabOtherZhCn other = _TranslationsSettingsTabOtherZhCn._(_root);
   @override
   String get advancedSettings => '高级设置';
 }
@@ -304,19 +266,15 @@ class _TranslationsTroubleshootPageZhCn extends TranslationsTroubleshootPageEn {
   @override
   String get fixButton => '自动修复';
   @override
-  late final _TranslationsTroubleshootPageFirewallZhCn firewall =
-      _TranslationsTroubleshootPageFirewallZhCn._(_root);
+  late final _TranslationsTroubleshootPageFirewallZhCn firewall = _TranslationsTroubleshootPageFirewallZhCn._(_root);
   @override
-  late final _TranslationsTroubleshootPageNoDiscoveryZhCn noDiscovery =
-      _TranslationsTroubleshootPageNoDiscoveryZhCn._(_root);
+  late final _TranslationsTroubleshootPageNoDiscoveryZhCn noDiscovery = _TranslationsTroubleshootPageNoDiscoveryZhCn._(_root);
   @override
-  late final _TranslationsTroubleshootPageNoConnectionZhCn noConnection =
-      _TranslationsTroubleshootPageNoConnectionZhCn._(_root);
+  late final _TranslationsTroubleshootPageNoConnectionZhCn noConnection = _TranslationsTroubleshootPageNoConnectionZhCn._(_root);
 }
 
 // Path: receiveHistoryPage
-class _TranslationsReceiveHistoryPageZhCn
-    extends TranslationsReceiveHistoryPageEn {
+class _TranslationsReceiveHistoryPageZhCn extends TranslationsReceiveHistoryPageEn {
   _TranslationsReceiveHistoryPageZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -333,31 +291,7 @@ class _TranslationsReceiveHistoryPageZhCn
   @override
   String get empty => '无历史记录。';
   @override
-  late final _TranslationsReceiveHistoryPageEntryActionsZhCn entryActions =
-      _TranslationsReceiveHistoryPageEntryActionsZhCn._(_root);
-}
-
-// Path: networkInterfacesPage
-class _TranslationsNetworkInterfacesPageZhCn
-    extends TranslationsNetworkInterfacesPageEn {
-  _TranslationsNetworkInterfacesPageZhCn._(TranslationsZhCn root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhCn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => '网络接口';
-  @override
-  String get info =>
-      '默认情况下，AloeChat.AI 使用所有可用的网络接口。您可以在此排除不需要的网络。需要重启服务器以应用更改。';
-  @override
-  String get preview => '预览';
-  @override
-  String get whitelist => '白名单';
-  @override
-  String get blacklist => '黑名单';
+  late final _TranslationsReceiveHistoryPageEntryActionsZhCn entryActions = _TranslationsReceiveHistoryPageEntryActionsZhCn._(_root);
 }
 
 // Path: apkPickerPage
@@ -380,8 +314,7 @@ class _TranslationsApkPickerPageZhCn extends TranslationsApkPickerPageEn {
 }
 
 // Path: selectedFilesPage
-class _TranslationsSelectedFilesPageZhCn
-    extends TranslationsSelectedFilesPageEn {
+class _TranslationsSelectedFilesPageZhCn extends TranslationsSelectedFilesPageEn {
   _TranslationsSelectedFilesPageZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -403,8 +336,7 @@ class _TranslationsReceivePageZhCn extends TranslationsReceivePageEn {
 
   // Translations
   @override
-  String subTitle({required num n}) =>
-      (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
+  String subTitle({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
         n,
         one: '想要发送给你一个文件',
         other: '想要发送给你 ${n} 个文件',
@@ -418,8 +350,7 @@ class _TranslationsReceivePageZhCn extends TranslationsReceivePageEn {
 }
 
 // Path: receiveOptionsPage
-class _TranslationsReceiveOptionsPageZhCn
-    extends TranslationsReceiveOptionsPageEn {
+class _TranslationsReceiveOptionsPageZhCn extends TranslationsReceiveOptionsPageEn {
   _TranslationsReceiveOptionsPageZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -474,23 +405,7 @@ class _TranslationsProgressPageZhCn extends TranslationsProgressPageEn {
   @override
   String get savedToGallery => '已保存到相册';
   @override
-  late final _TranslationsProgressPageTotalZhCn total =
-      _TranslationsProgressPageTotalZhCn._(_root);
-}
-
-// Path: dialogs.openFile
-class _TranslationsDialogsOpenFileZhCn extends TranslationsDialogsOpenFileEn {
-  _TranslationsDialogsOpenFileZhCn._(TranslationsZhCn root)
-      : this._root = root,
-        super.internal(root);
-
-  final TranslationsZhCn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => '打开文件';
-  @override
-  String get content => '你要现在打开文件吗？';
+  late final _TranslationsProgressPageTotalZhCn total = _TranslationsProgressPageTotalZhCn._(_root);
 }
 
 // Path: webSharePage
@@ -511,8 +426,7 @@ class _TranslationsWebSharePageZhCn extends TranslationsWebSharePageEn {
   @override
   String get error => '在启动服务器过程中发生了错误。';
   @override
-  String openLink({required num n}) =>
-      (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
+  String openLink({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(
         n,
         one: '在浏览器中打开链接：',
         other: '在浏览器中打开其中一个链接：',
@@ -675,8 +589,7 @@ class _TranslationsAliasGeneratorZhCn extends TranslationsAliasGeneratorEn {
         '番茄',
       ];
   @override
-  String combination({required Object adjective, required Object fruit}) =>
-      '${adjective}的${fruit}';
+  String combination({required Object adjective, required Object fruit}) => '${adjective}的${fruit}';
 }
 
 // Path: dialogs
@@ -689,84 +602,56 @@ class _TranslationsDialogsZhCn extends TranslationsDialogsEn {
 
   // Translations
   @override
-  late final _TranslationsDialogsAddFileZhCn addFile =
-      _TranslationsDialogsAddFileZhCn._(_root);
+  late final _TranslationsDialogsAddFileZhCn addFile = _TranslationsDialogsAddFileZhCn._(_root);
   @override
-  late final _TranslationsDialogsAddressInputZhCn addressInput =
-      _TranslationsDialogsAddressInputZhCn._(_root);
+  late final _TranslationsDialogsOpenFileZhCn openFile = _TranslationsDialogsOpenFileZhCn._(_root);
   @override
-  late final _TranslationsDialogsCancelSessionZhCn cancelSession =
-      _TranslationsDialogsCancelSessionZhCn._(_root);
+  late final _TranslationsDialogsAddressInputZhCn addressInput = _TranslationsDialogsAddressInputZhCn._(_root);
   @override
-  late final _TranslationsDialogsCannotOpenFileZhCn cannotOpenFile =
-      _TranslationsDialogsCannotOpenFileZhCn._(_root);
+  late final _TranslationsDialogsCancelSessionZhCn cancelSession = _TranslationsDialogsCancelSessionZhCn._(_root);
   @override
-  late final _TranslationsDialogsEncryptionDisabledNoticeZhCn
-      encryptionDisabledNotice =
-      _TranslationsDialogsEncryptionDisabledNoticeZhCn._(_root);
+  late final _TranslationsDialogsCannotOpenFileZhCn cannotOpenFile = _TranslationsDialogsCannotOpenFileZhCn._(_root);
   @override
-  late final _TranslationsDialogsOpenFileZhCn openFile =
-      _TranslationsDialogsOpenFileZhCn._(_root);
+  late final _TranslationsDialogsEncryptionDisabledNoticeZhCn encryptionDisabledNotice = _TranslationsDialogsEncryptionDisabledNoticeZhCn._(_root);
   @override
-  late final _TranslationsDialogsErrorDialogZhCn errorDialog =
-      _TranslationsDialogsErrorDialogZhCn._(_root);
+  late final _TranslationsDialogsErrorDialogZhCn errorDialog = _TranslationsDialogsErrorDialogZhCn._(_root);
   @override
-  late final _TranslationsDialogsFavoriteDialogZhCn favoriteDialog =
-      _TranslationsDialogsFavoriteDialogZhCn._(_root);
+  late final _TranslationsDialogsFavoriteDialogZhCn favoriteDialog = _TranslationsDialogsFavoriteDialogZhCn._(_root);
   @override
-  late final _TranslationsDialogsFavoriteDeleteDialogZhCn favoriteDeleteDialog =
-      _TranslationsDialogsFavoriteDeleteDialogZhCn._(_root);
+  late final _TranslationsDialogsFavoriteDeleteDialogZhCn favoriteDeleteDialog = _TranslationsDialogsFavoriteDeleteDialogZhCn._(_root);
   @override
-  late final _TranslationsDialogsFavoriteEditDialogZhCn favoriteEditDialog =
-      _TranslationsDialogsFavoriteEditDialogZhCn._(_root);
+  late final _TranslationsDialogsFavoriteEditDialogZhCn favoriteEditDialog = _TranslationsDialogsFavoriteEditDialogZhCn._(_root);
   @override
-  late final _TranslationsDialogsFileInfoZhCn fileInfo =
-      _TranslationsDialogsFileInfoZhCn._(_root);
+  late final _TranslationsDialogsFileInfoZhCn fileInfo = _TranslationsDialogsFileInfoZhCn._(_root);
   @override
-  late final _TranslationsDialogsFileNameInputZhCn fileNameInput =
-      _TranslationsDialogsFileNameInputZhCn._(_root);
+  late final _TranslationsDialogsFileNameInputZhCn fileNameInput = _TranslationsDialogsFileNameInputZhCn._(_root);
   @override
-  late final _TranslationsDialogsHistoryClearDialogZhCn historyClearDialog =
-      _TranslationsDialogsHistoryClearDialogZhCn._(_root);
+  late final _TranslationsDialogsHistoryClearDialogZhCn historyClearDialog = _TranslationsDialogsHistoryClearDialogZhCn._(_root);
   @override
-  late final _TranslationsDialogsLocalNetworkUnauthorizedZhCn
-      localNetworkUnauthorized =
-      _TranslationsDialogsLocalNetworkUnauthorizedZhCn._(_root);
+  late final _TranslationsDialogsLocalNetworkUnauthorizedZhCn localNetworkUnauthorized = _TranslationsDialogsLocalNetworkUnauthorizedZhCn._(_root);
   @override
-  late final _TranslationsDialogsMessageInputZhCn messageInput =
-      _TranslationsDialogsMessageInputZhCn._(_root);
+  late final _TranslationsDialogsMessageInputZhCn messageInput = _TranslationsDialogsMessageInputZhCn._(_root);
   @override
-  late final _TranslationsDialogsNoFilesZhCn noFiles =
-      _TranslationsDialogsNoFilesZhCn._(_root);
+  late final _TranslationsDialogsNoFilesZhCn noFiles = _TranslationsDialogsNoFilesZhCn._(_root);
   @override
-  late final _TranslationsDialogsNoPermissionZhCn noPermission =
-      _TranslationsDialogsNoPermissionZhCn._(_root);
+  late final _TranslationsDialogsNoPermissionZhCn noPermission = _TranslationsDialogsNoPermissionZhCn._(_root);
   @override
-  late final _TranslationsDialogsNotAvailableOnPlatformZhCn
-      notAvailableOnPlatform =
-      _TranslationsDialogsNotAvailableOnPlatformZhCn._(_root);
+  late final _TranslationsDialogsNotAvailableOnPlatformZhCn notAvailableOnPlatform = _TranslationsDialogsNotAvailableOnPlatformZhCn._(_root);
   @override
-  late final _TranslationsDialogsQrZhCn qr =
-      _TranslationsDialogsQrZhCn._(_root);
+  late final _TranslationsDialogsQrZhCn qr = _TranslationsDialogsQrZhCn._(_root);
   @override
-  late final _TranslationsDialogsQuickActionsZhCn quickActions =
-      _TranslationsDialogsQuickActionsZhCn._(_root);
+  late final _TranslationsDialogsQuickActionsZhCn quickActions = _TranslationsDialogsQuickActionsZhCn._(_root);
   @override
-  late final _TranslationsDialogsQuickSaveNoticeZhCn quickSaveNotice =
-      _TranslationsDialogsQuickSaveNoticeZhCn._(_root);
+  late final _TranslationsDialogsQuickSaveNoticeZhCn quickSaveNotice = _TranslationsDialogsQuickSaveNoticeZhCn._(_root);
   @override
-  late final _TranslationsDialogsQuickSaveFromFavoritesNoticeZhCn
-      quickSaveFromFavoritesNotice =
+  late final _TranslationsDialogsQuickSaveFromFavoritesNoticeZhCn quickSaveFromFavoritesNotice =
       _TranslationsDialogsQuickSaveFromFavoritesNoticeZhCn._(_root);
   @override
-  late final _TranslationsDialogsPinZhCn pin =
-      _TranslationsDialogsPinZhCn._(_root);
+  late final _TranslationsDialogsPinZhCn pin = _TranslationsDialogsPinZhCn._(_root);
   @override
-  late final _TranslationsDialogsSendModeHelpZhCn sendModeHelp =
-      _TranslationsDialogsSendModeHelpZhCn._(_root);
+  late final _TranslationsDialogsSendModeHelpZhCn sendModeHelp = _TranslationsDialogsSendModeHelpZhCn._(_root);
   @override
-  late final _TranslationsDialogsZoomZhCn zoom =
-      _TranslationsDialogsZoomZhCn._(_root);
+  late final _TranslationsDialogsZoomZhCn zoom = _TranslationsDialogsZoomZhCn._(_root);
 }
 
 // Path: sanitization
@@ -907,7 +792,7 @@ class _TranslationsNetworkInterfacesPageZhCn extends TranslationsNetworkInterfac
   @override
   String get title => '网络接口';
   @override
-  String get info => '默认情况下，LocalSend使用所有可用的网络接口。您可以在此处排除不需要的网络。您需要重新启动服务器以应用更改。';
+  String get info => '默认情况下，AloeChat.AI使用所有可用的网络接口。您可以在此处排除不需要的网络。您需要重新启动服务器以应用更改。';
   @override
   String get preview => '预览';
   @override
@@ -917,8 +802,7 @@ class _TranslationsNetworkInterfacesPageZhCn extends TranslationsNetworkInterfac
 }
 
 // Path: receiveTab.infoBox
-class _TranslationsReceiveTabInfoBoxZhCn
-    extends TranslationsReceiveTabInfoBoxEn {
+class _TranslationsReceiveTabInfoBoxZhCn extends TranslationsReceiveTabInfoBoxEn {
   _TranslationsReceiveTabInfoBoxZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -935,8 +819,7 @@ class _TranslationsReceiveTabInfoBoxZhCn
 }
 
 // Path: receiveTab.quickSave
-class _TranslationsReceiveTabQuickSaveZhCn
-    extends TranslationsReceiveTabQuickSaveEn {
+class _TranslationsReceiveTabQuickSaveZhCn extends TranslationsReceiveTabQuickSaveEn {
   _TranslationsReceiveTabQuickSaveZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1010,8 +893,7 @@ class _TranslationsSendTabSendModesZhCn extends TranslationsSendTabSendModesEn {
 }
 
 // Path: settingsTab.general
-class _TranslationsSettingsTabGeneralZhCn
-    extends TranslationsSettingsTabGeneralEn {
+class _TranslationsSettingsTabGeneralZhCn extends TranslationsSettingsTabGeneralEn {
   _TranslationsSettingsTabGeneralZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1024,20 +906,15 @@ class _TranslationsSettingsTabGeneralZhCn
   @override
   String get brightness => '主题';
   @override
-  late final _TranslationsSettingsTabGeneralBrightnessOptionsZhCn
-      brightnessOptions =
-      _TranslationsSettingsTabGeneralBrightnessOptionsZhCn._(_root);
+  late final _TranslationsSettingsTabGeneralBrightnessOptionsZhCn brightnessOptions = _TranslationsSettingsTabGeneralBrightnessOptionsZhCn._(_root);
   @override
   String get color => '颜色';
   @override
-  late final _TranslationsSettingsTabGeneralColorOptionsZhCn colorOptions =
-      _TranslationsSettingsTabGeneralColorOptionsZhCn._(_root);
+  late final _TranslationsSettingsTabGeneralColorOptionsZhCn colorOptions = _TranslationsSettingsTabGeneralColorOptionsZhCn._(_root);
   @override
   String get language => '语言';
   @override
-  late final _TranslationsSettingsTabGeneralLanguageOptionsZhCn
-      languageOptions =
-      _TranslationsSettingsTabGeneralLanguageOptionsZhCn._(_root);
+  late final _TranslationsSettingsTabGeneralLanguageOptionsZhCn languageOptions = _TranslationsSettingsTabGeneralLanguageOptionsZhCn._(_root);
   @override
   String get saveWindowPlacement => '退出时保存窗口位置';
   @override
@@ -1049,14 +926,13 @@ class _TranslationsSettingsTabGeneralZhCn
   @override
   String get launchMinimized => '启动时最小化到任务栏';
   @override
-  String get showInContextMenu => '在“发送到”文件菜单中显示 AloeChat.AI';
+  String get showInContextMenu => '在“发送到...”文件菜单中显示 AloeChat.AI';
   @override
   String get animations => '动画效果';
 }
 
 // Path: settingsTab.receive
-class _TranslationsSettingsTabReceiveZhCn
-    extends TranslationsSettingsTabReceiveEn {
+class _TranslationsSettingsTabReceiveZhCn extends TranslationsSettingsTabReceiveEn {
   _TranslationsSettingsTabReceiveZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1100,8 +976,7 @@ class _TranslationsSettingsTabSendZhCn extends TranslationsSettingsTabSendEn {
 }
 
 // Path: settingsTab.network
-class _TranslationsSettingsTabNetworkZhCn
-    extends TranslationsSettingsTabNetworkEn {
+class _TranslationsSettingsTabNetworkZhCn extends TranslationsSettingsTabNetworkEn {
   _TranslationsSettingsTabNetworkZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1124,19 +999,13 @@ class _TranslationsSettingsTabNetworkZhCn
   @override
   String get port => '端口';
   @override
-  String get network => '网络';
-  @override
-  late final _TranslationsSettingsTabNetworkNetworkOptionsZhCn networkOptions =
-      _TranslationsSettingsTabNetworkNetworkOptionsZhCn._(_root);
-  @override
   String get discoveryTimeout => '搜索设备超时';
   @override
   String get useSystemName => '使用系统名称';
   @override
   String get generateRandomAlias => '生成随机昵称';
   @override
-  String portWarning({required Object defaultPort}) =>
-      '由于正在使用自定义端口，你可能不会被其他设备检测到。（默认端口：${defaultPort}）';
+  String portWarning({required Object defaultPort}) => '由于正在使用自定义端口，你可能不会被其他设备检测到。（默认端口：${defaultPort}）';
   @override
   String get encryption => '加密';
   @override
@@ -1171,8 +1040,7 @@ class _TranslationsSettingsTabOtherZhCn extends TranslationsSettingsTabOtherEn {
 }
 
 // Path: troubleshootPage.firewall
-class _TranslationsTroubleshootPageFirewallZhCn
-    extends TranslationsTroubleshootPageFirewallEn {
+class _TranslationsTroubleshootPageFirewallZhCn extends TranslationsTroubleshootPageFirewallEn {
   _TranslationsTroubleshootPageFirewallZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1183,15 +1051,13 @@ class _TranslationsTroubleshootPageFirewallZhCn
   @override
   String get symptom => '此设备可以发送文件至其他设备，但其它设备无法发送文件到此设备。';
   @override
-  String solution({required Object port}) =>
-      '这最可能是由防火墙规则设定引起的。你可以通过在端口 ${port} 上允许（UDP 和 TCP）的传入请求来解决这个问题。';
+  String solution({required Object port}) => '这最可能是由防火墙规则设定引起的。你可以通过在端口 ${port} 上允许（UDP 和 TCP）的传入请求来解决这个问题。';
   @override
   String get openFirewall => '打开防火墙';
 }
 
 // Path: troubleshootPage.noDiscovery
-class _TranslationsTroubleshootPageNoDiscoveryZhCn
-    extends TranslationsTroubleshootPageNoDiscoveryEn {
+class _TranslationsTroubleshootPageNoDiscoveryZhCn extends TranslationsTroubleshootPageNoDiscoveryEn {
   _TranslationsTroubleshootPageNoDiscoveryZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1202,13 +1068,11 @@ class _TranslationsTroubleshootPageNoDiscoveryZhCn
   @override
   String get symptom => '此设备未能发现其他设备。';
   @override
-  String get solution =>
-      '确保所有设备都处于同一个 WLAN 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。您可以尝试手动键入目标设备的 IP 地址。如果这有效，请考虑将此设备添加到收藏夹中，以便将来可以自动发现。';
+  String get solution => '确保所有设备都处于同一个 Wi‑Fi 网络上，且共享相同的网络配置（端口、多线程广播地址、加密选项）。您可以尝试手动输入目标设备的 IP 地址。如果起到了效果，请考虑将此设备添加到收藏夹中，以便将来可以自动发现。';
 }
 
 // Path: troubleshootPage.noConnection
-class _TranslationsTroubleshootPageNoConnectionZhCn
-    extends TranslationsTroubleshootPageNoConnectionEn {
+class _TranslationsTroubleshootPageNoConnectionZhCn extends TranslationsTroubleshootPageNoConnectionEn {
   _TranslationsTroubleshootPageNoConnectionZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1219,13 +1083,11 @@ class _TranslationsTroubleshootPageNoConnectionZhCn
   @override
   String get symptom => '双方设备均无法发现对方或者分享文件。';
   @override
-  String get solution =>
-      '当问题发生在双方设备上时，请先确认双方设备处于同一个 WLAN 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。若因 WLAN 不允许参与者间通信，那么请在路由器中关闭“接入点 (AP) 隔离”选项。';
+  String get solution => '当问题发生在双方设备上时，请先确认双方设备处于同一个 Wi‑Fi 网络上，且共享相同的网络配置（端口、多线程广播地址、加密选项）。若因 Wi‑Fi 不允许参与者间通信，那么请在路由器中关闭“接入点 (AP) 隔离”选项。';
 }
 
 // Path: receiveHistoryPage.entryActions
-class _TranslationsReceiveHistoryPageEntryActionsZhCn
-    extends TranslationsReceiveHistoryPageEntryActionsEn {
+class _TranslationsReceiveHistoryPageEntryActionsZhCn extends TranslationsReceiveHistoryPageEntryActionsEn {
   _TranslationsReceiveHistoryPageEntryActionsZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1244,8 +1106,7 @@ class _TranslationsReceiveHistoryPageEntryActionsZhCn
 }
 
 // Path: progressPage.total
-class _TranslationsProgressPageTotalZhCn
-    extends TranslationsProgressPageTotalEn {
+class _TranslationsProgressPageTotalZhCn extends TranslationsProgressPageTotalEn {
   _TranslationsProgressPageTotalZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1254,11 +1115,9 @@ class _TranslationsProgressPageTotalZhCn
 
   // Translations
   @override
-  late final _TranslationsProgressPageTotalTitleZhCn title =
-      _TranslationsProgressPageTotalTitleZhCn._(_root);
+  late final _TranslationsProgressPageTotalTitleZhCn title = _TranslationsProgressPageTotalTitleZhCn._(_root);
   @override
-  String count({required Object curr, required Object n}) =>
-      '文件：${curr} / ${n}';
+  String count({required Object curr, required Object n}) => '文件：${curr} / ${n}';
   @override
   String size({required Object curr, required Object n}) => '大小：${curr} / ${n}';
   @override
@@ -1280,9 +1139,23 @@ class _TranslationsDialogsAddFileZhCn extends TranslationsDialogsAddFileEn {
   String get content => '你想加入什么文件？';
 }
 
+// Path: dialogs.openFile
+class _TranslationsDialogsOpenFileZhCn extends TranslationsDialogsOpenFileEn {
+  _TranslationsDialogsOpenFileZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '打开文件';
+  @override
+  String get content => '您是否要打开接收的文件？';
+}
+
 // Path: dialogs.addressInput
-class _TranslationsDialogsAddressInputZhCn
-    extends TranslationsDialogsAddressInputEn {
+class _TranslationsDialogsAddressInputZhCn extends TranslationsDialogsAddressInputEn {
   _TranslationsDialogsAddressInputZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1301,8 +1174,7 @@ class _TranslationsDialogsAddressInputZhCn
 }
 
 // Path: dialogs.cancelSession
-class _TranslationsDialogsCancelSessionZhCn
-    extends TranslationsDialogsCancelSessionEn {
+class _TranslationsDialogsCancelSessionZhCn extends TranslationsDialogsCancelSessionEn {
   _TranslationsDialogsCancelSessionZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1317,8 +1189,7 @@ class _TranslationsDialogsCancelSessionZhCn
 }
 
 // Path: dialogs.cannotOpenFile
-class _TranslationsDialogsCannotOpenFileZhCn
-    extends TranslationsDialogsCannotOpenFileEn {
+class _TranslationsDialogsCannotOpenFileZhCn extends TranslationsDialogsCannotOpenFileEn {
   _TranslationsDialogsCannotOpenFileZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1333,8 +1204,7 @@ class _TranslationsDialogsCannotOpenFileZhCn
 }
 
 // Path: dialogs.encryptionDisabledNotice
-class _TranslationsDialogsEncryptionDisabledNoticeZhCn
-    extends TranslationsDialogsEncryptionDisabledNoticeEn {
+class _TranslationsDialogsEncryptionDisabledNoticeZhCn extends TranslationsDialogsEncryptionDisabledNoticeEn {
   _TranslationsDialogsEncryptionDisabledNoticeZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1349,8 +1219,7 @@ class _TranslationsDialogsEncryptionDisabledNoticeZhCn
 }
 
 // Path: dialogs.errorDialog
-class _TranslationsDialogsErrorDialogZhCn
-    extends TranslationsDialogsErrorDialogEn {
+class _TranslationsDialogsErrorDialogZhCn extends TranslationsDialogsErrorDialogEn {
   _TranslationsDialogsErrorDialogZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1363,8 +1232,7 @@ class _TranslationsDialogsErrorDialogZhCn
 }
 
 // Path: dialogs.favoriteDialog
-class _TranslationsDialogsFavoriteDialogZhCn
-    extends TranslationsDialogsFavoriteDialogEn {
+class _TranslationsDialogsFavoriteDialogZhCn extends TranslationsDialogsFavoriteDialogEn {
   _TranslationsDialogsFavoriteDialogZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1381,8 +1249,7 @@ class _TranslationsDialogsFavoriteDialogZhCn
 }
 
 // Path: dialogs.favoriteDeleteDialog
-class _TranslationsDialogsFavoriteDeleteDialogZhCn
-    extends TranslationsDialogsFavoriteDeleteDialogEn {
+class _TranslationsDialogsFavoriteDeleteDialogZhCn extends TranslationsDialogsFavoriteDeleteDialogEn {
   _TranslationsDialogsFavoriteDeleteDialogZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1397,8 +1264,7 @@ class _TranslationsDialogsFavoriteDeleteDialogZhCn
 }
 
 // Path: dialogs.favoriteEditDialog
-class _TranslationsDialogsFavoriteEditDialogZhCn
-    extends TranslationsDialogsFavoriteEditDialogEn {
+class _TranslationsDialogsFavoriteEditDialogZhCn extends TranslationsDialogsFavoriteEditDialogEn {
   _TranslationsDialogsFavoriteEditDialogZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1444,8 +1310,7 @@ class _TranslationsDialogsFileInfoZhCn extends TranslationsDialogsFileInfoEn {
 }
 
 // Path: dialogs.fileNameInput
-class _TranslationsDialogsFileNameInputZhCn
-    extends TranslationsDialogsFileNameInputEn {
+class _TranslationsDialogsFileNameInputZhCn extends TranslationsDialogsFileNameInputEn {
   _TranslationsDialogsFileNameInputZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1460,8 +1325,7 @@ class _TranslationsDialogsFileNameInputZhCn
 }
 
 // Path: dialogs.historyClearDialog
-class _TranslationsDialogsHistoryClearDialogZhCn
-    extends TranslationsDialogsHistoryClearDialogEn {
+class _TranslationsDialogsHistoryClearDialogZhCn extends TranslationsDialogsHistoryClearDialogEn {
   _TranslationsDialogsHistoryClearDialogZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1476,8 +1340,7 @@ class _TranslationsDialogsHistoryClearDialogZhCn
 }
 
 // Path: dialogs.localNetworkUnauthorized
-class _TranslationsDialogsLocalNetworkUnauthorizedZhCn
-    extends TranslationsDialogsLocalNetworkUnauthorizedEn {
+class _TranslationsDialogsLocalNetworkUnauthorizedZhCn extends TranslationsDialogsLocalNetworkUnauthorizedEn {
   _TranslationsDialogsLocalNetworkUnauthorizedZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1494,8 +1357,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedZhCn
 }
 
 // Path: dialogs.messageInput
-class _TranslationsDialogsMessageInputZhCn
-    extends TranslationsDialogsMessageInputEn {
+class _TranslationsDialogsMessageInputZhCn extends TranslationsDialogsMessageInputEn {
   _TranslationsDialogsMessageInputZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1525,8 +1387,7 @@ class _TranslationsDialogsNoFilesZhCn extends TranslationsDialogsNoFilesEn {
 }
 
 // Path: dialogs.noPermission
-class _TranslationsDialogsNoPermissionZhCn
-    extends TranslationsDialogsNoPermissionEn {
+class _TranslationsDialogsNoPermissionZhCn extends TranslationsDialogsNoPermissionEn {
   _TranslationsDialogsNoPermissionZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1541,8 +1402,7 @@ class _TranslationsDialogsNoPermissionZhCn
 }
 
 // Path: dialogs.notAvailableOnPlatform
-class _TranslationsDialogsNotAvailableOnPlatformZhCn
-    extends TranslationsDialogsNotAvailableOnPlatformEn {
+class _TranslationsDialogsNotAvailableOnPlatformZhCn extends TranslationsDialogsNotAvailableOnPlatformEn {
   _TranslationsDialogsNotAvailableOnPlatformZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1570,8 +1430,7 @@ class _TranslationsDialogsQrZhCn extends TranslationsDialogsQrEn {
 }
 
 // Path: dialogs.quickActions
-class _TranslationsDialogsQuickActionsZhCn
-    extends TranslationsDialogsQuickActionsEn {
+class _TranslationsDialogsQuickActionsZhCn extends TranslationsDialogsQuickActionsEn {
   _TranslationsDialogsQuickActionsZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1594,8 +1453,7 @@ class _TranslationsDialogsQuickActionsZhCn
 }
 
 // Path: dialogs.quickSaveNotice
-class _TranslationsDialogsQuickSaveNoticeZhCn
-    extends TranslationsDialogsQuickSaveNoticeEn {
+class _TranslationsDialogsQuickSaveNoticeZhCn extends TranslationsDialogsQuickSaveNoticeEn {
   _TranslationsDialogsQuickSaveNoticeZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1610,8 +1468,7 @@ class _TranslationsDialogsQuickSaveNoticeZhCn
 }
 
 // Path: dialogs.quickSaveFromFavoritesNotice
-class _TranslationsDialogsQuickSaveFromFavoritesNoticeZhCn
-    extends TranslationsDialogsQuickSaveFromFavoritesNoticeEn {
+class _TranslationsDialogsQuickSaveFromFavoritesNoticeZhCn extends TranslationsDialogsQuickSaveFromFavoritesNoticeEn {
   _TranslationsDialogsQuickSaveFromFavoritesNoticeZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1643,8 +1500,7 @@ class _TranslationsDialogsPinZhCn extends TranslationsDialogsPinEn {
 }
 
 // Path: dialogs.sendModeHelp
-class _TranslationsDialogsSendModeHelpZhCn
-    extends TranslationsDialogsSendModeHelpEn {
+class _TranslationsDialogsSendModeHelpZhCn extends TranslationsDialogsSendModeHelpEn {
   _TranslationsDialogsSendModeHelpZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1676,8 +1532,7 @@ class _TranslationsDialogsZoomZhCn extends TranslationsDialogsZoomEn {
 }
 
 // Path: settingsTab.general.brightnessOptions
-class _TranslationsSettingsTabGeneralBrightnessOptionsZhCn
-    extends TranslationsSettingsTabGeneralBrightnessOptionsEn {
+class _TranslationsSettingsTabGeneralBrightnessOptionsZhCn extends TranslationsSettingsTabGeneralBrightnessOptionsEn {
   _TranslationsSettingsTabGeneralBrightnessOptionsZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1694,8 +1549,7 @@ class _TranslationsSettingsTabGeneralBrightnessOptionsZhCn
 }
 
 // Path: settingsTab.general.colorOptions
-class _TranslationsSettingsTabGeneralColorOptionsZhCn
-    extends TranslationsSettingsTabGeneralColorOptionsEn {
+class _TranslationsSettingsTabGeneralColorOptionsZhCn extends TranslationsSettingsTabGeneralColorOptionsEn {
   _TranslationsSettingsTabGeneralColorOptionsZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1710,8 +1564,7 @@ class _TranslationsSettingsTabGeneralColorOptionsZhCn
 }
 
 // Path: settingsTab.general.languageOptions
-class _TranslationsSettingsTabGeneralLanguageOptionsZhCn
-    extends TranslationsSettingsTabGeneralLanguageOptionsEn {
+class _TranslationsSettingsTabGeneralLanguageOptionsZhCn extends TranslationsSettingsTabGeneralLanguageOptionsEn {
   _TranslationsSettingsTabGeneralLanguageOptionsZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);
@@ -1739,8 +1592,7 @@ class _TranslationsSettingsTabNetworkNetworkOptionsZhCn extends TranslationsSett
 }
 
 // Path: progressPage.total.title
-class _TranslationsProgressPageTotalTitleZhCn
-    extends TranslationsProgressPageTotalTitleEn {
+class _TranslationsProgressPageTotalTitleZhCn extends TranslationsProgressPageTotalTitleEn {
   _TranslationsProgressPageTotalTitleZhCn._(TranslationsZhCn root)
       : this._root = root,
         super.internal(root);

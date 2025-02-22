@@ -6,6 +6,7 @@ import 'package:common/model/file_status.dart';
 import 'package:common/model/session_status.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/provider/network/send_provider.dart';
@@ -59,7 +60,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
   bool _advanced = false;
 
   @override
-  void initState() {
+  void initState() async{
     super.initState();
 
     // init
@@ -83,7 +84,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
           if (finished) {
             if (_finishCounter == 1) {
               timer.cancel();
-              _exit(closeSession: true);
+              _exitWithStopBgTask(closeSession: true);
             } else {
               setState(() {
                 _finishCounter--;
@@ -111,6 +112,11 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
         _totalBytes = _files.where((f) => _selectedFiles.contains(f.id)).fold(0, (prev, curr) => prev + curr.size);
       });
     });
+    final _platform = const MethodChannel(
+        'samples.flutter.dev/downloadplugin');
+    // 调用方法 getBatteryLevel
+    final result = await _platform
+        .invokeMethod<String>('startContinuousTask');
   }
 
   void _exit({required bool closeSession}) async {
@@ -120,6 +126,23 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
     final keepSession = !closeSession && (status == SessionStatus.sending || status == SessionStatus.finishedWithErrors);
     final result = status == null || keepSession || await _askCancelConfirmation(status);
 
+    if (result && mounted) {
+      // ignore: unawaited_futures
+      context.popUntilRoot();
+    }
+  }
+
+  void _exitWithStopBgTask({required bool closeSession}) async {
+    final receiveSession = ref.read(serverProvider.select((s) => s?.session));
+    final sendSession = ref.read(sendProvider)[widget.sessionId];
+    final SessionStatus? status = receiveSession?.status ?? sendSession?.status;
+    final keepSession = !closeSession && (status == SessionStatus.sending || status == SessionStatus.finishedWithErrors);
+    final result = status == null || keepSession || await _askCancelConfirmation(status);
+    final _platform = const MethodChannel(
+        'samples.flutter.dev/downloadplugin');
+    // 调用方法 getBatteryLevel
+    final result2 = await _platform
+        .invokeMethod<String>('stopContinuousTask');
     if (result && mounted) {
       // ignore: unawaited_futures
       context.popUntilRoot();
@@ -483,7 +506,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                               ),
                               TextButton.icon(
                                 style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onSurface),
-                                onPressed: () => _exit(closeSession: true),
+                                onPressed: () => _exitWithStopBgTask(closeSession: true),
                                 icon: Icon(status == SessionStatus.sending ? Icons.close : Icons.check_circle),
                                 label: Text(status == SessionStatus.sending
                                     ? t.general.cancel

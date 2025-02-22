@@ -2,8 +2,8 @@
   "app": {
     "bundleName": "com.aloereed.aloechatai",
     "vendor": "example",
-    "versionCode": 57,
-    "versionName": "1.16.2",
+    "versionCode": 58,
+    "versionName": "1.17.0",
     "icon": "$media:app_icon",
     "label": "$string:app_name"
   }
