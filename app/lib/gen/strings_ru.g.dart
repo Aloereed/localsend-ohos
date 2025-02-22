@@ -78,6 +78,8 @@ class TranslationsRu extends Translations {
   late final _TranslationsWebRu web = _TranslationsWebRu._(_root);
   @override
   late final _TranslationsAssetPickerRu assetPicker = _TranslationsAssetPickerRu._(_root);
+  @override
+  late final _TranslationsNetworkInterfacesPageRu networkInterfacesPage = _TranslationsNetworkInterfacesPageRu._(_root);
 }
 
 // Path: general
@@ -704,6 +706,28 @@ class _TranslationsAssetPickerRu extends TranslationsAssetPickerEn {
   String get sUnitAssetCountLabel => 'количество';
 }
 
+// Path: networkInterfacesPage
+class _TranslationsNetworkInterfacesPageRu extends TranslationsNetworkInterfacesPageEn {
+  _TranslationsNetworkInterfacesPageRu._(TranslationsRu root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsRu _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Сетевые интерфейсы';
+  @override
+  String get preview => 'Предосмотр';
+  @override
+  String get whitelist => 'Белый список';
+  @override
+  String get blacklist => 'Черный список';
+  @override
+  String get info =>
+      'По умолчанию, LocalSend использует все доступные сетевые интерфейсы. Вы можете исключить нежелательные сети здесь. Необходимо перезапустить сервер для применения изменений.';
+}
+
 // Path: receiveTab.infoBox
 class _TranslationsReceiveTabInfoBoxRu extends TranslationsReceiveTabInfoBoxEn {
   _TranslationsReceiveTabInfoBoxRu._(TranslationsRu root)
@@ -900,6 +924,10 @@ class _TranslationsSettingsTabNetworkRu extends TranslationsSettingsTabNetworkEn
   @override
   String multicastGroupWarning({required Object defaultMulticast}) =>
       'Другие устройства могут вас не найти, поскольку вы используете другой, собственный адрес мультивещания. (default: ${defaultMulticast})';
+  @override
+  String get network => 'Сеть';
+  @override
+  late final _TranslationsSettingsTabNetworkNetworkOptionsRu networkOptions = _TranslationsSettingsTabNetworkNetworkOptionsRu._(_root);
 }
 
 // Path: settingsTab.other
@@ -1443,6 +1471,21 @@ class _TranslationsSettingsTabGeneralLanguageOptionsRu extends TranslationsSetti
   // Translations
   @override
   String get system => 'Системный';
+}
+
+// Path: settingsTab.network.networkOptions
+class _TranslationsSettingsTabNetworkNetworkOptionsRu extends TranslationsSettingsTabNetworkNetworkOptionsEn {
+  _TranslationsSettingsTabNetworkNetworkOptionsRu._(TranslationsRu root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsRu _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get all => 'Все';
+  @override
+  String get filtered => 'Фильтровано';
 }
 
 // Path: progressPage.total.title

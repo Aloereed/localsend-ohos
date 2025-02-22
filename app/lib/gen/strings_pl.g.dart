@@ -78,6 +78,8 @@ class TranslationsPl extends Translations {
   late final _TranslationsWebPl web = _TranslationsWebPl._(_root);
   @override
   late final _TranslationsAssetPickerPl assetPicker = _TranslationsAssetPickerPl._(_root);
+  @override
+  late final _TranslationsNetworkInterfacesPagePl networkInterfacesPage = _TranslationsNetworkInterfacesPagePl._(_root);
 }
 
 // Path: general
@@ -198,9 +200,9 @@ class _TranslationsSendTabPl extends TranslationsSendTabEn {
   @override
   late final _TranslationsSendTabPickerPl picker = _TranslationsSendTabPickerPl._(_root);
   @override
-  String get shareIntentInfo => 'Możesz także skorzystać z funkcji „Udostępnij” swojego urządzenia mobilnego, aby łatwiej wybierać pliki.';
+  String get shareIntentInfo => 'Możesz także skorzystać z funkcji „Udostępnij” swojego urządzenia mobilnego, aby łatwiej wybierać pliki.';
   @override
-  String get nearbyDevices => 'Urządzenia w pobliżu';
+  String get nearbyDevices => 'Urządzenia w pobliżu';
   @override
   String get thisDevice => 'To urządzenie';
   @override
@@ -214,7 +216,7 @@ class _TranslationsSendTabPl extends TranslationsSendTabEn {
   @override
   String get sendModeHelp => 'Wyjaśnienie';
   @override
-  String get help => 'Upewnij się, że żądany cel również znajduje się w tej samej sieci Wi-Fi.';
+  String get help => 'Upewnij się, że żądany cel również znajduje się w tej samej sieci Wi-Fi.';
   @override
   String get placeItems => 'Umieść elementy do udostępnienia.';
 }
@@ -256,7 +258,7 @@ class _TranslationsTroubleshootPagePl extends TranslationsTroubleshootPageEn {
   @override
   String get title => 'Rozwiązywanie problemów';
   @override
-  String get subTitle => 'Aplikacja nie działa zgodnie z oczekiwaniami? Tutaj znajdziesz powszechne rozwiązania.';
+  String get subTitle => 'Aplikacja nie działa zgodnie z oczekiwaniami? Tutaj znajdziesz powszechne rozwiązania.';
   @override
   String get solution => 'Rozwiązanie:';
   @override
@@ -399,7 +401,7 @@ class _TranslationsProgressPagePl extends TranslationsProgressPageEn {
   @override
   String get titleReceiving => 'Odbieranie plików';
   @override
-  String get savedToGallery => 'Zapisane w galerii';
+  String get savedToGallery => 'Zapisane w galerii';
   @override
   late final _TranslationsProgressPageTotalPl total = _TranslationsProgressPageTotalPl._(_root);
 }
@@ -424,8 +426,8 @@ class _TranslationsWebSharePagePl extends TranslationsWebSharePageEn {
   @override
   String openLink({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pl'))(
         n,
-        one: 'Otwórz ten link w przeglądarce:',
-        other: 'Otwórz jeden z tych linków w przeglądarce:',
+        one: 'Otwórz ten link w przeglądarce:',
+        other: 'Otwórz jeden z tych linków w przeglądarce:',
       );
   @override
   String get requests => 'Żądania';
@@ -440,7 +442,7 @@ class _TranslationsWebSharePagePl extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'Kod PIN to „${pin}”';
   @override
-  String get encryptionHint => 'AloeChat.AI używa samopodpisanego certyfikatu. Musisz go zaakceptować w przeglądarce.';
+  String get encryptionHint => 'AloeChat.AI używa samopodpisanego certyfikatu. Musisz go zaakceptować w przeglądarce.';
   @override
   String pendingRequests({required Object n}) => 'Oczekujące żądania: ${n}';
 }
@@ -455,11 +457,11 @@ class _TranslationsAboutPagePl extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'O AloeChat.AI';
+  String get title => 'O AloeChat.AI';
   @override
   List<String> get description => [
-        'AloeChat.AI jest darmową, otwartoźródłową aplikacją, która pozwala na bezpieczne udostępnianie plików i wiadomości urządzeniom w pobliżu poprzez Twoją sieć lokalną, bez konieczności połączenia z internetem.',
-        'Ta aplikacja jest dostępna na systemach Android, iOS, macOS, Windows i Linux. Możesz znaleźć wszystkie opcje pobierania na oficjalnej stronie głównej.',
+        'AloeChat.AI jest darmową, otwartoźródłową aplikacją, która pozwala na bezpieczne udostępnianie plików i wiadomości urządzeniom w pobliżu poprzez Twoją sieć lokalną, bez konieczności połączenia z internetem.',
+        'Ta aplikacja jest dostępna na systemach Android, iOS, macOS, Windows i Linux. Możesz znaleźć wszystkie opcje pobierania na oficjalnej stronie głównej.',
       ];
   @override
   String get author => 'Autor';
@@ -670,16 +672,16 @@ class _TranslationsAssetPickerPl extends TranslationsAssetPickerEn {
   @override
   String get unableToAccessAll => 'Nie można uzyskać dostępu do wszystkich plików na urządzeniu';
   @override
-  String get viewingLimitedAssetsTip => 'Przeglądaj tylko pliki i albumy dostępne dla aplikacji.';
+  String get viewingLimitedAssetsTip => 'Przeglądaj tylko pliki i albumy dostępne dla aplikacji.';
   @override
   String get changeAccessibleLimitedAssets => 'Kliknij, aby zaktualizować dostępne pliki';
   @override
   String get accessAllTip =>
-      'Aplikacja może uzyskać dostęp tylko do niektórych plików na urządzeniu. Przejdź do ustawień systemowych i zezwól aplikacji na dostęp do wszystkich mediów na urządzeniu.';
+      'Aplikacja może uzyskać dostęp tylko do niektórych plików na urządzeniu. Przejdź do ustawień systemowych i zezwól aplikacji na dostęp do wszystkich mediów na urządzeniu.';
   @override
   String get goToSystemSettings => 'Przejdź do ustawień systemowych';
   @override
-  String get accessLimitedAssets => 'Kontynuuj z ograniczonym dostępem';
+  String get accessLimitedAssets => 'Kontynuuj z ograniczonym dostępem';
   @override
   String get accessiblePathName => 'Dostępne pliki';
   @override
@@ -704,6 +706,28 @@ class _TranslationsAssetPickerPl extends TranslationsAssetPickerEn {
   String get sNameDurationLabel => 'czas trwania';
   @override
   String get sUnitAssetCountLabel => 'liczba';
+}
+
+// Path: networkInterfacesPage
+class _TranslationsNetworkInterfacesPagePl extends TranslationsNetworkInterfacesPageEn {
+  _TranslationsNetworkInterfacesPagePl._(TranslationsPl root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsPl _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get preview => 'Podgląd';
+  @override
+  String get whitelist => 'Biała lista';
+  @override
+  String get blacklist => 'Czarna lista';
+  @override
+  String get title => 'Interfejsy sieciowe';
+  @override
+  String get info =>
+      'Domyślnie AloeChat.AI używa wszystkich dostępnych interfejsów sieciowych. Możesz tutaj wykluczyć niechciane sieci. Musisz ponownie uruchomić serwer, aby zastosować zmiany.';
 }
 
 // Path: receiveTab.infoBox
@@ -814,7 +838,7 @@ class _TranslationsSettingsTabGeneralPl extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Autostart: start ukryty';
   @override
-  String get showInContextMenu => 'Pokaż AloeChat.AI w menu kontekstowym';
+  String get showInContextMenu => 'Pokaż AloeChat.AI w menu kontekstowym';
   @override
   String get animations => 'Animacje';
 }
@@ -843,9 +867,9 @@ class _TranslationsSettingsTabReceivePl extends TranslationsSettingsTabReceiveEn
   @override
   String get downloads => '(Pobrane)';
   @override
-  String get saveToGallery => 'Zapisz media w galerii';
+  String get saveToGallery => 'Zapisz media w galerii';
   @override
-  String get saveToHistory => 'Zapisz w historii';
+  String get saveToHistory => 'Zapisz w historii';
 }
 
 // Path: settingsTab.send
@@ -902,6 +926,10 @@ class _TranslationsSettingsTabNetworkPl extends TranslationsSettingsTabNetworkEn
   @override
   String multicastGroupWarning({required Object defaultMulticast}) =>
       'Inne urządzenia mogą nie wykryć Twojego urządzenia, ponieważ używasz niestandardowego adresu multicast. (domyślnie: ${defaultMulticast})';
+  @override
+  late final _TranslationsSettingsTabNetworkNetworkOptionsPl networkOptions = _TranslationsSettingsTabNetworkNetworkOptionsPl._(_root);
+  @override
+  String get network => 'Sieć';
 }
 
 // Path: settingsTab.other
@@ -938,7 +966,7 @@ class _TranslationsTroubleshootPageFirewallPl extends TranslationsTroubleshootPa
   String get symptom => 'Aplikacja może wysyłać pliki do innych urządzeń, ale inne urządzenia nie mogą wysyłać plików do tego urządzenia.';
   @override
   String solution({required Object port}) =>
-      'Prawdopodobnie jest to problem z zaporą. Możesz go rozwiązać, zezwalając na przychodzące połączenia (UDP i TCP) na porcie ${port}.';
+      'Prawdopodobnie jest to problem z zaporą. Możesz go rozwiązać, zezwalając na przychodzące połączenia (UDP i TCP) na porcie ${port}.';
   @override
   String get openFirewall => 'Otwórz zaporę';
 }
@@ -956,7 +984,7 @@ class _TranslationsTroubleshootPageNoDiscoveryPl extends TranslationsTroubleshoo
   String get symptom => 'To urządzenie nie może wykryć innych urządzeń.';
   @override
   String get solution =>
-      'Upewnij się, że wszystkie urządzenia są w tej samej sieci Wi-Fi i mają tę samą konfigurację (port, adres multiemisji, szyfrowanie). Możesz spróbować wpisać adres IP urządzenia docelowego ręcznie. Jeśli to zadziała, rozważ dodanie tego urządzenia do ulubionych, aby mogło zostać automatycznie wykryte w przyszłości.';
+      'Upewnij się, że wszystkie urządzenia są w tej samej sieci Wi-Fi i mają tę samą konfigurację (port, adres multiemisji, szyfrowanie). Możesz spróbować wpisać adres IP urządzenia docelowego ręcznie. Jeśli to zadziała, rozważ dodanie tego urządzenia do ulubionych, aby mogło zostać automatycznie wykryte w przyszłości.';
 }
 
 // Path: troubleshootPage.noConnection
@@ -972,7 +1000,7 @@ class _TranslationsTroubleshootPageNoConnectionPl extends TranslationsTroublesho
   String get symptom => 'Oba urządzenia nie mogą się nawzajem wykryć ani dzielić się plikami.';
   @override
   String get solution =>
-      'Problem istnieje po obu stronach? Upewnij się, że oba urządzenia są w tej samej sieci Wi-Fi i mają takie same ustawienia (port, adres multicast, szyfrowanie). Wi-Fi może nie zezwalać na komunikację między uczestnikami z powodu izolacji punktu dostępu (AP). W takim przypadku tę opcję należy wyłączyć w routerze.';
+      'Problem istnieje po obu stronach? Upewnij się, że oba urządzenia są w tej samej sieci Wi-Fi i mają takie same ustawienia (port, adres multicast, szyfrowanie). Wi-Fi może nie zezwalać na komunikację między uczestnikami z powodu izolacji punktu dostępu (AP). W takim przypadku tę opcję należy wyłączyć w routerze.';
 }
 
 // Path: receiveHistoryPage.entryActions
@@ -987,11 +1015,11 @@ class _TranslationsReceiveHistoryPageEntryActionsPl extends TranslationsReceiveH
   @override
   String get open => 'Otwórz plik';
   @override
-  String get showInFolder => 'Pokaż w folderze';
+  String get showInFolder => 'Pokaż w folderze';
   @override
   String get info => 'Informacje';
   @override
-  String get deleteFromHistory => 'Usuń z historii';
+  String get deleteFromHistory => 'Usuń z historii';
 }
 
 // Path: progressPage.total
@@ -1104,7 +1132,7 @@ class _TranslationsDialogsEncryptionDisabledNoticePl extends TranslationsDialogs
   @override
   String get title => 'Szyfrowanie wyłączone';
   @override
-  String get content => 'Komunikacja odbywa się teraz za pomocą niezaszyfrowanego protokołu HTTP. Aby korzystać z HTTPS, włącz ponownie szyfrowanie.';
+  String get content => 'Komunikacja odbywa się teraz za pomocą niezaszyfrowanego protokołu HTTP. Aby korzystać z HTTPS, włącz ponownie szyfrowanie.';
 }
 
 // Path: dialogs.errorDialog
@@ -1147,9 +1175,9 @@ class _TranslationsDialogsFavoriteDeleteDialogPl extends TranslationsDialogsFavo
 
   // Translations
   @override
-  String get title => 'Usuń z ulubionych';
+  String get title => 'Usuń z ulubionych';
   @override
-  String content({required Object name}) => 'Czy na pewno chcesz usunąć z ulubionych „${name}”?';
+  String content({required Object name}) => 'Czy na pewno chcesz usunąć z ulubionych „${name}”?';
 }
 
 // Path: dialogs.favoriteEditDialog
@@ -1185,7 +1213,7 @@ class _TranslationsDialogsFileInfoPl extends TranslationsDialogsFileInfoEn {
 
   // Translations
   @override
-  String get title => 'Informacje o pliku';
+  String get title => 'Informacje o pliku';
   @override
   String get fileName => 'Nazwa pliku:';
   @override
@@ -1241,7 +1269,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedPl extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'AloeChat.AI nie może znaleźć innych urządzeń bez uprawnienia do skanowania sieci lokalnej. Udziel tego uprawnienia w ustawieniach.';
+      'AloeChat.AI nie może znaleźć innych urządzeń bez uprawnienia do skanowania sieci lokalnej. Udziel tego uprawnienia w ustawieniach.';
   @override
   String get gotoSettings => 'Ustawienia';
 }
@@ -1288,7 +1316,7 @@ class _TranslationsDialogsNoPermissionPl extends TranslationsDialogsNoPermission
   @override
   String get title => 'Brak uprawnień';
   @override
-  String get content => 'Nie udzieliłeś wymaganych uprawnień. Udziel ich w ustawieniach.';
+  String get content => 'Nie udzielono wymaganych uprawnień. Udziel ich w ustawieniach.';
 }
 
 // Path: dialogs.notAvailableOnPlatform
@@ -1354,7 +1382,7 @@ class _TranslationsDialogsQuickSaveNoticePl extends TranslationsDialogsQuickSave
   @override
   String get title => _root.general.quickSave;
   @override
-  String get content => 'Żądania plików są akceptowane automatycznie. Pamiętaj, że każdy w sieci lokalnej może przesyłać Ci pliki.';
+  String get content => 'Żądania plików są akceptowane automatycznie. Pamiętaj, że każdy w sieci lokalnej może przesyłać Ci pliki.';
 }
 
 // Path: dialogs.quickSaveFromFavoritesNotice
@@ -1370,9 +1398,9 @@ class _TranslationsDialogsQuickSaveFromFavoritesNoticePl extends TranslationsDia
   String get title => _root.general.quickSaveFromFavorites;
   @override
   List<String> get content => [
-        'Żądania plików są teraz akceptowane automatycznie z urządzeń na liście ulubionych.',
-        'Uwaga! Obecnie nie jest to całkowicie bezpieczne, ponieważ haker, który ma odcisk palca dowolnego urządzenia z listy ulubionych, może wysyłać Ci pliki bez ograniczeń.',
-        'Jednak ta opcja jest nadal bezpieczniejsza niż umożliwienie wszystkim użytkownikom w sieci lokalnej wysyłanie plików bez ograniczeń.',
+        'Żądania plików są teraz akceptowane automatycznie z urządzeń na liście ulubionych.',
+        'Uwaga! Obecnie nie jest to całkowicie bezpieczne, ponieważ haker, który ma odcisk palca dowolnego urządzenia z listy ulubionych, może wysyłać Ci pliki bez ograniczeń.',
+        'Jednak ta opcja jest nadal bezpieczniejsza niż umożliwienie wszystkim użytkownikom w sieci lokalnej wysyłanie plików bez ograniczeń.',
       ];
 }
 
@@ -1405,7 +1433,7 @@ class _TranslationsDialogsSendModeHelpPl extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Wysyła pliki do wielu odbiorców. Wybór nie zostanie wyczyszczony.';
   @override
-  String get link => 'Odbiorcy, którzy nie mają zainstalowanego AloeChat.AI, mogą pobrać wybrane pliki, otwierając link w swojej przeglądarce.';
+  String get link => 'Odbiorcy, którzy nie mają zainstalowanego AloeChat.AI, mogą pobrać wybrane pliki, otwierając link w swojej przeglądarce.';
 }
 
 // Path: dialogs.zoom
@@ -1466,6 +1494,21 @@ class _TranslationsSettingsTabGeneralLanguageOptionsPl extends TranslationsSetti
   String get system => 'Systemowy';
 }
 
+// Path: settingsTab.network.networkOptions
+class _TranslationsSettingsTabNetworkNetworkOptionsPl extends TranslationsSettingsTabNetworkNetworkOptionsEn {
+  _TranslationsSettingsTabNetworkNetworkOptionsPl._(TranslationsPl root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsPl _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get all => 'Wszystkie';
+  @override
+  String get filtered => 'Przefiltrowane';
+}
+
 // Path: progressPage.total.title
 class _TranslationsProgressPageTotalTitlePl extends TranslationsProgressPageTotalTitleEn {
   _TranslationsProgressPageTotalTitlePl._(TranslationsPl root)
@@ -1478,7 +1521,7 @@ class _TranslationsProgressPageTotalTitlePl extends TranslationsProgressPageTota
   @override
   String sending({required Object time}) => 'Całkowity postęp (${time})';
   @override
-  String get finishedError => 'Zakończono z błędem';
+  String get finishedError => 'Zakończono z błędem';
   @override
   String get canceledSender => 'Anulowane przez nadawcę';
   @override

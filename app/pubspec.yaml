@@ -45,7 +45,7 @@ dependencies:
   routerino: 0.8.0
   saf_stream: 0.10.0
   share_handler: 0.0.22
-  shared_preferences: 2.3.3
+  shared_preferences: 2.5.2
   shared_preferences_platform_interface: any
   shared_storage: 0.8.1
   slang: 4.4.0
@@ -167,4 +167,4 @@ msix_config:
     task_id: localsend
 name: localsend_app
 publish_to: none
-version: 1.16.2+57
+version: 1.17.0+58
