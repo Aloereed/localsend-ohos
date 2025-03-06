@@ -19,7 +19,8 @@ import 'package:localsend_app/provider/selection/selected_sending_files_provider
 import 'package:localsend_app/util/determine_image_type.dart';
 import 'package:localsend_app/util/file_path_helper.dart';
 import 'package:localsend_app/util/image_converter.dart';
-import 'package:localsend_app/util/native/channel/android_channel.dart' as android_channel;
+import 'package:localsend_app/util/native/channel/android_channel.dart'
+    as android_channel;
 import 'package:localsend_app/util/native/cross_file_converters.dart';
 import 'package:localsend_app/util/native/pick_directory_path.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
@@ -170,14 +171,17 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final result = await android_channel.pickFilesAndroid();
       if (result != null) {
-        await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
+        await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddFilesAction(
               files: result,
               converter: CrossFileConverters.convertFileInfo,
             ));
       }
     }
     if (checkPlatform([TargetPlatform.ohos])) {
-      final result = await file_picker_ohos.FilePicker.platform.pickFiles(allowMultiple: true);
+      final result = await file_picker_ohos.FilePicker.platform
+          .pickFiles(allowMultiple: true);
       if (result != null) {
         await ref
             .redux(selectedSendingFilesProvider)
@@ -188,7 +192,9 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
       }
     } else {
       final result = await openFiles();
-      await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(
+      await ref
+          .redux(selectedSendingFilesProvider)
+          .dispatchAsync(AddFilesAction(
             files: result,
             converter: CrossFileConverters.convertXFile,
           ));
@@ -231,16 +237,22 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
   );
   await sleepAsync(200); // Wait for the dialog to be shown
   try {
-    if (defaultTargetPlatform == TargetPlatform.android && (ref.read(deviceInfoProvider).androidSdkInt ?? 0) >= android_channel.contentUriMinSdk) {
+    if (defaultTargetPlatform == TargetPlatform.android &&
+        (ref.read(deviceInfoProvider).androidSdkInt ?? 0) >=
+            android_channel.contentUriMinSdk) {
       // Android 8 and above have more predictable content URIs that we can parse.
       final result = await android_channel.pickDirectoryAndroid();
       if (result != null) {
-        await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddAndroidDirectoryAction(result));
+        await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddAndroidDirectoryAction(result));
       }
     } else {
       final directoryPath = await pickDirectoryPath();
       if (directoryPath != null) {
-        await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddDirectoryAction(directoryPath));
+        await ref
+            .redux(selectedSendingFilesProvider)
+            .dispatchAsync(AddDirectoryAction(directoryPath));
       }
     }
   } catch (e) {
@@ -263,9 +275,11 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
 final ImagePicker _picker = ImagePicker();
 Future<void> _pickMedia(BuildContext context, Ref ref) async {
   if (checkPlatform([TargetPlatform.ohos])) {
-    final XFile? pickedFile = await _picker.pickMedia();
+    // final XFile? pickedFile = await _picker.pickMedia();
+    // 改为选择多个media
+    final List<XFile> pickedFiles = await _picker.pickMultipleMedia();
 
-    if (pickedFile != null) {
+    for (XFile pickedFile in pickedFiles) {
       // 如果选择了图片，使用 CrossFileConverters 将选中的图片转换并添加到状态管理
       await ref
           .redux(selectedSendingFilesProvider)
@@ -311,7 +325,7 @@ Future<void> _pickText(BuildContext context, Ref ref) async {
 }
 
 Future<void> _pickClipboard(BuildContext context, Ref ref) async {
-   if (checkPlatform([TargetPlatform.ohos])) {
+  if (checkPlatform([TargetPlatform.ohos])) {
     try {
       // 从剪贴板读取文本
       final ClipboardData? clipboardData =
@@ -343,7 +357,9 @@ Future<void> _pickClipboard(BuildContext context, Ref ref) async {
   }
   final data = await Clipboard.getData(Clipboard.kTextPlain);
   if (data?.text != null) {
-    ref.redux(selectedSendingFilesProvider).dispatch(AddMessageAction(message: data!.text!));
+    ref
+        .redux(selectedSendingFilesProvider)
+        .dispatch(AddMessageAction(message: data!.text!));
     return;
   }
 
@@ -375,7 +391,6 @@ Future<void> _pickClipboard(BuildContext context, Ref ref) async {
     return;
   }
 
-
   final List<String> files = await Pasteboard.files();
   if (files.isNotEmpty) {
     await ref.redux(selectedSendingFilesProvider).dispatchAsync(
@@ -389,7 +404,9 @@ Future<void> _pickClipboard(BuildContext context, Ref ref) async {
               return CrossFile(
                 name: file.name,
                 fileType: file.name.guessFileType(),
-                size: await _uriContent.getContentLength(Uri.parse(file.path)) ?? -1,
+                size:
+                    await _uriContent.getContentLength(Uri.parse(file.path)) ??
+                        -1,
                 path: file.path,
                 thumbnail: null,
                 asset: null,

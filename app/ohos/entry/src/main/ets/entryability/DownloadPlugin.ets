@@ -30,9 +30,11 @@ import { MethodResult } from '@ohos/flutter_ohos/src/main/ets/plugin/common/Meth
 import { EventSink } from '@ohos/flutter_ohos/src/main/ets/plugin/common/EventChannel';
 import { picker } from '@kit.CoreFileKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { fileIo as fs, ReadOptions } from "@kit.CoreFileKit"
 import { common , Want } from '@kit.AbilityKit';
 import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
 import { wantAgent, WantAgent } from '@kit.AbilityKit';
+import util from '@ohos.util';
 const TAG = "DownloadPluginTag";
 
 export default class DownloadPlugin implements FlutterPlugin {
@@ -63,6 +65,9 @@ export default class DownloadPlugin implements FlutterPlugin {
             break;
           case "stopContinuousTask":
             that.api.stopContinuousTask(result);
+            break;
+          case "copyFileWithReadable":
+            that.api.copyFileWithReadable(call.argument("uri") as string, result);
             break;
           case "callEvent":
             that.eventSink?.success("Success at " + new Date());
@@ -193,4 +198,68 @@ class DownloadApi {
     }
     Log.i(TAG, "openFileManager finish");
   }
+urlDecodeManual(encodedString: string): string {
+    let result = '';
+    let i = 0;
+    while (i < encodedString.length) {
+      const char = encodedString[i];
+      if (char === '%') {
+        // 提取 %XX 形式的子字符串
+        const hexCode = encodedString.substring(i + 1, i + 3);
+        const byte = parseInt(hexCode, 16);
+        // 将字节转换为字符
+        result += String.fromCharCode(byte);
+        // 跳过已经处理的三个字符
+        i += 3;
+      } else {
+        // 直接添加普通字符
+        result += char;
+        i++;
+      }
+    }
+    // 将结果从 UTF-8 编码转换为字符串
+    return this.decodeUTF8(result);
+  }
+  decodeUTF8(utf8String: string): string {
+    const utf8Bytes = new Uint8Array(utf8String.length);
+    for (let i = 0; i < utf8String.length; i++) {
+      utf8Bytes[i] = utf8String.charCodeAt(i);
+    }
+    return new util.TextDecoder().decodeToString(utf8Bytes);
+  }
+
+  copyFileWithReadable(fromUri: string,result: MethodResult) {
+    // 创建文件可读流
+    console.info("start copy")
+    let filename = fromUri.split("/").pop()
+    console.info(`file://docs/data/storage/el2/base/cache/${filename}`)
+    // 创建文件可写流
+    // 暂停模式拷贝文件。在拷贝数据时，将原始数据暂停，然后将数据复制到另一个位置，适用于对数据完整性和一致性要求较高的场景
+    let readFile: fs.File
+    try {
+        readFile = fs.openSync(fromUri, fs.OpenMode.READ_ONLY)
+        console.info("open file success")
+    } catch (e) {
+        console.error("open file failed")
+        result.success("")
+        return
+    }
+    let writeFile: fs.File
+    try {
+        // filename从uri转路径
+
+        writeFile = fs.openSync(
+            `/data/storage/el2/base/cache/${this.urlDecodeManual(filename)}`,
+            fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE
+        )
+        console.info("open output file success")
+    } catch (e) {
+        console.error(`open output file failed: ${e}`)
+        result.success("")
+        return
+    }
+    fs.copyFileSync(readFile.fd, writeFile.fd)
+    console.info("COPY DONE")
+    result.success(`file://docs/data/storage/el2/base/cache/${filename}`)
+}
 }

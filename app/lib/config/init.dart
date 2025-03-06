@@ -58,6 +58,8 @@ Future<RefenaContainer> preInit(List<String> args_) async {
   WidgetsFlutterBinding.ensureInitialized();
   // _args是个定长数组，先复制为可变数组
   final args = List<String>.from(args_);
+  final platform =
+          const MethodChannel('samples.flutter.dev/downloadplugin');
 
   if(checkPlatform([TargetPlatform.ohos])){
     // 尝试读取 "/data/storage/el2/base/openuri.txt" 如果有
@@ -69,10 +71,19 @@ Future<RefenaContainer> preInit(List<String> args_) async {
       // 对每一行执行Uri.decodeFull(uri.replaceFirst(RegExp(r"file://(media|docs)"), ""))
       // 然后加入args
       for (var line in lines) {
+        if(line.startsWith("file://")&&(!line.startsWith("file://media")&&!line.startsWith("file://docs"))){
+          final copiedUri = await platform.invokeMethod<String>('copyFileWithReadable', {"uri": line});
+          if(copiedUri!=null&&copiedUri!=""){
+            args.add(Uri.decodeFull(copiedUri.replaceFirst(RegExp(r"file://(media|docs)"), "")));
+          }
+        }
         final path = Uri.decodeFull(line.replaceFirst(RegExp(r"file://(media|docs)"), ""));
+        print("openuri: $path");
         args.add(path);
       }
       file.deleteSync();
+    }else{
+      print("openuri: no file");
     }
     // 删除该文件
     

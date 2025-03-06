@@ -167,4 +167,4 @@ msix_config:
     task_id: localsend
 name: localsend_app
 publish_to: none
-version: 1.17.0+58
+version: 1.17.1+59
