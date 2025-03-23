@@ -1,0 +1,43 @@
+# Copyright (c) 2023 Hunan OpenValley Digital Industry Development Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: image_picker_ohos
+description: Ohos implementation of the image_picker plugin.
+repository: https://gitee.com/openharmony-sig/flutter_packages/tree/master/packages/image_picker/image_picker_ohos
+issue_tracker: https://gitee.com/openharmony-sig/flutter_packages/issues
+
+version: 0.8.7+4
+
+environment:
+  sdk: ">=2.18.0 <4.0.0"
+  flutter: ">=3.3.0"
+
+flutter:
+  plugin:
+    implements: image_picker
+    platforms:
+      ohos:
+        package: io.flutter.plugins.imagepicker
+        pluginClass: ImagePickerPlugin
+        dartPluginClass: ImagePickerOhos
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_plugin_android_lifecycle: ^2.0.1
+  image_picker_platform_interface: ^2.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pigeon: ^9.2.5

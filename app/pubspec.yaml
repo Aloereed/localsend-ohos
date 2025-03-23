@@ -79,9 +79,9 @@ dependency_overrides:
   fluttertoast:
     git: https://gitee.com/openharmony-sig/flutter_fluttertoast.git
   image_picker:
-    git:
-      path: packages/image_picker/image_picker
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      path: ./image_picker/image_picker
+  image_picker_ohos:
+      path: ./image_picker/image_picker_ohos
   in_app_purchase: any
   intl: ^0.19.0
   open_filex:
