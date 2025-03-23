@@ -58,7 +58,7 @@ export default class DownloadPlugin implements FlutterPlugin {
             that.api.getDownloadPermission(result);
             break;
           case "openFileManager":
-            that.api.openFileManager(result);
+            that.api.openFileManager(result,call.argument("uri") as string);
             break;
           case "startContinuousTask":
             that.api.startContinuousTask(result);
@@ -177,7 +177,7 @@ class DownloadApi {
         console.error(`Failed to operation stopBackgroundRunning. Code is ${err.code}, message is ${err.message}`);
       });
    }
-  openFileManager(result: MethodResult) {
+  openFileManager(result: MethodResult, fileUri: string) {
     let context = getContext(this) as common.UIAbilityContext;
     let uri = 'Open FE.';
     // 创建一个Want对象，用于描述启动系统文件管理器的意图
@@ -185,7 +185,10 @@ class DownloadApi {
       // 设置系统文件管理器的包名
       bundleName: 'com.huawei.hmos.filemanager',
       // 设置系统文件管理器的主Ability名称
-      abilityName: 'MainAbility'
+      abilityName: 'MainAbility',
+      parameters: {
+        'fileUri': fileUri
+      }
     };
     context.startAbility(want);
     let wrapped: Map<String, Any> = new Map<String, Any>();

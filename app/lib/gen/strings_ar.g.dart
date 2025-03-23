@@ -800,7 +800,7 @@ class _TranslationsNetworkInterfacesPageAr extends TranslationsNetworkInterfaces
   String get blacklist => 'القائمة السوداء';
   @override
   String get info =>
-      'بشكل افتراضي، يستخدم LocalSend جميع واجهات الشبكة المتاحة. يمكنك استبعاد الشبكات غير المرغوب فيها هنا. تحتاج إلى إعادة تشغيل الخادم لتطبيق التغييرات.';
+      'بشكل افتراضي، يستخدم AloeChat.AI جميع واجهات الشبكة المتاحة. يمكنك استبعاد الشبكات غير المرغوب فيها هنا. تحتاج إلى إعادة تشغيل الخادم لتطبيق التغييرات.';
   @override
   String get preview => 'معاينة';
 }

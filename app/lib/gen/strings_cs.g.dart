@@ -284,7 +284,7 @@ class _TranslationsNetworkInterfacesPageCs extends TranslationsNetworkInterfaces
   String get title => 'Síťová rozhraní';
   @override
   String get info =>
-      'Ve výchozím nastavení používá LocalSend všechna dostupná síťová rozhraní. Zde můžete vyloučit nežádoucí sítě. Chcete-li použít změny, musíte restartovat server.';
+      'Ve výchozím nastavení používá AloeChat.AI všechna dostupná síťová rozhraní. Zde můžete vyloučit nežádoucí sítě. Chcete-li použít změny, musíte restartovat server.';
   @override
   String get preview => 'Náhled';
   @override

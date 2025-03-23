@@ -33,7 +33,7 @@ class TranslationsFi extends Translations {
   @override
   String get locale => 'Finnish';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralFi general = _TranslationsGeneralFi._(_root);
   @override
@@ -361,7 +361,7 @@ class _TranslationsReceiveOptionsPageFi extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend-kansio)';
+  String get appDirectory => '(AloeChat.AI-kansio)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -440,7 +440,7 @@ class _TranslationsWebSharePageFi extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN-koodi on "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi.';
+  String get encryptionHint => 'AloeChat.AI käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi.';
   @override
   String pendingRequests({required Object n}) => 'Odottavat pyynnöt: ${n}';
 }
@@ -455,10 +455,10 @@ class _TranslationsAboutPageFi extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Tietoja LocalSendista';
+  String get title => 'Tietoja AloeChat.AIista';
   @override
   List<String> get description => [
-        'LocalSend on ilmainen, avoimen lähdekoodin sovellus, jonka avulla voit turvallisesti jakaa tiedostoja ja viestejä läheisten laitteiden kanssa paikallisverkossasi ilman internet-yhteyttä.',
+        'AloeChat.AI on ilmainen, avoimen lähdekoodin sovellus, jonka avulla voit turvallisesti jakaa tiedostoja ja viestejä läheisten laitteiden kanssa paikallisverkossasi ilman internet-yhteyttä.',
         'Tämä sovellus on saatavilla Androidille, iOS:lle, macOS:lle, Windowsille ja Linuxille. Kaikki latausvaihtoehdot löytyvät virallisilta kotisivuilta.',
       ];
   @override
@@ -484,7 +484,7 @@ class _TranslationsDonationPageFi extends TranslationsDonationPageEn {
   String get title => 'Lahjoita';
   @override
   String get info =>
-      'LocalSend on ilmainen, avoimen lähdekoodin sovellus ilman mainoksia. Jos pidät sovelluksesta, voit tukea kehitystä lahjoituksella.';
+      'AloeChat.AI on ilmainen, avoimen lähdekoodin sovellus ilman mainoksia. Jos pidät sovelluksesta, voit tukea kehitystä lahjoituksella.';
   @override
   String donate({required Object amount}) => 'Lahjoita ${amount}';
   @override
@@ -687,7 +687,7 @@ class _TranslationsTrayFi extends TranslationsTrayEn {
   @override
   String get open => 'Avaa';
   @override
-  String get close => 'Lopeta LocalSend';
+  String get close => 'Lopeta AloeChat.AI';
   @override
   String get closeWindows => 'Poistu';
 }
@@ -908,7 +908,7 @@ class _TranslationsSettingsTabGeneralFi extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Automaattinen käynnistys: Käynnistä piiilotettuna';
   @override
-  String get showInContextMenu => 'Näytä LocalSend kontekstivalikossa';
+  String get showInContextMenu => 'Näytä AloeChat.AI kontekstivalikossa';
   @override
   String get animations => 'Animaatiot';
 }
@@ -1006,7 +1006,7 @@ class _TranslationsSettingsTabOtherFi extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Muut';
   @override
-  String get support => 'Tue LocalSendia';
+  String get support => 'Tue AloeChat.AIia';
   @override
   String get donate => 'Lahjoita';
   @override
@@ -1331,7 +1331,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedFi extends TranslationsDialogs
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => 'LocalSend ei löydä muita laitteita ilman lupaa skannata paikallisverkkoa. Anna tämä lupa asetuksissa.';
+  String get description => 'AloeChat.AI ei löydä muita laitteita ilman lupaa skannata paikallisverkkoa. Anna tämä lupa asetuksissa.';
   @override
   String get gotoSettings => 'Asetukset';
 }
@@ -1493,7 +1493,7 @@ class _TranslationsDialogsSendModeHelpFi extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Lähettää tiedostoja useille vastaanottajille. Valinta ei tyhjene.';
   @override
-  String get link => 'Vastaanottajat, joilla ei ole LocalSendia asennettuna, voivat ladata valitut tiedostot avaamalla linkin selaimessaan.';
+  String get link => 'Vastaanottajat, joilla ei ole AloeChat.AIia asennettuna, voivat ladata valitut tiedostot avaamalla linkin selaimessaan.';
 }
 
 // Path: dialogs.zoom

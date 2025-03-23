@@ -143,27 +143,6 @@ class ReceiveHistoryPage extends StatelessWidget {
                               final destination =
                                   context.read(settingsProvider).destination ??
                                       await getDefaultDestinationDirectory();
-
-                              if (destination ==
-                                  "/storage/Users/currentUser/Download/com.aloereed.aloechatai") {
-                                Fluttertoast.showToast(
-                                  msg: "请自行打开“/下载/AloeChat.AI”。",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.green,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                );
-                                // 延时2秒
-                                await Future.delayed(Duration(seconds: 2));
-                                // 创建实例
-                                final _platform = const MethodChannel(
-                                    'samples.flutter.dev/downloadplugin');
-                                // 调用方法 getBatteryLevel
-                                final result = await _platform
-                                    .invokeMethod<String>('openFileManager');
-                              }
                               await openFolder(folderPath: destination);
                             },
                       icon: const Icon(Icons.folder),
@@ -272,26 +251,6 @@ class ReceiveHistoryPage extends StatelessWidget {
                                   context.redux(receiveHistoryProvider));
                               break;
                             case _EntryOption.showInFolder:
-                              if (checkPlatform([TargetPlatform.ohos])) {
-                                Fluttertoast.showToast(
-                                  msg: "请自行打开“/下载/AloeChat.AI”。",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.green,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                );
-                                // 延时2秒
-                                await Future.delayed(Duration(seconds: 2));
-                                // 创建实例
-                                final _platform = const MethodChannel(
-                                    'samples.flutter.dev/downloadplugin');
-                                // 调用方法 getBatteryLevel
-                                final result = await _platform
-                                    .invokeMethod<String>('openFileManager');
-                                break;
-                              }
                               if (entry.path != null) {
                                 await openFolder(
                                   folderPath: File(entry.path!).parent.path,

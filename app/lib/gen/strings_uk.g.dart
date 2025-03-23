@@ -725,7 +725,7 @@ class _TranslationsNetworkInterfacesPageUk extends TranslationsNetworkInterfaces
   String get blacklist => 'Чорний список';
   @override
   String get info =>
-      'Типово LocalSend використовує всі доступні мережеві інтерфейси. Ви можете виключити небажані мережі тут. Щоб застосувати зміни, потрібно перезапустити сервер.';
+      'Типово AloeChat.AI використовує всі доступні мережеві інтерфейси. Ви можете виключити небажані мережі тут. Щоб застосувати зміни, потрібно перезапустити сервер.';
 }
 
 // Path: receiveTab.infoBox

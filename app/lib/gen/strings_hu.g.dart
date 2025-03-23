@@ -714,7 +714,7 @@ class _TranslationsNetworkInterfacesPageHu extends TranslationsNetworkInterfaces
   String get title => 'Hálózati interfészek';
   @override
   String get info =>
-      'Alapértelmezésként a LocalSend az összes rendelkezésre álló hálózati interfészt használja. Itt kizárhatja a nem kívánt hálózatokat. A módosítások alkalmazásához újra kell indítania a kiszolgálót.';
+      'Alapértelmezésként a AloeChat.AI az összes rendelkezésre álló hálózati interfészt használja. Itt kizárhatja a nem kívánt hálózatokat. A módosítások alkalmazásához újra kell indítania a kiszolgálót.';
   @override
   String get preview => 'Előnézet';
   @override

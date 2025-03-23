@@ -318,8 +318,8 @@ class TranslationsAboutPageEn {
   // Translations
   String get title => 'About AloeChat.AI';
   List<String> get description => [
-        'AloeChat.AI is a free, open-source app based on LocalSend that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
-		    'This app can be used on HarmonyOS Next and interacts with LocalSend on Android, iOS, macOS, Windows, and Linux.  You can find all download options on the official homepage.',
+        'AloeChat.AI is a free, open-source app based on AloeChat.AI that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.',
+		    'This app can be used on HarmonyOS Next and interacts with AloeChat.AI on Android, iOS, macOS, Windows, and Linux.  You can find all download options on the official homepage.',
       ];
   String get author => 'Author';
   String get contributors => 'Contributors';

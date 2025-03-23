@@ -286,7 +286,7 @@ class _TranslationsNetworkInterfacesPageDe extends TranslationsNetworkInterfaces
   String get title => 'Netzwerkschnittstellen';
   @override
   String get info =>
-      'Standardmäßig verwendet LocalSend alle verfügbaren Netzwerkschnittstellen. Hier können Sie unerwünschte Netzwerke ausschließen. Sie müssen den Server neu starten, um die Änderungen zu übernehmen.';
+      'Standardmäßig verwendet AloeChat.AI alle verfügbaren Netzwerkschnittstellen. Hier können Sie unerwünschte Netzwerke ausschließen. Sie müssen den Server neu starten, um die Änderungen zu übernehmen.';
   @override
   String get preview => 'Vorschau';
   @override

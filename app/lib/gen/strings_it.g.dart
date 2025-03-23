@@ -457,7 +457,7 @@ class _TranslationsAboutPageIt extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Informazioni su LocalSend';
+  String get title => 'Informazioni su AloeChat.AI';
   @override
   List<String> get description => [
         'AloeChat.AI è un\'app gratuita e open-source che consente di condividere file e messaggi in modo sicuro con dispositivi vicini sulla tua rete locale, senza bisogno di una connessione internet.',
@@ -719,7 +719,7 @@ class _TranslationsNetworkInterfacesPageIt extends TranslationsNetworkInterfaces
   String get title => 'Interfacce di rete';
   @override
   String get info =>
-      'Per impostazione predefinita, LocalSend utilizza tutte le interfacce di rete disponibili. È possibile escludere le reti indesiderate. È necessario riavviare il server per applicare le modifiche.';
+      'Per impostazione predefinita, AloeChat.AI utilizza tutte le interfacce di rete disponibili. È possibile escludere le reti indesiderate. È necessario riavviare il server per applicare le modifiche.';
   @override
   String get preview => 'Anteprima';
   @override

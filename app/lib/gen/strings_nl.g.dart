@@ -721,7 +721,7 @@ class _TranslationsNetworkInterfacesPageNl extends TranslationsNetworkInterfaces
   String get title => 'Netwerkinterfaces';
   @override
   String get info =>
-      'Standaard gebruikt LocalSend alle beschikbare netwerkinterfaces. U kunt hier ongewenste netwerken uitsluiten. U moet de server opnieuw opstarten om de wijzigingen toe te passen.';
+      'Standaard gebruikt AloeChat.AI alle beschikbare netwerkinterfaces. U kunt hier ongewenste netwerken uitsluiten. U moet de server opnieuw opstarten om de wijzigingen toe te passen.';
   @override
   String get whitelist => 'Whitelist';
   @override

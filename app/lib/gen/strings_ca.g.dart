@@ -33,7 +33,7 @@ class TranslationsCa extends Translations {
   @override
   String get locale => 'Català';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralCa general = _TranslationsGeneralCa._(_root);
   @override
@@ -360,7 +360,7 @@ class _TranslationsReceiveOptionsPageCa extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(Carpeta LocalSend)';
+  String get appDirectory => '(Carpeta AloeChat.AI)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -441,7 +441,7 @@ class _TranslationsWebSharePageCa extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'El PIN és "${pin}"';
   @override
-  String get encryptionHint => 'LocalSend utilitza un certificat auto-signat. Cal que l\'accepteu al navegador.';
+  String get encryptionHint => 'AloeChat.AI utilitza un certificat auto-signat. Cal que l\'accepteu al navegador.';
   @override
   String pendingRequests({required Object n}) => 'Peticions pendents: ${n}';
 }
@@ -456,10 +456,10 @@ class _TranslationsAboutPageCa extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'Sobre LocalSend';
+  String get title => 'Sobre AloeChat.AI';
   @override
   List<String> get description => [
-        'LocalSend és una aplicació gratuïta i de codi obert que us permet compartir fitxers i missatges de manera segura amb dispositius propers a la vostra xarxa local sense necessitat de connexió a Internet.',
+        'AloeChat.AI és una aplicació gratuïta i de codi obert que us permet compartir fitxers i missatges de manera segura amb dispositius propers a la vostra xarxa local sense necessitat de connexió a Internet.',
         'Aquesta aplicació està disponible per a Android, iOS, macOS, Windows i Linux. Pot trobar totes les opcions de descàrrega a la pàgina d\'inici oficial.',
       ];
   @override
@@ -485,7 +485,7 @@ class _TranslationsDonationPageCa extends TranslationsDonationPageEn {
   String get title => 'Donació';
   @override
   String get info =>
-      'LocalSend és gratuït, de codi obert i sense cap anunci. Si t\'agrada l\'aplicació, pots donar suport al desenvolupament amb una donació.';
+      'AloeChat.AI és gratuït, de codi obert i sense cap anunci. Si t\'agrada l\'aplicació, pots donar suport al desenvolupament amb una donació.';
   @override
   String donate({required Object amount}) => 'Donació ${amount}';
   @override
@@ -679,7 +679,7 @@ class _TranslationsTrayCa extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Sortir de LocalSend';
+  String get close => 'Sortir de AloeChat.AI';
   @override
   String get closeWindows => 'Sortir';
 }
@@ -887,7 +887,7 @@ class _TranslationsSettingsTabGeneralCa extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Inici automàtic: Inici minimitzat';
   @override
-  String get showInContextMenu => 'Mostrar LocalSend al menú contextual';
+  String get showInContextMenu => 'Mostrar AloeChat.AI al menú contextual';
   @override
   String get animations => 'Animacions';
 }
@@ -989,7 +989,7 @@ class _TranslationsSettingsTabOtherCa extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Altre';
   @override
-  String get support => 'Suport LocalSend';
+  String get support => 'Suport AloeChat.AI';
   @override
   String get donate => 'Donació';
   @override
@@ -1299,7 +1299,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedCa extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'LocalSend no pot trobar altres dispositius sense tenir el permís per escanejar la xarxa local. Concediu aquest permís a la configuració.';
+      'AloeChat.AI no pot trobar altres dispositius sense tenir el permís per escanejar la xarxa local. Concediu aquest permís a la configuració.';
   @override
   String get gotoSettings => 'Configuració';
 }
@@ -1458,7 +1458,7 @@ class _TranslationsDialogsSendModeHelpCa extends TranslationsDialogsSendModeHelp
   String get multiple => 'Enviar fitxers a diversos destinataris. La selecció no s\'esborrarà.';
   @override
   String get link =>
-      'Els destinataris que no tinguin LocalSend instal·lat poden descarregar els fitxers seleccionats obrint l\'enllaç al seu navegador.';
+      'Els destinataris que no tinguin AloeChat.AI instal·lat poden descarregar els fitxers seleccionats obrint l\'enllaç al seu navegador.';
 }
 
 // Path: dialogs.zoom

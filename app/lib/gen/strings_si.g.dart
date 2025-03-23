@@ -33,7 +33,7 @@ class TranslationsSi extends Translations {
   @override
   String get locale => 'සිංහල';
   @override
-  String get appName => 'LocalSend';
+  String get appName => 'AloeChat.AI';
   @override
   late final _TranslationsGeneralSi general = _TranslationsGeneralSi._(_root);
   @override
@@ -361,7 +361,7 @@ class _TranslationsReceiveOptionsPageSi extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(LocalSend ෆෝල්ඩරය)';
+  String get appDirectory => '(AloeChat.AI ෆෝල්ඩරය)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -443,7 +443,7 @@ class _TranslationsWebSharePageSi extends TranslationsWebSharePageEn {
   String pinHint({required Object pin}) => 'PIN එක "${pin}"';
   @override
   String get encryptionHint =>
-      'LocalSend self-signed certificate එකක් භාවිතා කරයි. ඔබ විසින් එය බ්‍රවුසරය (browser) තුළ දි පිළිගැනීම (accept) අවශ්‍ය වේ.';
+      'AloeChat.AI self-signed certificate එකක් භාවිතා කරයි. ඔබ විසින් එය බ්‍රවුසරය (browser) තුළ දි පිළිගැනීම (accept) අවශ්‍ය වේ.';
   @override
   String pendingRequests({required Object n}) => 'Pending වන ඉල්ලීම්: ${n}';
 }
@@ -458,10 +458,10 @@ class _TranslationsAboutPageSi extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'LocalSend පිළිබඳව';
+  String get title => 'AloeChat.AI පිළිබඳව';
   @override
   List<String> get description => [
-        'LocalSend යනු ඔබට අන්තර්ජාල සම්බන්ධතාවයක අවශ්‍යතාවයකින් තොරව, local ජාලයක් තුළ, සමීප උපාංග සමඟ ගොනු සහ පණිවිඩ ආරක්ෂිතව බෙදා ගත හැකි නිදහස්, විවෘත-මූලාශ්‍රය (Free and open-source) ඇප් එකකි.',
+        'AloeChat.AI යනු ඔබට අන්තර්ජාල සම්බන්ධතාවයක අවශ්‍යතාවයකින් තොරව, local ජාලයක් තුළ, සමීප උපාංග සමඟ ගොනු සහ පණිවිඩ ආරක්ෂිතව බෙදා ගත හැකි නිදහස්, විවෘත-මූලාශ්‍රය (Free and open-source) ඇප් එකකි.',
         'මෙම ඇප් එක Android, iOS, macOS, Windows සහ Linux සඳහා පවතියි. එය ඩවුන්ලෝඩ් (Download) කරගත හැකි ආකාර අපේ අඩවියේ මුල් පිටුවෙන් සොයාගත හැක.',
       ];
   @override
@@ -487,7 +487,7 @@ class _TranslationsDonationPageSi extends TranslationsDonationPageEn {
   String get title => 'ආධාර කරන්න';
   @override
   String get info =>
-      'LocalSend නිදහස්, විවෘත-මූලාශ්‍ර වන අතර කිසිදු වෙළඳ දැන්වීමකින් තොර වේ. ඔබ මෙම ඇප් එකට කැමැති නම්, මෙහි සංවර්ධනය සඳහා මූල්‍යමය දායකත්වයක් ලබා දී සහය ලබා දීමට හැක.';
+      'AloeChat.AI නිදහස්, විවෘත-මූලාශ්‍ර වන අතර කිසිදු වෙළඳ දැන්වීමකින් තොර වේ. ඔබ මෙම ඇප් එකට කැමැති නම්, මෙහි සංවර්ධනය සඳහා මූල්‍යමය දායකත්වයක් ලබා දී සහය ලබා දීමට හැක.';
   @override
   String donate({required Object amount}) => 'දායකත්වය ${amount}';
   @override
@@ -609,7 +609,7 @@ class _TranslationsTraySi extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'LocalSend වෙතින් ඉවත් වෙන්න';
+  String get close => 'AloeChat.AI වෙතින් ඉවත් වෙන්න';
   @override
   String get closeWindows => 'පිටවීම';
 }
@@ -834,7 +834,7 @@ class _TranslationsSettingsTabGeneralSi extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'ස්වයංක්‍රීය ආරම්භය: සඟවා ආරම්භ කරන්න';
   @override
-  String get showInContextMenu => 'Context මෙනුව තුළ LocalSend පෙන්වන්න';
+  String get showInContextMenu => 'Context මෙනුව තුළ AloeChat.AI පෙන්වන්න';
   @override
   String get animations => 'ඇනිමේශන්';
 }
@@ -936,7 +936,7 @@ class _TranslationsSettingsTabOtherSi extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'වෙනත්';
   @override
-  String get support => 'LocalSend සඳහා සහය දක්වන්න';
+  String get support => 'AloeChat.AI සඳහා සහය දක්වන්න';
   @override
   String get donate => 'ආධාර කරන්න';
   @override
@@ -1262,7 +1262,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedSi extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'ජාලය ස්කෑන් (Scan) කිරීමට අවසරයක් නොමැතිව, LocalSend හට අනෙකුත් උපාංග සොයාගත නොහැක. කාරුණිකව මෙම අවසරය සැකසුම් (Settings) තුළ ලබා දෙන්න.';
+      'ජාලය ස්කෑන් (Scan) කිරීමට අවසරයක් නොමැතිව, AloeChat.AI හට අනෙකුත් උපාංග සොයාගත නොහැක. කාරුණිකව මෙම අවසරය සැකසුම් (Settings) තුළ ලබා දෙන්න.';
   @override
   String get gotoSettings => 'සැකසුම්';
 }
@@ -1427,7 +1427,7 @@ class _TranslationsDialogsSendModeHelpSi extends TranslationsDialogsSendModeHelp
   String get multiple => 'ලබන්නන් කිහිපදෙනෙකු වෙත ගොනු යැවීම කරයි. ගොනු හුවමාරු කිරීමෙන් පසුව ද තේරීම මකා දමන්නේ නැත.';
   @override
   String get link =>
-      'ලබන්නන් LocalSend ස්ථාපනය කර නොමැති නම්, ඔව්න්ගේ බ්‍රවුසර් (Browser) තුළ අදාල ලින්ක් (Link) එක විවෘත කර, ගොනු බාගත (Download) කළ හැක.';
+      'ලබන්නන් AloeChat.AI ස්ථාපනය කර නොමැති නම්, ඔව්න්ගේ බ්‍රවුසර් (Browser) තුළ අදාල ලින්ක් (Link) එක විවෘත කර, ගොනු බාගත (Download) කළ හැක.';
 }
 
 // Path: dialogs.zoom

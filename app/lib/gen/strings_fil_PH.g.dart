@@ -284,7 +284,7 @@ class _TranslationsNetworkInterfacesPageFilPh extends TranslationsNetworkInterfa
   String get title => 'Mga Interface ng Network';
   @override
   String get info =>
-      'Bilang default, ang LocalSend ay gumagamit ng lahat ng mga available na network interface. Maaari mong ibukod ang mga hindi mo gustong network dito. Kinakailangang i-restart ang server upang mai-apply ang mga pagbabago';
+      'Bilang default, ang AloeChat.AI ay gumagamit ng lahat ng mga available na network interface. Maaari mong ibukod ang mga hindi mo gustong network dito. Kinakailangang i-restart ang server upang mai-apply ang mga pagbabago';
   @override
   String get preview => 'Silipin';
   @override

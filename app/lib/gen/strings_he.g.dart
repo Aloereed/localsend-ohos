@@ -717,7 +717,7 @@ class _TranslationsNetworkInterfacesPageHe extends TranslationsNetworkInterfaces
   String get title => 'ממשקי רשת';
   @override
   String get info =>
-      'כברירת מחדל, LocalSend משתמש בכל ממשקי הרשת הזמינים. באפשרותך להסיר רשתות שאינן רצויות כאן. עליך להפעיל מחדש את השרת כדי להחיל את השינויים.';
+      'כברירת מחדל, AloeChat.AI משתמש בכל ממשקי הרשת הזמינים. באפשרותך להסיר רשתות שאינן רצויות כאן. עליך להפעיל מחדש את השרת כדי להחיל את השינויים.';
   @override
   String get preview => 'תצוגה מקדימה';
   @override

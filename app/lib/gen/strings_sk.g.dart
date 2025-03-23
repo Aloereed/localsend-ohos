@@ -794,7 +794,7 @@ class _TranslationsNetworkInterfacesPageSk extends TranslationsNetworkInterfaces
   // Translations
   @override
   String get info =>
-      'V predvolenom nastavení LocalSend používa všetky dostupné sieťové rozhrania. Nežiaduce siete tu môžete vylúčiť. Na uplatnenie zmien je potrebné reštartovať server.';
+      'V predvolenom nastavení AloeChat.AI používa všetky dostupné sieťové rozhrania. Nežiaduce siete tu môžete vylúčiť. Na uplatnenie zmien je potrebné reštartovať server.';
   @override
   String get preview => 'Náhľad';
   @override
