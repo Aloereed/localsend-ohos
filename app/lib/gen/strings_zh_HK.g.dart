@@ -460,8 +460,8 @@ class _TranslationsAboutPageZhHk extends TranslationsAboutPageEn {
   String get title => '關於 AloeChat.AI';
   @override
   List<String> get description => [
-        'AloeChat. AI蘆薈流轉助手系一款基於AloeChat.AI嘅免費開源應用程式，可畀你通過本地網絡與附近嘅設備安全噉共亯檔案同資訊，而無使互聯網連結。',
-		    '本程式可喺鴻蒙Next上使用，兼夾與Android、iOS、macOS、Windows同Linux上嘅AloeChat.AI互動。 你可以喺官方主頁揾到所有下載選項',
+        'AloeChat. AI蘆薈流轉助手系一款基於Localsend嘅免費開源應用程式，可畀你通過本地網絡與附近嘅設備安全噉共亯檔案同資訊，而無使互聯網連結。',
+		    '本程式可喺鴻蒙Next上使用，兼夾與Android、iOS、macOS、Windows同Linux上嘅Localsend互動。 你可以喺官方主頁揾到所有下載選項',
       ];
   @override
   String get author => '作者';

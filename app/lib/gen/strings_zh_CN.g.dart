@@ -462,8 +462,8 @@ class _TranslationsAboutPageZhCn extends TranslationsAboutPageEn {
   String get title => '关于 AloeChat.AI';
   @override
   List<String> get description => [
-        'AloeChat.AI 是一款基于AloeChat.AI的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
-        '本程序可在 鸿蒙Next上使用，并且与Android、iOS、macOS、Windows 和 Linux 上的AloeChat.AI交互。您可以在官方主页找到所有下载选项。',
+        'AloeChat.AI 是一款基于Localsend的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
+        '本程序可在 鸿蒙Next上使用，并且与Android、iOS、macOS、Windows 和 Linux 上的Localsend交互。您可以在官方主页找到所有下载选项。',
       ];
   @override
   String get author => '作者';
