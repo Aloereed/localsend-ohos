@@ -1558,7 +1558,7 @@ packages:
       sha256: "4cdc3d8f4b384dbc56d94c87a5371d4a584460d82a74e18247ec690a0e369ff2"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.4.0"
+    version: "4.5.0"
   slang_build_runner:
     dependency: "direct dev"
     description:
