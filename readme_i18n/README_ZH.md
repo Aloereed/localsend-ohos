@@ -1,7 +1,7 @@
 # 芦荟流转助手
 <!-- AloeSend is an adaptation of LocalSend for HarmonyOS Next.   -->
 芦荟流转助手是一个用于HarmonyOS Next的LocalSend适配。  
-[从AppGallery下载](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai)  
+[从AppGallery下载 (旧版本)](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai)    
 [从GitHub Releases下载 (侧载)](https://github.com/Aloereed/localsend-ohos/releases)
 # LocalSend
 
