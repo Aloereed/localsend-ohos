@@ -2,8 +2,8 @@
 
 <!-- AloeSend 是一个用于HarmonyOS Next的LocalSend适配 -->
 AloeSend is an adaptation of LocalSend for HarmonyOS Next.  
-[Download from AppGallery](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai)  
-
+[Download from AppGallery (Old Version)](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai)    
+[Download from GitHub Releases (Sideloaded)](https://github.com/Aloereed/localsend-ohos/releases)
 
 # LocalSend
 
@@ -29,21 +29,25 @@ AloeSend is an adaptation of LocalSend for HarmonyOS Next.
 
 LocalSend is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.
 
-- [About](#about)
-- [Screenshots](#screenshots)
-- [Download](#download)
-- [How It Works](#how-it-works)
-- [Getting Started](#getting-started)
-- [Contributing](#contributing)
-  - [Translation](#translation)
-  - [Bug Fixes and Improvements](#bug-fixes-and-improvements)
-- [Troubleshooting](#troubleshooting)
-- [Building](#building)
-  - [Android](#android)
-  - [iOS](#ios)
-  - [macOS](#macos)
-  - [Windows](#windows)
-  - [Linux](#linux)
+- [AloeSend](#aloesend)
+- [LocalSend](#localsend)
+  - [About](#about)
+  - [Screenshots](#screenshots)
+  - [Download](#download)
+  - [Setup](#setup)
+  - [How It Works](#how-it-works)
+  - [Getting Started](#getting-started)
+  - [Contributing](#contributing)
+    - [Translation](#translation)
+    - [Bug Fixes and Improvements](#bug-fixes-and-improvements)
+  - [Troubleshooting](#troubleshooting)
+  - [Building](#building)
+    - [Android](#android)
+    - [iOS](#ios)
+    - [macOS](#macos)
+    - [Windows](#windows)
+    - [Linux](#linux)
+  - [Contributors](#contributors)
 
 ## About
 
