@@ -42,7 +42,7 @@
     },
     "other": {
       "title": "Other",
-      "support": "Support AloeChat.AI",
+      "support": "Support AloeSend",
       "donate": "Donate",
       "privacyPolicy": "Privacy Policy",
       "termsOfUse": "Terms of Use"
@@ -76,7 +76,7 @@
   },
   "aboutPage": {
     "description": [
-      "AloeChat.AI is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.",
+      "AloeSend is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.",
       "This app is available on Android, iOS, macOS, Windows and Linux. You can find all download options on the official homepage."
     ],
     "author": "Author",
@@ -86,7 +86,7 @@
   },
   "donationPage": {
     "title": "Donate",
-    "info": "AloeChat.AI is free, open-source and without any ads. If you like the app, you can support the development with a donation.",
+    "info": "AloeSend is free, open-source and without any ads. If you like the app, you can support the development with a donation.",
     "donate": "Donate {amount}",
     "thanks": "Thank you very much!",
     "restore": "Restore purchase"

@@ -33,7 +33,7 @@ class TranslationsAz extends Translations {
   @override
   String get locale => 'Azərbaycanca';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'AloeSend';
   @override
   late final _TranslationsGeneralAz general = _TranslationsGeneralAz._(_root);
   @override
@@ -327,7 +327,7 @@ class _TranslationsSettingsTabGeneralAz extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Birbaşa başlat: Gizli başlat';
   @override
-  String get showInContextMenu => 'Məzmun menyusunda AloeChat.AI-i göstər';
+  String get showInContextMenu => 'Məzmun menyusunda AloeSend-i göstər';
   @override
   String get animations => 'Animasiyalar';
 }

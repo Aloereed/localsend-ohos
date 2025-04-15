@@ -10,7 +10,7 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "AloeChatAI"
+      "value": "AloeSend"
     },
     {
       "name": "read_imagevideo_reason",
@@ -18,7 +18,7 @@
     },
     {
       "name": "pasteboard_reason",
-      "value": "AloeChatAI is applying to access your clipboard."
+      "value": "AloeSend is applying to access your clipboard."
     }
   ]
 }

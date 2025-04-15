@@ -33,7 +33,7 @@ class TranslationsZhCn extends Translations {
   @override
   String get locale => '简体中文';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'AloeSend';
   @override
   late final _TranslationsGeneralZhCn general = _TranslationsGeneralZhCn._(_root);
   @override
@@ -363,7 +363,7 @@ class _TranslationsReceiveOptionsPageZhCn extends TranslationsReceiveOptionsPage
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(AloeChat.AI 文件夹)';
+  String get appDirectory => '(AloeSend 文件夹)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -444,7 +444,7 @@ class _TranslationsWebSharePageZhCn extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN 为 “${pin}”';
   @override
-  String get encryptionHint => 'AloeChat.AI 使用自签名证书。您需要在浏览器中允许它。';
+  String get encryptionHint => 'AloeSend 使用自签名证书。您需要在浏览器中允许它。';
   @override
   String pendingRequests({required Object n}) => '待处理请求：${n}';
 }
@@ -459,10 +459,10 @@ class _TranslationsAboutPageZhCn extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => '关于 AloeChat.AI';
+  String get title => '关于 AloeSend';
   @override
   List<String> get description => [
-        'AloeChat.AI 是一款基于Localsend的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
+        'AloeSend 是一款基于Localsend的免费开源应用程序，可让您通过本地网络与附近的设备安全地共享文件和信息，而无需互联网连接。',
         '本程序可在 鸿蒙Next上使用，并且与Android、iOS、macOS、Windows 和 Linux 上的Localsend交互。您可以在官方主页找到所有下载选项。',
       ];
   @override
@@ -487,7 +487,7 @@ class _TranslationsDonationPageZhCn extends TranslationsDonationPageEn {
   @override
   String get title => '捐赠';
   @override
-  String get info => 'AloeChat.AI 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。';
+  String get info => 'AloeSend 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。';
   @override
   String donate({required Object amount}) => '捐款 ${amount}';
   @override
@@ -681,7 +681,7 @@ class _TranslationsTrayZhCn extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => '退出 AloeChat.AI';
+  String get close => '退出 AloeSend';
   @override
   String get closeWindows => '退出';
 }
@@ -792,7 +792,7 @@ class _TranslationsNetworkInterfacesPageZhCn extends TranslationsNetworkInterfac
   @override
   String get title => '网络接口';
   @override
-  String get info => '默认情况下，AloeChat.AI 使用所有可用的网络接口。您可以在此处排除不需要的网络接口。您需要重新启动服务器以应用更改。';
+  String get info => '默认情况下，AloeSend 使用所有可用的网络接口。您可以在此处排除不需要的网络接口。您需要重新启动服务器以应用更改。';
   @override
   String get preview => '预览';
   @override
@@ -926,7 +926,7 @@ class _TranslationsSettingsTabGeneralZhCn extends TranslationsSettingsTabGeneral
   @override
   String get launchMinimized => '启动时最小化到任务栏';
   @override
-  String get showInContextMenu => '在“发送到...”文件菜单中显示 AloeChat.AI';
+  String get showInContextMenu => '在“发送到...”文件菜单中显示 AloeSend';
   @override
   String get animations => '动画效果';
 }
@@ -1030,7 +1030,7 @@ class _TranslationsSettingsTabOtherZhCn extends TranslationsSettingsTabOtherEn {
   @override
   String get title => '其他';
   @override
-  String get support => '支持 AloeChat.AI';
+  String get support => '支持 AloeSend';
   @override
   String get donate => '捐赠';
   @override
@@ -1351,7 +1351,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedZhCn extends TranslationsDialo
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => 'AloeChat.AI 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。';
+  String get description => 'AloeSend 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。';
   @override
   String get gotoSettings => '设置';
 }
@@ -1515,7 +1515,7 @@ class _TranslationsDialogsSendModeHelpZhCn extends TranslationsDialogsSendModeHe
   @override
   String get multiple => '发送文件给多个接收者。已选择的文件在发送后不会取消选择。';
   @override
-  String get link => '未安装 AloeChat.AI 的接收者可以在浏览器中打开链接以下载选中的文件。';
+  String get link => '未安装 AloeSend 的接收者可以在浏览器中打开链接以下载选中的文件。';
 }
 
 // Path: dialogs.zoom

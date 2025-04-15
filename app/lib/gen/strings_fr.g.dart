@@ -33,7 +33,7 @@ class TranslationsFr extends Translations {
   @override
   String get locale => 'Français';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'AloeSend';
   @override
   late final _TranslationsGeneralFr general = _TranslationsGeneralFr._(_root);
   @override
@@ -364,7 +364,7 @@ class _TranslationsReceiveOptionsPageFr extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(AloeChat.AI folder)';
+  String get appDirectory => '(AloeSend folder)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -445,7 +445,7 @@ class _TranslationsWebSharePageFr extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'Le code PIN est "${pin}"';
   @override
-  String get encryptionHint => 'AloeChat.AI utilise un certificat auto-signé. Vous devez l\'accepter dans le navigateur.';
+  String get encryptionHint => 'AloeSend utilise un certificat auto-signé. Vous devez l\'accepter dans le navigateur.';
   @override
   String pendingRequests({required Object n}) => 'Requêtes en attente : ${n}';
 }
@@ -460,11 +460,11 @@ class _TranslationsAboutPageFr extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'À propos de AloeChat.AI';
+  String get title => 'À propos de AloeSend';
   @override
   List<String> get description => [
-        'AloeChat.AI est un logiciel gratuit et open-source qui vous permet de partager de manière sécurisée des fichiers et des messages avec d\'autres appareils connectés à votre réseau local. Une connexion à internet n\'est pas requise.',
-        'AloeChat.AI est disponible sur Android, iOS, macOS, Windows et Linux. Vous pouvez accéder à ces téléchargements depuis la page officielle.',
+        'AloeSend est un logiciel gratuit et open-source qui vous permet de partager de manière sécurisée des fichiers et des messages avec d\'autres appareils connectés à votre réseau local. Une connexion à internet n\'est pas requise.',
+        'AloeSend est disponible sur Android, iOS, macOS, Windows et Linux. Vous pouvez accéder à ces téléchargements depuis la page officielle.',
       ];
   @override
   String get author => 'Auteur';
@@ -489,7 +489,7 @@ class _TranslationsDonationPageFr extends TranslationsDonationPageEn {
   String get title => 'Faire une donation';
   @override
   String get info =>
-      'AloeChat.AI est gratuit, open-source et sans aucune pub. Si vous aimez ce logiciel, vous pouvez faire un don pour soutenir son développement.';
+      'AloeSend est gratuit, open-source et sans aucune pub. Si vous aimez ce logiciel, vous pouvez faire un don pour soutenir son développement.';
   @override
   String donate({required Object amount}) => 'Donner ${amount}';
   @override
@@ -611,7 +611,7 @@ class _TranslationsTrayFr extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Quitter AloeChat.AI';
+  String get close => 'Quitter AloeSend';
   @override
   String get closeWindows => 'Fermer';
 }
@@ -724,7 +724,7 @@ class _TranslationsNetworkInterfacesPageFr extends TranslationsNetworkInterfaces
   String get title => 'Interfaces réseau';
   @override
   String get info =>
-      'Par défaut, AloeChat.AI utilise toutes les interfaces réseau disponibles. Vous pouvez exclure les réseaux indésirables ici. Vous aurez besoin de redémarrer le serveur pour appliquer les changements.';
+      'Par défaut, AloeSend utilise toutes les interfaces réseau disponibles. Vous pouvez exclure les réseaux indésirables ici. Vous aurez besoin de redémarrer le serveur pour appliquer les changements.';
   @override
   String get preview => 'Aperçu';
   @override
@@ -854,11 +854,11 @@ class _TranslationsSettingsTabGeneralFr extends TranslationsSettingsTabGeneralEn
   @override
   String get minimizeToTray => 'Réduire dans la barre des tâches à la fermeture';
   @override
-  String get launchAtStartup => 'Lancer AloeChat.AI à la connexion de l\'utilisateur';
+  String get launchAtStartup => 'Lancer AloeSend à la connexion de l\'utilisateur';
   @override
-  String get launchMinimized => 'Minimiser AloeChat.AI lors du lancement';
+  String get launchMinimized => 'Minimiser AloeSend lors du lancement';
   @override
-  String get showInContextMenu => 'Afficher AloeChat.AI dans le menu contextuel';
+  String get showInContextMenu => 'Afficher AloeSend dans le menu contextuel';
   @override
   String get animations => 'Animations';
 }
@@ -964,7 +964,7 @@ class _TranslationsSettingsTabOtherFr extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Autre';
   @override
-  String get support => 'Soutenir AloeChat.AI';
+  String get support => 'Soutenir AloeSend';
   @override
   String get donate => 'Faire une donation';
   @override
@@ -1289,7 +1289,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedFr extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'AloeChat.AI ne peut pas trouver d\'autres appareils sans la permission de scanner votre réseau local. Veuillez donner cette permission à AloeChat.AI dans les paramètres système.';
+      'AloeSend ne peut pas trouver d\'autres appareils sans la permission de scanner votre réseau local. Veuillez donner cette permission à AloeSend dans les paramètres système.';
   @override
   String get gotoSettings => 'Paramètres';
 }
@@ -1334,7 +1334,7 @@ class _TranslationsDialogsNoPermissionFr extends TranslationsDialogsNoPermission
 
   // Translations
   @override
-  String get title => 'AloeChat.AI n\'a pas la permission';
+  String get title => 'AloeSend n\'a pas la permission';
   @override
   String get content => 'Vous n\'avez pas accordé les autorisations nécessaires. Veuillez les accorder dans les paramètres systèmes.';
 }
@@ -1455,7 +1455,7 @@ class _TranslationsDialogsSendModeHelpFr extends TranslationsDialogsSendModeHelp
   String get multiple => 'Envoyer des fichiers à plusieurs destinataires. La sélection ne sera pas effacée.';
   @override
   String get link =>
-      'Les destinataires n\'ayant pas AloeChat.AI installé peuvent télécharger les fichiers sélectionnés en ouvrant le lien dans leur navigateur.';
+      'Les destinataires n\'ayant pas AloeSend installé peuvent télécharger les fichiers sélectionnés en ouvrant le lien dans leur navigateur.';
 }
 
 // Path: dialogs.zoom

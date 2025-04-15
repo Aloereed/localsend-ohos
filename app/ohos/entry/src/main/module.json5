@@ -28,9 +28,9 @@
         srcEntry: "./ets/entryability/EntryAbility.ets",
         description: "$string:EntryAbility_desc",
         orientation: "auto_rotation_restricted",
-        icon: "$media:icon",
+        icon: "$media:layered_image",
         label: "$string:EntryAbility_label",
-        startWindowIcon: "$media:icon",
+        startWindowIcon: "$media:icon_startwindow",
         startWindowBackground: "$color:start_window_background",
         exported: true,
         "backgroundModes": [

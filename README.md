@@ -1,7 +1,7 @@
-# AloeChat.AI
+# AloeSend
 
-<!-- AloeChat.AI 是一个用于HarmonyOS Next的LocalSend适配 -->
-AloeChat.AI is an adaptation of LocalSend for HarmonyOS Next.  
+<!-- AloeSend 是一个用于HarmonyOS Next的LocalSend适配 -->
+AloeSend is an adaptation of LocalSend for HarmonyOS Next.  
 [Download from AppGallery](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai)  
 
 

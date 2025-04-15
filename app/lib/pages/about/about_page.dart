@@ -140,7 +140,7 @@ class AboutPage extends StatelessWidget {
                 onPressed: () async {
                   await launchUrl(Uri.parse('https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai'), mode: LaunchMode.externalApplication);
                 },
-                child: const Text('去AppGallery查看AloeChat.AI'),
+                child: const Text('去AppGallery查看AloeSend'),
               ),
               TextButton(
                 onPressed: () async {
@@ -176,7 +176,7 @@ class AboutPage extends StatelessWidget {
                 onPressed: () async {
                   await context.push(() => const LicensePage());
                 },
-                child: const Text('AloeChat.AI还使用了这些开源组件许可'),
+                child: const Text('AloeSend还使用了这些开源组件许可'),
               ),
               // TextButton(
               //   onPressed: () async {

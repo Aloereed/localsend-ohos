@@ -1,10 +1,10 @@
 {
   "app": {
-    "bundleName": "com.aloereed.aloechatai",
+    "bundleName": "com.aloereed.aloesend",
     "vendor": "example",
     "versionCode": 60,
     "versionName": "1.17.2",
-    "icon": "$media:app_icon",
+    "icon": "$media:layered_image",
     "label": "$string:app_name"
   }
 }

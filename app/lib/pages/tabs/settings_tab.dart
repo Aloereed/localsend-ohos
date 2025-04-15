@@ -545,7 +545,7 @@ class SettingsTab extends StatelessWidget {
                   orElse: () => Container(),
                 ),
             Text(
-              '© ${DateTime.now().year} AloeChat.AI',
+              '© ${DateTime.now().year} AloeSend',
               textAlign: TextAlign.center,
             ),
             Text(
@@ -728,7 +728,7 @@ extension on ColorMode {
   String get humanName {
     return switch (this) {
       ColorMode.system => t.settingsTab.general.colorOptions.system,
-      ColorMode.localsend => 'AloeChat.AI',
+      ColorMode.localsend => 'AloeSend',
       ColorMode.oled => t.settingsTab.general.colorOptions.oled,
       ColorMode.yaru => 'Yaru',
     };

@@ -33,7 +33,7 @@ class TranslationsSk extends Translations {
   @override
   String get locale => 'Slovenčina';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'AloeSend';
   @override
   late final _TranslationsGeneralSk general = _TranslationsGeneralSk._(_root);
   @override
@@ -363,7 +363,7 @@ class _TranslationsReceiveOptionsPageSk extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(Priečinok AloeChat.AI)';
+  String get appDirectory => '(Priečinok AloeSend)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -444,7 +444,7 @@ class _TranslationsWebSharePageSk extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN je "${pin}"';
   @override
-  String get encryptionHint => 'AloeChat.AI používa certifikát s vlastným podpisom. Musíte ho prijať vo svojom prehliadači.';
+  String get encryptionHint => 'AloeSend používa certifikát s vlastným podpisom. Musíte ho prijať vo svojom prehliadači.';
   @override
   String pendingRequests({required Object n}) => 'Nespracované žiadosti: ${n}';
 }
@@ -459,10 +459,10 @@ class _TranslationsAboutPageSk extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'O aplikácii AloeChat.AI';
+  String get title => 'O aplikácii AloeSend';
   @override
   List<String> get description => [
-        'AloeChat.AI je bezplatná aplikácia s otvoreným zdrojovým kódom, ktorá vám umožňuje bezpečne zdieľať súbory a správy so zariadeniami v okolí cez vašu lokálnu sieť bez potreby pripojenia k internetu.',
+        'AloeSend je bezplatná aplikácia s otvoreným zdrojovým kódom, ktorá vám umožňuje bezpečne zdieľať súbory a správy so zariadeniami v okolí cez vašu lokálnu sieť bez potreby pripojenia k internetu.',
         'Táto aplikácia je dostupná pre Android, iOS, macOS, Windows a Linux. Všetky možnosti stiahnutia nájdete na oficiálnej domovskej stránke.',
       ];
   @override
@@ -487,7 +487,7 @@ class _TranslationsDonationPageSk extends TranslationsDonationPageEn {
   @override
   String get title => 'Darovať';
   @override
-  String get info => 'AloeChat.AI je bezplatný, s otvoreným kódom a bez reklám. Ak sa vám aplikácia páči, môžete jej vývoj podporiť darom.';
+  String get info => 'AloeSend je bezplatný, s otvoreným kódom a bez reklám. Ak sa vám aplikácia páči, môžete jej vývoj podporiť darom.';
   @override
   String donate({required Object amount}) => 'Darovať ${amount}';
   @override
@@ -683,7 +683,7 @@ class _TranslationsTraySk extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'Ukončiť AloeChat.AI';
+  String get close => 'Ukončiť AloeSend';
   @override
   String get closeWindows => 'Ukončiť';
 }
@@ -794,7 +794,7 @@ class _TranslationsNetworkInterfacesPageSk extends TranslationsNetworkInterfaces
   // Translations
   @override
   String get info =>
-      'V predvolenom nastavení AloeChat.AI používa všetky dostupné sieťové rozhrania. Nežiaduce siete tu môžete vylúčiť. Na uplatnenie zmien je potrebné reštartovať server.';
+      'V predvolenom nastavení AloeSend používa všetky dostupné sieťové rozhrania. Nežiaduce siete tu môžete vylúčiť. Na uplatnenie zmien je potrebné reštartovať server.';
   @override
   String get preview => 'Náhľad';
   @override
@@ -930,7 +930,7 @@ class _TranslationsSettingsTabGeneralSk extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Autoštart: Spustiť skryté';
   @override
-  String get showInContextMenu => 'Zobraziť AloeChat.AI v kontextovej ponuke';
+  String get showInContextMenu => 'Zobraziť AloeSend v kontextovej ponuke';
   @override
   String get animations => 'Animácie';
 }
@@ -1036,7 +1036,7 @@ class _TranslationsSettingsTabOtherSk extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Iné';
   @override
-  String get support => 'Podporte AloeChat.AI';
+  String get support => 'Podporte AloeSend';
   @override
   String get donate => 'Darovať';
   @override
@@ -1361,7 +1361,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedSk extends TranslationsDialogs
   String get title => _root.dialogs.noPermission.title;
   @override
   String get description =>
-      'AloeChat.AI nemôže nájsť iné zariadenia bez povolenia na prehľadanie lokálnej siete. Povoľte prosím toto povolenie v nastaveniach.';
+      'AloeSend nemôže nájsť iné zariadenia bez povolenia na prehľadanie lokálnej siete. Povoľte prosím toto povolenie v nastaveniach.';
   @override
   String get gotoSettings => 'Nastavenia';
 }
@@ -1525,7 +1525,7 @@ class _TranslationsDialogsSendModeHelpSk extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Posiela súbory viacerým príjemcom. Výber sa vymaže po dokončení prenosu súborov.';
   @override
-  String get link => 'Príjemcovia, ktorí nemajú nainštalovaný AloeChat.AI, si môžu stiahnuť vybrané súbory otvorením odkazu vo svojom prehliadači.';
+  String get link => 'Príjemcovia, ktorí nemajú nainštalovaný AloeSend, si môžu stiahnuť vybrané súbory otvorením odkazu vo svojom prehliadači.';
 }
 
 // Path: dialogs.zoom

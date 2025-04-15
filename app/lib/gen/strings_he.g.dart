@@ -33,7 +33,7 @@ class TranslationsHe extends Translations {
   @override
   String get locale => 'עברית';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'AloeSend';
   @override
   late final _TranslationsGeneralHe general = _TranslationsGeneralHe._(_root);
   @override
@@ -361,7 +361,7 @@ class _TranslationsReceiveOptionsPageHe extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(תיקיית AloeChat.AI)';
+  String get appDirectory => '(תיקיית AloeSend)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -442,7 +442,7 @@ class _TranslationsWebSharePageHe extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'הסיסמה היא "${pin}"';
   @override
-  String get encryptionHint => 'AloeChat.AI משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן.';
+  String get encryptionHint => 'AloeSend משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן.';
   @override
   String pendingRequests({required Object n}) => 'בקשות בהמתנה: ${n}';
 }
@@ -457,10 +457,10 @@ class _TranslationsAboutPageHe extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'אודות AloeChat.AI';
+  String get title => 'אודות AloeSend';
   @override
   List<String> get description => [
-        'AloeChat.AI היא אפליקציית קוד פתוח חינמית המאפשרת לשתף קבצים והודעות בצורה מאובטחת עם מכשירים קרובים דרך הרשת המקומית מבלי להזדקק לחיבור לאינטרנט.',
+        'AloeSend היא אפליקציית קוד פתוח חינמית המאפשרת לשתף קבצים והודעות בצורה מאובטחת עם מכשירים קרובים דרך הרשת המקומית מבלי להזדקק לחיבור לאינטרנט.',
         'אפליקציה זו זמינה באנדרואיד, iOS, macOS, Windows ו-Linux. אתה יכול למצוא את כל אפשרויות ההורדה בדף הבית הרשמי.',
       ];
   @override
@@ -485,7 +485,7 @@ class _TranslationsDonationPageHe extends TranslationsDonationPageEn {
   @override
   String get title => 'תרומה';
   @override
-  String get info => 'אפליקציית AloeChat.AI היא חינמית, קוד פתוח וללא פרסומות. אם אתה אוהב את האפליקציה, אתה יכול לתמוך בפיתוח באמצעות תרומה.';
+  String get info => 'אפליקציית AloeSend היא חינמית, קוד פתוח וללא פרסומות. אם אתה אוהב את האפליקציה, אתה יכול לתמוך בפיתוח באמצעות תרומה.';
   @override
   String donate({required Object amount}) => 'תרומת ${amount}';
   @override
@@ -605,7 +605,7 @@ class _TranslationsTrayHe extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'צא מ-AloeChat.AI';
+  String get close => 'צא מ-AloeSend';
   @override
   String get closeWindows => 'יציאה';
 }
@@ -717,7 +717,7 @@ class _TranslationsNetworkInterfacesPageHe extends TranslationsNetworkInterfaces
   String get title => 'ממשקי רשת';
   @override
   String get info =>
-      'כברירת מחדל, AloeChat.AI משתמש בכל ממשקי הרשת הזמינים. באפשרותך להסיר רשתות שאינן רצויות כאן. עליך להפעיל מחדש את השרת כדי להחיל את השינויים.';
+      'כברירת מחדל, AloeSend משתמש בכל ממשקי הרשת הזמינים. באפשרותך להסיר רשתות שאינן רצויות כאן. עליך להפעיל מחדש את השרת כדי להחיל את השינויים.';
   @override
   String get preview => 'תצוגה מקדימה';
   @override
@@ -834,7 +834,7 @@ class _TranslationsSettingsTabGeneralHe extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'הפעלה אוטומטית: התחל מוסתר';
   @override
-  String get showInContextMenu => 'הצג את AloeChat.AI בתפריט ההקשר';
+  String get showInContextMenu => 'הצג את AloeSend בתפריט ההקשר';
   @override
   String get animations => 'אנימציות';
 }
@@ -940,7 +940,7 @@ class _TranslationsSettingsTabOtherHe extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'אחר';
   @override
-  String get support => 'תמיכה ב-AloeChat.AI';
+  String get support => 'תמיכה ב-AloeSend';
   @override
   String get donate => 'תרומה';
   @override
@@ -1249,7 +1249,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedHe extends TranslationsDialogs
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => 'ל־AloeChat.AI אין אפשרות למצוא מכשירים אחרים ללא הרשאה לסריקת הרשת המקומית. אנא הענק את ההרשאה הזו בהגדרות.';
+  String get description => 'ל־AloeSend אין אפשרות למצוא מכשירים אחרים ללא הרשאה לסריקת הרשת המקומית. אנא הענק את ההרשאה הזו בהגדרות.';
   @override
   String get gotoSettings => 'הגדרות';
 }
@@ -1407,7 +1407,7 @@ class _TranslationsDialogsSendModeHelpHe extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'שליחת קבצים למקבלים מרובים. בחירת הקבצים לא תתאפס.';
   @override
-  String get link => 'מקבלים ש-AloeChat.AI לא מותקן אצלם יוכלו להוריד את הקבצים שנבחרו על ידי פתיחת הקישור בדפדפן שלהם.';
+  String get link => 'מקבלים ש-AloeSend לא מותקן אצלם יוכלו להוריד את הקבצים שנבחרו על ידי פתיחת הקישור בדפדפן שלהם.';
 }
 
 // Path: dialogs.zoom

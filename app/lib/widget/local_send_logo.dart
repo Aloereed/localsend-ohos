@@ -35,7 +35,7 @@ class AloeChatAILogo extends StatelessWidget {
         children: [
           logo,
           const Text(
-            'AloeChat.AI',
+            'AloeSend',
             style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),

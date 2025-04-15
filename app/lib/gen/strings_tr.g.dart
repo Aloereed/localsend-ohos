@@ -33,7 +33,7 @@ class TranslationsTr extends Translations {
   @override
   String get locale => 'Türkçe';
   @override
-  String get appName => 'AloeChat.AI';
+  String get appName => 'AloeSend';
   @override
   late final _TranslationsGeneralTr general = _TranslationsGeneralTr._(_root);
   @override
@@ -363,7 +363,7 @@ class _TranslationsReceiveOptionsPageTr extends TranslationsReceiveOptionsPageEn
   @override
   String get destination => _root.settingsTab.receive.destination;
   @override
-  String get appDirectory => '(AloeChat.AI klasörü)';
+  String get appDirectory => '(AloeSend klasörü)';
   @override
   String get saveToGallery => _root.settingsTab.receive.saveToGallery;
   @override
@@ -444,7 +444,7 @@ class _TranslationsWebSharePageTr extends TranslationsWebSharePageEn {
   @override
   String pinHint({required Object pin}) => 'PIN "${pin}"';
   @override
-  String get encryptionHint => 'AloeChat.AI, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.';
+  String get encryptionHint => 'AloeSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.';
   @override
   String pendingRequests({required Object n}) => 'Bekleyen istekler: ${n}';
 }
@@ -459,10 +459,10 @@ class _TranslationsAboutPageTr extends TranslationsAboutPageEn {
 
   // Translations
   @override
-  String get title => 'AloeChat.AI hakkında';
+  String get title => 'AloeSend hakkında';
   @override
   List<String> get description => [
-        'AloeChat.AI, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.',
+        'AloeSend, internet bağlantısına ihtiyaç duymadan yerel ağınız üzerinden yakınınızdaki cihazlarla dosya ve mesajlarınızı güvenli bir şekilde paylaşmanıza olanak tanıyan özgür ve açık kaynaklı bir uygulamadır.',
         'Bu uygulama Android, iOS, macOS, Windows ve Linux\'ta mevcuttur. Tüm indirme seçeneklerini resmi ana sayfada bulabilirsiniz.',
       ];
   @override
@@ -488,7 +488,7 @@ class _TranslationsDonationPageTr extends TranslationsDonationPageEn {
   String get title => 'Bağış yap';
   @override
   String get info =>
-      'AloeChat.AI ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.';
+      'AloeSend ücretsiz, açık kaynaklı ve reklamsız bir uygulamadır. Eğer uygulamayı beğendiyseniz, bağış yaparak uygulamanın gelişimine katkıda bulunabilirsiniz.';
   @override
   String donate({required Object amount}) => 'Bağışta bulun ${amount}';
   @override
@@ -607,7 +607,7 @@ class _TranslationsTrayTr extends TranslationsTrayEn {
   @override
   String get open => _root.general.open;
   @override
-  String get close => 'AloeChat.AI\'den çık';
+  String get close => 'AloeSend\'den çık';
   @override
   String get closeWindows => 'Çıkış';
 }
@@ -851,7 +851,7 @@ class _TranslationsSettingsTabGeneralTr extends TranslationsSettingsTabGeneralEn
   @override
   String get launchMinimized => 'Otomatik başlatma: Gizli Başlatma';
   @override
-  String get showInContextMenu => 'AloeChat.AI\'i bağlam menüsünde göster';
+  String get showInContextMenu => 'AloeSend\'i bağlam menüsünde göster';
   @override
   String get animations => 'Animasyonlar';
 }
@@ -955,7 +955,7 @@ class _TranslationsSettingsTabOtherTr extends TranslationsSettingsTabOtherEn {
   @override
   String get title => 'Diğer';
   @override
-  String get support => 'AloeChat.AI\'i destekle';
+  String get support => 'AloeSend\'i destekle';
   @override
   String get donate => 'Bağış yap';
   @override
@@ -1265,7 +1265,7 @@ class _TranslationsDialogsLocalNetworkUnauthorizedTr extends TranslationsDialogs
   @override
   String get title => _root.dialogs.noPermission.title;
   @override
-  String get description => 'AloeChat.AI, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.';
+  String get description => 'AloeSend, lokal ağı tarama iznine sahip olmadan başka cihazları bulamıyor. Lütfen bu izni ayarlarda verin.';
   @override
   String get gotoSettings => 'Ayarlar';
 }
@@ -1411,7 +1411,7 @@ class _TranslationsDialogsSendModeHelpTr extends TranslationsDialogsSendModeHelp
   @override
   String get multiple => 'Dosyaları birden çok alıcıya gönderir. Seçim temizlenmeyecektir.';
   @override
-  String get link => 'AloeChat.AI yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir.';
+  String get link => 'AloeSend yüklü olmayan alıcılar, tarayıcılarındaki bağlantıyı açarak seçilen dosyaları indirebilir.';
 }
 
 // Path: dialogs.zoom
