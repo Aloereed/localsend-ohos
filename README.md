@@ -2,7 +2,7 @@
 
 <!-- AloeSend 是一个用于HarmonyOS Next的LocalSend适配 -->
 AloeSend is an adaptation of LocalSend for HarmonyOS Next.  
-[Download from AppGallery (Old Version)](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloechatai)    
+[Download from AppGallery (Old Version)](https://appgallery.huawei.com/app/detail?id=com.aloereed.aloesend)    
 [Download from GitHub Releases (Sideloaded)](https://github.com/Aloereed/localsend-ohos/releases)
 
 # LocalSend

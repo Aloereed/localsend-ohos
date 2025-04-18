@@ -141,7 +141,7 @@ class DownloadApi {
        // 添加需要被拉起应用的bundleName和abilityName
        wants: [
          {
-           bundleName: "com.aloereed.aloechatai",
+           bundleName: "com.aloereed.aloesend",
            abilityName: "EntryAbility"
          }
        ],
