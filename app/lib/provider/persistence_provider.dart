@@ -426,7 +426,7 @@ class PersistenceService {
   }
 
   bool isHttps() {
-    return _prefs.getBool(_https) ?? false;
+    return _prefs.getBool(_https) ?? true;
   }
 
   Future<void> setHttps(bool https) async {

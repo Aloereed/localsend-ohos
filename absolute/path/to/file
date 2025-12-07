@@ -1,0 +1,152 @@
+if (checkPlatform([TargetPlatform.android, TargetPlatform.iOS])) {
+  /// We need to use the file_picker package because file_selector does not expose the raw path.
+  /// We need the raw path to properly manipulate the path to save new files, or
+  /// to list files recursively.
+  /// Also, on iOS, file_selector does not work with directories.
+  return await FilePicker.platform.getDirectoryPath();
+} else if (checkPlatform([TargetPlatform.ohos])) {
+  /// For OHOS, due to permission restrictions, we need to create a custom dialog
+  /// to let users select folders under /storage/Users/currentUser/Download
+  return await _showOhosDirectoryPicker();
+} else {
+  return await file_selector.getDirectoryPath();
+}
+
+Future<String?> _showOhosDirectoryPicker() async {
+  // Get current user directory
+  final String currentUser = Platform.environment['USER'] ?? 'default';
+  final String basePath = '/storage/Users/$currentUser/Download';
+  
+  // List of selected directories
+  List<String>? directories;
+  try {
+    // List directories in base path
+    final Directory baseDir = Directory(basePath);
+    if (!await baseDir.exists()) {
+      return null;
+    }
+    
+    directories = await baseDir
+        .list()
+        .where((entity) => entity is Directory)
+        .map((dir) => dir.path)
+        .toList();
+    
+    // Add base path itself as an option
+    directories.insert(0, basePath);
+  } catch (e) {
+    debugPrint('Error listing directories: $e');
+    return null;
+  }
+  
+  // Show dialog with毛玻璃效果
+  return showDialog<String?>(
+    context: context,
+    builder: (BuildContext context) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          dialogTheme: DialogTheme(
+            backgroundColor: Colors.transparent,
+          ),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Dialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            child: Container(
+              margin: EdgeInsets.all(20),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[900]!.withOpacity(0.8)
+                    : Colors.white.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '选择文件夹',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.headline6?.color,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ListView.builder(
+                      itemCount: directories!.length,
+                      itemBuilder: (context, index) {
+                        final String path = directories![index];
+                        final String displayName = path.split('/').last;
+                        
+                        return ListTile(
+                          title: Text(displayName),
+                          subtitle: Text(path),
+                          onTap: () {
+                            Navigator.of(context).pop(path);
+                          },
+                          selected: false,
+                          selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(null);
+                        },
+                        child: Text('取消'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}```
+
+这个修改添加了以下功能：
+
+1. 在平台检查中增加了对TargetPlatform.ohos的判断
+2. 实现了_showOhosDirectoryPicker()方法来创建自定义对话框
+3. 对话框具有毛玻璃高斯模糊效果，通过BackdropFilter实现
+4. 适配了亮暗模式，根据主题自动调整背景色
+5. 界面美观，包括圆角、阴影和适当的间距
+6. 只显示/storage/Users/currentUser/Download目录下的文件夹
+7. 点击列表项可以选择文件夹并返回路径
+
+需要注意的是，为了让这段代码正常工作，你需要确保导入以下包：
+
+```dart
+import 'dart:io';
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+```
+
+另外，还需要确认Platform.environment['USER']是否能正确获取当前用户名，如果不能，可能需要调整获取当前用户的方式。

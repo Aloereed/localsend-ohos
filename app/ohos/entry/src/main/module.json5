@@ -18,7 +18,7 @@
     type: "entry",
     description: "$string:module_desc",
     mainElement: "EntryAbility",
-    deviceTypes: ["phone","tablet"],
+    deviceTypes: ["phone","tablet","2in1"],
     deliveryWithInstall: true,
     installationFree: false,
     pages: "$profile:main_pages",
@@ -58,6 +58,13 @@
       {
         "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
       },
+      // {
+      //   name:"ohos.permission.READ_WRITE_DOWNLOAD_DIRECTORY",
+      //   "reason": "$string:download_reason",
+      //   "usedScene": {
+      //     "when":"inuse"
+      //   }
+      // }
       // {
       //   name:"ohos.permission.READ_PASTEBOARD",
       //   "reason": "$string:pasteboard_reason",

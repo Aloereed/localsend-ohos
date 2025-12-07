@@ -82,7 +82,7 @@ export class FilePickerDelegate {
         let photoPicker = new picker.PhotoViewPicker(commonContext);
         let photoSelectOptions = new picker.PhotoSelectOptions();
         photoSelectOptions.MIMEType = picker.PhotoViewMIMETypes.IMAGE_TYPE;
-        photoSelectOptions.maxSelectNumber = this.isMultipleSelection ? 99 : 1;
+        photoSelectOptions.maxSelectNumber = this.isMultipleSelection ? 9999 : 1;
         await photoPicker.select(photoSelectOptions).then((photoSelectResult) => {
 
           this.savaFilePath = photoSelectResult.photoUris
@@ -102,7 +102,7 @@ export class FilePickerDelegate {
       case "video": {
         let photoPicker = new picker.PhotoViewPicker();
         let photoSelectOptions = new picker.PhotoSelectOptions();
-        photoSelectOptions.maxSelectNumber = this.isMultipleSelection ? 99 : 1;
+        photoSelectOptions.maxSelectNumber = this.isMultipleSelection ? 9999 : 1;
         photoSelectOptions.MIMEType = picker.PhotoViewMIMETypes.VIDEO_TYPE;
         photoPicker.select(photoSelectOptions).then((photoSelectResult) => {
           this.savaFilePath = photoSelectResult.photoUris
@@ -124,7 +124,7 @@ export class FilePickerDelegate {
         let context = getContext(this) as common.UIAbilityContext;
         let audioPicker: picker.AudioViewPicker = new picker.AudioViewPicker(context);
         let audioSelectOptions = new picker.AudioSelectOptions();
-        audioSelectOptions.maxSelectNumber = this.isMultipleSelection ? 99 : 1;
+        audioSelectOptions.maxSelectNumber = this.isMultipleSelection ? 9999 : 1;
         audioPicker.select(audioSelectOptions).then((audioSelectResult) => {
           this.savaFilePath = audioSelectResult
           if (audioSelectResult == null || audioSelectResult.length == 0) {
@@ -143,7 +143,7 @@ export class FilePickerDelegate {
       case "media": {
         let photoPicker = new photoAccessHelper.PhotoViewPicker();
         let photoSelectOptions = new photoAccessHelper.PhotoSelectOptions();
-        photoSelectOptions.maxSelectNumber = this.isMultipleSelection ? 99 : 1;
+        photoSelectOptions.maxSelectNumber = this.isMultipleSelection ? 9999 : 1;
         photoSelectOptions.MIMEType = this.resolveType(this.type) as photoAccessHelper.PhotoViewMIMETypes;
         photoPicker.select(photoSelectOptions).then((photoSelectResult) => {
           this.savaFilePath = photoSelectResult.photoUris
@@ -165,7 +165,7 @@ export class FilePickerDelegate {
         let commonContext = this.ability?.context as common.UIAbilityContext;
         let documentPicker = new picker.DocumentViewPicker(commonContext);
         let documentSelectOptions = new picker.DocumentSelectOptions();
-        documentSelectOptions.maxSelectNumber = this.isMultipleSelection ? 99 : 1;
+        documentSelectOptions.maxSelectNumber = this.isMultipleSelection ? 9999 : 1;
         documentPicker.select(documentSelectOptions).then((documentSelectResult: Array<string>) => {
           this.savaFilePath = documentSelectResult
           if (documentSelectResult == null || documentSelectResult.length == 0) {
@@ -189,7 +189,7 @@ export class FilePickerDelegate {
         let commonContext = this.ability?.context as common.UIAbilityContext;
         let documentSelectOptions = new picker.DocumentSelectOptions();
         let documentPicker = new picker.DocumentViewPicker(commonContext);
-        documentSelectOptions.maxSelectNumber = this.isMultipleSelection ? 99 : 1;
+        documentSelectOptions.maxSelectNumber = this.isMultipleSelection ? 9999 : 1;
         documentSelectOptions.fileSuffixFilters = this.allowedExtensions;
         documentPicker.select(documentSelectOptions).then((documentSelectResult: Array<string>) => {
           this.savaFilePath = documentSelectResult;

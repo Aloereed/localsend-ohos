@@ -99,6 +99,7 @@ enum FilePickerOption {
         FilePickerOption.file,
         FilePickerOption.media,
         FilePickerOption.text,
+        FilePickerOption.folder,
         // FilePickerOption.clipboard,
       ];
     } else {
@@ -230,11 +231,14 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
   }
 
   // ignore: unawaited_futures
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => const LoadingDialog(),
-  );
+  if (!checkPlatform([TargetPlatform.ohos])) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const LoadingDialog(),
+    );
+  }
+
   await sleepAsync(200); // Wait for the dialog to be shown
   try {
     if (defaultTargetPlatform == TargetPlatform.android &&
@@ -248,7 +252,7 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
             .dispatchAsync(AddAndroidDirectoryAction(result));
       }
     } else {
-      final directoryPath = await pickDirectoryPath();
+      final directoryPath = await pickDirectoryPath(Routerino.context);
       if (directoryPath != null) {
         await ref
             .redux(selectedSendingFilesProvider)

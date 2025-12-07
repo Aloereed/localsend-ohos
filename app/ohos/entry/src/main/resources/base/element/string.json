@@ -19,6 +19,10 @@
     {
       "name": "pasteboard_reason",
       "value": "AloeSend is applying to access your clipboard."
+    },
+    {
+      "name": "download_reason",
+      "value": "AloeSend is applying to access Download folder."
     }
   ]
 }

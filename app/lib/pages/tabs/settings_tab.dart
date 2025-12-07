@@ -210,7 +210,7 @@ class SettingsTab extends StatelessWidget {
                           return;
                         }
 
-                        final directory = await pickDirectoryPath();
+                        final directory = await pickDirectoryPath(context);
                         if (directory != null) {
                           if (defaultTargetPlatform == TargetPlatform.macOS) {
                             await persistDestinationFolderAccess(directory);
