@@ -48,3 +48,8 @@ app.*.map.json
 /ohos/entry/build
 /ohos/entry/libs
 /ohos/oh_modules
+
+/ohos/build-profile.json5
+/ohos/build-profile.Debug.json5
+/ohos/build-profile.Release.json5
+/ohos/build-profile.json5.backup
