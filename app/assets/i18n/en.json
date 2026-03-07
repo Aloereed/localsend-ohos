@@ -161,6 +161,8 @@
     "subTitle": "Does the app not work as expected? Here you can find some common solutions to problems.",
     "solution": "Solution:",
     "fixButton": "Fix automatically",
+    "commands": "Commands",
+    "adminOnlyWindows": "Admin privileges are only implemented on Windows.",
     "firewall": {
       "symptom": "This device can send files to other devices but other devices cannot send files to this device.",
       "solution": "This is most likely a firewall issue. You can solve this by allowing incoming connections (UDP and TCP) on port {port}.",
@@ -201,7 +203,8 @@
     "apps": "{n} Apps"
   },
   "selectedFilesPage": {
-    "deleteAll": "Delete all"
+    "deleteAll": "Delete all",
+    "messagePreview": "\"{message}\""
   },
   "receivePage": {
     "subTitle": {
@@ -210,7 +213,34 @@
     },
     "subTitleMessage": "sent you a message:",
     "subTitleLink": "sent you a link:",
-    "canceled": "The sender has canceled the request."
+    "canceled": "The sender has canceled the request.",
+    "badge": {
+      "message": "Message",
+      "files": "{n} file(s)"
+    },
+    "sender": {
+      "title": "Sender",
+      "subtitleRevealIp": "Tap the IP badge to reveal the full address.",
+      "subtitleHistory": "Message opened from receive history."
+    },
+    "messageCard": {
+      "titleLink": "Shared Link",
+      "titleMessage": "Shared Message",
+      "subtitleLink": "Open the link directly or copy it first.",
+      "subtitleMessage": "Review the message before closing."
+    },
+    "filesCard": {
+      "title": "Incoming Files",
+      "empty": "No file has been selected for receiving yet.",
+      "ready": "{n} selected item(s) ready to receive.",
+      "offered": "{n} offered",
+      "selected": "{n} selected"
+    },
+    "actions": {
+      "title": "Actions",
+      "subtitle": "Adjust receive options or accept/decline the incoming transfer.",
+      "canceledSubtitle": "The sender canceled this transfer request."
+    }
   },
   "receiveOptionsPage": {
     "title": "Options",
@@ -223,12 +253,80 @@
     "waiting": "Waiting for response…",
     "rejected": "The recipient has rejected the request.",
     "tooManyAttempts": "@:web.tooManyAttempts",
-    "busy": "The recipient is busy with another request."
+    "busy": "The recipient is busy with another request.",
+    "route": {
+      "title": "Transfer Route",
+      "subtitle": "Sending from this device to the selected target."
+    },
+    "status": {
+      "title": "Status",
+      "canceled": "Canceled",
+      "waiting": "Waiting for the recipient to respond.",
+      "declined": "The recipient declined the transfer request.",
+      "tooManyAttempts": "Too many attempts were made to start this transfer.",
+      "busy": "The recipient device is busy right now.",
+      "finishedWithErrors": "The transfer finished with at least one error.",
+      "sending": "The transfer is currently running.",
+      "finished": "The transfer completed successfully.",
+      "canceledBySender": "The transfer was canceled from this device.",
+      "canceledByReceiver": "The transfer was canceled by the recipient."
+    }
   },
   "progressPage": {
     "titleSending": "Sending files",
     "titleReceiving": "Receiving files",
     "savedToGallery": "Saved in Photos",
+    "header": {
+      "receivingFrom": "Receiving files from {device}.",
+      "sendingTo": "Sending files to {device}.",
+      "preparing": "Preparing transfer details."
+    },
+    "destination": {
+      "title": "Destination",
+      "savingToGallery": "Files are being received with automatic media saving enabled.",
+      "savingToFolder": "Received files will be written to this location."
+    },
+    "errorCard": {
+      "title": "Transfer Error",
+      "subtitle": "The session reported an error that may need your attention."
+    },
+    "overview": {
+      "title": "Overview",
+      "completed": "Completed",
+      "transferred": "Transferred",
+      "speed": "Speed",
+      "errors": "Errors"
+    },
+    "filesCard": {
+      "empty": "Preparing transfer items.",
+      "selected": "{n} selected item(s) in this transfer."
+    },
+    "fileCard": {
+      "preparing": "Preparing",
+      "retry": "Retry"
+    },
+    "status": {
+      "labelWaiting": "Waiting for the other device",
+      "labelBusy": "Recipient is busy",
+      "labelDeclined": "Transfer request declined",
+      "labelTooManyAttempts": "Too many attempts",
+      "chipWaiting": "Waiting",
+      "chipBusy": "Busy",
+      "chipDeclined": "Declined",
+      "chipTooManyAttempts": "Attempts",
+      "chipActive": "Active",
+      "chipCanceled": "Canceled",
+      "descriptionWaiting": "Waiting for the other device to continue the transfer.",
+      "descriptionBusy": "The destination device is busy right now.",
+      "descriptionDeclined": "The transfer request was declined.",
+      "descriptionTooManyAttempts": "Too many attempts were made to start this transfer.",
+      "descriptionReceiving": "Files are currently being received.",
+      "descriptionSending": "Files are currently being sent.",
+      "descriptionFinished": "All selected files finished transferring successfully.",
+      "descriptionFinishedWithErrors": "The transfer completed, but some items require attention.",
+      "descriptionCanceledBySender": "The transfer was canceled by the sender.",
+      "descriptionCanceledByReceiver": "The transfer was canceled by the receiver."
+    },
     "total": {
       "title": {
         "sending": "Total progress ({time})",
@@ -257,7 +355,31 @@
     "requirePin": "Require PIN",
     "pinHint": "The PIN is \"{pin}\"",
     "encryptionHint": "LocalSend uses a self-signed certificate. You need to accept it in your browser.",
-    "pendingRequests": "Pending requests: {n}"
+    "pendingRequests": "Pending requests: {n}",
+    "protocol": {
+      "http": "HTTP",
+      "https": "HTTPS"
+    },
+    "filesCount": "{n} file(s)",
+    "activeRequests": "{n} active request(s)",
+    "shareLinks": {
+      "title": "Share Links",
+      "subtitle": "Copy the link, scan a QR code, or open the TV mode."
+    },
+    "optionsCard": {
+      "title": "Options",
+      "subtitle": "Adjust web share behavior for this session."
+    },
+    "stateCard": {
+      "preparingTitle": "Preparing Web Share",
+      "preparingSubtitle": "Please keep this page open for a moment.",
+      "errorSubtitle": "The page could not be initialized. You can retry the operation.",
+      "tryAgain": "Try Again"
+    },
+    "linkActions": {
+      "qr": "QR",
+      "tv": "TV"
+    }
   },
   "aboutPage": {
     "title": "About LocalSend",
@@ -468,6 +590,11 @@
       "single": "Sends files to one recipient. Selection will be cleared after finished files transfer.",
       "multiple": "Sends files to multiple recipients. Selection will not be cleared after finished files transfer.",
       "link": "Recipients who do not have LocalSend installed can download the selected files by opening the link in their browser."
+    },
+    "privacyPolicy": {
+      "title": "Privacy Policy",
+      "subtitle": "Please review and accept the privacy policy before continuing.",
+      "loadError": "Unable to load privacy policy"
     },
     "zoom": {
       "title": "URL"

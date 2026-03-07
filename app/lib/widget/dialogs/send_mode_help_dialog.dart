@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localsend_app/gen/strings.g.dart';
+import 'package:localsend_app/widget/modern/modern_ui.dart';
 import 'package:routerino/routerino.dart';
 
 class SendModeHelpDialog extends StatelessWidget {
@@ -7,9 +8,11 @@ class SendModeHelpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(t.dialogs.sendModeHelp.title),
-      content: Column(
+    return ModernDialogScaffold(
+      title: t.dialogs.sendModeHelp.title,
+      subtitle: t.sendTab.sendMode,
+      onClose: () => context.pop(),
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -17,12 +20,12 @@ class SendModeHelpDialog extends StatelessWidget {
             mode: t.sendTab.sendModes.single,
             explanation: t.dialogs.sendModeHelp.single,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           _SendModeItem(
             mode: t.sendTab.sendModes.multiple,
             explanation: t.dialogs.sendModeHelp.multiple,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           _SendModeItem(
             mode: t.sendTab.sendModes.link,
             explanation: t.dialogs.sendModeHelp.link,
@@ -33,7 +36,7 @@ class SendModeHelpDialog extends StatelessWidget {
         TextButton(
           onPressed: () => context.pop(),
           child: Text(t.general.close),
-        )
+        ),
       ],
     );
   }
@@ -49,12 +52,23 @@ class _SendModeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(mode, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Text(explanation),
-      ],
+    return GlassSurface(
+      applyBlur: false,
+      borderRadius: BorderRadius.circular(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            mode,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 6),
+          Text(explanation),
+        ],
+      ),
     );
   }
 }

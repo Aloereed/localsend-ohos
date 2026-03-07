@@ -31,10 +31,14 @@ class DeviceListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final compact = MediaQuery.sizeOf(context).width < 430;
     final badgeColor = Color.lerp(Theme.of(context).colorScheme.secondaryContainer, Colors.white, 0.3)!;
     return CustomListTile(
-      icon: Icon(device.deviceType.icon, size: 46),
-      title: Text(nameOverride ?? device.alias, style: const TextStyle(fontSize: 20)),
+      icon: Icon(device.deviceType.icon, size: compact ? 38 : 46),
+      title: Text(
+        nameOverride ?? device.alias,
+        style: TextStyle(fontSize: compact ? 17 : 20),
+      ),
       trailing: onFavoriteTap != null
           ? IconButton(
               icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
@@ -42,8 +46,8 @@ class DeviceListTile extends StatelessWidget {
             )
           : null,
       subTitle: Wrap(
-        runSpacing: 10,
-        spacing: 10,
+        runSpacing: compact ? 8 : 10,
+        spacing: compact ? 8 : 10,
         children: [
           if (info != null)
             Text(info!, style: const TextStyle(color: Colors.grey))

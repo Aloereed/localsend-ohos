@@ -161,6 +161,8 @@
     "subTitle": "应用没有按预期工作？您可以在这里找到常用解决方案。",
     "solution": "解决方案：",
     "fixButton": "自动修复",
+    "commands": "命令",
+    "adminOnlyWindows": "管理员权限目前仅在 Windows 上实现。",
     "firewall": {
       "symptom": "此设备可以发送文件至其他设备，但其它设备无法发送文件到此设备。",
       "solution": "这最可能是由防火墙规则设定引起的。你可以通过在端口 {port} 上允许（UDP 和 TCP 的）传入请求来解决这个问题。",
@@ -194,7 +196,8 @@
     "apps": "{n} 个应用"
   },
   "selectedFilesPage": {
-    "deleteAll": "全部删除"
+    "deleteAll": "全部删除",
+    "messagePreview": "“{message}”"
   },
   "receivePage": {
     "subTitle": {
@@ -203,7 +206,34 @@
     },
     "subTitleMessage": "发送给你了一条消息：",
     "subTitleLink": "发送给你了一个链接：",
-    "canceled": "发送者取消了请求。"
+    "canceled": "发送者取消了请求。",
+    "badge": {
+      "message": "消息",
+      "files": "{n} 个文件"
+    },
+    "sender": {
+      "title": "发送方",
+      "subtitleRevealIp": "点击 IP 标识可显示完整地址。",
+      "subtitleHistory": "该消息从接收历史中打开。"
+    },
+    "messageCard": {
+      "titleLink": "共享链接",
+      "titleMessage": "共享消息",
+      "subtitleLink": "可直接打开链接，或先复制后再处理。",
+      "subtitleMessage": "关闭前先查看这条消息。"
+    },
+    "filesCard": {
+      "title": "接收文件",
+      "empty": "当前还没有选择要接收的文件。",
+      "ready": "已选择 {n} 项，准备接收。",
+      "offered": "共提供 {n} 项",
+      "selected": "已选择 {n} 项"
+    },
+    "actions": {
+      "title": "操作",
+      "subtitle": "调整接收选项，或接受 / 拒绝本次传输。",
+      "canceledSubtitle": "发送方已取消此次传输请求。"
+    }
   },
   "receiveOptionsPage": {
     "title": "设置",
@@ -216,12 +246,80 @@
     "waiting": "等待响应中……",
     "rejected": "对方拒绝了请求。",
     "tooManyAttempts": "@:web.tooManyAttempts",
-    "busy": "对方正在处理另一个请求。"
+    "busy": "对方正在处理另一个请求。",
+    "route": {
+      "title": "传输路径",
+      "subtitle": "从当前设备发送到所选目标设备。"
+    },
+    "status": {
+      "title": "状态",
+      "canceled": "已取消",
+      "waiting": "正在等待接收方响应。",
+      "declined": "接收方已拒绝此次传输请求。",
+      "tooManyAttempts": "尝试发起此次传输的次数过多。",
+      "busy": "接收方设备当前正忙。",
+      "finishedWithErrors": "传输已结束，但至少有一项出错。",
+      "sending": "传输正在进行中。",
+      "finished": "传输已成功完成。",
+      "canceledBySender": "此次传输已在本设备上取消。",
+      "canceledByReceiver": "此次传输已被接收方取消。"
+    }
   },
   "progressPage": {
     "titleSending": "正在发送文件",
     "titleReceiving": "正在接收文件",
     "savedToGallery": "已保存到相册",
+    "header": {
+      "receivingFrom": "正在接收来自 {device} 的文件。",
+      "sendingTo": "正在向 {device} 发送文件。",
+      "preparing": "正在准备传输详情。"
+    },
+    "destination": {
+      "title": "保存位置",
+      "savingToGallery": "当前已启用自动保存媒体到相册。",
+      "savingToFolder": "接收的文件将保存到此位置。"
+    },
+    "errorCard": {
+      "title": "传输错误",
+      "subtitle": "本次会话报告了一个需要你注意的错误。"
+    },
+    "overview": {
+      "title": "总览",
+      "completed": "已完成",
+      "transferred": "已传输",
+      "speed": "速度",
+      "errors": "错误"
+    },
+    "filesCard": {
+      "empty": "正在准备传输项目。",
+      "selected": "本次传输共选择了 {n} 项。"
+    },
+    "fileCard": {
+      "preparing": "准备中",
+      "retry": "重试"
+    },
+    "status": {
+      "labelWaiting": "正在等待对方设备",
+      "labelBusy": "接收方正忙",
+      "labelDeclined": "传输请求已被拒绝",
+      "labelTooManyAttempts": "尝试次数过多",
+      "chipWaiting": "等待中",
+      "chipBusy": "繁忙",
+      "chipDeclined": "已拒绝",
+      "chipTooManyAttempts": "次数过多",
+      "chipActive": "传输中",
+      "chipCanceled": "已取消",
+      "descriptionWaiting": "正在等待对方设备继续本次传输。",
+      "descriptionBusy": "目标设备当前正忙。",
+      "descriptionDeclined": "本次传输请求已被拒绝。",
+      "descriptionTooManyAttempts": "尝试发起本次传输的次数过多。",
+      "descriptionReceiving": "文件正在接收中。",
+      "descriptionSending": "文件正在发送中。",
+      "descriptionFinished": "所有已选文件都已成功传输完成。",
+      "descriptionFinishedWithErrors": "传输已完成，但部分项目需要你注意。",
+      "descriptionCanceledBySender": "本次传输已被发送方取消。",
+      "descriptionCanceledByReceiver": "本次传输已被接收方取消。"
+    },
     "total": {
       "title": {
         "sending": "总进度 ({time})",
@@ -250,7 +348,31 @@
     "requirePin": "启用 PIN 密码",
     "pinHint": "PIN 为 “{pin}”",
     "encryptionHint": "LocalSend 使用自签名证书。您需要在浏览器中允许它。",
-    "pendingRequests": "待处理请求：{n}"
+    "pendingRequests": "待处理请求：{n}",
+    "protocol": {
+      "http": "HTTP",
+      "https": "HTTPS"
+    },
+    "filesCount": "{n} 个文件",
+    "activeRequests": "{n} 个活动请求",
+    "shareLinks": {
+      "title": "分享链接",
+      "subtitle": "复制链接、扫描二维码，或打开电视模式。"
+    },
+    "optionsCard": {
+      "title": "选项",
+      "subtitle": "调整本次会话的网页分享行为。"
+    },
+    "stateCard": {
+      "preparingTitle": "正在准备网页分享",
+      "preparingSubtitle": "请暂时保持此页面打开。",
+      "errorSubtitle": "页面初始化失败。你可以重试此操作。",
+      "tryAgain": "重试"
+    },
+    "linkActions": {
+      "qr": "二维码",
+      "tv": "电视"
+    }
   },
   "aboutPage": {
     "title": "关于 LocalSend",
@@ -460,6 +582,11 @@
       "single": "发送文件给一个接收者。已选择的文件在发送后会取消选择。",
       "multiple": "发送文件给多个接收者。已选择的文件在发送后不会取消选择。",
       "link": "未安装 LocalSend 的接收者可以在浏览器中打开链接以下载选中的文件。"
+    },
+    "privacyPolicy": {
+      "title": "隐私政策",
+      "subtitle": "继续之前，请先阅读并接受隐私政策。",
+      "loadError": "无法加载隐私政策"
     },
     "zoom": {
       "title": "URL"

@@ -10,6 +10,7 @@ import 'package:localsend_app/pages/about/about_page.dart';
 import 'package:localsend_app/pages/changelog_page.dart';
 import 'package:localsend_app/pages/donation/donation_page.dart';
 import 'package:localsend_app/pages/language_page.dart';
+import 'package:localsend_app/pages/privacy_policy.dart';
 import 'package:localsend_app/pages/settings/network_interfaces_page.dart';
 import 'package:localsend_app/pages/tabs/settings_tab_controller.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
@@ -19,6 +20,7 @@ import 'package:localsend_app/util/device_type_ext.dart';
 import 'package:localsend_app/util/native/macos_channel.dart';
 import 'package:localsend_app/util/native/pick_directory_path.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
+import 'package:localsend_app/util/ui/visuals.dart';
 import 'package:localsend_app/widget/custom_dropdown_button.dart';
 import 'package:localsend_app/widget/dialogs/encryption_disabled_notice.dart';
 import 'package:localsend_app/widget/dialogs/pin_dialog.dart';
@@ -28,6 +30,7 @@ import 'package:localsend_app/widget/dialogs/text_field_tv.dart';
 import 'package:localsend_app/widget/dialogs/text_field_with_actions.dart';
 import 'package:localsend_app/widget/labeled_checkbox.dart';
 import 'package:localsend_app/widget/local_send_logo.dart';
+import 'package:localsend_app/widget/modern/modern_ui.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:routerino/routerino.dart';
@@ -42,14 +45,42 @@ class SettingsTab extends StatelessWidget {
       provider: settingsTabControllerProvider,
       builder: (context, vm) {
         final ref = context.ref;
+        final visuals = context.visuals;
         return ResponsiveListView(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 40),
+          maxWidth: 920,
+          padding: EdgeInsets.fromLTRB(
+            context.adaptiveHorizontalPadding,
+            context.adaptiveTopPadding,
+            context.adaptiveHorizontalPadding,
+            context.adaptiveBottomPadding,
+          ),
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Text(t.settingsTab.title, style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
+            ModernPageHeader(
+              title: t.settingsTab.title,
+              subtitle: vm.settings.alias,
+              leading: const _SettingsHeroLogo(),
+              chips: [
+                StatusChip(
+                  label: vm.settings.colorMode.humanName,
+                  icon: Icons.palette_rounded,
+                  emphasized: true,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                StatusChip(
+                  label: vm.serverState == null
+                      ? t.general.offline
+                      : '${t.settingsTab.network.server} | ${vm.serverState!.port}',
+                  icon: vm.serverState == null
+                      ? Icons.cloud_off_rounded
+                      : Icons.cloud_done_rounded,
+                ),
+                StatusChip(
+                  label: vm.deviceInfo.deviceModel ?? Platform.localHostname,
+                  icon: Icons.devices_other_rounded,
+                ),
+              ],
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: context.adaptiveSectionSpacing),
             _SettingsSection(
               title: t.settingsTab.general.title,
               children: [
@@ -500,9 +531,18 @@ class SettingsTab extends StatelessWidget {
                   label: t.settingsTab.other.privacyPolicy,
                   buttonLabel: t.general.open,
                   onTap: () async {
-                    await launchUrl(
-                      Uri.parse('https://aloereed.com/aloechat/privacy-statement.html'),
-                      mode: LaunchMode.externalApplication,
+                    await showDialog<void>(
+                      context: context,
+                      builder: (dialogContext) {
+                        return PrivacyPolicyDialog(
+                          onAccept: () {
+                            Navigator.of(dialogContext).pop();
+                          },
+                          onDecline: () {
+                            Navigator.of(dialogContext).pop();
+                          },
+                        );
+                      },
                     );
                   },
                 ),
@@ -580,20 +620,25 @@ class _SettingsEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isCompact = MediaQuery.sizeOf(context).width < 520;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(label),
-          ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 150,
-            child: child,
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.only(bottom: 16),
+      child: isCompact
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label),
+                const SizedBox(height: 10),
+                SizedBox(width: double.infinity, child: child),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(child: Text(label)),
+                const SizedBox(width: 16),
+                SizedBox(width: 170, child: child),
+              ],
+            ),
     );
   }
 }
@@ -612,32 +657,19 @@ class _BooleanEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return _SettingsEntry(
       label: label,
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              color: theme.inputDecorationTheme.fillColor,
-              borderRadius: theme.inputDecorationTheme.borderRadius,
-            ),
+      child: GlassSurface(
+        applyBlur: false,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        borderRadius: context.visuals.mediumRadius,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Switch(
+            value: value,
+            onChanged: onChanged,
           ),
-          Positioned.fill(
-            child: Center(
-              child: Switch(
-                value: value,
-                onChanged: onChanged,
-                activeTrackColor: theme.colorScheme.primary,
-                activeColor: theme.colorScheme.onPrimary,
-                inactiveThumbColor: theme.colorScheme.outline,
-                inactiveTrackColor: theme.colorScheme.surface,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -659,20 +691,11 @@ class _ButtonEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return _SettingsEntry(
       label: label,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: Theme.of(context).inputDecorationTheme.fillColor,
-          shape: RoundedRectangleBorder(borderRadius: Theme.of(context).inputDecorationTheme.borderRadius),
-          foregroundColor: Theme.of(context).colorScheme.onSurface,
-        ),
+      child: FilledButton(
         onPressed: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Text(
-            buttonLabel,
-            style: Theme.of(context).textTheme.titleMedium,
-            textAlign: TextAlign.center,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Text(buttonLabel, textAlign: TextAlign.center),
         ),
       ),
     );
@@ -694,18 +717,31 @@ class _SettingsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 10),
-              ...children,
-            ],
-          ),
+      child: GlassSectionCard(
+        title: title,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: children,
         ),
+      ),
+    );
+  }
+}
+
+class _SettingsHeroLogo extends StatelessWidget {
+  const _SettingsHeroLogo();
+
+  @override
+  Widget build(BuildContext context) {
+    final size = context.isPhoneLayout ? 82.0 : 96.0;
+    return GlassSurface(
+      width: size,
+      height: size,
+      strong: true,
+      padding: EdgeInsets.all(context.isPhoneLayout ? 10 : 12),
+      child: const FittedBox(
+        fit: BoxFit.contain,
+        child: AloeChatAILogo(withText: false),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -13,15 +14,20 @@ class SimpleServer {
     required SimpleServerRouteBuilder routes,
   }) : _server = server {
     _server.listen((request) async {
-      final handler = routes._routes[Route(
-        HttpMethod.values.firstWhere((e) => e.methodName == request.method),
-        request.uri.path,
-      )];
+      final method = HttpMethod.fromMethodName(request.method);
+      final handler = method == null
+          ? null
+          : routes._routes[Route(method, request.uri.path)] ??
+              (method == HttpMethod.head
+                  ? routes._routes[Route(HttpMethod.get, request.uri.path)]
+                  : null);
 
       if (handler != null) {
-        handler.call(request);
+        await handler.call(request);
       } else {
-        request.response.statusCode = HttpStatus.notFound;
+        request.response.statusCode = method == null
+            ? HttpStatus.methodNotAllowed
+            : HttpStatus.notFound;
         request.response.write('Not found');
         await request.response.flush();
         await request.response.close();
@@ -34,16 +40,27 @@ class SimpleServer {
   }
 }
 
-typedef HttpRequestHandler = void Function(HttpRequest request);
+typedef HttpRequestHandler = FutureOr<void> Function(HttpRequest request);
 
 enum HttpMethod {
   get('GET'),
+  head('HEAD'),
   post('POST'),
   ;
 
   const HttpMethod(this.methodName);
 
   final String methodName;
+
+  static HttpMethod? fromMethodName(String methodName) {
+    for (final method in values) {
+      if (method.methodName == methodName) {
+        return method;
+      }
+    }
+
+    return null;
+  }
 }
 
 class Route {
@@ -75,6 +92,10 @@ class SimpleServerRouteBuilder {
 
   void get(String path, HttpRequestHandler handler) {
     addRoute(HttpMethod.get, path, handler);
+  }
+
+  void head(String path, HttpRequestHandler handler) {
+    addRoute(HttpMethod.head, path, handler);
   }
 
   void post(String path, HttpRequestHandler handler) {

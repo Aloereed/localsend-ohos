@@ -169,6 +169,8 @@ class TranslationsTroubleshootPageEn {
   String get subTitle => 'Does the app not work as expected? Here you can find some common solutions to problems.';
   String get solution => 'Solution:';
   String get fixButton => 'Fix automatically';
+  String get commands => 'Commands';
+  String get adminOnlyWindows => 'Admin privileges are only implemented on Windows.';
   late final TranslationsTroubleshootPageFirewallEn firewall = TranslationsTroubleshootPageFirewallEn.internal(_root);
   late final TranslationsTroubleshootPageNoDiscoveryEn noDiscovery = TranslationsTroubleshootPageNoDiscoveryEn.internal(_root);
   late final TranslationsTroubleshootPageNoConnectionEn noConnection = TranslationsTroubleshootPageNoConnectionEn.internal(_root);
@@ -224,6 +226,7 @@ class TranslationsSelectedFilesPageEn {
 
   // Translations
   String get deleteAll => 'Delete all';
+  String messagePreview({required Object message}) => '"${message}"';
 }
 
 // Path: receivePage
@@ -241,6 +244,63 @@ class TranslationsReceivePageEn {
   String get subTitleMessage => 'sent you a message:';
   String get subTitleLink => 'sent you a link:';
   String get canceled => 'The sender has canceled the request.';
+  late final TranslationsReceivePageBadgeEn badge = TranslationsReceivePageBadgeEn.internal(_root);
+  late final TranslationsReceivePageSenderEn sender = TranslationsReceivePageSenderEn.internal(_root);
+  late final TranslationsReceivePageMessageCardEn messageCard = TranslationsReceivePageMessageCardEn.internal(_root);
+  late final TranslationsReceivePageFilesCardEn filesCard = TranslationsReceivePageFilesCardEn.internal(_root);
+  late final TranslationsReceivePageActionsEn actions = TranslationsReceivePageActionsEn.internal(_root);
+}
+
+class TranslationsReceivePageBadgeEn {
+  TranslationsReceivePageBadgeEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get message => 'Message';
+  String files({required Object n}) => '${n} file(s)';
+}
+
+class TranslationsReceivePageSenderEn {
+  TranslationsReceivePageSenderEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Sender';
+  String get subtitleRevealIp => 'Tap the IP badge to reveal the full address.';
+  String get subtitleHistory => 'Message opened from receive history.';
+}
+
+class TranslationsReceivePageMessageCardEn {
+  TranslationsReceivePageMessageCardEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get titleLink => 'Shared Link';
+  String get titleMessage => 'Shared Message';
+  String get subtitleLink => 'Open the link directly or copy it first.';
+  String get subtitleMessage => 'Review the message before closing.';
+}
+
+class TranslationsReceivePageFilesCardEn {
+  TranslationsReceivePageFilesCardEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Incoming Files';
+  String get empty => 'No file has been selected for receiving yet.';
+  String ready({required Object n}) => '${n} selected item(s) ready to receive.';
+  String offered({required Object n}) => '${n} offered';
+  String selected({required Object n}) => '${n} selected';
+}
+
+class TranslationsReceivePageActionsEn {
+  TranslationsReceivePageActionsEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Actions';
+  String get subtitle => 'Adjust receive options or accept/decline the incoming transfer.';
+  String get canceledSubtitle => 'The sender canceled this transfer request.';
 }
 
 // Path: receiveOptionsPage
@@ -268,6 +328,35 @@ class TranslationsSendPageEn {
   String get rejected => 'The recipient has rejected the request.';
   String get tooManyAttempts => _root.web.tooManyAttempts;
   String get busy => 'The recipient is busy with another request.';
+  late final TranslationsSendPageRouteEn route = TranslationsSendPageRouteEn.internal(_root);
+  late final TranslationsSendPageStatusEn status = TranslationsSendPageStatusEn.internal(_root);
+}
+
+class TranslationsSendPageRouteEn {
+  TranslationsSendPageRouteEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Transfer Route';
+  String get subtitle => 'Sending from this device to the selected target.';
+}
+
+class TranslationsSendPageStatusEn {
+  TranslationsSendPageStatusEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Status';
+  String get canceled => 'Canceled';
+  String get waiting => 'Waiting for the recipient to respond.';
+  String get declined => 'The recipient declined the transfer request.';
+  String get tooManyAttempts => 'Too many attempts were made to start this transfer.';
+  String get busy => 'The recipient device is busy right now.';
+  String get finishedWithErrors => 'The transfer finished with at least one error.';
+  String get sending => 'The transfer is currently running.';
+  String get finished => 'The transfer completed successfully.';
+  String get canceledBySender => 'The transfer was canceled from this device.';
+  String get canceledByReceiver => 'The transfer was canceled by the recipient.';
 }
 
 // Path: progressPage
@@ -280,7 +369,100 @@ class TranslationsProgressPageEn {
   String get titleSending => 'Sending files';
   String get titleReceiving => 'Receiving files';
   String get savedToGallery => 'Saved in Photos';
+  late final TranslationsProgressPageHeaderEn header = TranslationsProgressPageHeaderEn.internal(_root);
+  late final TranslationsProgressPageDestinationEn destination = TranslationsProgressPageDestinationEn.internal(_root);
+  late final TranslationsProgressPageErrorCardEn errorCard = TranslationsProgressPageErrorCardEn.internal(_root);
+  late final TranslationsProgressPageOverviewEn overview = TranslationsProgressPageOverviewEn.internal(_root);
+  late final TranslationsProgressPageFilesCardEn filesCard = TranslationsProgressPageFilesCardEn.internal(_root);
+  late final TranslationsProgressPageFileCardEn fileCard = TranslationsProgressPageFileCardEn.internal(_root);
+  late final TranslationsProgressPageStatusEn status = TranslationsProgressPageStatusEn.internal(_root);
   late final TranslationsProgressPageTotalEn total = TranslationsProgressPageTotalEn.internal(_root);
+}
+
+class TranslationsProgressPageHeaderEn {
+  TranslationsProgressPageHeaderEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String receivingFrom({required Object device}) => 'Receiving files from ${device}.';
+  String sendingTo({required Object device}) => 'Sending files to ${device}.';
+  String get preparing => 'Preparing transfer details.';
+}
+
+class TranslationsProgressPageDestinationEn {
+  TranslationsProgressPageDestinationEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Destination';
+  String get savingToGallery => 'Files are being received with automatic media saving enabled.';
+  String get savingToFolder => 'Received files will be written to this location.';
+}
+
+class TranslationsProgressPageErrorCardEn {
+  TranslationsProgressPageErrorCardEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Transfer Error';
+  String get subtitle => 'The session reported an error that may need your attention.';
+}
+
+class TranslationsProgressPageOverviewEn {
+  TranslationsProgressPageOverviewEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Overview';
+  String get completed => 'Completed';
+  String get transferred => 'Transferred';
+  String get speed => 'Speed';
+  String get errors => 'Errors';
+}
+
+class TranslationsProgressPageFilesCardEn {
+  TranslationsProgressPageFilesCardEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get empty => 'Preparing transfer items.';
+  String selected({required Object n}) => '${n} selected item(s) in this transfer.';
+}
+
+class TranslationsProgressPageFileCardEn {
+  TranslationsProgressPageFileCardEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get preparing => 'Preparing';
+  String get retry => 'Retry';
+}
+
+class TranslationsProgressPageStatusEn {
+  TranslationsProgressPageStatusEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get labelWaiting => 'Waiting for the other device';
+  String get labelBusy => 'Recipient is busy';
+  String get labelDeclined => 'Transfer request declined';
+  String get labelTooManyAttempts => 'Too many attempts';
+  String get chipWaiting => 'Waiting';
+  String get chipBusy => 'Busy';
+  String get chipDeclined => 'Declined';
+  String get chipTooManyAttempts => 'Attempts';
+  String get chipActive => 'Active';
+  String get chipCanceled => 'Canceled';
+  String get descriptionWaiting => 'Waiting for the other device to continue the transfer.';
+  String get descriptionBusy => 'The destination device is busy right now.';
+  String get descriptionDeclined => 'The transfer request was declined.';
+  String get descriptionTooManyAttempts => 'Too many attempts were made to start this transfer.';
+  String get descriptionReceiving => 'Files are currently being received.';
+  String get descriptionSending => 'Files are currently being sent.';
+  String get descriptionFinished => 'All selected files finished transferring successfully.';
+  String get descriptionFinishedWithErrors => 'The transfer completed, but some items require attention.';
+  String get descriptionCanceledBySender => 'The transfer was canceled by the sender.';
+  String get descriptionCanceledByReceiver => 'The transfer was canceled by the receiver.';
 }
 
 // Path: webSharePage
@@ -307,6 +489,60 @@ class TranslationsWebSharePageEn {
   String pinHint({required Object pin}) => 'The PIN is "${pin}"';
   String get encryptionHint => 'AloeSend uses a self-signed certificate. You need to accept it in your browser.';
   String pendingRequests({required Object n}) => 'Pending requests: ${n}';
+  late final TranslationsWebSharePageProtocolEn protocol = TranslationsWebSharePageProtocolEn.internal(_root);
+  String filesCount({required Object n}) => '${n} file(s)';
+  String activeRequests({required Object n}) => '${n} active request(s)';
+  late final TranslationsWebSharePageShareLinksEn shareLinks = TranslationsWebSharePageShareLinksEn.internal(_root);
+  late final TranslationsWebSharePageOptionsCardEn optionsCard = TranslationsWebSharePageOptionsCardEn.internal(_root);
+  late final TranslationsWebSharePageStateCardEn stateCard = TranslationsWebSharePageStateCardEn.internal(_root);
+  late final TranslationsWebSharePageLinkActionsEn linkActions = TranslationsWebSharePageLinkActionsEn.internal(_root);
+}
+
+class TranslationsWebSharePageProtocolEn {
+  TranslationsWebSharePageProtocolEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get http => 'HTTP';
+  String get https => 'HTTPS';
+}
+
+class TranslationsWebSharePageShareLinksEn {
+  TranslationsWebSharePageShareLinksEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Share Links';
+  String get subtitle => 'Copy the link, scan a QR code, or open the TV mode.';
+}
+
+class TranslationsWebSharePageOptionsCardEn {
+  TranslationsWebSharePageOptionsCardEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Options';
+  String get subtitle => 'Adjust web share behavior for this session.';
+}
+
+class TranslationsWebSharePageStateCardEn {
+  TranslationsWebSharePageStateCardEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get preparingTitle => 'Preparing Web Share';
+  String get preparingSubtitle => 'Please keep this page open for a moment.';
+  String get errorSubtitle => 'The page could not be initialized. You can retry the operation.';
+  String get tryAgain => 'Try Again';
+}
+
+class TranslationsWebSharePageLinkActionsEn {
+  TranslationsWebSharePageLinkActionsEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get qr => 'QR';
+  String get tv => 'TV';
 }
 
 // Path: aboutPage
@@ -463,6 +699,7 @@ class TranslationsDialogsEn {
       TranslationsDialogsQuickSaveFromFavoritesNoticeEn.internal(_root);
   late final TranslationsDialogsPinEn pin = TranslationsDialogsPinEn.internal(_root);
   late final TranslationsDialogsSendModeHelpEn sendModeHelp = TranslationsDialogsSendModeHelpEn.internal(_root);
+  late final TranslationsDialogsPrivacyPolicyEn privacyPolicy = TranslationsDialogsPrivacyPolicyEn.internal(_root);
   late final TranslationsDialogsZoomEn zoom = TranslationsDialogsZoomEn.internal(_root);
 }
 
@@ -1045,6 +1282,18 @@ class TranslationsDialogsSendModeHelpEn {
   String get single => 'Sends files to one recipient. Selection will be cleared after finished files transfer.';
   String get multiple => 'Sends files to multiple recipients. Selection will not be cleared after finished files transfer.';
   String get link => 'Recipients who do not have AloeSend installed can download the selected files by opening the link in their browser.';
+}
+
+// Path: dialogs.privacyPolicy
+class TranslationsDialogsPrivacyPolicyEn {
+  TranslationsDialogsPrivacyPolicyEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  String get title => 'Privacy Policy';
+  String get subtitle => 'Please review and accept the privacy policy before continuing.';
+  String get loadError => 'Unable to load privacy policy';
 }
 
 // Path: dialogs.zoom

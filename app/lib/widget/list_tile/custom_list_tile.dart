@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localsend_app/config/theme.dart';
+import 'package:localsend_app/widget/modern/modern_ui.dart';
 
 class CustomListTile extends StatelessWidget {
   final Widget? icon;
@@ -20,40 +20,45 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      color: Theme.of(context).colorScheme.secondaryContainerIfDark,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: Padding(
-          padding: padding,
-          child: Row(
-            children: [
-              if (icon != null) ...[
-                icon!,
-                const SizedBox(width: 15),
-              ],
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FittedBox(
-                      child: title,
-                    ),
-                    const SizedBox(height: 5),
-                    subTitle,
-                  ],
+    final compact = MediaQuery.sizeOf(context).width < 430;
+    final resolvedPadding = padding == const EdgeInsets.all(15)
+        ? EdgeInsets.all(compact ? 12 : 15)
+        : padding;
+
+    return GlassSurface(
+      padding: resolvedPadding,
+      applyBlur: false,
+      onTap: onTap,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (icon != null) ...[
+            icon!,
+            SizedBox(width: compact ? 12 : 16),
+          ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DefaultTextStyle.merge(
+                  style: Theme.of(context).textTheme.titleMedium,
+                  child: FittedBox(
+                    alignment: Alignment.centerLeft,
+                    fit: BoxFit.scaleDown,
+                    child: title,
+                  ),
                 ),
-              ),
-              if (trailing != null) trailing!,
-            ],
+                SizedBox(height: compact ? 6 : 8),
+                subTitle,
+              ],
+            ),
           ),
-        ),
+          if (trailing != null) ...[
+            SizedBox(width: compact ? 8 : 12),
+            trailing!,
+          ],
+        ],
       ),
     );
   }

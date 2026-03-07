@@ -266,6 +266,10 @@ class _TranslationsTroubleshootPageZhCn extends TranslationsTroubleshootPageEn {
   @override
   String get fixButton => '自动修复';
   @override
+  String get commands => '命令';
+  @override
+  String get adminOnlyWindows => '管理员权限目前仅在 Windows 上实现。';
+  @override
   late final _TranslationsTroubleshootPageFirewallZhCn firewall = _TranslationsTroubleshootPageFirewallZhCn._(_root);
   @override
   late final _TranslationsTroubleshootPageNoDiscoveryZhCn noDiscovery = _TranslationsTroubleshootPageNoDiscoveryZhCn._(_root);
@@ -324,6 +328,8 @@ class _TranslationsSelectedFilesPageZhCn extends TranslationsSelectedFilesPageEn
   // Translations
   @override
   String get deleteAll => '全部删除';
+  @override
+  String messagePreview({required Object message}) => '“${message}”';
 }
 
 // Path: receivePage
@@ -347,6 +353,96 @@ class _TranslationsReceivePageZhCn extends TranslationsReceivePageEn {
   String get subTitleLink => '发送给你了一个链接：';
   @override
   String get canceled => '发送者取消了请求。';
+  @override
+  late final _TranslationsReceivePageBadgeZhCn badge = _TranslationsReceivePageBadgeZhCn._(_root);
+  @override
+  late final _TranslationsReceivePageSenderZhCn sender = _TranslationsReceivePageSenderZhCn._(_root);
+  @override
+  late final _TranslationsReceivePageMessageCardZhCn messageCard = _TranslationsReceivePageMessageCardZhCn._(_root);
+  @override
+  late final _TranslationsReceivePageFilesCardZhCn filesCard = _TranslationsReceivePageFilesCardZhCn._(_root);
+  @override
+  late final _TranslationsReceivePageActionsZhCn actions = _TranslationsReceivePageActionsZhCn._(_root);
+}
+
+// Path: receiveOptionsPage
+class _TranslationsReceivePageBadgeZhCn extends TranslationsReceivePageBadgeEn {
+  _TranslationsReceivePageBadgeZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get message => '消息';
+  @override
+  String files({required Object n}) => '${n} 个文件';
+}
+
+class _TranslationsReceivePageSenderZhCn extends TranslationsReceivePageSenderEn {
+  _TranslationsReceivePageSenderZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '发送方';
+  @override
+  String get subtitleRevealIp => '点击 IP 标识可显示完整地址。';
+  @override
+  String get subtitleHistory => '该消息从接收历史中打开。';
+}
+
+class _TranslationsReceivePageMessageCardZhCn extends TranslationsReceivePageMessageCardEn {
+  _TranslationsReceivePageMessageCardZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get titleLink => '共享链接';
+  @override
+  String get titleMessage => '共享消息';
+  @override
+  String get subtitleLink => '可直接打开链接，或先复制后再处理。';
+  @override
+  String get subtitleMessage => '关闭前先查看这条消息。';
+}
+
+class _TranslationsReceivePageFilesCardZhCn extends TranslationsReceivePageFilesCardEn {
+  _TranslationsReceivePageFilesCardZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '接收文件';
+  @override
+  String get empty => '当前还没有选择要接收的文件。';
+  @override
+  String ready({required Object n}) => '已选择 ${n} 项，准备接收。';
+  @override
+  String offered({required Object n}) => '共提供 ${n} 项';
+  @override
+  String selected({required Object n}) => '已选择 ${n} 项';
+}
+
+class _TranslationsReceivePageActionsZhCn extends TranslationsReceivePageActionsEn {
+  _TranslationsReceivePageActionsZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '操作';
+  @override
+  String get subtitle => '调整接收选项，或接受 / 拒绝本次传输。';
+  @override
+  String get canceledSubtitle => '发送方已取消此次传输请求。';
 }
 
 // Path: receiveOptionsPage
@@ -387,6 +483,54 @@ class _TranslationsSendPageZhCn extends TranslationsSendPageEn {
   String get tooManyAttempts => _root.web.tooManyAttempts;
   @override
   String get busy => '对方正在处理另一个请求。';
+  @override
+  late final _TranslationsSendPageRouteZhCn route = _TranslationsSendPageRouteZhCn._(_root);
+  @override
+  late final _TranslationsSendPageStatusZhCn status = _TranslationsSendPageStatusZhCn._(_root);
+}
+
+class _TranslationsSendPageRouteZhCn extends TranslationsSendPageRouteEn {
+  _TranslationsSendPageRouteZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '传输路径';
+  @override
+  String get subtitle => '从当前设备发送到所选目标设备。';
+}
+
+class _TranslationsSendPageStatusZhCn extends TranslationsSendPageStatusEn {
+  _TranslationsSendPageStatusZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '状态';
+  @override
+  String get canceled => '已取消';
+  @override
+  String get waiting => '正在等待接收方响应。';
+  @override
+  String get declined => '接收方已拒绝此次传输请求。';
+  @override
+  String get tooManyAttempts => '尝试发起此次传输的次数过多。';
+  @override
+  String get busy => '接收方设备当前正忙。';
+  @override
+  String get finishedWithErrors => '传输已结束，但至少有一项出错。';
+  @override
+  String get sending => '传输正在进行中。';
+  @override
+  String get finished => '传输已成功完成。';
+  @override
+  String get canceledBySender => '此次传输已在本设备上取消。';
+  @override
+  String get canceledByReceiver => '此次传输已被接收方取消。';
 }
 
 // Path: progressPage
@@ -406,6 +550,157 @@ class _TranslationsProgressPageZhCn extends TranslationsProgressPageEn {
   String get savedToGallery => '已保存到相册';
   @override
   late final _TranslationsProgressPageTotalZhCn total = _TranslationsProgressPageTotalZhCn._(_root);
+  @override
+  late final _TranslationsProgressPageHeaderZhCn header = _TranslationsProgressPageHeaderZhCn._(_root);
+  @override
+  late final _TranslationsProgressPageDestinationZhCn destination = _TranslationsProgressPageDestinationZhCn._(_root);
+  @override
+  late final _TranslationsProgressPageErrorCardZhCn errorCard = _TranslationsProgressPageErrorCardZhCn._(_root);
+  @override
+  late final _TranslationsProgressPageOverviewZhCn overview = _TranslationsProgressPageOverviewZhCn._(_root);
+  @override
+  late final _TranslationsProgressPageFilesCardZhCn filesCard = _TranslationsProgressPageFilesCardZhCn._(_root);
+  @override
+  late final _TranslationsProgressPageFileCardZhCn fileCard = _TranslationsProgressPageFileCardZhCn._(_root);
+  @override
+  late final _TranslationsProgressPageStatusZhCn status = _TranslationsProgressPageStatusZhCn._(_root);
+}
+
+class _TranslationsProgressPageHeaderZhCn extends TranslationsProgressPageHeaderEn {
+  _TranslationsProgressPageHeaderZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String receivingFrom({required Object device}) => '正在接收来自 ${device} 的文件。';
+  @override
+  String sendingTo({required Object device}) => '正在向 ${device} 发送文件。';
+  @override
+  String get preparing => '正在准备传输详情。';
+}
+
+class _TranslationsProgressPageDestinationZhCn extends TranslationsProgressPageDestinationEn {
+  _TranslationsProgressPageDestinationZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '保存位置';
+  @override
+  String get savingToGallery => '当前已启用自动保存媒体到相册。';
+  @override
+  String get savingToFolder => '接收的文件将保存到此位置。';
+}
+
+class _TranslationsProgressPageErrorCardZhCn extends TranslationsProgressPageErrorCardEn {
+  _TranslationsProgressPageErrorCardZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '传输错误';
+  @override
+  String get subtitle => '本次会话报告了一个需要你注意的错误。';
+}
+
+class _TranslationsProgressPageOverviewZhCn extends TranslationsProgressPageOverviewEn {
+  _TranslationsProgressPageOverviewZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '总览';
+  @override
+  String get completed => '已完成';
+  @override
+  String get transferred => '已传输';
+  @override
+  String get speed => '速度';
+  @override
+  String get errors => '错误';
+}
+
+class _TranslationsProgressPageFilesCardZhCn extends TranslationsProgressPageFilesCardEn {
+  _TranslationsProgressPageFilesCardZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get empty => '正在准备传输项目。';
+  @override
+  String selected({required Object n}) => '本次传输共选择了 ${n} 项。';
+}
+
+class _TranslationsProgressPageFileCardZhCn extends TranslationsProgressPageFileCardEn {
+  _TranslationsProgressPageFileCardZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get preparing => '准备中';
+  @override
+  String get retry => '重试';
+}
+
+class _TranslationsProgressPageStatusZhCn extends TranslationsProgressPageStatusEn {
+  _TranslationsProgressPageStatusZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get labelWaiting => '正在等待对方设备';
+  @override
+  String get labelBusy => '接收方正忙';
+  @override
+  String get labelDeclined => '传输请求已被拒绝';
+  @override
+  String get labelTooManyAttempts => '尝试次数过多';
+  @override
+  String get chipWaiting => '等待中';
+  @override
+  String get chipBusy => '繁忙';
+  @override
+  String get chipDeclined => '已拒绝';
+  @override
+  String get chipTooManyAttempts => '次数过多';
+  @override
+  String get chipActive => '传输中';
+  @override
+  String get chipCanceled => '已取消';
+  @override
+  String get descriptionWaiting => '正在等待对方设备继续本次传输。';
+  @override
+  String get descriptionBusy => '目标设备当前正忙。';
+  @override
+  String get descriptionDeclined => '本次传输请求已被拒绝。';
+  @override
+  String get descriptionTooManyAttempts => '尝试发起本次传输的次数过多。';
+  @override
+  String get descriptionReceiving => '文件正在接收中。';
+  @override
+  String get descriptionSending => '文件正在发送中。';
+  @override
+  String get descriptionFinished => '所有已选文件都已成功传输完成。';
+  @override
+  String get descriptionFinishedWithErrors => '传输已完成，但部分项目需要你注意。';
+  @override
+  String get descriptionCanceledBySender => '本次传输已被发送方取消。';
+  @override
+  String get descriptionCanceledByReceiver => '本次传输已被接收方取消。';
 }
 
 // Path: webSharePage
@@ -447,6 +742,89 @@ class _TranslationsWebSharePageZhCn extends TranslationsWebSharePageEn {
   String get encryptionHint => 'AloeSend 使用自签名证书。您需要在浏览器中允许它。';
   @override
   String pendingRequests({required Object n}) => '待处理请求：${n}';
+  @override
+  late final _TranslationsWebSharePageProtocolZhCn protocol = _TranslationsWebSharePageProtocolZhCn._(_root);
+  @override
+  String filesCount({required Object n}) => '${n} 个文件';
+  @override
+  String activeRequests({required Object n}) => '${n} 个活动请求';
+  @override
+  late final _TranslationsWebSharePageShareLinksZhCn shareLinks = _TranslationsWebSharePageShareLinksZhCn._(_root);
+  @override
+  late final _TranslationsWebSharePageOptionsCardZhCn optionsCard = _TranslationsWebSharePageOptionsCardZhCn._(_root);
+  @override
+  late final _TranslationsWebSharePageStateCardZhCn stateCard = _TranslationsWebSharePageStateCardZhCn._(_root);
+  @override
+  late final _TranslationsWebSharePageLinkActionsZhCn linkActions = _TranslationsWebSharePageLinkActionsZhCn._(_root);
+}
+
+class _TranslationsWebSharePageProtocolZhCn extends TranslationsWebSharePageProtocolEn {
+  _TranslationsWebSharePageProtocolZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get http => 'HTTP';
+  @override
+  String get https => 'HTTPS';
+}
+
+class _TranslationsWebSharePageShareLinksZhCn extends TranslationsWebSharePageShareLinksEn {
+  _TranslationsWebSharePageShareLinksZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '分享链接';
+  @override
+  String get subtitle => '复制链接、扫描二维码，或打开电视模式。';
+}
+
+class _TranslationsWebSharePageOptionsCardZhCn extends TranslationsWebSharePageOptionsCardEn {
+  _TranslationsWebSharePageOptionsCardZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '选项';
+  @override
+  String get subtitle => '调整本次会话的网页分享行为。';
+}
+
+class _TranslationsWebSharePageStateCardZhCn extends TranslationsWebSharePageStateCardEn {
+  _TranslationsWebSharePageStateCardZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get preparingTitle => '正在准备网页分享';
+  @override
+  String get preparingSubtitle => '请暂时保持此页面打开。';
+  @override
+  String get errorSubtitle => '页面初始化失败。你可以重试此操作。';
+  @override
+  String get tryAgain => '重试';
+}
+
+class _TranslationsWebSharePageLinkActionsZhCn extends TranslationsWebSharePageLinkActionsEn {
+  _TranslationsWebSharePageLinkActionsZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get qr => '二维码';
+  @override
+  String get tv => '电视';
 }
 
 // Path: aboutPage
@@ -650,6 +1028,8 @@ class _TranslationsDialogsZhCn extends TranslationsDialogsEn {
   late final _TranslationsDialogsPinZhCn pin = _TranslationsDialogsPinZhCn._(_root);
   @override
   late final _TranslationsDialogsSendModeHelpZhCn sendModeHelp = _TranslationsDialogsSendModeHelpZhCn._(_root);
+  @override
+  late final _TranslationsDialogsPrivacyPolicyZhCn privacyPolicy = _TranslationsDialogsPrivacyPolicyZhCn._(_root);
   @override
   late final _TranslationsDialogsZoomZhCn zoom = _TranslationsDialogsZoomZhCn._(_root);
 }
@@ -1516,6 +1896,23 @@ class _TranslationsDialogsSendModeHelpZhCn extends TranslationsDialogsSendModeHe
   String get multiple => '发送文件给多个接收者。已选择的文件在发送后不会取消选择。';
   @override
   String get link => '未安装 AloeSend 的接收者可以在浏览器中打开链接以下载选中的文件。';
+}
+
+// Path: dialogs.privacyPolicy
+class _TranslationsDialogsPrivacyPolicyZhCn extends TranslationsDialogsPrivacyPolicyEn {
+  _TranslationsDialogsPrivacyPolicyZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '隐私政策';
+  @override
+  String get subtitle => '继续之前，请先阅读并接受隐私政策。';
+  @override
+  String get loadError => '无法加载隐私政策';
 }
 
 // Path: dialogs.zoom

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localsend_app/util/ui/visuals.dart';
 import 'package:routerino/routerino.dart';
 
 class CustomBottomSheet extends StatelessWidget {
@@ -13,11 +14,14 @@ class CustomBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final visuals = context.visuals;
+    final dialogColor = Theme.of(context).dialogTheme.backgroundColor;
+
     return RouterinoBottomSheet(
       title: title,
       description: description,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      borderRadius: 20,
+      backgroundColor: dialogColor ?? visuals.glassSurfaceStrong,
+      borderRadius: 28,
       child: child,
     );
   }

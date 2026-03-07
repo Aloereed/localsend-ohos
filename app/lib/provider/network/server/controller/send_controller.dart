@@ -10,6 +10,7 @@ import 'package:common/model/dto/receive_request_response_dto.dart';
 import 'package:common/model/file_type.dart';
 import 'package:common/util/stream.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:localsend_app/gen/assets.gen.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/cross_file.dart';
@@ -26,6 +27,7 @@ import 'package:uri_content/uri_content.dart';
 import 'package:uuid/uuid.dart';
 
 const _uuid = Uuid();
+const _downloadPluginChannel = MethodChannel('samples.flutter.dev/downloadplugin');
 
 /// Handles all requests for sending files.
 class SendController {
@@ -191,62 +193,149 @@ class SendController {
           ).toJson());
     });
 
-    router.get(ApiRoute.download.v2, (HttpRequest request) async {
-      final sessionId = request.uri.queryParameters['sessionId'];
-      if (sessionId == null) {
-        return await request.respondJson(400, message: 'Missing sessionId.');
-      }
-
-      final session = server.getState().webSendState?.sessions[sessionId];
-      if (session == null || session.responseHandler != null || session.ip != request.ip) {
-        return await request.respondJson(403, message: 'Invalid sessionId.');
-      }
-
-      final fileId = request.uri.queryParameters['fileId'];
-      if (fileId == null) {
-        return await request.respondJson(400, message: 'Missing fileId.');
-      }
-
-      final file = server.getState().webSendState?.files[fileId];
+    router.head(ApiRoute.download.v2, (HttpRequest request) async {
+      final file = await _getDownloadFile(request);
       if (file == null) {
-        return await request.respondJson(403, message: 'Invalid fileId.');
+        return;
       }
 
-      final fileName = file.file.fileName.replaceAll('/', '-'); // File name may be inside directories
+      var contentLength = file.file.size;
+      final path = file.path;
+      if (file.bytes == null && path != null && path.isNotEmpty && !path.startsWith('content://')) {
+        try {
+          final readablePath = await _resolveReadablePath(path);
+          contentLength = File(readablePath).lengthSync();
+        } catch (_) {
+          contentLength = file.file.size;
+        }
+      }
 
-      request.response
-        ..statusCode = 200
-        ..headers.set('content-type', 'application/octet-stream')
-        ..headers.set('content-disposition', 'attachment; filename="${Uri.encodeComponent(fileName)}"')
-        ..headers.set('content-length', '${file.file.size}');
+      _setDownloadHeaders(
+        response: request.response,
+        fileName: file.file.fileName,
+        contentLength: contentLength,
+      );
+      await request.response.close();
+    });
+
+    router.get(ApiRoute.download.v2, (HttpRequest request) async {
+      final file = await _getDownloadFile(request);
+      if (file == null) {
+        return;
+      }
 
       if (file.bytes != null) {
+        _setDownloadHeaders(
+          response: request.response,
+          fileName: file.file.fileName,
+          contentLength: file.bytes!.length,
+        );
+
         final byteStream = Stream.fromIterable([file.bytes!]);
         final (streamController, subscription) = byteStream.digested();
 
-        await request.response.addStream(streamController.stream).then((_) {
-          request.response.close();
-          subscription.cancel();
-        });
+        await request.response.addStream(streamController.stream);
+        await request.response.close();
+        await subscription.cancel();
       } else {
-        final path = file.path!;
-        dynamic uriContent;
-        if(checkPlatform([TargetPlatform.ohos]))
-          uriContent = null;
-        else
-          uriContent = UriContent();
-        final tmpfile = File(file.path!);
-        request.response.headers.set('content-length', '${tmpfile.lengthSync()}');
+        final path = file.path;
+        if (path == null || path.isEmpty) {
+          return await request.respondJson(404, message: 'File not found.');
+        }
 
-        final fileStream = path.startsWith('content://')&&uriContent!=null ? uriContent.getContentStream(Uri.parse(file.path!)) : tmpfile.openRead();
+        late final Stream<List<int>> fileStream;
+        late final int contentLength;
+
+        try {
+          if (path.startsWith('content://')) {
+            if (checkPlatform([TargetPlatform.ohos])) {
+              return await request.respondJson(404, message: 'File not found.');
+            }
+            fileStream = UriContent().getContentStream(Uri.parse(path));
+            contentLength = file.file.size;
+          } else {
+            final readablePath = await _resolveReadablePath(path);
+            final tmpfile = File(readablePath);
+            contentLength = tmpfile.lengthSync();
+            fileStream = tmpfile.openRead();
+          }
+        } catch (_) {
+          return await request.respondJson(404, message: 'File not found.');
+        }
+
+        _setDownloadHeaders(
+          response: request.response,
+          fileName: file.file.fileName,
+          contentLength: contentLength,
+        );
+
         final (streamController, subscription) = fileStream.digested();
 
-        await request.response.addStream(streamController.stream).then((_) {
-          request.response.close();
-          subscription.cancel();
-        });
+        await request.response.addStream(streamController.stream);
+        await request.response.close();
+        await subscription.cancel();
       }
     });
+  }
+
+  Future<WebSendFile?> _getDownloadFile(HttpRequest request) async {
+    final sessionId = request.uri.queryParameters['sessionId'];
+    if (sessionId == null) {
+      await request.respondJson(400, message: 'Missing sessionId.');
+      return null;
+    }
+
+    final session = server.getState().webSendState?.sessions[sessionId];
+    if (session == null || session.responseHandler != null || session.ip != request.ip) {
+      await request.respondJson(403, message: 'Invalid sessionId.');
+      return null;
+    }
+
+    final fileId = request.uri.queryParameters['fileId'];
+    if (fileId == null) {
+      await request.respondJson(400, message: 'Missing fileId.');
+      return null;
+    }
+
+    final file = server.getState().webSendState?.files[fileId];
+    if (file == null) {
+      await request.respondJson(403, message: 'Invalid fileId.');
+      return null;
+    }
+
+    return file;
+  }
+
+  Future<String> _resolveReadablePath(String path) async {
+    if (!checkPlatform([TargetPlatform.ohos]) || !path.startsWith('file://')) {
+      return path;
+    }
+
+    final copiedUri = await _downloadPluginChannel.invokeMethod<String>(
+      'copyFileWithReadable',
+      {'uri': path},
+    );
+    final readableUri = copiedUri?.isNotEmpty == true ? copiedUri! : path;
+    return Uri.decodeFull(
+      readableUri.replaceFirst(RegExp(r'^file://(media|docs)'), ''),
+    );
+  }
+
+  void _setDownloadHeaders({
+    required HttpResponse response,
+    required String fileName,
+    required int contentLength,
+  }) {
+    final sanitizedFileName = fileName.replaceAll('/', '-');
+
+    response
+      ..statusCode = 200
+      ..headers.set('content-type', 'application/octet-stream')
+      ..headers.set(
+        'content-disposition',
+        'attachment; filename="${Uri.encodeComponent(sanitizedFileName)}"',
+      )
+      ..headers.set('content-length', '$contentLength');
   }
 
   Future<void> initializeWebSend({required List<CrossFile> files}) async {
