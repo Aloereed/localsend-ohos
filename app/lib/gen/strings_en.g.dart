@@ -701,6 +701,7 @@ class TranslationsDialogsEn {
   late final TranslationsDialogsOpenFileEn openFile = TranslationsDialogsOpenFileEn.internal(_root);
   late final TranslationsDialogsAddressInputEn addressInput = TranslationsDialogsAddressInputEn.internal(_root);
   late final TranslationsDialogsCancelSessionEn cancelSession = TranslationsDialogsCancelSessionEn.internal(_root);
+  late final TranslationsDialogsChooseFolderEn chooseFolder = TranslationsDialogsChooseFolderEn.internal(_root);
   late final TranslationsDialogsCannotOpenFileEn cannotOpenFile = TranslationsDialogsCannotOpenFileEn.internal(_root);
   late final TranslationsDialogsEncryptionDisabledNoticeEn encryptionDisabledNotice = TranslationsDialogsEncryptionDisabledNoticeEn.internal(_root);
   late final TranslationsDialogsErrorDialogEn errorDialog = TranslationsDialogsErrorDialogEn.internal(_root);
@@ -1068,6 +1069,19 @@ class TranslationsDialogsCancelSessionEn {
   // Translations
   String get title => 'Cancel files transfer';
   String get content => 'Do you really want to cancel the files transfer?';
+}
+
+// Path: dialogs.chooseFolder
+class TranslationsDialogsChooseFolderEn {
+  TranslationsDialogsChooseFolderEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+  String get title => 'Choose Folder';
+  String get subtitle => 'Only directories accessible to the app are shown.';
+  String get empty => 'This folder is empty';
+  String get useThisFolder => 'Use This Folder';
 }
 
 // Path: dialogs.cannotOpenFile

@@ -486,6 +486,12 @@
       "title": "取消文件传输",
       "content": "要取消文件传输吗？"
     },
+    "chooseFolder": {
+      "title": "选择文件夹",
+      "subtitle": "这里只显示应用可访问的目录。",
+      "empty": "当前文件夹为空",
+      "useThisFolder": "使用此文件夹"
+    },
     "cannotOpenFile": {
       "title": "无法打开文件",
       "content": "无法打开 “{file}”。这个文件是否已被移动、重命名或删除？"

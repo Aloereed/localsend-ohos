@@ -1028,6 +1028,8 @@ class _TranslationsDialogsZhCn extends TranslationsDialogsEn {
   @override
   late final _TranslationsDialogsCancelSessionZhCn cancelSession = _TranslationsDialogsCancelSessionZhCn._(_root);
   @override
+  late final _TranslationsDialogsChooseFolderZhCn chooseFolder = _TranslationsDialogsChooseFolderZhCn._(_root);
+  @override
   late final _TranslationsDialogsCannotOpenFileZhCn cannotOpenFile = _TranslationsDialogsCannotOpenFileZhCn._(_root);
   @override
   late final _TranslationsDialogsEncryptionDisabledNoticeZhCn encryptionDisabledNotice = _TranslationsDialogsEncryptionDisabledNoticeZhCn._(_root);
@@ -1608,6 +1610,25 @@ class _TranslationsDialogsCancelSessionZhCn extends TranslationsDialogsCancelSes
   String get title => '取消文件传输';
   @override
   String get content => '要取消文件传输吗？';
+}
+
+// Path: dialogs.chooseFolder
+class _TranslationsDialogsChooseFolderZhCn extends TranslationsDialogsChooseFolderEn {
+  _TranslationsDialogsChooseFolderZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => '选择文件夹';
+  @override
+  String get subtitle => '这里只显示应用可访问的目录。';
+  @override
+  String get empty => '当前文件夹为空';
+  @override
+  String get useThisFolder => '使用此文件夹';
 }
 
 // Path: dialogs.cannotOpenFile

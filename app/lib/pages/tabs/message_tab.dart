@@ -40,7 +40,15 @@ class MessageTab extends StatelessWidget {
     final selection = context.watch(activeMessageSelectionProvider);
     return selection == null
         ? const _MessageConversationListView()
-        : _MessageConversationView(selection: selection);
+        : PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) {
+              if (!didPop) {
+                context.ref.notifier(activeMessageSelectionProvider).setState((_) => null);
+              }
+            },
+            child: _MessageConversationView(selection: selection),
+          );
   }
 }
 
@@ -336,6 +344,7 @@ class _MessageConversationViewState extends State<_MessageConversationView> {
   Widget build(BuildContext context) {
     final allEntries = context.watch(messageHistoryProvider);
     final entries = entriesForConversation(allEntries, widget.selection.conversationId);
+    final compactHeader = context.isPhoneLayout;
     final target = context.watch(nearbyDevicesProvider.select(
       (state) => state.devices.values.firstWhereOrNull((e) => e.fingerprint == widget.selection.peer.fingerprint),
     ));
@@ -361,10 +370,19 @@ class _MessageConversationViewState extends State<_MessageConversationView> {
               ModernPageHeader(
                 title: widget.selection.peer.alias,
                 subtitle: target == null ? t.messageTab.offlineSubtitle : '#${target.ip}',
-                trailing: IconButton(
-                  onPressed: () => context.ref.notifier(activeMessageSelectionProvider).setState((_) => null),
-                  icon: const Icon(Icons.arrow_back_rounded),
-                ),
+                lowProfile: compactHeader,
+                leading: compactHeader
+                    ? IconButton(
+                        onPressed: () => context.ref.notifier(activeMessageSelectionProvider).setState((_) => null),
+                        icon: const Icon(Icons.arrow_back_rounded),
+                      )
+                    : null,
+                trailing: compactHeader
+                    ? null
+                    : IconButton(
+                        onPressed: () => context.ref.notifier(activeMessageSelectionProvider).setState((_) => null),
+                        icon: const Icon(Icons.arrow_back_rounded),
+                      ),
               ),
               SizedBox(height: gap),
               Expanded(

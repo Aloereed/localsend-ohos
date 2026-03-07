@@ -4,10 +4,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/provider/device_info_provider.dart';
 import 'package:localsend_app/util/native/channel/android_channel.dart'
     as android_channel;
 import 'package:localsend_app/util/native/platform_check.dart';
+import 'package:localsend_app/util/ui/visuals.dart';
 import 'package:localsend_app/widget/modern/modern_ui.dart';
 import 'package:path/path.dart' as path;
 import 'package:refena_flutter/refena_flutter.dart';
@@ -153,17 +155,25 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final mediaQuery = MediaQuery.of(context);
+    final compact = context.isPhoneLayout;
 
     return WillPopScope(
       onWillPop: () async => true,
       child: ModernDialogScaffold(
-        title: 'Choose Folder',
-        subtitle: 'Only directories accessible to the app are shown.',
-        maxWidth: MediaQuery.of(context).size.width * 0.9,
+        title: t.dialogs.chooseFolder.title,
+        subtitle: t.dialogs.chooseFolder.subtitle,
+        maxWidth: mediaQuery.size.width * 0.9,
+        insetPadding: EdgeInsets.fromLTRB(
+          16,
+          24,
+          16,
+          24 + (compact ? mediaQuery.padding.bottom + 8 : 0),
+        ),
         onClose: _cancel,
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.85,
-          height: MediaQuery.of(context).size.height * 0.66,
+          width: mediaQuery.size.width * 0.85,
+          height: mediaQuery.size.height * (compact ? 0.56 : 0.66),
           child: Column(
             children: [
               GlassSurface(
@@ -213,7 +223,7 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'This folder is empty',
+                                  t.dialogs.chooseFolder.empty,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge
@@ -243,10 +253,10 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
           ),
         ),
         actions: [
-          TextButton(onPressed: _cancel, child: const Text('Cancel')),
+          TextButton(onPressed: _cancel, child: Text(t.general.cancel)),
           FilledButton(
             onPressed: _selectCurrentFolder,
-            child: const Text('Use This Folder'),
+            child: Text(t.dialogs.chooseFolder.useThisFolder),
           ),
         ],
       ),

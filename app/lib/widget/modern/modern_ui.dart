@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -485,6 +486,9 @@ class ModernDialogScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visuals = context.visuals;
+    final actionBottomPadding = actions != null && actions!.isNotEmpty && context.isPhoneLayout
+        ? math.max(8.0, MediaQuery.viewPaddingOf(context).bottom).toDouble()
+        : 0.0;
     return Dialog(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -538,11 +542,14 @@ class ModernDialogScaffold extends StatelessWidget {
               child,
               if (actions != null && actions!.isNotEmpty) ...[
                 const SizedBox(height: 20),
-                Wrap(
-                  alignment: WrapAlignment.end,
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: actions!,
+                Padding(
+                  padding: EdgeInsets.only(bottom: actionBottomPadding),
+                  child: Wrap(
+                    alignment: WrapAlignment.end,
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: actions!,
+                  ),
                 ),
               ],
             ],
@@ -559,6 +566,7 @@ class ModernPageHeader extends StatelessWidget {
   final List<Widget> chips;
   final Widget? trailing;
   final Widget? leading;
+  final bool lowProfile;
 
   const ModernPageHeader({
     required this.title,
@@ -566,6 +574,7 @@ class ModernPageHeader extends StatelessWidget {
     this.chips = const [],
     this.trailing,
     this.leading,
+    this.lowProfile = false,
     super.key,
   });
 
@@ -582,6 +591,60 @@ class ModernPageHeader extends StatelessWidget {
       color: visuals.mutedForeground,
       height: 1.45,
     );
+
+    if (compact && lowProfile) {
+      return GlassSurface(
+        strong: true,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                if (leading != null) ...[
+                  leading!,
+                  const SizedBox(width: 8),
+                ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: visuals.mutedForeground,
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (trailing != null) ...[
+                  const SizedBox(width: 8),
+                  trailing!,
+                ],
+              ],
+            ),
+            if (chips.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(spacing: 8, runSpacing: 8, children: chips),
+            ],
+          ],
+        ),
+      );
+    }
 
     if (compact) {
       return GlassSurface(
