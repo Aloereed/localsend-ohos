@@ -38,7 +38,7 @@ ThemeData getTheme(
     scaffoldBackgroundColor: brightness == Brightness.light
         ? const Color(0xFFF2F3F5) // 鸿蒙浅色背景
         : const Color(0xFF000000), // 深色模式背景
-    appBarTheme: AppBarTheme(
+    appBarTheme: AppBarThemeData(
       backgroundColor: brightness == Brightness.light
           ? const Color(0xFFF2F3F5)
           : const Color(0xFF000000),
@@ -80,7 +80,7 @@ ThemeData getTheme(
             unselectedItemColor: Color(0xFF818181), // 未选中项的颜色为灰色
             elevation: 0, // 去掉分割线
           ),
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: InputDecorationThemeData(
       filled: true,
       fillColor: colorScheme.surface.withOpacity(0.1), // 浅色背景下的输入框填充色
       border: inputBorder,
@@ -277,8 +277,32 @@ extension ColorSchemeExt on ColorScheme {
   }
 }
 
+BorderRadius _resolveInputBorderRadius(InputDecorationThemeData theme) {
+  final border = switch (theme.border ??
+      theme.enabledBorder ??
+      theme.focusedBorder ??
+      theme.disabledBorder ??
+      theme.errorBorder ??
+      theme.focusedErrorBorder) {
+    final WidgetStateInputBorder border =>
+      border.resolve(const <WidgetState>{}),
+    final InputBorder border => border,
+    null => null,
+  };
+
+  if (border case final OutlineInputBorder outlineBorder) {
+    return outlineBorder.borderRadius;
+  }
+
+  return _borderRadius;
+}
+
+extension InputDecorationThemeDataExt on InputDecorationThemeData {
+  BorderRadius get borderRadius => _resolveInputBorderRadius(this);
+}
+
 extension InputDecorationThemeExt on InputDecorationTheme {
-  BorderRadius get borderRadius => _borderRadius;
+  BorderRadius get borderRadius => _resolveInputBorderRadius(data);
 }
 
 // ColorScheme _determineColorScheme(ColorMode mode, Brightness brightness, DynamicColors? dynamicColors) {
@@ -318,10 +342,11 @@ ThemeData _getYaruTheme(Brightness brightness) {
   return baseTheme.copyWith(
     navigationBarTheme: colorScheme.brightness == Brightness.dark
         ? NavigationBarThemeData(
-            iconTheme: WidgetStateProperty.all(const IconThemeData(color: Colors.white)),
+            iconTheme: WidgetStateProperty.all(
+                const IconThemeData(color: Colors.white)),
           )
         : null,
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: InputDecorationThemeData(
       filled: true,
       fillColor: colorScheme.secondaryContainer,
       border: colorScheme.brightness == Brightness.light

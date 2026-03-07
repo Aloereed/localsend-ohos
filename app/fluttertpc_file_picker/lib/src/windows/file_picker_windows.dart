@@ -4,7 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:file_picker/src/utils.dart';
 import 'package:file_picker/src/exceptions.dart';
 import 'package:file_picker/src/windows/file_picker_windows_ffi_types.dart';

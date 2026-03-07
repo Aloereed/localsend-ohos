@@ -32,7 +32,9 @@ Future<void> _clear(RootIsolateToken token) async {
   BackgroundIsolateBinaryMessenger.ensureInitialized(token);
 
   final futures = (
-    FilePicker.platform.clearTemporaryFiles(),
+    checkPlatform([TargetPlatform.iOS, TargetPlatform.android])
+        ? FilePicker.platform.clearTemporaryFiles()
+        : Future.value(),
     PhotoManager.clearFileCache(),
     checkPlatform([TargetPlatform.iOS, TargetPlatform.android])
         ? getTemporaryDirectory().then((cacheDir) {
@@ -59,7 +61,8 @@ Future<void> _clear(RootIsolateToken token) async {
             final directory = Directory(directoryPath);
 
             // delete contents of the directory (only files, not directories)
-            await for (final entry in directory.list(recursive: false, followLinks: false)) {
+            await for (final entry
+                in directory.list(recursive: false, followLinks: false)) {
               if (entry is File && !entry.path.fileName.startsWith('.')) {
                 _logger.info('Deleting ${entry.path}');
                 entry.deleteSync();

@@ -61,6 +61,10 @@ dependencies:
   yaru: 1.2.2
 dependency_overrides:
   screen_retriever: 0.2.0
+  wechat_assets_picker:
+    path: ./third_party/wechat_assets_picker
+  yaru:
+    path: ./third_party/yaru
   connectivity_plus:
     git:
       path: packages/connectivity_plus/connectivity_plus
@@ -160,4 +164,4 @@ flutter_gen:
 homepage: https://localsend.org/
 name: localsend_app
 publish_to: none
-version: 1.17.7+65
+version: 1.17.7+70

@@ -146,7 +146,7 @@ Future<String?> _showOhosDirectoryPicker() async {
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 ```
 
 另外，还需要确认Platform.environment['USER']是否能正确获取当前用户名，如果不能，可能需要调整获取当前用户的方式。

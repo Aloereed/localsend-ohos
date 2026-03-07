@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:file_picker/src/linux/dialog_handler.dart';
 import 'package:path/path.dart' as p;
 

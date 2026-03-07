@@ -2,7 +2,7 @@
   "app": {
     "bundleName": "com.aloereed.aloesend",
     "vendor": "example",
-    "versionCode": 65,
+    "versionCode": 70,
     "versionName": "1.17.7",
     "icon": "$media:layered_image",
     "label": "$string:app_name"

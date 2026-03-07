@@ -1,19 +1,13 @@
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet("hap", "app")]
-    [string]$BuildType,
-
-    [Parameter(Mandatory = $false, Position = 1)]
     [ValidateSet("debug", "release")]
-    [string]$Config
+    [string]$Config,
+
+    [Parameter(Mandatory = $true, Position = 1)]
+    [string]$DeviceId
 )
 
-$appRoot = Join-Path $PSScriptRoot "app"
-if (-not (Test-Path $appRoot)) {
-    Write-Error "app directory not found: $appRoot"
-    exit 1
-}
-
+$appRoot = $PSScriptRoot
 Set-Location $appRoot
 
 function Update-VersionIfChanged {
@@ -61,15 +55,6 @@ function Update-VersionIfChanged {
     }
 }
 
-if (-not $Config) {
-    if ($BuildType -eq "hap") {
-        $Config = "debug"
-    }
-    else {
-        $Config = "release"
-    }
-}
-
 Update-VersionIfChanged
 
 $buildProfilePath = "ohos\build-profile.json5"
@@ -90,26 +75,29 @@ Write-Host "Using config: $Config"
 Write-Host "Copying $buildProfileSource to $buildProfilePath"
 Copy-Item $buildProfileSource $buildProfilePath -Force
 
-$buildCommand = "flutter build $BuildType --$Config"
-Write-Host "Running build command: $buildCommand"
+$runCommand = "flutter run --release -d $DeviceId"
+Write-Host "Running command: $runCommand"
+Write-Host "Selected build profile config: $Config"
+Write-Host "Target device: $DeviceId"
 Write-Host "----------------------------------------"
 
 try {
-    Invoke-Expression $buildCommand
+    dart run build_runner build --delete-conflicting-outputs
+    Invoke-Expression $runCommand
     $exitCode = $LASTEXITCODE
 
     if ($exitCode -eq 0) {
         Write-Host "----------------------------------------"
-        Write-Host "Build succeeded." -ForegroundColor Green
+        Write-Host "Run completed." -ForegroundColor Green
     }
     else {
         Write-Host "----------------------------------------"
-        Write-Host "Build failed with exit code: $exitCode" -ForegroundColor Red
+        Write-Host "Run failed with exit code: $exitCode" -ForegroundColor Red
         exit $exitCode
     }
 }
 catch {
     Write-Host "----------------------------------------"
-    Write-Host "Build process error: $_" -ForegroundColor Red
+    Write-Host "Run process error: $_" -ForegroundColor Red
     exit 1
 }

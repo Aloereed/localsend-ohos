@@ -1,18 +1,12 @@
 import { FlutterEngine, Log } from '@ohos/flutter_ohos';
-import FluttertoastPlugin from 'fluttertoast';
-import FileSelectorOhosPlugin from 'file_selector_ohos';
 import PathProviderPlugin from 'path_provider_ohos';
 import SharedPreferencesPlugin from 'shared_preferences_ohos';
-import UrlLauncherPlugin from 'url_launcher_ohos';
-import WebViewFlutterPlugin from 'webview_flutter_ohos';
-import PermissionHandlerPlugin from 'permission_handler_ohos';
-import ConnectivityPlugin from 'connectivity_plus';
 import PackageInfoPlugin from 'package_info_plus';
-import SharePlusOhosPlugin from 'share_plus';
 import OpenFilePlugin from 'open_filex';
-import DeviceInfoPlusOhosPlugin from 'device_info_plus';
-import FilePickerPlugin from 'file_picker_ohos';
 import ImagePickerPlugin from 'image_picker_ohos';
+import FileSelectorOhosPlugin from 'file_selector_ohos';
+import DeviceInfoPlusOhosPlugin from 'device_info_plus';
+import ConnectivityPlugin from 'connectivity_plus';
 
 /**
  * Generated file. Do not edit.
@@ -26,20 +20,14 @@ export class GeneratedPluginRegistrant {
 
   static registerWith(flutterEngine: FlutterEngine) {
     try {
-      flutterEngine.getPlugins()?.add(new FluttertoastPlugin());
-      flutterEngine.getPlugins()?.add(new FileSelectorOhosPlugin());
       flutterEngine.getPlugins()?.add(new PathProviderPlugin());
       flutterEngine.getPlugins()?.add(new SharedPreferencesPlugin());
-      flutterEngine.getPlugins()?.add(new UrlLauncherPlugin());
-      flutterEngine.getPlugins()?.add(new WebViewFlutterPlugin());
-      flutterEngine.getPlugins()?.add(new PermissionHandlerPlugin());
-      flutterEngine.getPlugins()?.add(new ConnectivityPlugin());
       flutterEngine.getPlugins()?.add(new PackageInfoPlugin());
-      flutterEngine.getPlugins()?.add(new SharePlusOhosPlugin());
       flutterEngine.getPlugins()?.add(new OpenFilePlugin());
-      flutterEngine.getPlugins()?.add(new DeviceInfoPlusOhosPlugin());
-      flutterEngine.getPlugins()?.add(new FilePickerPlugin());
       flutterEngine.getPlugins()?.add(new ImagePickerPlugin());
+      flutterEngine.getPlugins()?.add(new FileSelectorOhosPlugin());
+      flutterEngine.getPlugins()?.add(new DeviceInfoPlusOhosPlugin());
+      flutterEngine.getPlugins()?.add(new ConnectivityPlugin());
     } catch (e) {
       Log.e(
         TAG,

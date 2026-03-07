@@ -1,9 +1,6 @@
 import 'dart:async';
 
 // import 'package:common/common.dart';
-import 'package:file_picker/file_picker.dart' as file_picker;
-import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
-import 'package:file_selector/file_selector.dart' as file_selector;
 import 'package:common/model/file_type.dart';
 import 'package:common/util/sleep.dart';
 import 'package:file_selector/file_selector.dart';
@@ -179,16 +176,14 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
               converter: CrossFileConverters.convertFileInfo,
             ));
       }
-    }
-    if (checkPlatform([TargetPlatform.ohos])) {
-      final result = await file_picker_ohos.FilePicker.platform
-          .pickFiles(allowMultiple: true);
-      if (result != null) {
+    } else if (checkPlatform([TargetPlatform.ohos])) {
+      final result = await openFiles();
+      if (result.isNotEmpty) {
         await ref
             .redux(selectedSendingFilesProvider)
             .dispatchAsync(AddFilesAction(
-              files: result.files,
-              converter: CrossFileConverters.convertPlatformFileOhos,
+              files: result,
+              converter: CrossFileConverters.convertXFile,
             ));
       }
     } else {

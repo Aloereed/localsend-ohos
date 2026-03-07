@@ -36,7 +36,8 @@ Future<String?> pickDirectoryPath(BuildContext context) async {
 }
 
 Future<String?> _showOhosDirectoryPicker(BuildContext context) async {
-  const String baseDirectory = '/storage/Users/currentUser/Download/com.aloereed.aloesend';
+  const String baseDirectory =
+      '/storage/Users/currentUser/Download/com.aloereed.aloesend';
   // if baseDir not exists, create it
   if (!await Directory(baseDirectory).exists()) {
     await Directory(baseDirectory).create(recursive: true);
@@ -45,7 +46,8 @@ Future<String?> _showOhosDirectoryPicker(BuildContext context) async {
     context: context,
     barrierDismissible: true, // 允许点击外部关闭
     barrierColor: Colors.black54,
-    builder: (context) => _OhosDirectoryPickerDialog(baseDirectory: baseDirectory),
+    builder: (context) =>
+        _OhosDirectoryPickerDialog(baseDirectory: baseDirectory),
   );
 }
 
@@ -55,10 +57,12 @@ class _OhosDirectoryPickerDialog extends StatefulWidget {
   const _OhosDirectoryPickerDialog({required this.baseDirectory});
 
   @override
-  State<_OhosDirectoryPickerDialog> createState() => _OhosDirectoryPickerDialogState();
+  State<_OhosDirectoryPickerDialog> createState() =>
+      _OhosDirectoryPickerDialogState();
 }
 
-class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> {
+class _OhosDirectoryPickerDialogState
+    extends State<_OhosDirectoryPickerDialog> {
   late String currentPath;
   List<Directory> directories = [];
   bool isLoading = true;
@@ -79,21 +83,22 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
 
   Future<void> _loadDirectories() async {
     if (_isDisposed) return; // 如果已销毁，不执行
-    
+
     if (mounted) {
       setState(() => isLoading = true);
     }
-    
+
     try {
       final dir = Directory(currentPath);
       final entities = await dir.list().toList();
-      
+
       final dirs = entities
           .whereType<Directory>()
           .where((d) => !path.basename(d.path).startsWith('.'))
           .toList()
-        ..sort((a, b) => path.basename(a.path).compareTo(path.basename(b.path)));
-      
+        ..sort(
+            (a, b) => path.basename(a.path).compareTo(path.basename(b.path)));
+
       if (!_isDisposed && mounted) {
         setState(() {
           directories = dirs;
@@ -112,7 +117,7 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
 
   void _navigateToDirectory(String dirPath) {
     if (_isDisposed || !mounted) return;
-    
+
     setState(() {
       currentPath = dirPath;
     });
@@ -121,7 +126,7 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
 
   void _navigateUp() {
     if (_isDisposed || !mounted) return;
-    
+
     if (currentPath != widget.baseDirectory) {
       final parentPath = Directory(currentPath).parent.path;
       if (parentPath.startsWith(widget.baseDirectory)) {
@@ -205,9 +210,12 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
                             Expanded(
                               child: Text(
                                 '选择文件夹',
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ),
                             IconButton(
@@ -242,10 +250,13 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
                               Expanded(
                                 child: Text(
                                   _getRelativePath(),
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: colorScheme.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: colorScheme.primary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -277,15 +288,19 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
                                     const SizedBox(height: 16),
                                     Text(
                                       '此文件夹为空',
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        color: colorScheme.outline,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: colorScheme.outline,
+                                          ),
                                     ),
                                   ],
                                 ),
                               )
                             : ListView.builder(
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
                                 itemCount: directories.length,
                                 itemBuilder: (context, index) {
                                   final dir = directories[index];
@@ -300,7 +315,8 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
                                       ),
                                       padding: const EdgeInsets.all(16),
                                       decoration: BoxDecoration(
-                                        color: colorScheme.surfaceVariant.withOpacity(0.3),
+                                        color: colorScheme.surfaceVariant
+                                            .withOpacity(0.3),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Row(
@@ -314,7 +330,9 @@ class _OhosDirectoryPickerDialogState extends State<_OhosDirectoryPickerDialog> 
                                           Expanded(
                                             child: Text(
                                               dirName,
-                                              style: Theme.of(context).textTheme.bodyLarge,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),

@@ -10,12 +10,12 @@ import 'dart:io';
 import 'package:common/model/file_type.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
-import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localsend_app/model/cross_file.dart';
 import 'package:localsend_app/util/file_path_helper.dart';
-import 'package:localsend_app/util/native/channel/android_channel.dart' as android_channel;
+import 'package:localsend_app/util/native/channel/android_channel.dart'
+    as android_channel;
 import 'package:share_handler/share_handler.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
@@ -37,28 +37,14 @@ class CrossFileConverters {
     );
   }
 
-  static Future<CrossFile> convertPlatformFileOhos(
-      file_picker_ohos.PlatformFile file) async {
-    return CrossFile(
-      name: file.name,
-      fileType: file.name.guessFileType(),
-      size: file.size,
-      thumbnail: null,
-      asset: null,
-      path: kIsWeb ? null : file.path,
-      bytes: kIsWeb ? file.bytes! : null,
-      lastModified: null,
-      lastAccessed: null,
-    );
-  }
-
-  static Future<CrossFile> convertUriOhos(
-      String uri) async {
-    final path = uri.startsWith("file://")?Uri.decodeFull(uri.replaceFirst(RegExp(r"file://(media|docs)"), "")):uri;
+  static Future<CrossFile> convertUriOhos(String uri) async {
+    final path = uri.startsWith("file://")
+        ? Uri.decodeFull(uri.replaceFirst(RegExp(r"file://(media|docs)"), ""))
+        : uri;
     final file = File(path);
     // 打印file是否存在
-    print("file exists:"+file.existsSync().toString());
-    print("start convert:"+path);
+    print("file exists:" + file.existsSync().toString());
+    print("start convert:" + path);
     return CrossFile(
       name: path.fileName,
       fileType: path.fileName.guessFileType(),
@@ -104,7 +90,9 @@ class CrossFileConverters {
       bytes: kIsWeb
           ? await file.readAsBytes()
           : null, // we can fetch it now because in Web it is already there
-      lastModified: kIsWeb || checkPlatform([TargetPlatform.ohos]) ? null : await file.lastModified(),
+      lastModified: kIsWeb || checkPlatform([TargetPlatform.ohos])
+          ? null
+          : await file.lastModified(),
       lastAccessed: null,
     );
   }
@@ -123,7 +111,8 @@ class CrossFileConverters {
     );
   }
 
-  static Future<CrossFile> convertFileInfo(android_channel.FileInfo file) async {
+  static Future<CrossFile> convertFileInfo(
+      android_channel.FileInfo file) async {
     return CrossFile(
       name: file.name,
       fileType: file.name.guessFileType(),
@@ -132,12 +121,14 @@ class CrossFileConverters {
       asset: null,
       path: file.uri,
       bytes: null,
-      lastModified: DateTime.fromMillisecondsSinceEpoch(file.lastModified, isUtc: true),
+      lastModified:
+          DateTime.fromMillisecondsSinceEpoch(file.lastModified, isUtc: true),
       lastAccessed: null,
     );
   }
 
-  static Future<CrossFile> convertSharedAttachment(SharedAttachment attachment) async {
+  static Future<CrossFile> convertSharedAttachment(
+      SharedAttachment attachment) async {
     final file = File(attachment.path);
     final fileName = attachment.path.fileName;
     return CrossFile(
