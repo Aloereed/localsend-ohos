@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:localsend_app/model/state/send/send_session_state.dart';
 import 'package:localsend_app/model/state/server/receive_session_state.dart';
 import 'package:localsend_app/model/state/server/receiving_file.dart';
+import 'package:localsend_app/model/persistence/message_history_entry.dart';
 import 'package:localsend_app/pages/home_page.dart';
 import 'package:localsend_app/pages/home_page_controller.dart';
 import 'package:localsend_app/pages/progress_page.dart';
@@ -27,6 +28,7 @@ import 'package:localsend_app/pages/receive_page_controller.dart';
 import 'package:localsend_app/provider/device_info_provider.dart';
 import 'package:localsend_app/provider/favorites_provider.dart';
 import 'package:localsend_app/provider/http_provider.dart';
+import 'package:localsend_app/provider/message_history_provider.dart';
 import 'package:localsend_app/provider/logging/discovery_logs_provider.dart';
 import 'package:localsend_app/provider/network/nearby_devices_provider.dart';
 import 'package:localsend_app/provider/network/send_provider.dart';
@@ -56,6 +58,7 @@ final _logger = Logger('ReceiveController');
 /// Handles all requests for receiving files.
 class ReceiveController {
   final ServerUtils server;
+  final Set<String> _closeOnFinishSessionIds = <String>{};
 
   ReceiveController(this.server);
 
@@ -188,15 +191,14 @@ class ReceiveController {
     required bool v2,
   }) async {
     if (server.getState().session != null) {
-      // block incoming requests when we are already in a session
-      return await request.respondJson(409, message: 'Blocked by another session');
+      return await request.respondJson(409, message: 'Another file transfer is in progress');
     }
 
     final pinCorrect = await checkPin(
+      request: request,
       server: server,
       pin: server.ref.read(settingsProvider).receivePin,
       pinAttempts: server.getState().pinAttempts,
-      request: request,
     );
     if (!pinCorrect) {
       return;
@@ -211,7 +213,6 @@ class ReceiveController {
     }
 
     if (dto.files.isEmpty) {
-      // block empty requests (at least one file is required)
       return await request.respondJson(400, message: 'Request must contain at least one file');
     }
 
@@ -262,70 +263,55 @@ class ReceiveController {
         quickSave = true;
       }
     }
+
+    final receiveSession = server.getState().session!;
+    final message = receiveSession.message;
     final Map<String, String>? selection;
-    if (quickSave) {
-      // accept all files
-      selection = {
-        for (final f in dto.files.values) f.id: f.fileName,
-      };
+    if (message != null) {
+      await _upsertIncomingTextEntry(server, receiveSession, message);
+      _focusMessageConversation(server, receiveSession);
+      selection = const <String, String>{};
     } else {
-      if (checkPlatformHasTray() && (await windowManager.isMinimized() || !(await windowManager.isVisible()) || !(await windowManager.isFocused()))) {
-        await showFromTray();
-      }
-
-      final message = server.getState().session?.message;
-      if (message != null) {
-        // Message already received
-        await server.ref.redux(receiveHistoryProvider).dispatchAsync(AddHistoryEntryAction(
-              entryId: const Uuid().v4(),
-              fileName: message,
-              fileType: FileType.text,
-              path: null,
-              savedToGallery: false,
-              isMessage: true,
-              fileSize: utf8.encode(message).length,
-              senderAlias: server.getState().session!.senderAlias,
-              timestamp: DateTime.now().toUtc(),
-            ));
+      server.ref.notifier(selectedReceivingFilesProvider).setFiles(receiveSession.files.values.map((f) => f.file).toList());
+      await _upsertIncomingTransferEntry(server, receiveSession, MessageTransferState.pendingIncoming);
+      if (quickSave) {
+        selection = {
+          for (final f in receiveSession.files.values) f.file.id: f.file.fileName,
+        };
       } else {
-        server.ref.notifier(selectedReceivingFilesProvider).setFiles(server.getState().session!.files.values.map((f) => f.file).toList());
+        if (checkPlatformHasTray() && (await windowManager.isMinimized() || !(await windowManager.isVisible()) || !(await windowManager.isFocused()))) {
+          await showFromTray();
+        }
+        _presentIncomingTransfer(server, receiveSession);
+        selection = await streamController.stream.first;
       }
-
-      server.ref.redux(receivePageControllerProvider).dispatch(InitReceivePageAction());
-
-      // ignore: use_build_context_synchronously, unawaited_futures
-      Routerino.context.push(() => const ReceivePage());
-
-      // Delayed response (waiting for user's decision)
-      selection = await streamController.stream.first;
     }
 
     if (server.getState().session == null) {
-      // somehow this state is already disposed
       return await request.respondJson(500, message: 'Server is in invalid state');
     }
 
     if (selection == null) {
+      await _upsertIncomingTransferEntry(server, server.getState().session!, MessageTransferState.declined);
       closeSession();
       return await request.respondJson(403, message: 'File request declined by recipient');
     }
 
-    if (selection.isEmpty) {
-      // nothing selected, send this to sender and close session
-      // This usually happens for message transfers
+    final acceptedSelection = selection!;
+    if (acceptedSelection.isEmpty) {
       closeSession();
       return await request.respondJson(204);
     }
 
     server.setState(
       (oldState) {
-        final receiveState = oldState!.session!;
+        final current = oldState!.session!;
         return oldState.copyWith(
-          session: receiveState.copyWith(
+          session: current.copyWith(
             status: SessionStatus.sending,
             files: Map.fromEntries(
-              receiveState.files.values.map((entry) {
-                final desiredName = selection![entry.file.id];
+              current.files.values.map((entry) {
+                final desiredName = acceptedSelection[entry.file.id];
                 return MapEntry(
                   entry.file.id,
                   ReceivingFile(
@@ -345,15 +331,7 @@ class ReceiveController {
         );
       },
     );
-
-    if (quickSave) {
-      // ignore: use_build_context_synchronously, unawaited_futures
-      Routerino.context.pushImmediately(() => ProgressPage(
-            showAppBar: false,
-            closeSessionOnClose: true,
-            sessionId: sessionId,
-          ));
-    }
+    await _upsertIncomingTransferEntry(server, server.getState().session!, MessageTransferState.receiving);
 
     final files = {
       for (final file in server.getState().session!.files.values.where((f) => f.token != null)) file.file.id: file.token,
@@ -361,7 +339,6 @@ class ReceiveController {
 
     if (checkPlatform([TargetPlatform.android, TargetPlatform.iOS])) {
       if (checkPlatform([TargetPlatform.android]) && !server.getState().session!.destinationDirectory.startsWith('/storage/emulated/0/Download')) {
-        // Android requires more permission to save files outside of the Download directory
         try {
           final result = await Permission.storage.request();
           _logger.info('storage permission: $result');
@@ -377,11 +354,13 @@ class ReceiveController {
     }
 
     if (v2) {
-      return await request.respondJson(200,
-          body: PrepareUploadResponseDto(
-            sessionId: sessionId,
-            files: files.cast(),
-          ).toJson());
+      return await request.respondJson(
+        200,
+        body: PrepareUploadResponseDto(
+          sessionId: sessionId,
+          files: files.cast(),
+        ).toJson(),
+      );
     }
 
     return await request.respondJson(200, body: files);
@@ -411,36 +390,30 @@ class ReceiveController {
     final token = request.uri.queryParameters['token'];
     final sessionId = request.uri.queryParameters['sessionId'];
     if (fileId == null || token == null || (v2 && sessionId == null)) {
-      // reject because of missing parameters
       _logger.warning('Missing parameters: fileId=$fileId, token=$token, sessionId=$sessionId');
       return await request.respondJson(400, message: 'Missing parameters');
     }
 
     if (v2 && sessionId != receiveState.sessionId) {
-      // reject because of wrong session id
       _logger.warning('Wrong session id: $sessionId (expected: ${receiveState.sessionId})');
       return await request.respondJson(403, message: 'Invalid session id');
     }
 
     final receivingFile = receiveState.files[fileId];
     if (receivingFile == null || receivingFile.token != token) {
-      // reject because there is no file or token does not match
       _logger.warning('Wrong fileId: $fileId (expected: ${receivingFile?.file.id})');
       return await request.respondJson(403, message: 'Invalid token');
     }
 
-    // begin of actual file transfer
     server.setState(
       (oldState) => oldState?.copyWith(
         session: receiveState.copyWith(
           files: {...receiveState.files}..update(
               fileId,
-              (_) => receivingFile.copyWith(
-                status: FileStatus.sending,
-              ),
+              (_) => receivingFile.copyWith(status: FileStatus.sending),
             ),
           startTime: receiveState.startTime ?? DateTime.now().millisecondsSinceEpoch,
-          status: SessionStatus.sending, // in case it was finishedWithErrors and user retries a failed file
+          status: SessionStatus.sending,
         ),
       ),
     );
@@ -456,7 +429,6 @@ class ReceiveController {
       );
 
       outerDestinationPath = destinationPath;
-
       _logger.info('Saving ${receivingFile.file.fileName} to $destinationPath');
 
       await saveFile(
@@ -493,20 +465,7 @@ class ReceiveController {
           ),
         ),
       );
-
-      // Track it in history
-      await server.ref.redux(receiveHistoryProvider).dispatchAsync(AddHistoryEntryAction(
-            entryId: fileId,
-            fileName: receivingFile.desiredName!,
-            fileType: receivingFile.file.fileType,
-            path: saveToGallery ? null : destinationPath,
-            savedToGallery: saveToGallery,
-            isMessage: false,
-            fileSize: receivingFile.file.size,
-            senderAlias: receiveState.senderAlias,
-            timestamp: DateTime.now().toUtc(),
-          ));
-
+      await _upsertIncomingTransferEntry(server, server.getState().session!, _incomingTransferState(server.getState().session!));
       _logger.info('Saved ${receivingFile.file.fileName}.');
     } catch (e, st) {
       server.setState(
@@ -520,6 +479,7 @@ class ReceiveController {
           ),
         ),
       );
+      await _upsertIncomingTransferEntry(server, server.getState().session!, _incomingTransferState(server.getState().session!));
       _logger.severe('Failed to save file', e, st);
     }
 
@@ -544,34 +504,38 @@ class ReceiveController {
           ),
         ),
       );
+      await _upsertIncomingTransferEntry(
+        server,
+        server.getState().session!,
+        hasError ? MessageTransferState.failed : MessageTransferState.completed,
+      );
       final settings = server.ref.read(settingsProvider);
       bool quickSave = settings.quickSave && server.getState().session?.message == null;
       final quickSaveFromFavorites = settings.quickSaveFromFavorites && server.getState().session?.message == null;
       if (quickSaveFromFavorites) {
-        // dto is not defined here. I must check sender fingerprint
         final bool isFavorite = server.ref.read(favoritesProvider).any((e) => e.fingerprint == session.sender.fingerprint);
         if (isFavorite) {
           quickSave = true;
         }
       }
       if (quickSave) {
-        // close the session **after** return of the response
         Future.delayed(Duration.zero, () {
+          _closeOnFinishSessionIds.remove(session.sessionId);
           closeSession();
           _logger.info('Closing session');
-
-          // ignore: use_build_context_synchronously
-          Routerino.context.pushRootImmediately(() => const HomePage(initialTab: HomeTab.receive, appStart: false));
-
-          // open the dialog to open file instantly
           if (outerDestinationPath != null && outerDestinationPath.isNotEmpty) {
             OpenFileDialog.open(
-              Routerino.context, // ignore: use_build_context_synchronously
+              Routerino.context,
               filePath: outerDestinationPath,
               fileType: fileType,
               openGallery: saveToGallery,
             );
           }
+        });
+      } else if (_closeOnFinishSessionIds.remove(session.sessionId)) {
+        Future.delayed(Duration.zero, () {
+          closeSession();
+          _logger.info('Closing message receive session');
         });
       }
       _logger.info('Received all files.');
@@ -581,6 +545,7 @@ class ReceiveController {
         ? await request.respondJson(200)
         : await request.respondJson(500, message: 'Could not save file. Check receiving device for more information.');
   }
+
 
   Future<void> _cancelHandler({
     required HttpRequest request,
@@ -691,8 +656,19 @@ class ReceiveController {
     return await request.respondJson(403, message: 'Invalid token');
   }
 
-  void acceptFileRequest(Map<String, String> fileNameMap) {
-    final controller = server.getState().session?.responseHandler;
+  void acceptFileRequest(
+    Map<String, String> fileNameMap, {
+    bool closeOnFinish = false,
+  }) {
+    final session = server.getState().session;
+    if (closeOnFinish && session != null) {
+      _closeOnFinishSessionIds.add(session.sessionId);
+    }
+    if (session != null && session.message == null && fileNameMap.isNotEmpty) {
+      unawaited(_upsertIncomingTransferEntry(server, session, MessageTransferState.receiving));
+    }
+
+    final controller = session?.responseHandler;
     if (controller == null || controller.isClosed) {
       return;
     }
@@ -702,7 +678,12 @@ class ReceiveController {
   }
 
   void declineFileRequest() {
-    final controller = server.getState().session?.responseHandler;
+    final session = server.getState().session;
+    if (session != null && session.message == null) {
+      unawaited(_upsertIncomingTransferEntry(server, session, MessageTransferState.declined));
+    }
+
+    final controller = session?.responseHandler;
     if (controller == null || controller.isClosed) {
       return;
     }
@@ -739,22 +720,20 @@ class ReceiveController {
   void cancelSession() async {
     final session = server.getStateOrNull()?.session;
     if (session == null) {
-      // the server is not running
       return;
     }
 
-    // notify sender
+    if (session.message == null) {
+      unawaited(_upsertIncomingTransferEntry(server, session, MessageTransferState.canceled));
+    }
+
     try {
-      // ignore: unawaited_futures
       server.ref.read(httpProvider).discovery.post(ApiRoute.cancel.target(session.sender, query: {'sessionId': session.sessionId}));
     } catch (e) {
       _logger.warning('Failed to notify sender', e);
     }
 
     closeSession();
-
-    // TODO: cancel incoming requests (https://github.com/dart-lang/shelf/issues/319)
-    // restartServer(alias: tempState.alias, port: tempState.port);
   }
 
   void closeSession() {
@@ -762,6 +741,8 @@ class ReceiveController {
     if (sessionId == null) {
       return;
     }
+
+    _closeOnFinishSessionIds.remove(sessionId);
 
     server.setState(
       (oldState) => oldState?.copyWith(
@@ -772,6 +753,126 @@ class ReceiveController {
   }
 }
 
+
+void _presentIncomingTransfer(ServerUtils server, ReceiveSessionState session) {
+  final currentTab = server.ref.read(homePageControllerProvider).currentTab;
+  final openMessageTab =
+      currentTab == HomeTab.message || server.ref.read(openMessageTabOnIncomingFilesProvider);
+  if (openMessageTab) {
+    _focusMessageConversation(server, session);
+    return;
+  }
+
+  server.ref.redux(receivePageControllerProvider).dispatch(InitReceivePageAction());
+  unawaited(Routerino.context.push(() => const ReceivePage()));
+}
+
+
+void _focusMessageConversation(ServerUtils server, ReceiveSessionState session) {
+  final peer = MessagePeerSnapshot.fromDevice(
+    session.sender,
+    aliasOverride: session.senderAlias,
+  );
+  server.ref.notifier(activeMessageSelectionProvider).setState(
+        (_) => MessageConversationSelection.fromPeer(peer),
+      );
+  server.ref.redux(homePageControllerProvider).dispatch(ChangeTabAction(HomeTab.message));
+}
+
+Future<void> _upsertIncomingTextEntry(
+  ServerUtils server,
+  ReceiveSessionState session,
+  String message,
+) async {
+  final peer = MessagePeerSnapshot.fromDevice(
+    session.sender,
+    aliasOverride: session.senderAlias,
+  );
+  final existing = server.ref.read(messageHistoryProvider).firstWhereOrNull(
+        (entry) => entry.id == session.sessionId,
+      );
+  final now = DateTime.now().toUtc();
+  await server.ref.redux(messageHistoryProvider).dispatchAsync(
+        UpsertMessageHistoryEntryAction(
+          MessageHistoryEntry(
+            id: session.sessionId,
+            conversationId: peer.conversationId,
+            peer: peer,
+            direction: MessageDirection.incoming,
+            kind: MessageEntryKind.text,
+            state: MessageTransferState.completed,
+            text: message,
+            isLink: guessIsLink(message),
+            items: const [],
+            sessionId: session.sessionId,
+            createdAt: existing?.createdAt ?? now,
+            updatedAt: now,
+          ),
+        ),
+      );
+}
+
+Future<void> _upsertIncomingTransferEntry(
+  ServerUtils server,
+  ReceiveSessionState session,
+  MessageTransferState state,
+) async {
+  final peer = MessagePeerSnapshot.fromDevice(
+    session.sender,
+    aliasOverride: session.senderAlias,
+  );
+  final existing = server.ref.read(messageHistoryProvider).firstWhereOrNull(
+        (entry) => entry.id == session.sessionId,
+      );
+  final now = DateTime.now().toUtc();
+  await server.ref.redux(messageHistoryProvider).dispatchAsync(
+        UpsertMessageHistoryEntryAction(
+          MessageHistoryEntry(
+            id: session.sessionId,
+            conversationId: peer.conversationId,
+            peer: peer,
+            direction: MessageDirection.incoming,
+            kind: MessageEntryKind.transferBatch,
+            state: state,
+            text: null,
+            isLink: false,
+            items: session.files.values
+                .map(
+                  (file) => MessageTransferItem(
+                    id: file.file.id,
+                    fileName: file.desiredName ?? file.file.fileName,
+                    fileType: file.file.fileType,
+                    size: file.file.size,
+                    path: file.path,
+                    savedToGallery: file.savedToGallery,
+                    errorMessage: file.errorMessage,
+                  ),
+                )
+                .toList(growable: false),
+            sessionId: session.sessionId,
+            createdAt: existing?.createdAt ?? now,
+            updatedAt: now,
+          ),
+        ),
+      );
+}
+
+MessageTransferState _incomingTransferState(ReceiveSessionState? session) {
+  if (session == null) {
+    return MessageTransferState.canceled;
+  }
+  if (session.files.values.any((file) => file.status == FileStatus.failed)) {
+    return MessageTransferState.failed;
+  }
+  if (session.files.values.map((file) => file.status).isFinishedOrError) {
+    return MessageTransferState.completed;
+  }
+  if (session.files.values.any((file) => file.status == FileStatus.sending || file.status == FileStatus.finished)) {
+    return MessageTransferState.receiving;
+  }
+  return MessageTransferState.pendingIncoming;
+}
+
 void _cancelBySender(ServerUtils server) {
   final receiveSession = server.getState().session;
   if (receiveSession == null) {
@@ -779,8 +880,6 @@ void _cancelBySender(ServerUtils server) {
   }
 
   if (receiveSession.status == SessionStatus.waiting) {
-    // received cancel during accept/decline
-    // pop just in case if user is in [ReceiveOptionsPage]
     Routerino.context.popUntil(ReceivePage);
   }
 
@@ -790,6 +889,13 @@ void _cancelBySender(ServerUtils server) {
           endTime: DateTime.now().millisecondsSinceEpoch,
         ),
       ));
+  if (receiveSession.message == null) {
+    unawaited(_upsertIncomingTransferEntry(
+      server,
+      server.getStateOrNull()?.session ?? receiveSession,
+      MessageTransferState.canceled,
+    ));
+  }
 }
 
 extension on ReceiveSessionState {
@@ -813,3 +919,7 @@ extension on ReceiveSessionState {
     );
   }
 }
+
+
+
+

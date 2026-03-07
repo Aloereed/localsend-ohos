@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/persistence/color_mode.dart';
 import 'package:localsend_app/model/persistence/favorite_device.dart';
+import 'package:localsend_app/model/persistence/message_history_entry.dart';
 import 'package:localsend_app/model/persistence/receive_history_entry.dart';
 import 'package:localsend_app/model/send_mode.dart';
 import 'package:localsend_app/provider/window_dimensions_provider.dart';
@@ -49,6 +50,7 @@ const _securityContext = 'ls_security_context';
 
 // Received file history
 const _receiveHistory = 'ls_receive_history';
+const _messageHistory = 'ls_message_history';
 
 // Favorites
 const _favorites = 'ls_favorites';
@@ -85,6 +87,7 @@ const _enableAnimations = 'ls_enable_animations';
 const _deviceType = 'ls_device_type';
 const _deviceModel = 'ls_device_model';
 const _shareViaLinkAutoAccept = 'ls_share_via_link_auto_accept';
+const _openMessageTabOnIncomingFiles = 'ls_open_message_tab_on_incoming_files';
 const _advancedSettingsKey = 'ls_advanced_settings';
 
 final persistenceProvider = Provider<PersistenceService>((ref) {
@@ -227,6 +230,18 @@ class PersistenceService {
     await _prefs.setStringList(_receiveHistory, historyRaw);
   }
 
+  List<MessageHistoryEntry> getMessageHistory() {
+    final historyRaw = _prefs.getStringList(_messageHistory) ?? [];
+    return historyRaw
+        .map((entry) => MessageHistoryEntry.fromJson(jsonDecode(entry) as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> setMessageHistory(List<MessageHistoryEntry> entries) async {
+    final historyRaw = entries.map((entry) => jsonEncode(entry.toJson())).toList();
+    await _prefs.setStringList(_messageHistory, historyRaw);
+  }
+
   List<FavoriteDevice> getFavorites() {
     final favoritesRaw = _prefs.getStringList(_favorites) ?? [];
     return favoritesRaw.map((entry) => FavoriteDevice.fromJson(jsonDecode(entry))).toList();
@@ -335,6 +350,14 @@ class PersistenceService {
 
   Future<void> setShareViaLinkAutoAccept(bool shareViaLinkAutoAccept) async {
     await _prefs.setBool(_shareViaLinkAutoAccept, shareViaLinkAutoAccept);
+  }
+
+  bool getOpenMessageTabOnIncomingFiles() {
+    return _prefs.getBool(_openMessageTabOnIncomingFiles) ?? false;
+  }
+
+  Future<void> setOpenMessageTabOnIncomingFiles(bool enabled) async {
+    await _prefs.setBool(_openMessageTabOnIncomingFiles, enabled);
   }
 
   String getMulticastGroup() {

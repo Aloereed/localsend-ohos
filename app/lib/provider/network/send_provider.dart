@@ -62,6 +62,7 @@ class SendNotifier extends Notifier<Map<String, SendSessionState>> {
     required Device target,
     required List<CrossFile> files,
     required bool background,
+    void Function(String sessionId)? onSessionCreated,
   }) async {
     final client = ref.read(httpProvider).longLiving;
     final cancelToken = CancelToken();
@@ -132,6 +133,7 @@ class SendNotifier extends Notifier<Map<String, SendSessionState>> {
       sessionId: sessionId,
       state: (_) => requestState,
     );
+    onSessionCreated?.call(sessionId);
 
     if (!background) {
       // ignore: use_build_context_synchronously, unawaited_futures

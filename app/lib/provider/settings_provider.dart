@@ -30,6 +30,25 @@ final settingsProvider = NotifierProvider<SettingsService, SettingsState>((ref) 
       ));
 });
 
+final openMessageTabOnIncomingFilesProvider =
+    NotifierProvider<OpenMessageTabOnIncomingFilesService, bool>((ref) {
+  return OpenMessageTabOnIncomingFilesService(ref.read(persistenceProvider));
+});
+
+class OpenMessageTabOnIncomingFilesService extends PureNotifier<bool> {
+  final PersistenceService _persistence;
+
+  OpenMessageTabOnIncomingFilesService(this._persistence);
+
+  @override
+  bool init() => _persistence.getOpenMessageTabOnIncomingFiles();
+
+  Future<void> setEnabled(bool enabled) async {
+    await _persistence.setOpenMessageTabOnIncomingFiles(enabled);
+    state = enabled;
+  }
+}
+
 class SettingsService extends PureNotifier<SettingsState> {
   final PersistenceService _persistence;
 

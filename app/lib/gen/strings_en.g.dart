@@ -38,6 +38,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
   String get appName => 'AloeSend';
   late final TranslationsGeneralEn general = TranslationsGeneralEn.internal(_root);
   late final TranslationsReceiveTabEn receiveTab = TranslationsReceiveTabEn.internal(_root);
+  late final TranslationsMessageTabEn messageTab = TranslationsMessageTabEn.internal(_root);
   late final TranslationsSendTabEn sendTab = TranslationsSendTabEn.internal(_root);
   late final TranslationsSettingsTabEn settingsTab = TranslationsSettingsTabEn.internal(_root);
   late final TranslationsTroubleshootPageEn troubleshootPage = TranslationsTroubleshootPageEn.internal(_root);
@@ -140,6 +141,28 @@ class TranslationsSendTabEn {
   String get sendModeHelp => 'Explanation';
   String get help => 'Please ensure that the desired target is also on the same Wi-Fi network.';
   String get placeItems => 'Place items to share.';
+}
+
+// Path: messageTab
+class TranslationsMessageTabEn {
+  TranslationsMessageTabEn.internal(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  String get title => 'Messages';
+  String get empty => 'No conversations yet';
+  String get recentConversations => 'Recent conversations';
+  String get startConversation => 'Start a conversation';
+  String get selectDevice => 'Choose a device to open the conversation.';
+  String get noMessages => 'No messages yet';
+  String get offlineSubtitle => 'This device is currently offline.';
+  String get pendingIncoming => 'Awaiting response';
+  String get sending => 'Sending';
+  String get receiving => 'Receiving';
+  String get completed => 'Completed';
+  String get declined => 'Declined';
+  String get failed => 'Failed';
+  String get canceled => 'Canceled';
 }
 
 // Path: settingsTab
@@ -879,6 +902,7 @@ class TranslationsSettingsTabReceiveEn {
   String get quickSaveFromFavorites => _root.general.quickSaveFromFavorites;
   String get requirePin => _root.webSharePage.requirePin;
   String get autoFinish => 'Auto Finish';
+  String get openMessageTabOnIncomingFiles => 'Open Messages for incoming files';
   String get destination => 'Save to folder';
   String get downloads => '(Downloads)';
   String get saveToGallery => 'Save media to gallery';

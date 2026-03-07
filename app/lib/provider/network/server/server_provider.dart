@@ -167,8 +167,14 @@ class ServerService extends Notifier<ServerState?> {
     return await startServer(alias: alias, port: port, https: https);
   }
 
-  void acceptFileRequest(Map<String, String> fileNameMap) {
-    _receiveController.acceptFileRequest(fileNameMap);
+  void acceptFileRequest(
+    Map<String, String> fileNameMap, {
+    bool closeOnFinish = false,
+  }) {
+    _receiveController.acceptFileRequest(
+      fileNameMap,
+      closeOnFinish: closeOnFinish,
+    );
   }
 
   void declineFileRequest() {

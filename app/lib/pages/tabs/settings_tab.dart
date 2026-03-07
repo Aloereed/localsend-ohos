@@ -45,6 +45,8 @@ class SettingsTab extends StatelessWidget {
       provider: settingsTabControllerProvider,
       builder: (context, vm) {
         final ref = context.ref;
+        final openMessageTabOnIncomingFiles =
+            ref.watch(openMessageTabOnIncomingFilesProvider);
         final visuals = context.visuals;
         return ResponsiveListView(
           maxWidth: 920,
@@ -268,6 +270,15 @@ class SettingsTab extends StatelessWidget {
                   value: vm.settings.autoFinish,
                   onChanged: (b) async {
                     await ref.notifier(settingsProvider).setAutoFinish(b);
+                  },
+                ),
+                _BooleanEntry(
+                  label: t.settingsTab.receive.openMessageTabOnIncomingFiles,
+                  value: openMessageTabOnIncomingFiles,
+                  onChanged: (b) async {
+                    await ref
+                        .notifier(openMessageTabOnIncomingFilesProvider)
+                        .setEnabled(b);
                   },
                 ),
                 _BooleanEntry(

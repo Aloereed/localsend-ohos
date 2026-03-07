@@ -68,20 +68,20 @@ dependency_overrides:
   connectivity_plus:
     git:
       path: packages/connectivity_plus/connectivity_plus
-      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
   device_info_plus:
       path: ./device_info_plus/device_info_plus
   file_picker:
     git:
-      url: https://gitee.com/openharmony-sig/fluttertpc_file_picker.git
+      url: https://gitcode.com/openharmony-sig/fluttertpc_file_picker.git
   file_picker_ohos:
     path: ./fluttertpc_file_picker/ohos
   file_selector:
     git:
       path: packages/file_selector/file_selector
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
   fluttertoast:
-    git: https://gitee.com/openharmony-sig/flutter_fluttertoast.git
+    git: https://gitcode.com/openharmony-sig/flutter_fluttertoast.git
   image_picker:
       path: ./image_picker/image_picker
   image_picker_platform_interface:
@@ -96,20 +96,20 @@ dependency_overrides:
   intl: ^0.19.0
   open_filex:
     git:
-      url: https://gitee.com/openharmony-sig/fluttertpc_open_filex.git
+      url: https://gitcode.com/openharmony-sig/fluttertpc_open_filex.git
   package_info_plus:
     git:
       path: packages/package_info_plus/package_info_plus
-      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
   path: 1.9.0
   path_provider:
     git:
       path: packages/path_provider/path_provider
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
   permission_handler:
     git:
       path: permission_handler
-      url: https://gitee.com/openharmony-sig/flutter_permission_handler.git
+      url: https://gitcode.com/openharmony-sig/flutter_permission_handler.git
   permission_handler_windows:
     git:
       ref: 2dadd8afbf81e0e3e4791d7144e689555e58f649
@@ -120,23 +120,23 @@ dependency_overrides:
   share_plus:
     git:
       path: packages/share_plus/share_plus
-      url: https://gitee.com/openharmony-sig/flutter_plus_plugins.git
+      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
   shared_preferences:
     git:
       path: packages/shared_preferences/shared_preferences
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
   url_launcher:
     git:
       path: packages/url_launcher/url_launcher
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
   wakelock_plus:
     git:
       path: wakelock_plus
-      url: https://gitee.com/openharmony-sig/fluttertpc_wakelock_plus.git
+      url: https://gitcode.com/openharmony-sig/fluttertpc_wakelock_plus.git
   webview_flutter:
     git:
       path: packages/webview_flutter/webview_flutter
-      url: https://gitee.com/openharmony-sig/flutter_packages.git
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
   win32: 5.5.4
 description: An open source cross-platform alternative to AirDrop
 dev_dependencies:
@@ -164,4 +164,4 @@ flutter_gen:
 homepage: https://localsend.org/
 name: localsend_app
 publish_to: none
-version: 1.17.7+92
+version: 1.17.7+97

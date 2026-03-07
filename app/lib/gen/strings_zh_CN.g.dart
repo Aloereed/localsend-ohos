@@ -39,6 +39,8 @@ class TranslationsZhCn extends Translations {
   @override
   late final _TranslationsReceiveTabZhCn receiveTab = _TranslationsReceiveTabZhCn._(_root);
   @override
+  late final _TranslationsMessageTabZhCn messageTab = _TranslationsMessageTabZhCn._(_root);
+  @override
   late final _TranslationsSendTabZhCn sendTab = _TranslationsSendTabZhCn._(_root);
   @override
   late final _TranslationsSettingsTabZhCn settingsTab = _TranslationsSettingsTabZhCn._(_root);
@@ -187,6 +189,44 @@ class _TranslationsReceiveTabZhCn extends TranslationsReceiveTabEn {
 }
 
 // Path: sendTab
+// Path: messageTab
+class _TranslationsMessageTabZhCn extends TranslationsMessageTabEn {
+  _TranslationsMessageTabZhCn._(TranslationsZhCn root)
+      : this._root = root,
+        super.internal(root);
+
+  final TranslationsZhCn _root; // ignore: unused_field
+
+  @override
+  String get title => '消息';
+  @override
+  String get empty => '暂无会话';
+  @override
+  String get recentConversations => '最近会话';
+  @override
+  String get startConversation => '开始新会话';
+  @override
+  String get selectDevice => '选择一个设备以打开会话。';
+  @override
+  String get noMessages => '暂无消息';
+  @override
+  String get offlineSubtitle => '该设备当前不在线。';
+  @override
+  String get pendingIncoming => '等待响应';
+  @override
+  String get sending => '发送中';
+  @override
+  String get receiving => '接收中';
+  @override
+  String get completed => '已完成';
+  @override
+  String get declined => '已拒绝';
+  @override
+  String get failed => '失败';
+  @override
+  String get canceled => '已取消';
+}
+
 class _TranslationsSendTabZhCn extends TranslationsSendTabEn {
   _TranslationsSendTabZhCn._(TranslationsZhCn root)
       : this._root = root,
@@ -1330,6 +1370,8 @@ class _TranslationsSettingsTabReceiveZhCn extends TranslationsSettingsTabReceive
   String get requirePin => _root.webSharePage.requirePin;
   @override
   String get autoFinish => '自动完成传输任务';
+  @override
+  String get openMessageTabOnIncomingFiles => '收到文件时打开消息标签';
   @override
   String get destination => '保存目录';
   @override

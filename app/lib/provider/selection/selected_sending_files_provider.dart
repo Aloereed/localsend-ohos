@@ -324,3 +324,14 @@ class ClearSelectionAction extends ReduxAction<SelectedSendingFilesNotifier, Lis
     global.dispatchAsync(ClearCacheAction()); // ignore: discarded_futures
   }
 }
+
+class ReplaceSelectionAction extends ReduxAction<SelectedSendingFilesNotifier, List<CrossFile>> {
+  final List<CrossFile> files;
+
+  ReplaceSelectionAction(this.files);
+
+  @override
+  List<CrossFile> reduce() {
+    return List.unmodifiable(files);
+  }
+}

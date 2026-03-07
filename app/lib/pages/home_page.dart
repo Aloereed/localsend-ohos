@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:localsend_app/config/init.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/pages/home_page_controller.dart';
+import 'package:localsend_app/pages/tabs/message_tab.dart';
 import 'package:localsend_app/pages/tabs/receive_tab.dart';
 import 'package:localsend_app/pages/tabs/send_tab.dart';
 import 'package:localsend_app/pages/tabs/settings_tab.dart';
@@ -18,6 +19,7 @@ import 'package:refena_flutter/refena_flutter.dart';
 
 enum HomeTab {
   receive(Icons.wifi_rounded),
+  message(Icons.chat_bubble_rounded),
   send(Icons.rocket_launch_rounded),
   settings(Icons.tune_rounded);
 
@@ -29,6 +31,8 @@ enum HomeTab {
     switch (this) {
       case HomeTab.receive:
         return t.receiveTab.title;
+      case HomeTab.message:
+        return t.messageTab.title;
       case HomeTab.send:
         return t.sendTab.title;
       case HomeTab.settings:
@@ -143,6 +147,7 @@ class _HomePageState extends State<HomePage> with Refena {
                       physics: const NeverScrollableScrollPhysics(),
                       children: const [
                         ReceiveTab(),
+                        MessageTab(),
                         SendTab(),
                         SettingsTab(),
                       ],
