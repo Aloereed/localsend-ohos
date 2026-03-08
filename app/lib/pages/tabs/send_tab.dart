@@ -45,7 +45,6 @@ class SendTab extends StatelessWidget {
         SendTabInitAction(context),
       ),
       builder: (context, vm) {
-        final visuals = context.visuals;
         final sectionSpacing = context.adaptiveSectionSpacing;
         return ResponsiveListView(
           maxWidth: 920,
@@ -56,34 +55,6 @@ class SendTab extends StatelessWidget {
             context.adaptiveBottomPadding,
           ),
           children: [
-            ModernPageHeader(
-              title: t.sendTab.title,
-              subtitle: vm.selectedFiles.isEmpty
-                  ? t.sendTab.selection.title
-                  : t.sendTab.selection.files(files: vm.selectedFiles.length),
-              chips: [
-                StatusChip(
-                  label: vm.sendMode.humanName,
-                  icon: Icons.send_time_extension_rounded,
-                  emphasized: true,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                StatusChip(
-                  label: vm.nearbyDevices.isEmpty
-                      ? t.general.offline
-                      : '${vm.nearbyDevices.length} ${t.sendTab.nearbyDevices}',
-                  icon: Icons.devices_rounded,
-                ),
-                if (vm.selectedFiles.isNotEmpty)
-                  StatusChip(
-                    label: vm.selectedFiles
-                        .fold<int>(0, (prev, curr) => prev + curr.size)
-                        .asReadableFileSize,
-                    icon: Icons.storage_rounded,
-                  ),
-              ],
-            ),
-            SizedBox(height: sectionSpacing),
             _SelectionSection(vm: vm),
             SizedBox(height: sectionSpacing),
             _NearbyDevicesSection(vm: vm),
@@ -121,116 +92,183 @@ class _SelectionSection extends StatelessWidget {
                   .dispatch(ClearSelectionAction()),
               icon: const Icon(Icons.close_rounded),
             ),
-      child: vm.selectedFiles.isEmpty
-          ? LayoutBuilder(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              StatusChip(
+                label: vm.sendMode.humanName,
+                icon: Icons.send_time_extension_rounded,
+                emphasized: true,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              StatusChip(
+                label: vm.nearbyDevices.isEmpty
+                    ? t.general.offline
+                    : '${vm.nearbyDevices.length} ${t.sendTab.nearbyDevices}',
+                icon: Icons.devices_rounded,
+              ),
+              if (vm.selectedFiles.isNotEmpty)
+                StatusChip(
+                  label: t.sendTab.selection.files(
+                    files: vm.selectedFiles.length,
+                  ),
+                  icon: Icons.collections_bookmark_rounded,
+                ),
+              if (vm.selectedFiles.isNotEmpty)
+                StatusChip(
+                  label: totalSize.asReadableFileSize,
+                  icon: Icons.data_usage_rounded,
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (vm.selectedFiles.isEmpty)
+            LayoutBuilder(
               builder: (context, constraints) {
-                final compact = constraints.maxWidth < 640;
-                final tiles = _options.map((option) {
-                  return ModernActionTile(
-                    icon: option.icon,
-                    title: option.label,
-                    subtitle: t.sendTab.selection.title,
-                    highlighted: option == _options.first,
-                    onTap: () async => ref.global.dispatchAsync(
-                      PickFileAction(option: option, context: context),
-                    ),
-                  );
-                }).toList();
+                final tileExtent = constraints.maxWidth < 640 ? 92.0 : 104.0;
 
-                if (compact) {
-                  return Column(
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: [
-                      for (var index = 0; index < tiles.length; index++) ...[
-                        SizedBox(width: double.infinity, child: tiles[index]),
-                        if (index != tiles.length - 1) const SizedBox(height: 10),
+                      for (var index = 0; index < _options.length; index++) ...[
+                        SizedBox(
+                          width: tileExtent,
+                          height: tileExtent,
+                          child: _SelectionActionButton(
+                            icon: _options[index].icon,
+                            label: _options[index].label,
+                            highlighted: _options[index] == _options.first,
+                            onTap: () async => ref.global.dispatchAsync(
+                              PickFileAction(option: _options[index], context: context),
+                            ),
+                          ),
+                        ),
+                        if (index != _options.length - 1) const SizedBox(width: 10),
                       ],
                     ],
-                  );
-                }
-
-                return Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: tiles
-                      .map(
-                        (tile) => SizedBox(
-                          width: 260,
-                          child: tile,
-                        ),
-                      )
-                      .toList(),
+                  ),
                 );
               },
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          else ...[
+            SizedBox(
+              height: defaultThumbnailSize + (context.isPhoneLayout ? 8 : 20),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: vm.selectedFiles.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                itemBuilder: (context, index) {
+                  final file = vm.selectedFiles[index];
+                  return GlassSurface(
+                    padding: const EdgeInsets.all(10),
+                    applyBlur: false,
+                    borderRadius: context.visuals.mediumRadius,
+                    child: SmartFileThumbnail.fromCrossFile(file),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 18),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
               children: [
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: [
-                    StatusChip(
-                      label: t.sendTab.selection.files(
-                        files: vm.selectedFiles.length,
-                      ),
-                      icon: Icons.collections_bookmark_rounded,
-                    ),
-                    StatusChip(
-                      label: totalSize.asReadableFileSize,
-                      icon: Icons.data_usage_rounded,
-                    ),
-                  ],
+                TextButton.icon(
+                  onPressed: () async {
+                    await context.push(() => const SelectedFilesPage());
+                  },
+                  icon: const Icon(Icons.edit_rounded),
+                  label: Text(t.general.edit),
                 ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: defaultThumbnailSize + (context.isPhoneLayout ? 8 : 20),
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: vm.selectedFiles.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 10),
-                    itemBuilder: (context, index) {
-                      final file = vm.selectedFiles[index];
-                      return GlassSurface(
-                        padding: const EdgeInsets.all(10),
-                        applyBlur: false,
-                        borderRadius: context.visuals.mediumRadius,
-                        child: SmartFileThumbnail.fromCrossFile(file),
+                FilledButton.icon(
+                  onPressed: () async {
+                    if (_options.length == 1) {
+                      await ref.global.dispatchAsync(
+                        PickFileAction(option: _options.first, context: context),
                       );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () async {
-                        await context.push(() => const SelectedFilesPage());
-                      },
-                      icon: const Icon(Icons.edit_rounded),
-                      label: Text(t.general.edit),
-                    ),
-                    FilledButton.icon(
-                      onPressed: () async {
-                        if (_options.length == 1) {
-                          await ref.global.dispatchAsync(
-                            PickFileAction(option: _options.first, context: context),
-                          );
-                          return;
-                        }
-                        await AddFileDialog.open(
-                          context: context,
-                          options: _options,
-                        );
-                      },
-                      icon: const Icon(Icons.add_rounded),
-                      label: Text(t.general.add),
-                    ),
-                  ],
+                      return;
+                    }
+                    await AddFileDialog.open(
+                      context: context,
+                      options: _options,
+                    );
+                  },
+                  icon: const Icon(Icons.add_rounded),
+                  label: Text(t.general.add),
                 ),
               ],
             ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _SelectionActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool highlighted;
+  final VoidCallback onTap;
+
+  const _SelectionActionButton({
+    required this.icon,
+    required this.label,
+    required this.highlighted,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final visuals = context.visuals;
+    final scheme = theme.colorScheme;
+
+    return GlassSurface(
+      applyBlur: false,
+      strong: highlighted,
+      color: highlighted
+          ? scheme.primary.withOpacity(0.16)
+          : visuals.glassSurfaceStrong,
+      borderRadius: visuals.mediumRadius,
+      padding: const EdgeInsets.all(10),
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: highlighted
+                  ? scheme.primary.withOpacity(0.18)
+                  : scheme.surface.withOpacity(0.5),
+              borderRadius: visuals.smallRadius,
+            ),
+            child: Icon(
+              icon,
+              size: 18,
+              color: highlighted ? scheme.primary : scheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+              height: 1.15,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

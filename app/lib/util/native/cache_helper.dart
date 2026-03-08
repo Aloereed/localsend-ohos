@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:common/util/logger.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:flutter/services.dart';
 import 'package:localsend_app/util/file_path_helper.dart';
 import 'package:localsend_app/util/native/platform_check.dart';

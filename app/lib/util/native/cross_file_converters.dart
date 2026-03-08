@@ -9,7 +9,7 @@ import 'dart:io';
 
 import 'package:common/model/file_type.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:file_picker/file_picker.dart' as file_picker;
+import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localsend_app/model/cross_file.dart';
@@ -23,7 +23,7 @@ import 'package:localsend_app/util/native/platform_check.dart';
 /// Utility functions to convert third party models to common [CrossFile] model.
 class CrossFileConverters {
   static Future<CrossFile> convertPlatformFile(
-      file_picker.PlatformFile file) async {
+      file_picker_ohos.PlatformFile file) async {
     return CrossFile(
       name: file.name,
       fileType: file.name.guessFileType(),

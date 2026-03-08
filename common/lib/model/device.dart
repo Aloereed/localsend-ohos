@@ -5,6 +5,7 @@ part 'device.mapper.dart';
 @MappableEnum(defaultValue: DeviceType.desktop)
 enum DeviceType {
   mobile,
+  tablet,
   desktop,
   web,
   headless,

@@ -27,6 +27,8 @@ class DeviceTypeMapper extends EnumMapper<DeviceType> {
     switch (value) {
       case 'mobile':
         return DeviceType.mobile;
+      case 'tablet':
+        return DeviceType.tablet;
       case 'desktop':
         return DeviceType.desktop;
       case 'web':
@@ -36,7 +38,7 @@ class DeviceTypeMapper extends EnumMapper<DeviceType> {
       case 'server':
         return DeviceType.server;
       default:
-        return DeviceType.values[1];
+        return DeviceType.desktop;
     }
   }
 
@@ -45,6 +47,8 @@ class DeviceTypeMapper extends EnumMapper<DeviceType> {
     switch (self) {
       case DeviceType.mobile:
         return 'mobile';
+      case DeviceType.tablet:
+        return 'tablet';
       case DeviceType.desktop:
         return 'desktop';
       case DeviceType.web:

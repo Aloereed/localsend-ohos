@@ -3,7 +3,7 @@ import 'dart:async';
 // import 'package:common/common.dart';
 import 'package:common/model/file_type.dart';
 import 'package:common/util/sleep.dart';
-import 'package:file_selector/file_selector.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart' as file_picker_ohos;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -176,24 +176,19 @@ Future<void> _pickFiles(BuildContext context, Ref ref) async {
               converter: CrossFileConverters.convertFileInfo,
             ));
       }
-    } else if (checkPlatform([TargetPlatform.ohos])) {
-      final result = await openFiles();
-      if (result.isNotEmpty) {
+    } else {
+      final result = await file_picker_ohos.FilePicker.platform.pickFiles(
+        type: file_picker_ohos.FileType.any,
+        allowMultiple: true,
+      );
+      if (result != null && result.files.isNotEmpty) {
         await ref
             .redux(selectedSendingFilesProvider)
             .dispatchAsync(AddFilesAction(
-              files: result,
-              converter: CrossFileConverters.convertXFile,
+              files: result.files,
+              converter: CrossFileConverters.convertPlatformFile,
             ));
       }
-    } else {
-      final result = await openFiles();
-      await ref
-          .redux(selectedSendingFilesProvider)
-          .dispatchAsync(AddFilesAction(
-            files: result,
-            converter: CrossFileConverters.convertXFile,
-          ));
     }
   } catch (e) {
     if (e is PlatformException && e.code == 'CANCELED') {

@@ -411,7 +411,16 @@ class SettingsTab extends StatelessWidget {
                         return DropdownMenuItem(
                           value: type,
                           alignment: Alignment.center,
-                          child: Icon(type.icon),
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(type.icon, size: 20),
+                                const SizedBox(width: 10),
+                                Text(type.displayName),
+                              ],
+                            ),
+                          ),
                         );
                       }).toList(),
                       onChanged: (type) async {
