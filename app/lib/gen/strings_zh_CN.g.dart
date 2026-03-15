@@ -1351,6 +1351,8 @@ class _TranslationsSettingsTabGeneralZhCn extends TranslationsSettingsTabGeneral
   String get showInContextMenu => '在“发送到...”文件菜单中显示 AloeSend';
   @override
   String get animations => '动画效果';
+  @override
+  String get legacyUiMode => '旧界面模式';
 }
 
 // Path: settingsTab.receive

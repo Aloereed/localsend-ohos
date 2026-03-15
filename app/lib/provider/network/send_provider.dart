@@ -20,6 +20,8 @@ import 'package:localsend_app/util/native/platform_check.dart';
 import 'package:localsend_app/model/send_mode.dart';
 import 'package:localsend_app/model/state/send/send_session_state.dart';
 import 'package:localsend_app/model/state/send/sending_file.dart';
+import 'package:localsend_app/pages/legacy/legacy_progress_page.dart';
+import 'package:localsend_app/pages/legacy/legacy_send_page.dart';
 import 'package:localsend_app/pages/home_page.dart';
 import 'package:localsend_app/pages/progress_page.dart';
 import 'package:localsend_app/pages/send_page.dart';
@@ -136,9 +138,20 @@ class SendNotifier extends Notifier<Map<String, SendSessionState>> {
     onSessionCreated?.call(sessionId);
 
     if (!background) {
+      final legacyUi = ref.read(settingsProvider).legacyUiMode;
       // ignore: use_build_context_synchronously, unawaited_futures
       Routerino.context.push(
-        () => SendPage(showAppBar: false, closeSessionOnClose: true, sessionId: sessionId),
+        () => legacyUi
+            ? LegacySendPage(
+                showAppBar: false,
+                closeSessionOnClose: true,
+                sessionId: sessionId,
+              )
+            : SendPage(
+                showAppBar: false,
+                closeSessionOnClose: true,
+                sessionId: sessionId,
+              ),
         transition: RouterinoTransition.fade(),
       );
     }
@@ -292,17 +305,24 @@ class SendNotifier extends Notifier<Map<String, SendSessionState>> {
 
     if (state[sessionId]?.background == false) {
       final background = ref.read(settingsProvider).sendMode == SendMode.multiple;
+      final legacyUi = ref.read(settingsProvider).legacyUiMode;
 
       // ignore: use_build_context_synchronously, unawaited_futures
       Routerino.context.pushAndRemoveUntil(
         removeUntil: HomePage,
         transition: RouterinoTransition.fade(),
         // immediately is not possible: https://github.com/flutter/flutter/issues/121910
-        builder: () => ProgressPage(
-          showAppBar: background,
-          closeSessionOnClose: !background,
-          sessionId: sessionId,
-        ),
+        builder: () => legacyUi
+            ? LegacyProgressPage(
+                showAppBar: background,
+                closeSessionOnClose: !background,
+                sessionId: sessionId,
+              )
+            : ProgressPage(
+                showAppBar: background,
+                closeSessionOnClose: !background,
+                sessionId: sessionId,
+              ),
       );
     }
 

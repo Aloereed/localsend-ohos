@@ -82,6 +82,7 @@ class SettingsService extends PureNotifier<SettingsState> {
         shareViaLinkAutoAccept: _persistence.getShareViaLinkAutoAccept(),
         discoveryTimeout: _persistence.getDiscoveryTimeout(),
         advancedSettings: _persistence.getAdvancedSettingsEnabled(),
+        legacyUiMode: _persistence.getLegacyUiMode(),
       );
 
   Future<void> setAlias(String alias) async {
@@ -257,6 +258,13 @@ class SettingsService extends PureNotifier<SettingsState> {
 
     state = state.copyWith(
       shareViaLinkAutoAccept: shareViaLinkAutoAccept,
+    );
+  }
+
+  Future<void> setLegacyUiMode(bool legacyUiMode) async {
+    await _persistence.setLegacyUiMode(legacyUiMode);
+    state = state.copyWith(
+      legacyUiMode: legacyUiMode,
     );
   }
 }

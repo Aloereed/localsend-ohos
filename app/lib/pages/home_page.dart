@@ -6,6 +6,10 @@ import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:flutter/services.dart';
 import 'package:localsend_app/config/init.dart';
 import 'package:localsend_app/gen/strings.g.dart';
+import 'package:localsend_app/pages/legacy/legacy_home_scaffold.dart';
+import 'package:localsend_app/pages/legacy/legacy_receive_tab.dart';
+import 'package:localsend_app/pages/legacy/legacy_send_tab.dart';
+import 'package:localsend_app/pages/legacy/legacy_settings_tab.dart';
 import 'package:localsend_app/pages/home_page_controller.dart';
 import 'package:localsend_app/pages/tabs/message_tab.dart';
 import 'package:localsend_app/pages/tabs/receive_tab.dart';
@@ -13,6 +17,7 @@ import 'package:localsend_app/pages/tabs/send_tab.dart';
 import 'package:localsend_app/pages/tabs/settings_tab.dart';
 import 'package:localsend_app/provider/message_history_provider.dart';
 import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
+import 'package:localsend_app/provider/settings_provider.dart';
 import 'package:localsend_app/util/native/cross_file_converters.dart';
 import 'package:localsend_app/util/ui/nav_bar_padding.dart';
 import 'package:localsend_app/util/ui/visuals.dart';
@@ -62,10 +67,14 @@ class _HomePageState extends State<HomePage> with Refena {
   bool _isTabDockVisible = true;
   final EventChannel _eventChannel =
       const EventChannel('com.example.app/events');
+  late HomeTab _lastNonMessageTab;
 
   @override
   void initState() {
     super.initState();
+    _lastNonMessageTab = widget.initialTab == HomeTab.message
+        ? HomeTab.receive
+        : widget.initialTab;
 
     ensureRef((ref) async {
       ref
@@ -112,6 +121,11 @@ class _HomePageState extends State<HomePage> with Refena {
 
   void _changeTab(HomePageVm vm, HomeTab tab) {
     _setTabDockVisible(true);
+    if (tab != HomeTab.message && _lastNonMessageTab != tab) {
+      setState(() {
+        _lastNonMessageTab = tab;
+      });
+    }
     vm.changeTab(tab);
   }
 
@@ -136,6 +150,12 @@ class _HomePageState extends State<HomePage> with Refena {
   Widget build(BuildContext context) {
     Translations.of(context);
     final vm = context.watch(homePageControllerProvider);
+    if (vm.currentTab != HomeTab.message) {
+      _lastNonMessageTab = vm.currentTab;
+    }
+    final legacy = context.watch(
+      settingsProvider.select((settings) => settings.legacyUiMode),
+    );
     final activeMessageSelection = context.watch(activeMessageSelectionProvider);
     final bottomInset = getNavBarPadding(context);
     final shouldAutoHideTabDock =
@@ -176,107 +196,122 @@ class _HomePageState extends State<HomePage> with Refena {
         }
         _changeTab(vm, HomeTab.send);
       },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        extendBody: true,
-        body: AppBackdrop(
-          child: SafeArea(
-            bottom: false,
-            child: NotificationListener<UserScrollNotification>(
-              onNotification: (notification) =>
-                  _onScrollablePageScroll(notification, shouldAutoHideTabDock),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: AnimatedPadding(
-                      duration: const Duration(milliseconds: 220),
-                      curve: Curves.easeOutCubic,
-                      padding: EdgeInsets.only(bottom: pageBottomPadding),
-                      child: PageView(
-                        controller: vm.controller,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: const [
-                          ReceiveTab(),
-                          MessageTab(),
-                          SendTab(),
-                          SettingsTab(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (_dragAndDropIndicator)
-                    Positioned.fill(
-                      child: Padding(
-                        padding: EdgeInsets.all(context.isPhoneLayout ? 14 : 18),
-                        child: GlassSurface(
-                          strong: true,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.file_download_rounded,
-                                size: context.isPhoneLayout ? 72 : 96,
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                t.sendTab.placeItems,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(fontWeight: FontWeight.w800),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                t.sendTab.selection.title,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: dockBottom,
-                    child: Center(
-                      child: IgnorePointer(
-                        ignoring: !showTabDock,
-                        child: AnimatedSlide(
-                          offset: showTabDock
-                              ? Offset.zero
-                              : const Offset(0, 1.2),
-                          duration: const Duration(milliseconds: 220),
-                          curve: Curves.easeOutCubic,
-                          child: AnimatedOpacity(
-                            opacity: showTabDock ? 1 : 0,
-                            duration: const Duration(milliseconds: 180),
+      child: legacy
+          ? LegacyHomeScaffold(
+              controller: vm.controller,
+              currentTab: vm.currentTab,
+              lastNonMessageTab: _lastNonMessageTab,
+              onTabChange: (tab) => _changeTab(vm, tab),
+              showDragIndicator: _dragAndDropIndicator,
+              tabs: const [
+                LegacyReceiveTab(),
+                MessageTab(),
+                LegacySendTab(),
+                LegacySettingsTab(),
+              ],
+            )
+          : Scaffold(
+              backgroundColor: Colors.transparent,
+              extendBody: true,
+              body: AppBackdrop(
+                child: SafeArea(
+                  bottom: false,
+                  child: NotificationListener<UserScrollNotification>(
+                    onNotification: (notification) => _onScrollablePageScroll(
+                        notification, shouldAutoHideTabDock),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: AnimatedPadding(
+                            duration: const Duration(milliseconds: 220),
                             curve: Curves.easeOutCubic,
-                            child: FloatingTabDock<HomeTab>(
-                              currentValue: vm.currentTab,
-                              onChanged: (tab) => _changeTab(vm, tab),
-                              items: HomeTab.values
-                                  .map(
-                                    (tab) => FloatingTabDockItem<HomeTab>(
-                                      value: tab,
-                                      icon: tab.icon,
-                                      label: tab.label,
-                                    ),
-                                  )
-                                  .toList(),
+                            padding: EdgeInsets.only(bottom: pageBottomPadding),
+                            child: PageView(
+                              controller: vm.controller,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: const [
+                                ReceiveTab(),
+                                MessageTab(),
+                                SendTab(),
+                                SettingsTab(),
+                              ],
                             ),
                           ),
                         ),
-                      ),
+                        if (_dragAndDropIndicator)
+                          Positioned.fill(
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.all(context.isPhoneLayout ? 14 : 18),
+                              child: GlassSurface(
+                                strong: true,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.file_download_rounded,
+                                      size: context.isPhoneLayout ? 72 : 96,
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Text(
+                                      t.sendTab.placeItems,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.copyWith(fontWeight: FontWeight.w800),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      t.sendTab.selection.title,
+                                      style: Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: dockBottom,
+                          child: Center(
+                            child: IgnorePointer(
+                              ignoring: !showTabDock,
+                              child: AnimatedSlide(
+                                offset: showTabDock
+                                    ? Offset.zero
+                                    : const Offset(0, 1.2),
+                                duration: const Duration(milliseconds: 220),
+                                curve: Curves.easeOutCubic,
+                                child: AnimatedOpacity(
+                                  opacity: showTabDock ? 1 : 0,
+                                  duration: const Duration(milliseconds: 180),
+                                  curve: Curves.easeOutCubic,
+                                  child: FloatingTabDock<HomeTab>(
+                                    currentValue: vm.currentTab,
+                                    onChanged: (tab) => _changeTab(vm, tab),
+                                    items: HomeTab.values
+                                        .map(
+                                          (tab) => FloatingTabDockItem<HomeTab>(
+                                            value: tab,
+                                            icon: tab.icon,
+                                            label: tab.label,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

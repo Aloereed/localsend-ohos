@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
+import 'package:localsend_app/pages/home_page.dart';
 import 'package:localsend_app/provider/network/send_provider.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
 import 'package:localsend_app/provider/progress_provider.dart';
@@ -131,7 +132,17 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
     final result = status == null || keepSession || await _askCancelConfirmation(status);
 
     if (result && mounted) {
-      context.popUntilRoot();
+      if (receiveSession != null) {
+        Routerino.context.pushRootImmediately(
+          () => const HomePage(initialTab: HomeTab.receive, appStart: false),
+        );
+      } else if (sendSession != null && widget.closeSessionOnClose) {
+        Routerino.context.pushRootImmediately(
+          () => const HomePage(initialTab: HomeTab.send, appStart: false),
+        );
+      } else {
+        context.popUntilRoot();
+      }
     }
   }
 
@@ -144,7 +155,17 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
     await _stopContinuousTask();
 
     if (result && mounted) {
-      context.popUntilRoot();
+      if (receiveSession != null) {
+        Routerino.context.pushRootImmediately(
+          () => const HomePage(initialTab: HomeTab.receive, appStart: false),
+        );
+      } else if (sendSession != null && widget.closeSessionOnClose) {
+        Routerino.context.pushRootImmediately(
+          () => const HomePage(initialTab: HomeTab.send, appStart: false),
+        );
+      } else {
+        context.popUntilRoot();
+      }
     }
   }
 

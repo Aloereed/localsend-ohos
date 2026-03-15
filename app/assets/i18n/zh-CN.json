@@ -109,7 +109,8 @@
       "launchAtStartup": "登录系统后自动启动程序",
       "launchMinimized": "启动时最小化到任务栏",
       "showInContextMenu": "在“发送到...”文件菜单中显示 LocalSend",
-      "animations": "动画效果"
+      "animations": "动画效果",
+      "legacyUiMode": "旧界面模式"
     },
     "receive": {
       "title": "接收",

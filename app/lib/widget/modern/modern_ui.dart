@@ -12,36 +12,39 @@ class AppBackdrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visuals = context.visuals;
-    return DecoratedBox(
-      decoration: BoxDecoration(gradient: visuals.backgroundGradient),
-      child: Stack(
-        children: [
-          Positioned(
-            top: -120,
-            left: -90,
-            child: _GlowOrb(
-              size: 260,
-              color: visuals.accentGlow,
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(gradient: visuals.backgroundGradient),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned(
+              top: -120,
+              left: -90,
+              child: _GlowOrb(
+                size: 260,
+                color: visuals.accentGlow,
+              ),
             ),
-          ),
-          Positioned(
-            top: 120,
-            right: -110,
-            child: _GlowOrb(
-              size: 220,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+            Positioned(
+              top: 120,
+              right: -110,
+              child: _GlowOrb(
+                size: 220,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+              ),
             ),
-          ),
-          Positioned(
-            bottom: -120,
-            left: 40,
-            child: _GlowOrb(
-              size: 280,
-              color: Theme.of(context).colorScheme.tertiary.withOpacity(0.08),
+            Positioned(
+              bottom: -120,
+              left: 40,
+              child: _GlowOrb(
+                size: 280,
+                color: Theme.of(context).colorScheme.tertiary.withOpacity(0.08),
+              ),
             ),
-          ),
-          child,
-        ],
+            child,
+          ],
+        ),
       ),
     );
   }

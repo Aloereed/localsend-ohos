@@ -22,7 +22,7 @@ import 'package:localsend_app/model/state/server/receiving_file.dart';
 import 'package:localsend_app/model/persistence/message_history_entry.dart';
 import 'package:localsend_app/pages/home_page.dart';
 import 'package:localsend_app/pages/home_page_controller.dart';
-import 'package:localsend_app/pages/progress_page.dart';
+import 'package:localsend_app/pages/legacy/legacy_receive_page.dart';
 import 'package:localsend_app/pages/receive_page.dart';
 import 'package:localsend_app/pages/receive_page_controller.dart';
 import 'package:localsend_app/provider/device_info_provider.dart';
@@ -764,7 +764,9 @@ void _presentIncomingTransfer(ServerUtils server, ReceiveSessionState session) {
   }
 
   server.ref.redux(receivePageControllerProvider).dispatch(InitReceivePageAction());
-  unawaited(Routerino.context.push(() => const ReceivePage()));
+  final legacyUi = server.ref.read(settingsProvider).legacyUiMode;
+  unawaited(Routerino.context.push(
+      () => legacyUi ? const LegacyReceivePage() : const ReceivePage()));
 }
 
 
@@ -880,7 +882,14 @@ void _cancelBySender(ServerUtils server) {
   }
 
   if (receiveSession.status == SessionStatus.waiting) {
-    Routerino.context.popUntil(ReceivePage);
+    final currentTab = server.ref.read(homePageControllerProvider).currentTab;
+    final openMessageTab =
+        currentTab == HomeTab.message ||
+        server.ref.read(openMessageTabOnIncomingFilesProvider);
+    if (!openMessageTab) {
+      final legacyUi = server.ref.read(settingsProvider).legacyUiMode;
+      Routerino.context.popUntil(legacyUi ? LegacyReceivePage : ReceivePage);
+    }
   }
 
   server.setState((oldState) => oldState?.copyWith(

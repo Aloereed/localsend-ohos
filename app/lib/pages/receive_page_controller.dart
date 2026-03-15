@@ -2,10 +2,13 @@ import 'package:common/model/device.dart';
 import 'package:common/model/session_status.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:localsend_app/model/persistence/receive_history_entry.dart';
+import 'package:localsend_app/pages/legacy/legacy_progress_page.dart';
+import 'package:localsend_app/pages/legacy/legacy_receive_page.dart';
 import 'package:localsend_app/pages/progress_page.dart';
 import 'package:localsend_app/pages/receive_page.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
 import 'package:localsend_app/provider/selection/selected_receiving_files_provider.dart';
+import 'package:localsend_app/provider/settings_provider.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 import 'package:routerino/routerino.dart';
 
@@ -126,13 +129,22 @@ class InitReceivePageAction extends ReduxAction<ReceivePageController, ReceivePa
         final selectedFiles = notifier._selectedReceivingFiles.state;
         notifier._server.acceptFileRequest(selectedFiles);
 
+        final legacyUi = notifier._server.ref.read(settingsProvider).legacyUiMode;
         await Routerino.context.pushAndRemoveUntilImmediately(
-          removeUntil: ReceivePage,
-          builder: () => ProgressPage(
-            showAppBar: false,
-            closeSessionOnClose: true,
-            sessionId: sessionId,
-          ),
+          removeUntil: legacyUi ? LegacyReceivePage : ReceivePage,
+          builder: () {
+            return legacyUi
+                ? LegacyProgressPage(
+                    showAppBar: false,
+                    closeSessionOnClose: true,
+                    sessionId: sessionId,
+                  )
+                : ProgressPage(
+                    showAppBar: false,
+                    closeSessionOnClose: true,
+                    sessionId: sessionId,
+                  );
+          },
         );
       },
       onDecline: () {

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/pages/receive_options_page.dart';
 import 'package:localsend_app/pages/receive_page_controller.dart';
+import 'package:localsend_app/pages/home_page.dart';
 import 'package:localsend_app/provider/favorites_provider.dart';
 import 'package:localsend_app/provider/selection/selected_receiving_files_provider.dart';
 import 'package:localsend_app/util/device_type_ext.dart';
@@ -30,6 +31,8 @@ class ReceivePage extends StatefulWidget {
 }
 
 class _ReceivePageState extends State<ReceivePage> with Refena {
+  bool _navigatedAway = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -48,6 +51,15 @@ class _ReceivePageState extends State<ReceivePage> with Refena {
     );
 
     if (vm.status == null && vm.message == null) {
+      if (!_navigatedAway) {
+        _navigatedAway = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          Routerino.context.pushRootImmediately(
+            () => const HomePage(initialTab: HomeTab.receive, appStart: false),
+          );
+        });
+      }
       return const Scaffold(backgroundColor: Colors.transparent, body: SizedBox());
     }
 

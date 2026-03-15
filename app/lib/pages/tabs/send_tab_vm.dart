@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:localsend_app/model/cross_file.dart';
 import 'package:localsend_app/model/persistence/favorite_device.dart';
 import 'package:localsend_app/model/send_mode.dart';
+import 'package:localsend_app/pages/legacy/legacy_progress_page.dart';
+import 'package:localsend_app/pages/legacy/legacy_send_page.dart';
 import 'package:localsend_app/pages/progress_page.dart';
 import 'package:localsend_app/pages/send_page.dart';
 import 'package:localsend_app/pages/web_send_page.dart';
@@ -146,18 +148,41 @@ final sendTabVmProvider = ViewProvider((ref) {
     },
     onTapDeviceMultiSend: (context, device) async {
       final session = ref.read(sendProvider).values.firstWhereOrNull((s) => s.target.ip == device.ip);
+      final legacyUi = ref.read(settingsProvider).legacyUiMode;
       if (session != null) {
         if (session.status == SessionStatus.waiting) {
           ref.notifier(sendProvider).setBackground(session.sessionId, false);
           await context.push(
-            () => SendPage(showAppBar: true, closeSessionOnClose: false, sessionId: session.sessionId),
+            () => legacyUi
+                ? LegacySendPage(
+                    showAppBar: true,
+                    closeSessionOnClose: false,
+                    sessionId: session.sessionId,
+                  )
+                : SendPage(
+                    showAppBar: true,
+                    closeSessionOnClose: false,
+                    sessionId: session.sessionId,
+                  ),
             transition: RouterinoTransition.fade(),
           );
           ref.notifier(sendProvider).setBackground(session.sessionId, true);
           return;
         } else if (session.status == SessionStatus.sending || session.status == SessionStatus.finishedWithErrors) {
           ref.notifier(sendProvider).setBackground(session.sessionId, false);
-          await context.push(() => ProgressPage(showAppBar: true, closeSessionOnClose: false, sessionId: session.sessionId));
+          await context.push(
+            () => legacyUi
+                ? LegacyProgressPage(
+                    showAppBar: true,
+                    closeSessionOnClose: false,
+                    sessionId: session.sessionId,
+                  )
+                : ProgressPage(
+                    showAppBar: true,
+                    closeSessionOnClose: false,
+                    sessionId: session.sessionId,
+                  ),
+          );
           ref.notifier(sendProvider).setBackground(session.sessionId, true);
           return;
         }

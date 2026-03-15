@@ -176,6 +176,13 @@ class SettingsTab extends StatelessWidget {
                     await ref.notifier(settingsProvider).setEnableAnimations(b);
                   },
                 ),
+                _BooleanEntry(
+                  label: t.settingsTab.general.legacyUiMode,
+                  value: vm.settings.legacyUiMode,
+                  onChanged: (b) async {
+                    await ref.notifier(settingsProvider).setLegacyUiMode(b);
+                  },
+                ),
               ],
             ),
             _SettingsSection(

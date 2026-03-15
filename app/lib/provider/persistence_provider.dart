@@ -89,6 +89,7 @@ const _deviceModel = 'ls_device_model';
 const _shareViaLinkAutoAccept = 'ls_share_via_link_auto_accept';
 const _openMessageTabOnIncomingFiles = 'ls_open_message_tab_on_incoming_files';
 const _advancedSettingsKey = 'ls_advanced_settings';
+const _legacyUiModeKey = 'ls_legacy_ui_mode';
 
 final persistenceProvider = Provider<PersistenceService>((ref) {
   throw Exception('persistenceProvider not initialized');
@@ -402,6 +403,14 @@ class PersistenceService {
 
   Future<void> setAdvancedSettingsEnabled(bool isEnabled) async {
     await _prefs.setBool(_advancedSettingsKey, isEnabled);
+  }
+
+  bool getLegacyUiMode() {
+    return _prefs.getBool(_legacyUiModeKey) ?? false;
+  }
+
+  Future<void> setLegacyUiMode(bool enabled) async {
+    await _prefs.setBool(_legacyUiModeKey, enabled);
   }
 
   bool isQuickSave() {
