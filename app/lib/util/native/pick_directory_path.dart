@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/provider/device_info_provider.dart';
 import 'package:localsend_app/util/native/channel/android_channel.dart'
     as android_channel;
+import 'package:localsend_app/util/ui/visuals.dart';
+import 'package:localsend_app/widget/modern/modern_ui.dart';
+import 'package:path/path.dart' as path;
 import 'package:refena_flutter/refena_flutter.dart';
 
 Future<String?> pickDirectoryPath(BuildContext context) async {
@@ -13,5 +19,248 @@ Future<String?> pickDirectoryPath(BuildContext context) async {
     return android_channel.pickDirectoryPathAndroid();
   }
 
+  if (defaultTargetPlatform == TargetPlatform.ohos) {
+    return _showOhosDirectoryPicker(context);
+  }
+
   return FilePicker.platform.getDirectoryPath();
+}
+
+Future<String?> _showOhosDirectoryPicker(BuildContext context) async {
+  const baseDirectory =
+      '/storage/Users/currentUser/Download/com.aloereed.aloesend';
+  if (!await Directory(baseDirectory).exists()) {
+    await Directory(baseDirectory).create(recursive: true);
+  }
+
+  return showDialog<String>(
+    context: context,
+    barrierDismissible: true,
+    barrierColor: Colors.black54,
+    builder: (context) =>
+        _OhosDirectoryPickerDialog(baseDirectory: baseDirectory),
+  );
+}
+
+class _OhosDirectoryPickerDialog extends StatefulWidget {
+  final String baseDirectory;
+
+  const _OhosDirectoryPickerDialog({required this.baseDirectory});
+
+  @override
+  State<_OhosDirectoryPickerDialog> createState() =>
+      _OhosDirectoryPickerDialogState();
+}
+
+class _OhosDirectoryPickerDialogState
+    extends State<_OhosDirectoryPickerDialog> {
+  late String currentPath;
+  List<Directory> directories = [];
+  bool isLoading = true;
+  bool _isDisposed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    currentPath = widget.baseDirectory;
+    _loadDirectories();
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  Future<void> _loadDirectories() async {
+    if (_isDisposed) {
+      return;
+    }
+    if (mounted) {
+      setState(() => isLoading = true);
+    }
+
+    try {
+      final dir = Directory(currentPath);
+      final entities = await dir.list().toList();
+      final dirs = entities
+          .whereType<Directory>()
+          .where((entry) => !path.basename(entry.path).startsWith('.'))
+          .toList()
+        ..sort(
+          (left, right) =>
+              path.basename(left.path).compareTo(path.basename(right.path)),
+        );
+
+      if (!_isDisposed && mounted) {
+        setState(() {
+          directories = dirs;
+          isLoading = false;
+        });
+      }
+    } catch (_) {
+      if (!_isDisposed && mounted) {
+        setState(() {
+          directories = [];
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  void _navigateToDirectory(String dirPath) {
+    if (_isDisposed || !mounted) {
+      return;
+    }
+
+    setState(() {
+      currentPath = dirPath;
+    });
+    _loadDirectories();
+  }
+
+  void _navigateUp() {
+    if (_isDisposed || !mounted) {
+      return;
+    }
+
+    if (currentPath != widget.baseDirectory) {
+      final parentPath = Directory(currentPath).parent.path;
+      if (parentPath.startsWith(widget.baseDirectory)) {
+        _navigateToDirectory(parentPath);
+      }
+    }
+  }
+
+  void _selectCurrentFolder() {
+    if (_isDisposed || !mounted) {
+      return;
+    }
+    Navigator.of(context).pop(currentPath);
+  }
+
+  void _cancel() {
+    if (_isDisposed || !mounted) {
+      return;
+    }
+    Navigator.of(context).pop(null);
+  }
+
+  String _getRelativePath() {
+    if (currentPath == widget.baseDirectory) {
+      return 'Download/AloeSend';
+    }
+    return currentPath.substring(widget.baseDirectory.length + 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final mediaQuery = MediaQuery.of(context);
+    final compact = context.isPhoneLayout;
+
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: ModernDialogScaffold(
+        title: t.dialogs.chooseFolder.title,
+        subtitle: t.dialogs.chooseFolder.subtitle,
+        maxWidth: mediaQuery.size.width * 0.9,
+        insetPadding: EdgeInsets.fromLTRB(
+          16,
+          24,
+          16,
+          24 + (compact ? mediaQuery.padding.bottom + 8 : 0),
+        ),
+        onClose: _cancel,
+        child: SizedBox(
+          width: mediaQuery.size.width * 0.85,
+          height: mediaQuery.size.height * (compact ? 0.56 : 0.66),
+          child: Column(
+            children: [
+              GlassSurface(
+                applyBlur: false,
+                borderRadius: BorderRadius.circular(20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                child: Row(
+                  children: [
+                    if (currentPath != widget.baseDirectory) ...[
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_rounded, size: 20),
+                        onPressed: _navigateUp,
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                    Expanded(
+                      child: Text(
+                        _getRelativePath(),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: colorScheme.primary,
+                        ),
+                      )
+                    : directories.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.folder_off_outlined,
+                                  size: 64,
+                                  color: colorScheme.outline,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  t.dialogs.chooseFolder.empty,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(color: colorScheme.outline),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            itemCount: directories.length,
+                            itemBuilder: (context, index) {
+                              final dir = directories[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: ModernActionTile(
+                                  icon: Icons.folder_rounded,
+                                  title: path.basename(dir.path),
+                                  subtitle: dir.path,
+                                  onTap: () => _navigateToDirectory(dir.path),
+                                ),
+                              );
+                            },
+                          ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: _cancel, child: Text(t.general.cancel)),
+          FilledButton(
+            onPressed: _selectCurrentFolder,
+            child: Text(t.dialogs.chooseFolder.useThisFolder),
+          ),
+        ],
+      ),
+    );
+  }
 }
