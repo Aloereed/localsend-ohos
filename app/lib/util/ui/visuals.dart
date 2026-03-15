@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 @immutable
 class AppVisuals extends ThemeExtension<AppVisuals> {
   final bool useGlass;
+  final bool reduceEffects;
   final Color backgroundTop;
   final Color backgroundMiddle;
   final Color backgroundBottom;
@@ -24,6 +25,7 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
 
   const AppVisuals({
     required this.useGlass,
+    required this.reduceEffects,
     required this.backgroundTop,
     required this.backgroundMiddle,
     required this.backgroundBottom,
@@ -58,6 +60,7 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
   @override
   AppVisuals copyWith({
     bool? useGlass,
+    bool? reduceEffects,
     Color? backgroundTop,
     Color? backgroundMiddle,
     Color? backgroundBottom,
@@ -77,6 +80,7 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
   }) {
     return AppVisuals(
       useGlass: useGlass ?? this.useGlass,
+      reduceEffects: reduceEffects ?? this.reduceEffects,
       backgroundTop: backgroundTop ?? this.backgroundTop,
       backgroundMiddle: backgroundMiddle ?? this.backgroundMiddle,
       backgroundBottom: backgroundBottom ?? this.backgroundBottom,
@@ -104,6 +108,7 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
 
     return AppVisuals(
       useGlass: t < 0.5 ? useGlass : other.useGlass,
+      reduceEffects: t < 0.5 ? reduceEffects : other.reduceEffects,
       backgroundTop: Color.lerp(backgroundTop, other.backgroundTop, t)!,
       backgroundMiddle: Color.lerp(backgroundMiddle, other.backgroundMiddle, t)!,
       backgroundBottom: Color.lerp(backgroundBottom, other.backgroundBottom, t)!,

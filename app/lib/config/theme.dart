@@ -17,8 +17,24 @@ ThemeData getTheme(
   Brightness brightness,
   DynamicColors? dynamicColors,
 ) {
+  return getThemeWithSettings(
+    colorMode: colorMode,
+    brightness: brightness,
+    dynamicColors: dynamicColors,
+  );
+}
+
+ThemeData getThemeWithSettings({
+  required ColorMode colorMode,
+  required Brightness brightness,
+  required DynamicColors? dynamicColors,
+  bool lightweightEffects = false,
+}) {
   if (colorMode == ColorMode.yaru) {
-    return _getYaruTheme(brightness);
+    return _getYaruTheme(
+      brightness,
+      lightweightEffects: lightweightEffects,
+    );
   }
 
   final colorScheme =
@@ -27,6 +43,7 @@ ThemeData getTheme(
     colorScheme: colorScheme,
     brightness: brightness,
     useGlass: checkPlatform([TargetPlatform.ohos]),
+    reduceEffects: lightweightEffects,
   );
   final inputBorder = OutlineInputBorder(
     borderSide: BorderSide(color: visuals.glassBorder),
@@ -259,28 +276,41 @@ AppVisuals _buildVisuals({
   required ColorScheme colorScheme,
   required Brightness brightness,
   required bool useGlass,
+  required bool reduceEffects,
 }) {
   final isDark = brightness == Brightness.dark;
+  final glassSurfaceOpacity = isDark
+      ? (reduceEffects ? 0.14 : 0.08)
+      : (reduceEffects ? 0.66 : 0.55);
+  final glassSurfaceStrongOpacity = isDark
+      ? (reduceEffects ? 0.2 : 0.12)
+      : (reduceEffects ? 0.78 : 0.72);
   return AppVisuals(
     useGlass: useGlass,
+    reduceEffects: reduceEffects,
     backgroundTop:
         isDark ? const Color(0xFF08111E) : const Color(0xFFF4F8FF),
     backgroundMiddle:
         isDark ? const Color(0xFF0C1A2B) : const Color(0xFFEFF5F3),
     backgroundBottom:
         isDark ? const Color(0xFF05080F) : const Color(0xFFF8FAFD),
-    accentGlow: colorScheme.primary.withOpacity(isDark ? 0.16 : 0.11),
+    accentGlow: colorScheme.primary.withOpacity(
+      isDark
+          ? (reduceEffects ? 0.12 : 0.16)
+          : (reduceEffects ? 0.08 : 0.11),
+    ),
     glassSurface:
-        (isDark ? Colors.white : Colors.white).withOpacity(isDark ? 0.08 : 0.55),
+        (isDark ? Colors.white : Colors.white).withOpacity(glassSurfaceOpacity),
     glassSurfaceStrong:
-        (isDark ? Colors.white : Colors.white).withOpacity(isDark ? 0.12 : 0.72),
+        (isDark ? Colors.white : Colors.white)
+            .withOpacity(glassSurfaceStrongOpacity),
     glassBorder:
         (isDark ? Colors.white : colorScheme.outline).withOpacity(isDark ? 0.12 : 0.18),
     mutedForeground:
         (isDark ? Colors.white : colorScheme.onSurface).withOpacity(0.7),
     shadowColor: Colors.black.withOpacity(isDark ? 0.24 : 0.08),
-    glassBlur: useGlass ? 18 : 0,
-    dialogBlur: useGlass ? 24 : 0,
+    glassBlur: useGlass && !reduceEffects ? 18 : 0,
+    dialogBlur: useGlass && !reduceEffects ? 24 : 0,
     radiusSmall: 14,
     radiusMedium: 20,
     radiusLarge: 28,
@@ -377,13 +407,17 @@ extension InputDecorationThemeExt on InputDecorationTheme {
   BorderRadius get borderRadius => _resolveInputBorderRadius(data);
 }
 
-ThemeData _getYaruTheme(Brightness brightness) {
+ThemeData _getYaruTheme(
+  Brightness brightness, {
+  bool lightweightEffects = false,
+}) {
   final baseTheme = brightness == Brightness.light ? yaru.yaruLight : yaru.yaruDark;
   final colorScheme = baseTheme.colorScheme;
   final visuals = _buildVisuals(
     colorScheme: colorScheme,
     brightness: brightness,
     useGlass: false,
+    reduceEffects: lightweightEffects,
   );
 
   final inputBorder = OutlineInputBorder(

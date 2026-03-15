@@ -84,6 +84,7 @@ const _minimizeToTray = 'ls_minimize_to_tray';
 const _https = 'ls_https';
 const _sendMode = 'ls_send_mode';
 const _enableAnimations = 'ls_enable_animations';
+const _lightweightEffects = 'ls_lightweight_effects';
 const _deviceType = 'ls_device_type';
 const _deviceModel = 'ls_device_model';
 const _shareViaLinkAutoAccept = 'ls_share_via_link_auto_accept';
@@ -530,6 +531,14 @@ class PersistenceService {
 
   bool getEnableAnimations() {
     return _prefs.getBool(_enableAnimations) ?? true;
+  }
+
+  Future<void> setLightweightEffects(bool lightweightEffects) async {
+    await _prefs.setBool(_lightweightEffects, lightweightEffects);
+  }
+
+  bool getLightweightEffects() {
+    return _prefs.getBool(_lightweightEffects) ?? false;
   }
 
   DeviceType? getDeviceType() {

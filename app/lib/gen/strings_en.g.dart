@@ -889,6 +889,7 @@ class TranslationsSettingsTabGeneralEn {
   String get launchMinimized => 'Autostart: Start hidden';
   String get showInContextMenu => 'Show AloeSend in context menu';
   String get animations => 'Animations';
+  String get lightweightEffects => 'Lightweight effects';
   String get legacyUiMode => 'Legacy UI mode';
 }
 

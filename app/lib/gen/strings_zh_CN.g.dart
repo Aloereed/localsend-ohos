@@ -1352,6 +1352,8 @@ class _TranslationsSettingsTabGeneralZhCn extends TranslationsSettingsTabGeneral
   @override
   String get animations => '动画效果';
   @override
+  String get lightweightEffects => '轻量化特效';
+  @override
   String get legacyUiMode => '旧界面模式';
 }
 

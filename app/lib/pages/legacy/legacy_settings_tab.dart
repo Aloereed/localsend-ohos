@@ -135,6 +135,15 @@ class LegacySettingsTab extends StatelessWidget {
                   },
                 ),
                 _SwitchRow(
+                  label: t.settingsTab.general.lightweightEffects,
+                  value: vm.settings.lightweightEffects,
+                  onChanged: (b) async {
+                    await ref
+                        .notifier(settingsProvider)
+                        .setLightweightEffects(b);
+                  },
+                ),
+                _SwitchRow(
                   label: t.settingsTab.general.legacyUiMode,
                   value: vm.settings.legacyUiMode,
                   onChanged: (b) async {

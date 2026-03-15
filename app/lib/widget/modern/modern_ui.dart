@@ -24,6 +24,7 @@ class AppBackdrop extends StatelessWidget {
               child: _GlowOrb(
                 size: 260,
                 color: visuals.accentGlow,
+                reduceEffects: visuals.reduceEffects,
               ),
             ),
             Positioned(
@@ -32,6 +33,7 @@ class AppBackdrop extends StatelessWidget {
               child: _GlowOrb(
                 size: 220,
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+                reduceEffects: visuals.reduceEffects,
               ),
             ),
             Positioned(
@@ -40,6 +42,7 @@ class AppBackdrop extends StatelessWidget {
               child: _GlowOrb(
                 size: 280,
                 color: Theme.of(context).colorScheme.tertiary.withOpacity(0.08),
+                reduceEffects: visuals.reduceEffects,
               ),
             ),
             child,
@@ -86,6 +89,10 @@ class GlassSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     final visuals = context.visuals;
     final resolvedRadius = borderRadius ?? visuals.largeRadius;
+    final shadowBlur = strong ? 32.0 : 24.0;
+    final shadowOffset = const Offset(0, 16);
+    final reducedShadowBlur = shadowBlur * 0.5;
+    final reducedShadowOffset = Offset(shadowOffset.dx, shadowOffset.dy * 0.6);
     final childWidget = Container(
       width: width,
       height: height,
@@ -101,8 +108,8 @@ class GlassSurface extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: visuals.shadowColor,
-            blurRadius: strong ? 32 : 24,
-            offset: const Offset(0, 16),
+            blurRadius: visuals.reduceEffects ? reducedShadowBlur : shadowBlur,
+            offset: visuals.reduceEffects ? reducedShadowOffset : shadowOffset,
           ),
         ],
       ),
@@ -118,7 +125,7 @@ class GlassSurface extends StatelessWidget {
 
     final surface = ClipRRect(
       borderRadius: resolvedRadius,
-      child: visuals.useGlass && applyBlur
+      child: visuals.useGlass && !visuals.reduceEffects && applyBlur
           ? BackdropFilter(
               filter: ImageFilter.blur(
                 sigmaX: blurSigma ?? visuals.glassBlur,
@@ -715,11 +722,35 @@ class ModernPageHeader extends StatelessWidget {
 class _GlowOrb extends StatelessWidget {
   final double size;
   final Color color;
+  final bool reduceEffects;
 
-  const _GlowOrb({required this.size, required this.color});
+  const _GlowOrb({
+    required this.size,
+    required this.color,
+    required this.reduceEffects,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (reduceEffects) {
+      return IgnorePointer(
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: RadialGradient(
+              colors: [
+                color.withOpacity(0.75),
+                color.withOpacity(0.0),
+              ],
+              stops: const [0.0, 1.0],
+            ),
+          ),
+        ),
+      );
+    }
+
     return IgnorePointer(
       child: ImageFiltered(
         imageFilter: ImageFilter.blur(sigmaX: 28, sigmaY: 28),

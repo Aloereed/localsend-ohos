@@ -110,6 +110,7 @@
       "launchMinimized": "启动时最小化到任务栏",
       "showInContextMenu": "在“发送到...”文件菜单中显示 LocalSend",
       "animations": "动画效果",
+      "lightweightEffects": "轻量化特效",
       "legacyUiMode": "旧界面模式"
     },
     "receive": {

@@ -48,8 +48,11 @@ class PrivacyPolicyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ref = context.ref;
-    final (themeMode, colorMode) =
-        ref.watch(settingsProvider.select((settings) => (settings.theme, settings.colorMode)));
+    final (themeMode, colorMode, lightweightEffects) = ref.watch(
+      settingsProvider.select(
+        (settings) => (settings.theme, settings.colorMode, settings.lightweightEffects),
+      ),
+    );
     final dynamicColors = ref.watch(dynamicColorsProvider);
 
     return MaterialApp(
@@ -59,8 +62,18 @@ class PrivacyPolicyApp extends StatelessWidget {
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       debugShowCheckedModeBanner: false,
       navigatorKey: Routerino.navigatorKey,
-      theme: getTheme(colorMode, Brightness.light, dynamicColors),
-      darkTheme: getTheme(colorMode, Brightness.dark, dynamicColors),
+      theme: getThemeWithSettings(
+        colorMode: colorMode,
+        brightness: Brightness.light,
+        dynamicColors: dynamicColors,
+        lightweightEffects: lightweightEffects,
+      ),
+      darkTheme: getThemeWithSettings(
+        colorMode: colorMode,
+        brightness: Brightness.dark,
+        dynamicColors: dynamicColors,
+        lightweightEffects: lightweightEffects,
+      ),
       themeMode: colorMode == ColorMode.oled ? ThemeMode.dark : themeMode,
       home: const PrivacyPolicyScreen(),
     );

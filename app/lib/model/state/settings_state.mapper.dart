@@ -63,6 +63,8 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
   static const Field<SettingsState, bool> _f$saveWindowPlacement = Field('saveWindowPlacement', _$saveWindowPlacement);
   static bool _$enableAnimations(SettingsState v) => v.enableAnimations;
   static const Field<SettingsState, bool> _f$enableAnimations = Field('enableAnimations', _$enableAnimations);
+  static bool _$lightweightEffects(SettingsState v) => v.lightweightEffects;
+  static const Field<SettingsState, bool> _f$lightweightEffects = Field('lightweightEffects', _$lightweightEffects);
   static DeviceType? _$deviceType(SettingsState v) => v.deviceType;
   static const Field<SettingsState, DeviceType> _f$deviceType = Field('deviceType', _$deviceType);
   static String? _$deviceModel(SettingsState v) => v.deviceModel;
@@ -99,6 +101,7 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
     #sendMode: _f$sendMode,
     #saveWindowPlacement: _f$saveWindowPlacement,
     #enableAnimations: _f$enableAnimations,
+    #lightweightEffects: _f$lightweightEffects,
     #deviceType: _f$deviceType,
     #deviceModel: _f$deviceModel,
     #shareViaLinkAutoAccept: _f$shareViaLinkAutoAccept,
@@ -130,6 +133,7 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
         sendMode: data.dec(_f$sendMode),
         saveWindowPlacement: data.dec(_f$saveWindowPlacement),
         enableAnimations: data.dec(_f$enableAnimations),
+        lightweightEffects: data.dec(_f$lightweightEffects),
         deviceType: data.dec(_f$deviceType),
         deviceModel: data.dec(_f$deviceModel),
         shareViaLinkAutoAccept: data.dec(_f$shareViaLinkAutoAccept),
@@ -206,6 +210,7 @@ abstract class SettingsStateCopyWith<$R, $In extends SettingsState, $Out> implem
       SendMode? sendMode,
       bool? saveWindowPlacement,
       bool? enableAnimations,
+      bool? lightweightEffects,
       DeviceType? deviceType,
       String? deviceModel,
       bool? shareViaLinkAutoAccept,
@@ -252,6 +257,7 @@ class _SettingsStateCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
           SendMode? sendMode,
           bool? saveWindowPlacement,
           bool? enableAnimations,
+          bool? lightweightEffects,
           Object? deviceType = $none,
           Object? deviceModel = $none,
           bool? shareViaLinkAutoAccept,
@@ -280,6 +286,7 @@ class _SettingsStateCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
         if (sendMode != null) #sendMode: sendMode,
         if (saveWindowPlacement != null) #saveWindowPlacement: saveWindowPlacement,
         if (enableAnimations != null) #enableAnimations: enableAnimations,
+        if (lightweightEffects != null) #lightweightEffects: lightweightEffects,
         if (deviceType != $none) #deviceType: deviceType,
         if (deviceModel != $none) #deviceModel: deviceModel,
         if (shareViaLinkAutoAccept != null) #shareViaLinkAutoAccept: shareViaLinkAutoAccept,
@@ -310,6 +317,7 @@ class _SettingsStateCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Setting
       sendMode: data.get(#sendMode, or: $value.sendMode),
       saveWindowPlacement: data.get(#saveWindowPlacement, or: $value.saveWindowPlacement),
       enableAnimations: data.get(#enableAnimations, or: $value.enableAnimations),
+      lightweightEffects: data.get(#lightweightEffects, or: $value.lightweightEffects),
       deviceType: data.get(#deviceType, or: $value.deviceType),
       deviceModel: data.get(#deviceModel, or: $value.deviceModel),
       shareViaLinkAutoAccept: data.get(#shareViaLinkAutoAccept, or: $value.shareViaLinkAutoAccept),

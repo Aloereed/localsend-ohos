@@ -110,6 +110,7 @@
       "launchMinimized": "Autostart: Start hidden",
       "showInContextMenu": "Show LocalSend in context menu",
       "animations": "Animations",
+      "lightweightEffects": "Lightweight effects",
       "legacyUiMode": "Legacy UI mode"
     },
     "receive": {
