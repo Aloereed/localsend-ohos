@@ -136,11 +136,11 @@ class LegacySettingsTab extends StatelessWidget {
                 ),
                 _SwitchRow(
                   label: t.settingsTab.general.lightweightEffects,
-                  value: vm.settings.lightweightEffects,
+                  value: !vm.settings.lightweightEffects,
                   onChanged: (b) async {
                     await ref
                         .notifier(settingsProvider)
-                        .setLightweightEffects(b);
+                        .setLightweightEffects(!b);
                   },
                 ),
                 _SwitchRow(

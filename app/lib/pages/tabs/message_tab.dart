@@ -6,6 +6,7 @@ import 'package:common/model/device.dart';
 import 'package:common/model/file_type.dart';
 import 'package:common/model/session_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:localsend_app/gen/strings.g.dart';
 import 'package:localsend_app/model/cross_file.dart';
@@ -22,6 +23,7 @@ import 'package:localsend_app/util/device_type_ext.dart';
 import 'package:localsend_app/util/favorites.dart';
 import 'package:localsend_app/util/file_size_helper.dart';
 import 'package:localsend_app/util/native/file_picker.dart';
+import 'package:localsend_app/util/ui/snackbar.dart';
 import 'package:localsend_app/util/ui/visuals.dart';
 import 'package:localsend_app/widget/file_thumbnail.dart';
 import 'package:localsend_app/widget/modern/modern_ui.dart';
@@ -117,24 +119,7 @@ class _MessageConversationListView extends StatelessWidget {
               : Column(
                   children: [
                     for (var i = 0; i < summaries.length; i++) ...[
-                      ModernActionTile(
-                        icon: summaries[i].peer.deviceType?.icon ?? Icons.devices_rounded,
-                        title: summaries[i].peer.alias,
-                        subtitle: conversationPreview(summaries[i].lastEntry),
-                        highlighted: summaries[i].hasActiveTransfer,
-                        trailing: Text(
-                          _formatConversationTime(summaries[i].lastEntry.updatedAt),
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
-                        onTap: () {
-                          context.ref.notifier(activeMessageSelectionProvider).setState(
-                                (_) => MessageConversationSelection(
-                                  conversationId: summaries[i].conversationId,
-                                  peer: summaries[i].peer,
-                                ),
-                              );
-                        },
-                      ),
+                      _ConversationListItem(summary: summaries[i]),
                       if (i != summaries.length - 1) const SizedBox(height: 12),
                     ],
                   ],
@@ -172,6 +157,65 @@ class _MessageConversationListView extends StatelessWidget {
                 ),
         ),
       ],
+    );
+  }
+}
+
+class _ConversationListItem extends StatelessWidget {
+  final MessageConversationSummary summary;
+
+  const _ConversationListItem({
+    required this.summary,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ModernActionTile(
+      icon: summary.peer.deviceType?.icon ?? Icons.devices_rounded,
+      title: summary.peer.alias,
+      subtitle: conversationPreview(summary.lastEntry),
+      highlighted: summary.hasActiveTransfer,
+      trailing: Text(
+        _formatConversationTime(summary.lastEntry.updatedAt),
+        style: Theme.of(context).textTheme.labelMedium,
+      ),
+      onTap: () {
+        context.ref.notifier(activeMessageSelectionProvider).setState(
+              (_) => MessageConversationSelection(
+                conversationId: summary.conversationId,
+                peer: summary.peer,
+              ),
+            );
+      },
+      onLongPress: () => _showConversationActions(context),
+    );
+  }
+
+  Future<void> _showConversationActions(BuildContext context) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.delete_rounded, color: Theme.of(context).colorScheme.error),
+                title: Text(
+                  t.general.delete,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                onTap: () async {
+                  Navigator.of(sheetContext).pop();
+                  await context.redux(messageHistoryProvider).dispatchAsync(
+                        RemoveMessageConversationAction(summary.conversationId),
+                      );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -463,6 +507,66 @@ class _MessageEntryCard extends StatelessWidget {
 
   const _MessageEntryCard({required this.entry, required this.actionable});
 
+  Future<void> _openLink() async {
+    final uri = Uri.tryParse(entry.text ?? '');
+    if (uri != null) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _deleteEntry(BuildContext context) async {
+    await context.redux(messageHistoryProvider).dispatchAsync(
+          RemoveMessageHistoryEntryAction(entry.id),
+        );
+  }
+
+  Future<void> _showEntryActions(BuildContext context) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (entry.isText && (entry.text?.isNotEmpty ?? false))
+                ListTile(
+                  leading: const Icon(Icons.copy_rounded),
+                  title: Text(t.general.copy),
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: entry.text!));
+                    if (context.mounted) {
+                      Navigator.of(sheetContext).pop();
+                      context.showSnackBar(t.general.copiedToClipboard);
+                    }
+                  },
+                ),
+              if (entry.isText && entry.isLink && entry.text != null)
+                ListTile(
+                  leading: const Icon(Icons.open_in_new_rounded),
+                  title: Text(t.general.open),
+                  onTap: () async {
+                    Navigator.of(sheetContext).pop();
+                    await _openLink();
+                  },
+                ),
+              ListTile(
+                leading: Icon(Icons.delete_rounded, color: Theme.of(context).colorScheme.error),
+                title: Text(
+                  t.general.delete,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                onTap: () async {
+                  Navigator.of(sheetContext).pop();
+                  await _deleteEntry(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -474,11 +578,9 @@ class _MessageEntryCard extends StatelessWidget {
           color: entry.isOutgoing ? Theme.of(context).colorScheme.primary.withOpacity(0.18) : null,
           padding: const EdgeInsets.all(16),
           onTap: entry.isText && entry.isLink && entry.text != null
-              ? () async {
-                  final uri = Uri.tryParse(entry.text!);
-                  if (uri != null) await launchUrl(uri, mode: LaunchMode.externalApplication);
-                }
+              ? _openLink
               : null,
+          onLongPress: () => _showEntryActions(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -488,7 +590,7 @@ class _MessageEntryCard extends StatelessWidget {
               ]),
               const SizedBox(height: 8),
               if (entry.isText)
-                SelectableText(entry.text ?? '')
+                Text(entry.text ?? '')
               else
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

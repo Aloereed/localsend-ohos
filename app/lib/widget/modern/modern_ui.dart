@@ -67,6 +67,7 @@ class GlassSurface extends StatelessWidget {
   final double? width;
   final double? height;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   const GlassSurface({
     required this.child,
@@ -82,6 +83,7 @@ class GlassSurface extends StatelessWidget {
     this.width,
     this.height,
     this.onTap,
+    this.onLongPress,
     super.key,
   });
 
@@ -117,6 +119,7 @@ class GlassSurface extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
+          onLongPress: onLongPress,
           borderRadius: resolvedRadius,
           child: Padding(padding: padding, child: child),
         ),
@@ -289,6 +292,7 @@ class ModernActionTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final Widget? trailing;
   final bool highlighted;
 
@@ -297,6 +301,7 @@ class ModernActionTile extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.onTap,
+    this.onLongPress,
     this.trailing,
     this.highlighted = false,
     super.key,
@@ -318,6 +323,7 @@ class ModernActionTile extends StatelessWidget {
       borderRadius: visuals.mediumRadius,
       padding: EdgeInsets.all(compact ? 14 : 20),
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Row(
         children: [
           Container(

@@ -149,6 +149,21 @@ class RemoveMessageHistoryEntryAction extends AsyncReduxAction<MessageHistorySer
   }
 }
 
+class RemoveMessageConversationAction extends AsyncReduxAction<MessageHistoryService, List<MessageHistoryEntry>> {
+  final String conversationId;
+
+  RemoveMessageConversationAction(this.conversationId);
+
+  @override
+  Future<List<MessageHistoryEntry>> reduce() async {
+    final updated = state
+        .where((entry) => entry.conversationId != conversationId)
+        .toList(growable: false);
+    await notifier._persistence.setMessageHistory(updated);
+    return updated;
+  }
+}
+
 class RemoveCompatibilityMessageHistoryEntryAction
     extends AsyncReduxAction<MessageHistoryService, List<MessageHistoryEntry>> {
   final String sourceEntryId;

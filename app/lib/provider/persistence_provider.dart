@@ -178,6 +178,10 @@ class PersistenceService {
       }
     }
 
+    if (prefs.getBool(_lightweightEffects) == null) {
+      await prefs.setBool(_lightweightEffects, true);
+    }
+
     if (prefs.getString(_colorKey) == null) {
       await _initColorSetting(prefs, supportsDynamicColors);
     } else {
@@ -538,7 +542,7 @@ class PersistenceService {
   }
 
   bool getLightweightEffects() {
-    return _prefs.getBool(_lightweightEffects) ?? false;
+    return _prefs.getBool(_lightweightEffects) ?? true;
   }
 
   DeviceType? getDeviceType() {

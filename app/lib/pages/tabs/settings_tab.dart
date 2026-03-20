@@ -178,9 +178,9 @@ class SettingsTab extends StatelessWidget {
                 ),
                 _BooleanEntry(
                   label: t.settingsTab.general.lightweightEffects,
-                  value: vm.settings.lightweightEffects,
+                  value: !vm.settings.lightweightEffects,
                   onChanged: (b) async {
-                    await ref.notifier(settingsProvider).setLightweightEffects(b);
+                    await ref.notifier(settingsProvider).setLightweightEffects(!b);
                   },
                 ),
                 _BooleanEntry(
