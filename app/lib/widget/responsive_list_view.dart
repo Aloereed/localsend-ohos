@@ -9,6 +9,7 @@ class ResponsiveListView extends StatelessWidget {
   final ScrollController? controller;
   final EdgeInsets padding;
   final EdgeInsets desktopPadding;
+  final double extraBottomPadding;
   final List<Widget>? children;
   final Widget? child;
 
@@ -17,6 +18,7 @@ class ResponsiveListView extends StatelessWidget {
     this.controller,
     required this.padding,
     EdgeInsets? tabletPadding,
+    this.extraBottomPadding = 0,
     required Widget this.child,
     super.key,
   })  : desktopPadding = tabletPadding ?? const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
@@ -27,6 +29,7 @@ class ResponsiveListView extends StatelessWidget {
     this.controller,
     required this.padding,
     EdgeInsets? tabletPadding,
+    this.extraBottomPadding = 0,
     required List<Widget> this.children,
     super.key,
   })  : desktopPadding = tabletPadding ?? const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
@@ -45,7 +48,7 @@ class ResponsiveListView extends StatelessWidget {
                 final bottom = sizingInformation.isDesktop ? desktopPadding.bottom : padding.bottom;
                 return Padding(
                   padding: (sizingInformation.isDesktop ? desktopPadding : padding).copyWith(
-                    bottom: bottom + getNavBarPadding(context),
+                    bottom: bottom + extraBottomPadding + getNavBarPadding(context),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -63,8 +66,12 @@ class ResponsiveListView extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: maxWidth),
           child: ResponsiveBuilder(
             builder: (sizingInformation) {
+              final basePadding =
+                  sizingInformation.isDesktop ? desktopPadding : padding;
               return Padding(
-                padding: sizingInformation.isDesktop ? desktopPadding : padding,
+                padding: basePadding.copyWith(
+                  bottom: basePadding.bottom + extraBottomPadding,
+                ),
                 child: child!,
               );
             },

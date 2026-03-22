@@ -252,6 +252,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
     final totalBytes = _totalBytes == double.maxFinite.toInt() ? null : _totalBytes;
     final progressValue = totalBytes == null ? null : totalBytes == 0 ? 0.0 : (currBytes / totalBytes).clamp(0.0, 1.0);
     final sectionSpacing = context.adaptiveSectionSpacing;
+    final compactPhone = context.isCompactPhoneLayout;
 
     return PopScope(
       onPopInvoked: (didPop) {
@@ -333,7 +334,10 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                         : null,
                     child: SelectableText(
                       receiveSession.destinationDirectory,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.45),
+                      style: (context.isPhoneLayout
+                              ? Theme.of(context).textTheme.bodyMedium
+                              : Theme.of(context).textTheme.bodyLarge)
+                          ?.copyWith(height: 1.45),
                     ),
                   ),
                 ],
@@ -373,12 +377,23 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                     children: [
                       Text(
                         status.getLabel(remainingTime: _remainingTime ?? '-'),
-                        style: (context.isPhoneLayout ? Theme.of(context).textTheme.headlineSmall : Theme.of(context).textTheme.headlineMedium)?.copyWith(
+                        style: (compactPhone
+                                ? Theme.of(context).textTheme.titleLarge
+                                : context.isPhoneLayout
+                                    ? Theme.of(context).textTheme.headlineSmall
+                                    : Theme.of(context).textTheme.headlineMedium)
+                            ?.copyWith(
                           fontWeight: FontWeight.w800,
                           letterSpacing: context.isPhoneLayout ? -0.2 : -0.5,
                         ),
                       ),
-                      SizedBox(height: context.isPhoneLayout ? 14 : 18),
+                      SizedBox(
+                        height: compactPhone
+                            ? 12
+                            : context.isPhoneLayout
+                                ? 14
+                                : 18,
+                      ),
                       if (progressValue == null)
                         const CustomProgressBar(progress: null, borderRadius: 7)
                       else
@@ -390,7 +405,13 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                             return CustomProgressBar(progress: value, borderRadius: 7);
                           },
                         ),
-                      SizedBox(height: context.isPhoneLayout ? 14 : 18),
+                      SizedBox(
+                        height: compactPhone
+                            ? 12
+                            : context.isPhoneLayout
+                                ? 14
+                                : 18,
+                      ),
                       _ProgressStatLine(
                         icon: Icons.check_circle_rounded,
                         label: t.progressPage.overview.completed,
@@ -425,7 +446,7 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                         duration: const Duration(milliseconds: 220),
                         firstChild: const SizedBox.shrink(),
                         secondChild: Padding(
-                          padding: const EdgeInsets.only(top: 14),
+                          padding: EdgeInsets.only(top: context.isPhoneLayout ? 12 : 14),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -437,10 +458,16 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                           ),
                         ),
                       ),
-                      SizedBox(height: context.isPhoneLayout ? 16 : 18),
+                      SizedBox(
+                        height: compactPhone
+                            ? 12
+                            : context.isPhoneLayout
+                                ? 14
+                                : 18,
+                      ),
                       Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
+                        spacing: context.isPhoneLayout ? 8 : 10,
+                        runSpacing: context.isPhoneLayout ? 8 : 10,
                         alignment: WrapAlignment.end,
                         children: [
                           TextButton.icon(
@@ -491,7 +518,8 @@ class _ProgressPageState extends State<ProgressPage> with Refena {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: _files.length,
-                          separatorBuilder: (context, index) => SizedBox(height: context.isPhoneLayout ? 10 : 12),
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: context.isPhoneLayout ? 8 : 12),
                           itemBuilder: (context, index) {
                             final file = _files[index];
                             final fileName = receiveSession?.files[file.id]?.desiredName ?? file.fileName;
@@ -582,11 +610,13 @@ class _ProgressStatLine extends StatelessWidget {
     final visuals = context.visuals;
     final scheme = Theme.of(context).colorScheme;
     final resolvedColor = color ?? scheme.onSurface;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: context.isPhoneLayout ? 14 : 16,
-        vertical: context.isPhoneLayout ? 12 : 14,
+        horizontal: compactPhone ? 12 : phone ? 13 : 16,
+        vertical: compactPhone ? 10 : phone ? 11 : 14,
       ),
       decoration: BoxDecoration(
         color: color == null ? visuals.glassSurfaceStrong : color!.withOpacity(0.12),
@@ -598,29 +628,35 @@ class _ProgressStatLine extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 38,
-            height: 38,
+            width: compactPhone ? 34 : phone ? 36 : 38,
+            height: compactPhone ? 34 : phone ? 36 : 38,
             decoration: BoxDecoration(
               color: resolvedColor.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(phone ? 12 : 14),
             ),
-            child: Icon(icon, size: 18, color: resolvedColor),
+            child: Icon(icon, size: phone ? 17 : 18, color: resolvedColor),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: phone ? 10 : 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  style: (phone
+                          ? Theme.of(context).textTheme.labelMedium
+                          : Theme.of(context).textTheme.labelLarge)
+                      ?.copyWith(
                         color: visuals.mutedForeground,
                       ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Text(
                   value,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: (phone
+                          ? Theme.of(context).textTheme.titleSmall
+                          : Theme.of(context).textTheme.titleMedium)
+                      ?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: resolvedColor,
                       ),
@@ -665,6 +701,7 @@ class _TransferFileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final visuals = context.visuals;
     final compact = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
     final statusColor = fileStatus.getColor(context);
     final statusLabel = savedToGallery
         ? t.progressPage.savedToGallery
@@ -712,7 +749,7 @@ class _TransferFileCard extends StatelessWidget {
           ? Theme.of(context).colorScheme.warning.withOpacity(0.08)
           : visuals.glassSurfaceStrong,
       borderRadius: visuals.mediumRadius,
-      padding: EdgeInsets.all(compact ? 14 : 16),
+      padding: EdgeInsets.all(compactPhone ? 12 : compact ? 14 : 16),
       onTap: onTap,
       child: compact
           ? Column(
@@ -736,11 +773,14 @@ class _TransferFileCard extends StatelessWidget {
                             fileName,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            style: (compactPhone
+                                    ? Theme.of(context).textTheme.titleSmall
+                                    : Theme.of(context).textTheme.titleMedium)
+                                ?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 3),
                           Text(
                             file.size.asReadableFileSize,
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -752,14 +792,14 @@ class _TransferFileCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: compactPhone ? 10 : 12),
                 if (fileStatus == FileStatus.sending) ...[
                   CustomProgressBar(
                     progress: progress,
                     borderRadius: 7,
                     color: statusColor,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: compactPhone ? 8 : 10),
                 ],
                 Wrap(
                   spacing: 8,

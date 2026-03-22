@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 class AppVisuals extends ThemeExtension<AppVisuals> {
   final bool useGlass;
   final bool reduceEffects;
+  final bool showBackdropOrbs;
   final Color backgroundTop;
   final Color backgroundMiddle;
   final Color backgroundBottom;
   final Color accentGlow;
+  final Color backdropPrimaryWash;
+  final Color backdropDepthWash;
   final Color glassSurface;
   final Color glassSurfaceStrong;
   final Color glassBorder;
@@ -26,10 +29,13 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
   const AppVisuals({
     required this.useGlass,
     required this.reduceEffects,
+    required this.showBackdropOrbs,
     required this.backgroundTop,
     required this.backgroundMiddle,
     required this.backgroundBottom,
     required this.accentGlow,
+    required this.backdropPrimaryWash,
+    required this.backdropDepthWash,
     required this.glassSurface,
     required this.glassSurfaceStrong,
     required this.glassBorder,
@@ -61,10 +67,13 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
   AppVisuals copyWith({
     bool? useGlass,
     bool? reduceEffects,
+    bool? showBackdropOrbs,
     Color? backgroundTop,
     Color? backgroundMiddle,
     Color? backgroundBottom,
     Color? accentGlow,
+    Color? backdropPrimaryWash,
+    Color? backdropDepthWash,
     Color? glassSurface,
     Color? glassSurfaceStrong,
     Color? glassBorder,
@@ -81,10 +90,13 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
     return AppVisuals(
       useGlass: useGlass ?? this.useGlass,
       reduceEffects: reduceEffects ?? this.reduceEffects,
+      showBackdropOrbs: showBackdropOrbs ?? this.showBackdropOrbs,
       backgroundTop: backgroundTop ?? this.backgroundTop,
       backgroundMiddle: backgroundMiddle ?? this.backgroundMiddle,
       backgroundBottom: backgroundBottom ?? this.backgroundBottom,
       accentGlow: accentGlow ?? this.accentGlow,
+      backdropPrimaryWash: backdropPrimaryWash ?? this.backdropPrimaryWash,
+      backdropDepthWash: backdropDepthWash ?? this.backdropDepthWash,
       glassSurface: glassSurface ?? this.glassSurface,
       glassSurfaceStrong: glassSurfaceStrong ?? this.glassSurfaceStrong,
       glassBorder: glassBorder ?? this.glassBorder,
@@ -109,10 +121,15 @@ class AppVisuals extends ThemeExtension<AppVisuals> {
     return AppVisuals(
       useGlass: t < 0.5 ? useGlass : other.useGlass,
       reduceEffects: t < 0.5 ? reduceEffects : other.reduceEffects,
+      showBackdropOrbs: t < 0.5 ? showBackdropOrbs : other.showBackdropOrbs,
       backgroundTop: Color.lerp(backgroundTop, other.backgroundTop, t)!,
       backgroundMiddle: Color.lerp(backgroundMiddle, other.backgroundMiddle, t)!,
       backgroundBottom: Color.lerp(backgroundBottom, other.backgroundBottom, t)!,
       accentGlow: Color.lerp(accentGlow, other.accentGlow, t)!,
+      backdropPrimaryWash:
+          Color.lerp(backdropPrimaryWash, other.backdropPrimaryWash, t)!,
+      backdropDepthWash:
+          Color.lerp(backdropDepthWash, other.backdropDepthWash, t)!,
       glassSurface: Color.lerp(glassSurface, other.glassSurface, t)!,
       glassSurfaceStrong: Color.lerp(glassSurfaceStrong, other.glassSurfaceStrong, t)!,
       glassBorder: Color.lerp(glassBorder, other.glassBorder, t)!,
@@ -139,6 +156,11 @@ extension AppVisualsBuildContextExt on BuildContext {
 
   Size get screenSize => MediaQuery.sizeOf(this);
 
+  bool get isCompactPhoneLayout => screenSize.width < 430;
+
+  bool get isRegularPhoneLayout =>
+      screenSize.width >= 430 && screenSize.width < 700;
+
   bool get isCompactWidth => screenSize.width < 390;
 
   bool get isNarrowWidth => screenSize.width < 560;
@@ -149,26 +171,52 @@ extension AppVisualsBuildContextExt on BuildContext {
 
   double get adaptiveHorizontalPadding {
     final width = screenSize.width;
-    if (width < 360) {
+    if (width < 430) {
       return 14;
     }
-    if (width < 430) {
-      return 16;
-    }
     if (width < 700) {
-      return 18;
+      return 16;
     }
     return visuals.horizontalPadding;
   }
 
-  double get adaptiveTopPadding => isPhoneLayout ? 18 : 24;
+  double get adaptiveTopPadding {
+    if (isCompactPhoneLayout) {
+      return 14;
+    }
+    if (isRegularPhoneLayout) {
+      return 16;
+    }
+    return 24;
+  }
 
-  double get adaptiveBottomPadding => isPhoneLayout ? 20 : 28;
+  double get adaptiveBottomPadding {
+    if (isCompactPhoneLayout) {
+      return 14;
+    }
+    if (isRegularPhoneLayout) {
+      return 18;
+    }
+    return 28;
+  }
+
+  double get adaptiveTabDockPadding {
+    if (isCompactPhoneLayout) {
+      return 76;
+    }
+    if (isRegularPhoneLayout) {
+      return 82;
+    }
+    return 108;
+  }
 
   double get adaptiveSectionSpacing {
-    if (!isPhoneLayout) {
-      return visuals.sectionSpacing;
+    if (isCompactPhoneLayout) {
+      return 10;
     }
-    return visuals.sectionSpacing > 14 ? visuals.sectionSpacing - 4 : visuals.sectionSpacing;
+    if (isRegularPhoneLayout) {
+      return 12;
+    }
+    return visuals.sectionSpacing;
   }
 }

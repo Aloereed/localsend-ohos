@@ -80,6 +80,7 @@ class _MessageConversationListView extends StatelessWidget {
         context.adaptiveHorizontalPadding,
         context.adaptiveBottomPadding,
       ),
+      extraBottomPadding: context.adaptiveTabDockPadding,
       children: [
         ModernPageHeader(
           title: t.messageTab.title,

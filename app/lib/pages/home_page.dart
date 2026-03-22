@@ -162,11 +162,8 @@ class _HomePageState extends State<HomePage> with Refena {
         vm.currentTab == HomeTab.settings ||
         (vm.currentTab == HomeTab.message && activeMessageSelection != null);
     final showTabDock = !shouldAutoHideTabDock || _isTabDockVisible;
-    final dockBottom = (context.isPhoneLayout ? 12.0 : 18.0) + bottomInset;
-    final pageBottomPadding =
-        (showTabDock
-                ? (context.isPhoneLayout ? 92.0 : 108.0)
-                : (context.isPhoneLayout ? 16.0 : 24.0)) +
+    final dockBottom =
+        (context.isCompactPhoneLayout ? 8.0 : context.isPhoneLayout ? 10.0 : 18.0) +
             bottomInset;
 
     return DropTarget(
@@ -222,27 +219,23 @@ class _HomePageState extends State<HomePage> with Refena {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: AnimatedPadding(
-                            duration: const Duration(milliseconds: 220),
-                            curve: Curves.easeOutCubic,
-                            padding: EdgeInsets.only(bottom: pageBottomPadding),
-                            child: PageView(
-                              controller: vm.controller,
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: const [
-                                ReceiveTab(),
-                                MessageTab(),
-                                SendTab(),
-                                SettingsTab(),
-                              ],
-                            ),
+                          child: PageView(
+                            controller: vm.controller,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: const [
+                              ReceiveTab(),
+                              MessageTab(),
+                              SendTab(),
+                              SettingsTab(),
+                            ],
                           ),
                         ),
                         if (_dragAndDropIndicator)
                           Positioned.fill(
                             child: Padding(
-                              padding:
-                                  EdgeInsets.all(context.isPhoneLayout ? 14 : 18),
+                              padding: EdgeInsets.all(
+                                context.isPhoneLayout ? 12 : 18,
+                              ),
                               child: GlassSurface(
                                 strong: true,
                                 child: Column(
@@ -250,9 +243,13 @@ class _HomePageState extends State<HomePage> with Refena {
                                   children: [
                                     Icon(
                                       Icons.file_download_rounded,
-                                      size: context.isPhoneLayout ? 72 : 96,
+                                      size: context.isCompactPhoneLayout
+                                          ? 64
+                                          : context.isPhoneLayout
+                                              ? 72
+                                              : 96,
                                     ),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: context.isPhoneLayout ? 16 : 20),
                                     Text(
                                       t.sendTab.placeItems,
                                       style: Theme.of(context)
@@ -264,7 +261,9 @@ class _HomePageState extends State<HomePage> with Refena {
                                     const SizedBox(height: 8),
                                     Text(
                                       t.sendTab.selection.title,
-                                      style: Theme.of(context).textTheme.bodyLarge,
+                                      style: context.isPhoneLayout
+                                          ? Theme.of(context).textTheme.bodyMedium
+                                          : Theme.of(context).textTheme.bodyLarge,
                                     ),
                                   ],
                                 ),

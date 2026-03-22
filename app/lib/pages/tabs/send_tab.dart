@@ -54,6 +54,7 @@ class SendTab extends StatelessWidget {
             context.adaptiveHorizontalPadding,
             context.adaptiveBottomPadding,
           ),
+          extraBottomPadding: context.adaptiveTabDockPadding,
           children: [
             _SelectionSection(vm: vm),
             SizedBox(height: sectionSpacing),
@@ -76,6 +77,8 @@ class _SelectionSection extends StatelessWidget {
     final ref = context.ref;
     final totalSize =
         vm.selectedFiles.fold<int>(0, (prev, curr) => prev + curr.size);
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
 
     return GlassSectionCard(
       title: t.sendTab.selection.title,
@@ -125,11 +128,15 @@ class _SelectionSection extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: phone ? 14 : 16),
           if (vm.selectedFiles.isEmpty)
             LayoutBuilder(
               builder: (context, constraints) {
-                final tileExtent = constraints.maxWidth < 640 ? 92.0 : 104.0;
+                final tileExtent = phone
+                    ? (compactPhone ? 78.0 : 84.0)
+                    : constraints.maxWidth < 640
+                        ? 92.0
+                        : 104.0;
 
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -148,7 +155,8 @@ class _SelectionSection extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (index != _options.length - 1) const SizedBox(width: 10),
+                        if (index != _options.length - 1)
+                          SizedBox(width: phone ? 8 : 10),
                       ],
                     ],
                   ),
@@ -157,15 +165,20 @@ class _SelectionSection extends StatelessWidget {
             )
           else ...[
             SizedBox(
-              height: defaultThumbnailSize + (context.isPhoneLayout ? 8 : 20),
+              height: defaultThumbnailSize +
+                  (compactPhone
+                      ? 4
+                      : context.isPhoneLayout
+                          ? 8
+                          : 20),
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: vm.selectedFiles.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                separatorBuilder: (_, __) => SizedBox(width: phone ? 8 : 10),
                 itemBuilder: (context, index) {
                   final file = vm.selectedFiles[index];
                   return GlassSurface(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(phone ? 8 : 10),
                     applyBlur: false,
                     borderRadius: context.visuals.mediumRadius,
                     child: SmartFileThumbnail.fromCrossFile(file),
@@ -173,7 +186,7 @@ class _SelectionSection extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: phone ? 14 : 18),
             Wrap(
               spacing: 10,
               runSpacing: 10,
@@ -228,6 +241,8 @@ class _SelectionActionButton extends StatelessWidget {
     final theme = Theme.of(context);
     final visuals = context.visuals;
     final scheme = theme.colorScheme;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
 
     return GlassSurface(
       applyBlur: false,
@@ -236,14 +251,14 @@ class _SelectionActionButton extends StatelessWidget {
           ? scheme.primary.withOpacity(0.16)
           : visuals.glassSurfaceStrong,
       borderRadius: visuals.mediumRadius,
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(compactPhone ? 8 : phone ? 9 : 10),
       onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 36,
-            height: 36,
+            width: compactPhone ? 30 : phone ? 32 : 36,
+            height: compactPhone ? 30 : phone ? 32 : 36,
             decoration: BoxDecoration(
               color: highlighted
                   ? scheme.primary.withOpacity(0.18)
@@ -252,17 +267,18 @@ class _SelectionActionButton extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              size: 18,
+              size: compactPhone ? 16 : 18,
               color: highlighted ? scheme.primary : scheme.onSurface,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: phone ? 6 : 8),
           Text(
             label,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: theme.textTheme.titleSmall?.copyWith(
+            style: (phone ? theme.textTheme.bodySmall : theme.textTheme.titleSmall)
+                ?.copyWith(
               fontWeight: FontWeight.w700,
               height: 1.15,
             ),
@@ -281,11 +297,12 @@ class _NearbyDevicesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visuals = context.visuals;
+    final phone = context.isPhoneLayout;
     return GlassSectionCard(
       title: t.sendTab.nearbyDevices,
       subtitle: t.sendTab.help,
       trailing: Wrap(
-        spacing: 8,
+        spacing: phone ? 6 : 8,
         children: [
           _ScanButton(ips: vm.localIps),
           IconButton(
@@ -315,7 +332,7 @@ class _NearbyDevicesSection extends StatelessWidget {
             ...vm.nearbyDevices.map((device) {
               final favoriteEntry = vm.favoriteDevices.findDevice(device);
               return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.only(bottom: phone ? 10 : 12),
                 child: Hero(
                   tag: 'device-${device.ip}',
                   child: vm.sendMode == SendMode.multiple

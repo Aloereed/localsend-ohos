@@ -56,6 +56,7 @@ class SettingsTab extends StatelessWidget {
             context.adaptiveHorizontalPadding,
             context.adaptiveBottomPadding,
           ),
+          extraBottomPadding: context.adaptiveTabDockPadding,
           children: [
             ModernPageHeader(
               title: t.settingsTab.title,
@@ -267,7 +268,12 @@ class SettingsTab extends StatelessWidget {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(vm.settings.destination ?? t.settingsTab.receive.downloads, style: Theme.of(context).textTheme.titleMedium),
+                        child: Text(
+                          vm.settings.destination ?? t.settingsTab.receive.downloads,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ),
@@ -654,25 +660,39 @@ class _SettingsEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCompact = MediaQuery.sizeOf(context).width < 520;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: isCompact
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label),
-                const SizedBox(height: 10),
-                SizedBox(width: double.infinity, child: child),
-              ],
-            )
-          : Row(
-              children: [
-                Expanded(child: Text(label)),
-                const SizedBox(width: 16),
-                SizedBox(width: 170, child: child),
-              ],
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
+        final useStackedLayout = maxWidth < 240;
+        var childWidth = maxWidth * 0.42;
+        if (childWidth < 124) {
+          childWidth = 124;
+        } else if (childWidth > 170) {
+          childWidth = 170;
+        }
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: useStackedLayout
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(label),
+                    const SizedBox(height: 10),
+                    SizedBox(width: double.infinity, child: child),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Expanded(child: Text(label)),
+                    const SizedBox(width: 16),
+                    SizedBox(width: childWidth, child: child),
+                  ],
+                ),
+        );
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localsend_app/util/ui/visuals.dart';
 import 'package:localsend_app/widget/modern/modern_ui.dart';
 
 class CustomListTile extends StatelessWidget {
@@ -20,9 +21,10 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compact = MediaQuery.sizeOf(context).width < 430;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
     final resolvedPadding = padding == const EdgeInsets.all(15)
-        ? EdgeInsets.all(compact ? 12 : 15)
+        ? EdgeInsets.all(compactPhone ? 10 : phone ? 12 : 15)
         : padding;
 
     return GlassSurface(
@@ -34,7 +36,7 @@ class CustomListTile extends StatelessWidget {
         children: [
           if (icon != null) ...[
             icon!,
-            SizedBox(width: compact ? 12 : 16),
+            SizedBox(width: compactPhone ? 10 : phone ? 12 : 16),
           ],
           Expanded(
             child: Column(
@@ -42,20 +44,22 @@ class CustomListTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DefaultTextStyle.merge(
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: compactPhone
+                      ? Theme.of(context).textTheme.titleSmall
+                      : Theme.of(context).textTheme.titleMedium,
                   child: FittedBox(
                     alignment: Alignment.centerLeft,
                     fit: BoxFit.scaleDown,
                     child: title,
                   ),
                 ),
-                SizedBox(height: compact ? 6 : 8),
+                SizedBox(height: compactPhone ? 4 : phone ? 6 : 8),
                 subTitle,
               ],
             ),
           ),
           if (trailing != null) ...[
-            SizedBox(width: compact ? 8 : 12),
+            SizedBox(width: compactPhone ? 6 : phone ? 8 : 12),
             trailing!,
           ],
         ],

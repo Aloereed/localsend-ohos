@@ -2,6 +2,7 @@ import 'package:common/model/device.dart';
 import 'package:flutter/material.dart';
 import 'package:localsend_app/util/device_type_ext.dart';
 import 'package:localsend_app/util/ip_helper.dart';
+import 'package:localsend_app/util/ui/visuals.dart';
 import 'package:localsend_app/widget/custom_progress_bar.dart';
 import 'package:localsend_app/widget/device_bage.dart';
 import 'package:localsend_app/widget/list_tile/custom_list_tile.dart';
@@ -31,13 +32,18 @@ class DeviceListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compact = MediaQuery.sizeOf(context).width < 430;
-    final badgeColor = Color.lerp(Theme.of(context).colorScheme.secondaryContainer, Colors.white, 0.3)!;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
+    final theme = Theme.of(context);
+    final badgeColor = Color.lerp(theme.colorScheme.secondaryContainer, Colors.white, 0.3)!;
     return CustomListTile(
-      icon: Icon(device.deviceType.icon, size: compact ? 38 : 46),
+      icon: Icon(
+        device.deviceType.icon,
+        size: compactPhone ? 34 : phone ? 38 : 46,
+      ),
       title: Text(
         nameOverride ?? device.alias,
-        style: TextStyle(fontSize: compact ? 17 : 20),
+        style: TextStyle(fontSize: compactPhone ? 16 : phone ? 18 : 20),
       ),
       trailing: onFavoriteTap != null
           ? IconButton(
@@ -46,14 +52,17 @@ class DeviceListTile extends StatelessWidget {
             )
           : null,
       subTitle: Wrap(
-        runSpacing: compact ? 8 : 10,
-        spacing: compact ? 8 : 10,
+        runSpacing: compactPhone ? 6 : phone ? 8 : 10,
+        spacing: compactPhone ? 6 : phone ? 8 : 10,
         children: [
           if (info != null)
-            Text(info!, style: const TextStyle(color: Colors.grey))
+            Text(
+              info!,
+              style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+            )
           else if (progress != null)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
+              padding: EdgeInsets.symmetric(vertical: compactPhone ? 3 : 5),
               child: CustomProgressBar(progress: progress!),
             )
           else ...[

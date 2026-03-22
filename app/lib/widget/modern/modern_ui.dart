@@ -12,42 +12,82 @@ class AppBackdrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visuals = context.visuals;
+    final orbLayers = [
+      Positioned(
+        top: -120,
+        left: -90,
+        child: _GlowOrb(
+          size: 260,
+          color: visuals.accentGlow,
+        ),
+      ),
+      Positioned(
+        top: 120,
+        right: -110,
+        child: _GlowOrb(
+          size: 220,
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+        ),
+      ),
+      Positioned(
+        bottom: -120,
+        left: 40,
+        child: _GlowOrb(
+          size: 280,
+          color: Theme.of(context).colorScheme.tertiary.withOpacity(0.08),
+        ),
+      ),
+    ];
+
     return SizedBox.expand(
       child: DecoratedBox(
         decoration: BoxDecoration(gradient: visuals.backgroundGradient),
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Positioned(
-              top: -120,
-              left: -90,
-              child: _GlowOrb(
-                size: 260,
-                color: visuals.accentGlow,
-                reduceEffects: visuals.reduceEffects,
+            if (visuals.showBackdropOrbs) ...orbLayers,
+            if (!visuals.showBackdropOrbs) ...[
+              _BackdropWash(
+                gradient: RadialGradient(
+                  center: const Alignment(-0.92, -1.0),
+                  radius: 1.08,
+                  colors: [
+                    visuals.backdropPrimaryWash,
+                    visuals.backdropPrimaryWash.withOpacity(0),
+                  ],
+                  stops: const [0.0, 1.0],
+                ),
               ),
-            ),
-            Positioned(
-              top: 120,
-              right: -110,
-              child: _GlowOrb(
-                size: 220,
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
-                reduceEffects: visuals.reduceEffects,
+              _BackdropWash(
+                gradient: RadialGradient(
+                  center: const Alignment(1.08, 1.05),
+                  radius: 1.16,
+                  colors: [
+                    visuals.backdropDepthWash,
+                    visuals.backdropDepthWash.withOpacity(0),
+                  ],
+                  stops: const [0.0, 1.0],
+                ),
               ),
-            ),
-            Positioned(
-              bottom: -120,
-              left: 40,
-              child: _GlowOrb(
-                size: 280,
-                color: Theme.of(context).colorScheme.tertiary.withOpacity(0.08),
-                reduceEffects: visuals.reduceEffects,
-              ),
-            ),
+            ],
             child,
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _BackdropWash extends StatelessWidget {
+  final Gradient gradient;
+
+  const _BackdropWash({required this.gradient});
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: DecoratedBox(
+        decoration: BoxDecoration(gradient: gradient),
       ),
     );
   }
@@ -170,24 +210,27 @@ class GlassSectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visuals = context.visuals;
-    final compact = context.isNarrowWidth;
-    final titleStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
+    final stackedHeader = context.isNarrowWidth;
+    final titleStyle =
+        (phone ? Theme.of(context).textTheme.titleMedium : Theme.of(context).textTheme.titleLarge)?.copyWith(
           fontWeight: FontWeight.w700,
         );
     final subtitleStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: visuals.mutedForeground,
-          height: 1.35,
+          height: phone ? 1.28 : 1.35,
         );
 
     return GlassSurface(
       strong: strong,
       applyBlur: applyBlur,
       margin: margin,
-      padding: EdgeInsets.all(compact ? 16 : 20),
+      padding: EdgeInsets.all(compactPhone ? 14 : phone ? 16 : 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (compact)
+          if (stackedHeader)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -197,7 +240,7 @@ class GlassSectionCard extends StatelessWidget {
                   Text(subtitle!, style: subtitleStyle),
                 ],
                 if (trailing != null) ...[
-                  const SizedBox(height: 14),
+                  SizedBox(height: phone ? 12 : 14),
                   Align(alignment: Alignment.centerLeft, child: trailing!),
                 ],
               ],
@@ -224,7 +267,7 @@ class GlassSectionCard extends StatelessWidget {
                 ],
               ],
             ),
-          SizedBox(height: compact ? 16 : 20),
+          SizedBox(height: phone ? 14 : 20),
           child,
         ],
       ),
@@ -248,13 +291,14 @@ class StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compact = context.isCompactWidth;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
     final scheme = Theme.of(context).colorScheme;
     final resolved = color ?? scheme.primary;
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: compact ? 10 : 12,
-        vertical: compact ? 7 : 8,
+        horizontal: compactPhone ? 8 : phone ? 10 : 12,
+        vertical: phone ? 6 : 8,
       ),
       decoration: BoxDecoration(
         color: emphasized
@@ -271,12 +315,19 @@ class StatusChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: compact ? 13 : 14, color: emphasized ? resolved : null),
-            SizedBox(width: compact ? 5 : 6),
+            Icon(
+              icon,
+              size: compactPhone ? 12 : phone ? 13 : 14,
+              color: emphasized ? resolved : null,
+            ),
+            SizedBox(width: compactPhone ? 4 : phone ? 5 : 6),
           ],
           Text(
             label,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            style: (phone
+                    ? Theme.of(context).textTheme.labelMedium
+                    : Theme.of(context).textTheme.labelLarge)
+                ?.copyWith(
                   color: emphasized ? resolved : null,
                   fontWeight: FontWeight.w600,
                 ),
@@ -309,7 +360,8 @@ class ModernActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compact = context.isNarrowWidth;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
     final theme = Theme.of(context);
     final visuals = context.visuals;
     final scheme = theme.colorScheme;
@@ -321,14 +373,14 @@ class ModernActionTile extends StatelessWidget {
           ? scheme.primary.withOpacity(0.16)
           : visuals.glassSurfaceStrong,
       borderRadius: visuals.mediumRadius,
-      padding: EdgeInsets.all(compact ? 14 : 20),
+      padding: EdgeInsets.all(compactPhone ? 12 : phone ? 14 : 20),
       onTap: onTap,
       onLongPress: onLongPress,
       child: Row(
         children: [
           Container(
-            width: compact ? 40 : 44,
-            height: compact ? 40 : 44,
+            width: compactPhone ? 36 : phone ? 38 : 44,
+            height: compactPhone ? 36 : phone ? 38 : 44,
             decoration: BoxDecoration(
               color: highlighted
                   ? scheme.primary.withOpacity(0.18)
@@ -337,26 +389,32 @@ class ModernActionTile extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              size: compact ? 20 : 24,
+              size: compactPhone ? 18 : phone ? 19 : 24,
               color: highlighted ? scheme.primary : scheme.onSurface,
             ),
           ),
-          SizedBox(width: compact ? 12 : 14),
+          SizedBox(width: compactPhone ? 10 : phone ? 12 : 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  style: (compactPhone
+                          ? theme.textTheme.titleSmall
+                          : theme.textTheme.titleMedium)
+                      ?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 if (subtitle != null) ...[
-                  const SizedBox(height: 4),
+                  SizedBox(height: phone ? 3 : 4),
                   Text(
                     subtitle!,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: (phone
+                            ? theme.textTheme.bodySmall
+                            : theme.textTheme.bodyMedium)
+                        ?.copyWith(
                       color: visuals.mutedForeground,
                     ),
                   ),
@@ -365,7 +423,7 @@ class ModernActionTile extends StatelessWidget {
             ),
           ),
           if (trailing != null) ...[
-            const SizedBox(width: 12),
+            SizedBox(width: phone ? 10 : 12),
             trailing!,
           ] else
             Icon(Icons.chevron_right, color: visuals.mutedForeground),
@@ -389,73 +447,82 @@ class FloatingTabDock<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compact = context.isCompactWidth;
-    final showLabels = !compact && !context.isNarrowWidth;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
+    final showLabels = !phone && !context.isCompactWidth && !context.isNarrowWidth;
     final visuals = context.visuals;
     final scheme = Theme.of(context).colorScheme;
 
     return GlassSurface(
       padding: EdgeInsets.symmetric(
-        horizontal: compact ? 6 : 10,
-        vertical: compact ? 6 : 10,
+        horizontal: compactPhone ? 4 : phone ? 6 : 10,
+        vertical: compactPhone ? 4 : phone ? 6 : 10,
       ),
-      borderRadius: BorderRadius.circular(compact ? 24 : 28),
+      borderRadius: BorderRadius.circular(compactPhone ? 22 : phone ? 24 : 28),
       strong: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: items.map((item) {
           final selected = item.value == currentValue;
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: compact ? 2 : 4),
+            padding: EdgeInsets.symmetric(horizontal: compactPhone ? 1 : phone ? 2 : 4),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(compact ? 18 : 22),
+                borderRadius: BorderRadius.circular(compactPhone ? 16 : phone ? 18 : 22),
                 onTap: () => onChanged(item.value),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: compact ? 12 : 16,
-                    vertical: compact ? 10 : 12,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 44,
+                    minHeight: 44,
                   ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(compact ? 18 : 22),
-                    color: selected
-                        ? scheme.primary.withOpacity(0.18)
-                        : Colors.transparent,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        item.icon,
-                        size: compact ? 18 : 20,
-                        color: selected ? scheme.primary : visuals.mutedForeground,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: compactPhone ? 10 : phone ? 12 : 16,
+                      vertical: compactPhone ? 8 : phone ? 9 : 12,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        compactPhone ? 16 : phone ? 18 : 22,
                       ),
-                      AnimatedSize(
-                        duration: const Duration(milliseconds: 220),
-                        curve: Curves.easeOutCubic,
-                        child: showLabels && selected
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    item.label,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(
-                                          color: scheme.primary,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                  ),
-                                ],
-                              )
-                            : const SizedBox.shrink(),
-                      ),
-                    ],
+                      color: selected
+                          ? scheme.primary.withOpacity(0.18)
+                          : Colors.transparent,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          item.icon,
+                          size: compactPhone ? 17 : phone ? 18 : 20,
+                          color: selected ? scheme.primary : visuals.mutedForeground,
+                        ),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 220),
+                          curve: Curves.easeOutCubic,
+                          child: showLabels && selected
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      item.label,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                            color: scheme.primary,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -596,22 +663,38 @@ class ModernPageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compact = context.isNarrowWidth;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
     final theme = Theme.of(context);
     final visuals = context.visuals;
-    final titleStyle = (compact ? theme.textTheme.headlineSmall : theme.textTheme.headlineMedium)?.copyWith(
+    final titleStyle =
+        (compactPhone
+                ? theme.textTheme.titleLarge
+                : phone
+                    ? theme.textTheme.headlineSmall
+                    : theme.textTheme.headlineMedium)
+            ?.copyWith(
       fontWeight: FontWeight.w800,
-      letterSpacing: compact ? -0.3 : -0.6,
+      letterSpacing: compactPhone ? -0.2 : phone ? -0.3 : -0.6,
     );
-    final subtitleStyle = (compact ? theme.textTheme.bodyMedium : theme.textTheme.bodyLarge)?.copyWith(
+    final subtitleStyle =
+        (compactPhone
+                ? theme.textTheme.bodySmall
+                : phone
+                    ? theme.textTheme.bodyMedium
+                    : theme.textTheme.bodyLarge)
+            ?.copyWith(
       color: visuals.mutedForeground,
-      height: 1.45,
+      height: phone ? 1.3 : 1.45,
     );
 
-    if (compact && lowProfile) {
+    if (phone && lowProfile) {
       return GlassSurface(
         strong: true,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: compactPhone ? 12 : 14,
+          vertical: compactPhone ? 10 : 11,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -629,12 +712,15 @@ class ModernPageHeader extends StatelessWidget {
                         title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleLarge?.copyWith(
+                        style: (compactPhone
+                                ? theme.textTheme.titleMedium
+                                : theme.textTheme.titleLarge)
+                            ?.copyWith(
                           fontWeight: FontWeight.w800,
                           letterSpacing: -0.2,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 1),
                       Text(
                         subtitle,
                         maxLines: 1,
@@ -654,18 +740,22 @@ class ModernPageHeader extends StatelessWidget {
               ],
             ),
             if (chips.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Wrap(spacing: 8, runSpacing: 8, children: chips),
+              SizedBox(height: compactPhone ? 8 : 10),
+              Wrap(
+                spacing: compactPhone ? 6 : 8,
+                runSpacing: compactPhone ? 6 : 8,
+                children: chips,
+              ),
             ],
           ],
         ),
       );
     }
 
-    if (compact) {
+    if (phone) {
       return GlassSurface(
         strong: true,
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.all(compactPhone ? 14 : 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -678,13 +768,18 @@ class ModernPageHeader extends StatelessWidget {
                   if (trailing != null) trailing!,
                 ],
               ),
-            if (leading != null || trailing != null) const SizedBox(height: 16),
+            if (leading != null || trailing != null)
+              SizedBox(height: compactPhone ? 10 : 12),
             Text(title, style: titleStyle),
-            const SizedBox(height: 6),
+            SizedBox(height: compactPhone ? 4 : 6),
             Text(subtitle, style: subtitleStyle),
             if (chips.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              Wrap(spacing: 8, runSpacing: 8, children: chips),
+              SizedBox(height: compactPhone ? 10 : 12),
+              Wrap(
+                spacing: compactPhone ? 6 : 8,
+                runSpacing: compactPhone ? 6 : 8,
+                children: chips,
+              ),
             ],
           ],
         ),
@@ -728,35 +823,14 @@ class ModernPageHeader extends StatelessWidget {
 class _GlowOrb extends StatelessWidget {
   final double size;
   final Color color;
-  final bool reduceEffects;
 
   const _GlowOrb({
     required this.size,
     required this.color,
-    required this.reduceEffects,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (reduceEffects) {
-      return IgnorePointer(
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: RadialGradient(
-              colors: [
-                color.withOpacity(0.75),
-                color.withOpacity(0.0),
-              ],
-              stops: const [0.0, 1.0],
-            ),
-          ),
-        ),
-      );
-    }
-
     return IgnorePointer(
       child: ImageFiltered(
         imageFilter: ImageFilter.blur(sigmaX: 28, sigmaY: 28),

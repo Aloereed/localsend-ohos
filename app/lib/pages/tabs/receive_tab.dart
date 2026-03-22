@@ -24,6 +24,8 @@ class ReceiveTab extends StatelessWidget {
     final vm = context.watch(receiveTabVmProvider);
     final visuals = context.visuals;
     final sectionSpacing = context.adaptiveSectionSpacing;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
     final isOnline = vm.serverState != null;
     final networkSummary = isOnline
         ? vm.localIps.map((ip) => '#${ip.visualId}').toSet().join(' | ')
@@ -37,6 +39,7 @@ class ReceiveTab extends StatelessWidget {
         context.adaptiveHorizontalPadding,
         context.adaptiveBottomPadding,
       ),
+      extraBottomPadding: context.adaptiveTabDockPadding,
       children: [
         ModernPageHeader(
           title: vm.serverState?.alias ?? vm.aliasSettings,
@@ -82,6 +85,15 @@ class ReceiveTab extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SegmentedButton<_QuickSaveMode>(
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      padding: WidgetStatePropertyAll(
+                        EdgeInsets.symmetric(
+                          horizontal: compactPhone ? 10 : phone ? 12 : 14,
+                          vertical: compactPhone ? 10 : phone ? 11 : 12,
+                        ),
+                      ),
+                    ),
                     multiSelectionEnabled: false,
                     emptySelectionAllowed: false,
                     showSelectedIcon: false,
@@ -127,10 +139,13 @@ class ReceiveTab extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: phone ? 12 : 14),
               Text(
                 t.general.quickSave,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                style: (phone
+                        ? Theme.of(context).textTheme.bodySmall
+                        : Theme.of(context).textTheme.bodyMedium)
+                    ?.copyWith(
                       color: visuals.mutedForeground,
                     ),
               ),
@@ -178,9 +193,10 @@ class _HeaderActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final phone = context.isPhoneLayout;
     return Wrap(
-      spacing: 10,
-      runSpacing: 10,
+      spacing: phone ? 8 : 10,
+      runSpacing: phone ? 8 : 10,
       alignment: WrapAlignment.end,
       children: [
         AnimatedOpacity(
@@ -216,12 +232,18 @@ class _HeroLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = context.isPhoneLayout ? 84.0 : 104.0;
+    final size = context.isCompactPhoneLayout
+        ? 64.0
+        : context.isPhoneLayout
+            ? 72.0
+            : 104.0;
     return GlassSurface(
       width: size,
       height: size,
       strong: isOnline,
-      padding: EdgeInsets.all(context.isPhoneLayout ? 8 : 10),
+      padding: EdgeInsets.all(
+        context.isCompactPhoneLayout ? 6 : context.isPhoneLayout ? 7 : 10,
+      ),
       child: const FittedBox(
         fit: BoxFit.contain,
         child: AloeChatAILogo(withText: false),
@@ -238,23 +260,23 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compact = context.isCompactWidth;
+    final phone = context.isPhoneLayout;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: compact
+      padding: EdgeInsets.only(bottom: phone ? 10 : 14),
+      child: phone
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: context.visuals.mutedForeground,
                       ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 SelectableText(
                   value,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             )

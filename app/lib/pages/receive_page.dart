@@ -66,8 +66,9 @@ class _ReceivePageState extends State<ReceivePage> with Refena {
     final senderFavoriteEntry = ref.watch(
       favoritesProvider.select((state) => state.findDevice(vm.sender)),
     );
-    final visuals = context.visuals;
     final sectionSpacing = context.adaptiveSectionSpacing;
+    final phone = context.isPhoneLayout;
+    final compactPhone = context.isCompactPhoneLayout;
 
     return PopScope(
       onPopInvoked: (didPop) {
@@ -140,22 +141,28 @@ class _ReceivePageState extends State<ReceivePage> with Refena {
                           Builder(
                             builder: (context) {
                               final compact = context.isPhoneLayout;
+                              final compactPhone = context.isCompactPhoneLayout;
                               return Container(
-                                width: compact ? 72 : 84,
-                                height: compact ? 72 : 84,
+                                width: compactPhone ? 60 : compact ? 68 : 84,
+                                height: compactPhone ? 60 : compact ? 68 : 84,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.primary.withOpacity(0.14),
-                                  borderRadius: BorderRadius.circular(compact ? 24 : 28),
+                                  borderRadius: BorderRadius.circular(
+                                    compactPhone ? 20 : compact ? 22 : 28,
+                                  ),
                                 ),
-                                child: Icon(vm.sender.deviceType.icon, size: compact ? 36 : 42),
+                                child: Icon(
+                                  vm.sender.deviceType.icon,
+                                  size: compactPhone ? 30 : compact ? 34 : 42,
+                                ),
                               );
                             },
                           ),
-                          const SizedBox(height: 18),
+                          SizedBox(height: compactPhone ? 12 : phone ? 14 : 18),
                           if (vm.showSenderInfo)
                             Wrap(
-                              spacing: 10,
-                              runSpacing: 10,
+                              spacing: phone ? 8 : 10,
+                              runSpacing: phone ? 8 : 10,
                               alignment: WrapAlignment.center,
                               children: [
                                 InkWell(
@@ -226,16 +233,22 @@ class _MessageSection extends StatelessWidget {
             applyBlur: false,
             borderRadius: BorderRadius.circular(22),
             child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: context.isPhoneLayout ? 96 : 120),
+              constraints: BoxConstraints(
+                minHeight: context.isCompactPhoneLayout
+                    ? 80
+                    : context.isPhoneLayout
+                        ? 88
+                        : 120,
+              ),
               child: SingleChildScrollView(
                 child: SelectableText(vm.message!),
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: context.isPhoneLayout ? 12 : 16),
           Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: context.isPhoneLayout ? 8 : 10,
+            runSpacing: context.isPhoneLayout ? 8 : 10,
             alignment: WrapAlignment.center,
             children: [
               FilledButton.icon(
@@ -330,14 +343,20 @@ class _ReceiveActions extends StatelessWidget {
       return GlassSectionCard(
         title: t.receivePage.canceled,
         subtitle: t.receivePage.actions.canceledSubtitle,
-        child: Center(
-          child: FilledButton.icon(
-            onPressed: () {
-              vm.onClose();
-              context.pop();
-            },
-            icon: const Icon(Icons.check_circle_rounded),
-            label: Text(t.general.close),
+        child: SizedBox(
+          width: context.isPhoneLayout ? double.infinity : null,
+          child: Center(
+            child: SizedBox(
+              width: context.isPhoneLayout ? double.infinity : null,
+              child: FilledButton.icon(
+                onPressed: () {
+                  vm.onClose();
+                  context.pop();
+                },
+                icon: const Icon(Icons.check_circle_rounded),
+                label: Text(t.general.close),
+              ),
+            ),
           ),
         ),
       );
@@ -347,35 +366,60 @@ class _ReceiveActions extends StatelessWidget {
       title: t.receivePage.actions.title,
       subtitle: t.receivePage.actions.subtitle,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextButton.icon(
-            onPressed: () async {
-              await context.push(() => const ReceiveOptionsPage());
-            },
-            icon: const Icon(Icons.tune_rounded),
-            label: Text(t.receiveOptionsPage.title),
+          SizedBox(
+            width: context.isPhoneLayout ? double.infinity : null,
+            child: TextButton.icon(
+              onPressed: () async {
+                await context.push(() => const ReceiveOptionsPage());
+              },
+              icon: const Icon(Icons.tune_rounded),
+              label: Text(t.receiveOptionsPage.title),
+            ),
           ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            alignment: WrapAlignment.center,
-            children: [
-              FilledButton.tonalIcon(
-                onPressed: () {
-                  vm.onDecline();
-                  context.pop();
-                },
-                icon: const Icon(Icons.close_rounded),
-                label: Text(t.general.decline),
-              ),
-              FilledButton.icon(
-                onPressed: selectedFiles.isEmpty ? null : () => vm.onAccept(),
-                icon: const Icon(Icons.check_circle_rounded),
-                label: Text(t.general.accept),
-              ),
-            ],
-          ),
+          SizedBox(height: context.isPhoneLayout ? 12 : 14),
+          if (context.isPhoneLayout)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FilledButton.icon(
+                  onPressed: selectedFiles.isEmpty ? null : () => vm.onAccept(),
+                  icon: const Icon(Icons.check_circle_rounded),
+                  label: Text(t.general.accept),
+                ),
+                const SizedBox(height: 10),
+                FilledButton.tonalIcon(
+                  onPressed: () {
+                    vm.onDecline();
+                    context.pop();
+                  },
+                  icon: const Icon(Icons.close_rounded),
+                  label: Text(t.general.decline),
+                ),
+              ],
+            )
+          else
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              alignment: WrapAlignment.center,
+              children: [
+                FilledButton.tonalIcon(
+                  onPressed: () {
+                    vm.onDecline();
+                    context.pop();
+                  },
+                  icon: const Icon(Icons.close_rounded),
+                  label: Text(t.general.decline),
+                ),
+                FilledButton.icon(
+                  onPressed: selectedFiles.isEmpty ? null : () => vm.onAccept(),
+                  icon: const Icon(Icons.check_circle_rounded),
+                  label: Text(t.general.accept),
+                ),
+              ],
+            ),
         ],
       ),
     );

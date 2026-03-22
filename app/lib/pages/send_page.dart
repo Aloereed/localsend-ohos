@@ -114,6 +114,7 @@ class _SendPageState extends State<SendPage> with Refena {
     );
     final waiting = sendState?.status == SessionStatus.waiting;
     final sectionSpacing = context.adaptiveSectionSpacing;
+    final compactPhone = context.isCompactPhoneLayout;
 
     return PopScope(
       onPopInvoked: (didPop) {
@@ -176,10 +177,24 @@ class _SendPageState extends State<SendPage> with Refena {
                   child: Column(
                     children: [
                       DeviceListTile(device: myDevice),
-                      SizedBox(height: context.isPhoneLayout ? 16 : 22),
+                      SizedBox(
+                        height: compactPhone
+                            ? 12
+                            : context.isPhoneLayout
+                                ? 16
+                                : 22,
+                      ),
                       Container(
-                        width: context.isPhoneLayout ? 48 : 56,
-                        height: context.isPhoneLayout ? 48 : 56,
+                        width: compactPhone
+                            ? 42
+                            : context.isPhoneLayout
+                                ? 46
+                                : 56,
+                        height: compactPhone
+                            ? 42
+                            : context.isPhoneLayout
+                                ? 46
+                                : 56,
                         decoration: BoxDecoration(
                           color: Theme.of(context)
                               .colorScheme
@@ -189,10 +204,20 @@ class _SendPageState extends State<SendPage> with Refena {
                         ),
                         child: Icon(
                           Icons.arrow_downward_rounded,
-                          size: context.isPhoneLayout ? 22 : 24,
+                          size: compactPhone
+                              ? 18
+                              : context.isPhoneLayout
+                                  ? 20
+                                  : 24,
                         ),
                       ),
-                      SizedBox(height: context.isPhoneLayout ? 16 : 22),
+                      SizedBox(
+                        height: compactPhone
+                            ? 12
+                            : context.isPhoneLayout
+                                ? 16
+                                : 22,
+                      ),
                       Hero(
                         tag: 'device-${targetDevice.ip}',
                         child: DeviceListTile(

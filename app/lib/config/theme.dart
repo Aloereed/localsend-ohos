@@ -179,6 +179,21 @@ ThemeData getThemeWithSettings({
         return IconThemeData(color: visuals.mutedForeground);
       }),
     ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: colorScheme.surface,
+      selectedItemColor: colorScheme.primary,
+      unselectedItemColor: visuals.mutedForeground,
+      selectedLabelStyle: const TextStyle(
+        fontFamily: 'HarmonyOS Sans',
+        fontWeight: FontWeight.w600,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontFamily: 'HarmonyOS Sans',
+        fontWeight: FontWeight.w500,
+      ),
+      elevation: 0,
+      type: BottomNavigationBarType.fixed,
+    ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
         backgroundColor:
@@ -279,26 +294,46 @@ AppVisuals _buildVisuals({
   required bool reduceEffects,
 }) {
   final isDark = brightness == Brightness.dark;
+  final showBackdropOrbs = !reduceEffects;
   final glassSurfaceOpacity = isDark
       ? (reduceEffects ? 0.14 : 0.08)
       : (reduceEffects ? 0.66 : 0.55);
   final glassSurfaceStrongOpacity = isDark
       ? (reduceEffects ? 0.2 : 0.12)
       : (reduceEffects ? 0.78 : 0.72);
+  final backgroundTop = reduceEffects
+      ? (isDark ? const Color(0xFF08111A) : const Color(0xFFF5FAF8))
+      : (isDark ? const Color(0xFF08111E) : const Color(0xFFF4F8FF));
+  final backgroundMiddle = reduceEffects
+      ? (isDark ? const Color(0xFF0B1621) : const Color(0xFFF1F7F4))
+      : (isDark ? const Color(0xFF0C1A2B) : const Color(0xFFEFF5F3));
+  final backgroundBottom = reduceEffects
+      ? (isDark ? const Color(0xFF050B12) : const Color(0xFFEDF4F6))
+      : (isDark ? const Color(0xFF05080F) : const Color(0xFFF8FAFD));
+  final backdropPrimaryWash = colorScheme.primary.withOpacity(
+    reduceEffects
+        ? (isDark ? 0.08 : 0.06)
+        : (isDark ? 0.12 : 0.09),
+  );
+  final backdropDepthWash = (isDark ? Colors.white : Colors.black).withOpacity(
+    reduceEffects
+        ? (isDark ? 0.05 : 0.04)
+        : (isDark ? 0.08 : 0.06),
+  );
   return AppVisuals(
     useGlass: useGlass,
     reduceEffects: reduceEffects,
-    backgroundTop:
-        isDark ? const Color(0xFF08111E) : const Color(0xFFF4F8FF),
-    backgroundMiddle:
-        isDark ? const Color(0xFF0C1A2B) : const Color(0xFFEFF5F3),
-    backgroundBottom:
-        isDark ? const Color(0xFF05080F) : const Color(0xFFF8FAFD),
+    showBackdropOrbs: showBackdropOrbs,
+    backgroundTop: backgroundTop,
+    backgroundMiddle: backgroundMiddle,
+    backgroundBottom: backgroundBottom,
     accentGlow: colorScheme.primary.withOpacity(
       isDark
           ? (reduceEffects ? 0.12 : 0.16)
           : (reduceEffects ? 0.08 : 0.11),
     ),
+    backdropPrimaryWash: backdropPrimaryWash,
+    backdropDepthWash: backdropDepthWash,
     glassSurface:
         (isDark ? Colors.white : Colors.white).withOpacity(glassSurfaceOpacity),
     glassSurfaceStrong:
