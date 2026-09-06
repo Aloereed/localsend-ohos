@@ -76,19 +76,26 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
       } catch (e) { fail(e as Error); }
     };
     token.close = () => fail(new Error('传输已取消'));
-    if (tcp) {
-      tcp.on('message', (message: socket.SocketMessageInfo) => consume(new Uint8Array(message.message)));
-      tcp.on('error', (error) => fail(new Error(`网络错误 ${error.code}`)));
-      tcp.on('close', () => { if (!finished) fail(new Error('设备提前关闭了连接')); });
-    }
-    if (tls) {
-      tls.on('message', (message: socket.SocketMessageInfo) => consume(new Uint8Array(message.message)));
-      tls.on('error', (error) => fail(new Error(`TLS 网络错误 ${error.code}`)));
-      tls.on('close', () => { if (!finished) fail(new Error('设备提前关闭了连接')); });
-    }
     const start = async (): Promise<void> => {
       touch();
       const address: socket.NetAddress = { address: peer.ip, port: peer.port, family: peer.ip.includes(':') ? 2 : 1 };
+      const local: socket.NetAddress = { address: peer.ip.includes(':') ? '::' : '0.0.0.0', port: 0, family: address.family };
+      // TLSSocket event subscription requires a successful bind on HarmonyOS.
+      // Explicit ephemeral binding also makes IPv4/IPv6 selection unambiguous.
+      if (tcp) await tcp.bind(local);
+      if (tls) await tls.bind(local);
+      if (finished) { close(); return; }
+      token.check();
+      if (tcp) {
+        tcp.on('message', (message: socket.SocketMessageInfo) => consume(new Uint8Array(message.message)));
+        tcp.on('error', (error) => fail(new Error(`网络错误 ${error.code}`)));
+        tcp.on('close', () => { if (!finished) fail(new Error('设备提前关闭了连接')); });
+      }
+      if (tls) {
+        tls.on('message', (message: socket.SocketMessageInfo) => consume(new Uint8Array(message.message)));
+        tls.on('error', (error) => fail(new Error(`TLS 网络错误 ${error.code}`)));
+        tls.on('close', () => { if (!finished) fail(new Error('设备提前关闭了连接')); });
+      }
       if (tcp) await tcp.connect({ address: address, timeout: 5000 });
       if (tls) {
         // LocalSend uses self-signed certificates. Check the advertised/persisted

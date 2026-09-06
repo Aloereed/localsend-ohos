@@ -40,14 +40,19 @@ const nativeFs = {
 
 class SocketAdapter {
   constructor(isTls, socket) { this.isTls = isTls; this.socket = socket; this.listeners = []; if (socket) this.attach(); }
-  on(name, callback) { this.listeners.push([name, callback]); if (this.socket) this.install(name, callback); }
+  async bind(address) { this.bindAddress = address; }
+  on(name, callback) {
+    if (this.isTls && !this.socket && !this.bindAddress) throw new Error('HarmonyOS TLSSocket.on requires successful bind first');
+    this.listeners.push([name, callback]); if (this.socket) this.install(name, callback);
+  }
   install(name, cb) {
     if (name === 'message') this.socket.on('data', data => cb({ message: Uint8Array.from(data).buffer, remoteInfo: { address: this.socket.remoteAddress?.replace(/^::ffff:/, ''), port: this.socket.remotePort } }));
     else this.socket.on(name, cb);
   }
   attach() { for (const [name, cb] of this.listeners) this.install(name, cb); }
   async connect(options) {
-    const settings = { host: options.address.address, port: options.address.port };
+    if (!this.bindAddress) throw new Error('Explicit client bind missing');
+    const settings = { host: options.address.address, port: options.address.port, localAddress: this.bindAddress.address, localPort: this.bindAddress.port };
     this.socket = this.isTls ? tls.connect({ ...settings, rejectUnauthorized: false }) : net.connect(settings);
     this.attach();
     await new Promise((resolve, reject) => { this.socket.once(this.isTls ? 'secureConnect' : 'connect', resolve); this.socket.once('error', reject); });
