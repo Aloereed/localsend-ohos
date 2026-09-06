@@ -128,7 +128,7 @@ class UploadSink implements BodySink {
     }
     if (this.output) { await fs.close(this.output); this.output = undefined; }
     await fs.rename(`${this.path}.part`, this.path);
-    this.finished = true; this.view.status = 'complete';
+    this.finished = true; this.view.status = 'complete'; this.view.path = this.path;
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
     entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
     if (this.fileInfo.preview && this.fileInfo.fileType === 'text/plain' && this.received <= 400000) entry.text = await fs.readText(this.path);

@@ -30,6 +30,6 @@ export default class EntryAbility extends UIAbility {
     appStore.init(this.context).then(() => localSend.discover(false)).catch((error: Error) => appStore.log(error.message));
   }
   onConfigurationUpdate(configuration: Configuration): void { appStore.refreshSystemTheme(); }
-  onBackground(): void { appStore.log('应用进入后台，活跃传输由系统长时任务保护'); }
+  onBackground(): void { appStore.log('应用进入后台；长时任务申请结果请查看传输日志'); }
   onDestroy(): void { webShare.stop(); localSend.stop(); }
 }

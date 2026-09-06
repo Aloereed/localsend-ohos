@@ -271,6 +271,7 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       });
       const entry = store.history.find(item => item.name === 'nonzero-128MiB.bin'); assert.ok(entry);
       assert.equal(entry.path, store.downloadDirectory + '/nonzero-128MiB.bin'); assert.equal(entry.exportedPath, entry.path);
+      assert.equal(store.transfers.find(item => item.id === session.sessionId).files[0].path, entry.path, 'completed transfer exposes the verified file for opening');
       const actual = crypto.createHash('sha256');
       for await (const chunk of require('node:fs').createReadStream(entry.path)) actual.update(chunk);
       assert.equal(actual.digest('hex'), digest); assert.equal(started, 1);

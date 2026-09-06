@@ -60,6 +60,7 @@ export class HistoryEntry {
 
 export class TransferFile {
   id: string = '';
+  path: string = '';
   name: string = '';
   size: number = 0;
   transferred: number = 0;

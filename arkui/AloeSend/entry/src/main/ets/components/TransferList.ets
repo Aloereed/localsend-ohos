@@ -1,4 +1,4 @@
-import { AppStore, TransferView, TransferFile, formatSize } from '../model/AppStore';
+import { AppStore, TransferView, TransferFile, HistoryEntry, formatSize } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { AppIcon } from './AppIcon';
@@ -74,6 +74,16 @@ export struct TransferList {
 
   total(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + (file.selected ? file.size : 0), 0); }
   done(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + file.transferred, 0); }
+  percent(transfer: TransferView): number {
+    if (transfer.status === 'complete') return 100;
+    return Math.max(0, Math.min(100, this.done(transfer) * 100 / Math.max(1, this.total(transfer))));
+  }
+  openReceived(transferId: string, fileId: string): void {
+    const file = this.currentFile(transferId, fileId);
+    if (file.status !== 'complete' || !file.path) return;
+    const entry = new HistoryEntry(); entry.name = file.name; entry.path = file.path;
+    this.store.openFile(entry);
+  }
   rate(transfer: TransferView): string {
     const seconds = Math.max(1, ((transfer.finished || Date.now()) - (transfer.activeStarted || transfer.started)) / 1000);
     const speed = this.done(transfer) / seconds;
@@ -104,11 +114,11 @@ export struct TransferList {
           }.width('100%')
           if (this.current(transfer.id).status === 'transferring' || this.current(transfer.id).status === 'complete') {
             Row({ space: 12 }) {
-              Text(`${Math.min(100, Math.round(this.done(this.current(transfer.id)) * 100 / Math.max(1, this.total(this.current(transfer.id)))))}%`)
+              Text(`${Math.floor(this.percent(this.current(transfer.id)))}%`)
                 .fontSize(36).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
               Text(this.rate(this.current(transfer.id))).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.width('100%').alignItems(VerticalAlign.Bottom)
-            Progress({ value: this.done(this.current(transfer.id)), total: Math.max(1, this.total(this.current(transfer.id))), type: ProgressType.Linear })
+            Progress({ value: this.percent(this.current(transfer.id)), total: 100, type: ProgressType.Linear })
               .color(this.store.settings.accent).backgroundColor(this.store.controlSurface)
               .style({ strokeWidth: 6, enableSmoothEffect: this.store.settings.animations }).width('100%')
             Row() {
@@ -141,7 +151,10 @@ export struct TransferList {
                 }
                 Text(`${formatSize(this.currentFile(transfer.id, file.id).size)} · ${this.statusLabel(this.currentFile(transfer.id, file.id).status)}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
               }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-              if (this.currentFile(transfer.id, file.id).status === 'complete') { Text('✓').fontColor(this.store.accentText).fontSize(20) }
+              if (this.currentFile(transfer.id, file.id).status === 'complete' && this.currentFile(transfer.id, file.id).path) {
+                Button(this.store.t('打开')).height(44).fontSize(13).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+                  .onClick(() => this.openReceived(transfer.id, file.id))
+              } else if (this.currentFile(transfer.id, file.id).status === 'complete') { Text('✓').fontColor(this.store.accentText).fontSize(20) }
               if (transfer.id === this.store.pendingReceive && !this.currentFile(transfer.id, file.id).preview) {
                 Button(this.store.t('改名')).fontSize(12).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
                   .onClick(() => { this.batchEdit = false; this.renameId = file.id; this.renameText = this.currentFile(transfer.id, file.id).name; this.renameSheet = true; })
