@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000024 | [M24-appearance-options](artifacts/AloeSend-2000024-M24-appearance-options-unsigned.hap) | 4ac49f57 | 0EAD0825F8293330B60CD4B45F42D1DED80CB589E8B8AB02121301AB689B5472 |
 | 2000023 | [M23-completion-polish](artifacts/AloeSend-2000023-M23-completion-polish-unsigned.hap) | 248b1895 | E118F9754D09B7BFB64AEC76CD12A456F3DF333D092CD46264297D0839AECB23 |
 | 2000022 | [M22-harmony-surfaces](artifacts/AloeSend-2000022-M22-harmony-surfaces-unsigned.hap) | b4865584 | B87488C912C097EB366950653984341FEF1DEDF62531D02742CABEA533000D7E |
 | 2000021 | [M21-live-progress](artifacts/AloeSend-2000021-M21-live-progress-unsigned.hap) | b1a88aca | C2FD24CD5470D4AA0C13E68CB167F9E9D077791288B1D57A9AC272697A3F736E |

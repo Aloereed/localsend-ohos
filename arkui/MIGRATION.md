@@ -24,7 +24,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence as of M23:
+implementation evidence as of M24:
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
@@ -32,9 +32,9 @@ implementation evidence as of M23:
 | Send, selected files | SendView, PeerDetail, AppStore | Five input types, editing and batch send implemented; OS file/photo/folder pickers need device coverage. |
 | Discovery and favorites | LocalSendService, SendView, SettingsView | Automatic discovery schedule, manual addresses and identity matching covered by host tests. |
 | Progress | TransferList, NativeServer, SecureServer | Cancel/retry/queue and 128 MiB real TLS upload verified; system background behavior remains device-dependent. |
-| Messages and history | MessagesView, LibraryView, FileDetailsView | Search, conversation isolation, open/export/share and metadata implemented; new-conversation favorites and folder reveal still need parity review. |
+| Messages and history | MessagesView, LibraryView, FileDetailsView | Search, conversation isolation, open/export/share, metadata and favorite conversation targets implemented; folder reveal still needs parity review. |
 | Browser sharing | WebShareView, WebShareService, WebPage | Real HTTP consent, upload/download, PIN, cancellation and resource tests pass. |
-| Settings and appearance | SettingsView, Locale, AppStore | Chinese/English/system, colors, theme, animations, receive and network controls implemented; original extra theme presets and full translation coverage not claimed. |
+| Settings and appearance | SettingsView, Locale, AppStore | Chinese/English/system, colors, theme, animations, reduced effects, OLED background, receive and network controls implemented; original extra theme presets and full translation coverage not claimed. |
 | Help, privacy, credits, diagnostics | Index information routes and SettingsView | Native routes implemented; first-launch privacy flow and developer-only screens need final parity review. |
 | Legacy UI | Shared native flows | No duplicate legacy navigation shell; equivalent actions are consolidated. Final interaction audit pending. |
 | Android/desktop-only actions | Platform scope | APK installed-app picker, desktop tray, autostart and shell integration are not HarmonyOS equivalents. |
