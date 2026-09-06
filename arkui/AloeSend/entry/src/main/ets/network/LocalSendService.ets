@@ -48,6 +48,8 @@ class ReceiveSession {
   resolve: (accepted: boolean) => void = () => {};
   accepted: boolean = false;
   cancelled: boolean = false;
+  expired: boolean = false;
+  lastActivity: number = Date.now();
   uploads: NativeConnection[] = [];
 }
 
@@ -103,6 +105,7 @@ class UploadSink implements BodySink {
     this.output = await fs.open(`${this.path}.part`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
     if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
     this.view.status = 'transferring'; this.session.view.status = 'transferring';
+    this.session.lastActivity = Date.now();
     this.service.store.updateTransfer(this.session.view);
   }
 
@@ -117,6 +120,7 @@ class UploadSink implements BodySink {
     }
     await this.hash?.update({ data: bytes });
     this.received += bytes.length; this.view.transferred = this.received;
+    this.session.lastActivity = Date.now();
     if (Date.now() - this.lastUpdate > 100) { this.service.store.updateTransfer(this.session.view); this.lastUpdate = Date.now(); }
   }
 
@@ -143,8 +147,8 @@ class UploadSink implements BodySink {
     this.finished = true;
     if (this.output) { await fs.close(this.output).catch(() => {}); this.output = undefined; }
     if (this.path) await fs.unlink(`${this.path}.part`).catch(() => {});
-    this.view.status = this.session.cancelled ? 'cancelled' : 'error'; this.session.view.status = this.view.status;
-    this.session.view.error = this.session.cancelled ? '' : '文件接收中断'; this.service.store.updateTransfer(this.session.view);
+    this.view.status = this.session.expired ? 'error' : this.session.cancelled ? 'cancelled' : 'error'; this.session.view.status = this.view.status;
+    this.session.view.error = this.session.expired ? '发送方长时间未继续传输，请让对方重试' : this.session.cancelled ? '' : '文件接收中断'; this.service.store.updateTransfer(this.session.view);
   }
 }
 
@@ -213,7 +217,7 @@ export class LocalSendService {
       // Retry without requiring a tap and refresh addresses on subsequent scans.
       this.discoveryRetries = [800, 2500, 6000].map((delay: number) =>
         setTimeout(() => { if (this.running) this.discover(false); }, delay));
-      this.timer = setInterval(() => { this.discover(false); }, 15000);
+      this.timer = setInterval(() => { this.checkReceiveIdle(); this.discover(false); }, 15000);
       this.store.log('LocalSend 接收服务启动');
     } catch (e) { this.store.fail('接收服务启动失败', e as Error); this.store.serverStatus = '启动失败'; await this.stop(); }
     finally { this.starting = false; }
@@ -472,7 +476,7 @@ export class LocalSendService {
     }
     const tokens: Record<string, string> = {};
     for (const file of selected) tokens[file.id] = util.generateRandomUUID();
-    session.tokens = tokens; session.view.status = 'transferring'; this.store.updateTransfer(session.view);
+    session.tokens = tokens; session.lastActivity = Date.now(); session.view.status = 'transferring'; this.store.updateTransfer(session.view);
     const response: PrepareReply = { sessionId: session.id, files: tokens };
     await channel.respond(200, JSON.stringify(head.target.includes('/v1/') ? tokens : response));
   }
@@ -541,9 +545,20 @@ export class LocalSendService {
   }
 
   finishReceiveFile(session: ReceiveSession): void {
+    session.lastActivity = Date.now();
     if (session.view.files.filter((file: TransferFile) => file.selected).every((file: TransferFile) => file.status === 'complete')) {
       session.view.status = 'complete'; session.view.finished = Date.now(); this.store.notice = `已收到 ${session.peer.alias} 的文件`;
     }
+    this.store.updateTransfer(session.view);
+  }
+
+  checkReceiveIdle(): void {
+    const session = this.receiving;
+    if (!session || !session.accepted || session.cancelled || session.view.status !== 'transferring') return;
+    if (Date.now() - session.lastActivity < 180000 || session.uploads.some((channel: NativeConnection) => !channel.closed)) return;
+    session.expired = true; session.cancelled = true; session.view.status = 'error'; session.view.finished = Date.now();
+    session.view.error = '发送方长时间未继续传输，请让对方重试';
+    for (const file of session.view.files) { if (file.selected && file.status !== 'complete') file.status = 'error'; }
     this.store.updateTransfer(session.view);
   }
 

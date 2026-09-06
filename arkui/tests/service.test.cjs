@@ -98,6 +98,17 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       const result = await call(port, `/api/localsend/v2/upload?sessionId=${prepared.sessionId}&fileId=f1&token=invalid`, data);
       assert.equal(result.status, 403); service.cancel(prepared.sessionId);
     });
+    await check('accepted but abandoned session expires and releases the next receive', async () => {
+      const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('abandoned.bin', data))).json();
+      service.checkReceiveIdle(); assert.equal(store.transfers[0].status, 'transferring');
+      service.receiving.lastActivity = Date.now() - 180001;
+      service.checkReceiveIdle();
+      assert.equal(store.transfers.find(item => item.id === session.sessionId).status, 'error');
+      assert.equal(store.activeTransfers, false);
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data)).status, 403);
+      const next = await call(port, '/api/localsend/v2/prepare-upload', offer('next.bin', data));
+      assert.equal(next.status, 200); service.cancel(next.json().sessionId);
+    });
     await check('incoming path traversal rejected before consent or file writes', async () => {
       assert.equal((await call(port, '/api/localsend/v2/prepare-upload', offer('../outside', data))).status, 400);
     });
@@ -117,6 +128,9 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       client.write(`POST /api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1} HTTP/1.1\r\nHost: localhost\r\nContent-Length: ${data.length}\r\n\r\n`);
       client.write(data.subarray(0, 1000));
       await until(() => store.transfers[0].files[0].transferred === 1000);
+      service.receiving.lastActivity = Date.now() - 180001; service.checkReceiveIdle();
+      assert.equal(store.transfers[0].status, 'transferring', 'a live upload uses connection-level timeout instead of the between-file timeout');
+      service.receiving.lastActivity = Date.now();
       service.cancel(session.sessionId);
       await until(() => handles.size === 0); client.destroy();
       assert.equal(store.transfers[0].status, 'cancelled');

@@ -121,6 +121,9 @@ export struct TransferList {
             Progress({ value: this.percent(this.current(transfer.id)), total: 100, type: ProgressType.Linear })
               .color(this.store.settings.accent).backgroundColor(this.store.controlSurface)
               .style({ strokeWidth: 6, enableSmoothEffect: this.store.settings.animations }).width('100%')
+            if (this.current(transfer.id).direction === 'receive' && this.current(transfer.id).status === 'transferring' && this.done(this.current(transfer.id)) === 0) {
+              Text(this.store.t('已确认，等待发送方传输…')).fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
+            }
             Row() {
               Text(`${formatSize(this.done(this.current(transfer.id)))} / ${formatSize(this.total(this.current(transfer.id)))}`).layoutWeight(1).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.width('100%')

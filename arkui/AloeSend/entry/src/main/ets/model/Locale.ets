@@ -1,6 +1,8 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "发送方长时间未继续传输，请让对方重试": "The sender stopped responding. Ask them to try again.",
+  "已确认，等待发送方传输…": "Accepted. Waiting for the sender…",
   "上传 PIN": "Upload PIN",
   "请让对方连接同一网络": "Ask the other person to connect to the same network",
   "放大二维码": "Larger QR code",
