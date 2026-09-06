@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000036 | [M36-message-reading](artifacts/AloeSend-2000036-M36-message-reading-unsigned.hap) | 56aba9f4 | B815A676EA2AC6555162694430062CFF95CCA220DEE4BC7AD350B36E3CFCDC87 |
 | 2000035 | [M35-receive-storage-fallback](artifacts/AloeSend-2000035-M35-receive-storage-fallback-unsigned.hap) | 22652a33 | 59D45C3740DEEEDCC2469F230800A59926CFA838310D3EBD30EFF35163B579A8 |
 | 2000034 | [M34-receive-idle](artifacts/AloeSend-2000034-M34-receive-idle-unsigned.hap) | 0311e21f | 1035F11959B681A4E5AB40B9D345C109602AE828A278F3283481415FAA2720D8 |
 | 2000033 | [M33-share-presentation](artifacts/AloeSend-2000033-M33-share-presentation-unsigned.hap) | d2f62971 | A20B47754D54E2455A46FFB9EE7CDF9EAA5AF61A0A92CBDD0F6AA777134518D5 |
