@@ -4,6 +4,7 @@
 [未签名 debug 包](artifacts/AloeSend-2000042-M42-selection-preview-unsigned.hap)。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
+最新全量验证与尚未完成的验收范围见 [明早交接](HANDOFF.md)。M42 已通过全部 22 个宿主测试文件。
 
 ## 本轮修复与打磨
 
