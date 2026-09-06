@@ -7,6 +7,7 @@ export struct SendView {
   onDiscover: () => void = () => {};
   onAddress: (address: string) => void = () => {};
   onWebShare: () => void = () => {};
+  onDetails: (peer: Peer) => void = () => {};
   @State textSheet: boolean = false;
   @State text: string = '';
   @State addressSheet: boolean = false;
@@ -70,7 +71,7 @@ export struct SendView {
       Column({ space: 5 }) {
         Text(peer.alias || peer.ip).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
         Text(`${peer.ip}:${peer.port}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
-      }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onSend(peer))
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onDetails(peer))
       Button(this.store.isFavorite(peer) ? '★' : '☆').fontColor(this.store.settings.accent)
         .backgroundColor(Color.Transparent).onClick(() => this.store.toggleFavorite(peer)).accessibilityText('收藏设备')
       Button('发送').backgroundColor(this.store.settings.accent).onClick(() => this.onSend(peer))

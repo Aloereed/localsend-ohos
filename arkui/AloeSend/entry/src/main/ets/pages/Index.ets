@@ -5,6 +5,8 @@ import { SendView } from '../components/SendView';
 import { LibraryView } from '../components/LibraryView';
 import { TransferList } from '../components/TransferList';
 import { localSend } from '../network/LocalSendService';
+import { WebShareView } from '../components/WebShareView';
+import { PeerDetailView } from '../components/PeerDetailView';
 
 @Entry
 @Component
@@ -13,6 +15,7 @@ struct Index {
   @State tab: number = 0;
   @State route: string = '';
   @State pinText: string = '';
+  @State selectedPeer: Peer = new Peer();
 
   async aboutToAppear(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
@@ -26,6 +29,7 @@ struct Index {
   }
 
   title(): string {
+    if (this.route === 'peer') return '设备详情';
     if (this.route === 'transfers') return '传输任务';
     if (this.route === 'history') return '接收历史';
     if (this.route === 'diagnostics') return '连接诊断';
@@ -79,10 +83,12 @@ struct Index {
 
   @Builder
   details() {
-    if (this.route === 'transfers') { TransferList({ store: this.store }) }
+    if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer, onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; } }) }
+    else if (this.route === 'transfers') { TransferList({ store: this.store }) }
     else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
     else if (this.route === 'diagnostics') {
       this.info('接收服务', this.store.serverStatus)
+      this.info('本机证书指纹', this.store.settings.fingerprint)
       Button('重启接收服务').backgroundColor(this.store.settings.accent).onClick(() => localSend.restart())
       this.info('本机地址', this.store.localIps.length ? this.store.localIps.join('\n') : '尚未读取到网络地址')
       this.info('连接参数', `端口 ${this.store.settings.port}\n组播 ${this.store.settings.multicast}\n协议 LocalSend 2.1`)
@@ -105,7 +111,7 @@ struct Index {
       this.info('原生迁移 · M2', '系统文件与照片选择、文件夹选择、文字和剪贴板、选择清单、重命名、历史与消息搜索、另存为、主题与接收设置。')
       this.info('原生迁移 · M1', '四个原生页面、鸿蒙浅深色资源、本地偏好存储、可追溯的未签名里程碑构建。')
     } else if (this.route === 'web') {
-      this.info('让浏览器也能加入', '浏览器分享服务正在接入。服务启动后，这里会显示真实的局域网链接与二维码。')
+      WebShareView({ store: this.store })
     } else {
       this.info('AloeSend', '为鸿蒙重新设计的本地分享体验。\n跨越设备，传递心意。\n原生 ArkUI · 无需账号 · 不经云端')
       this.info('感谢开源社区', 'LocalSend 和所有贡献者，让跨平台分享成为可能。\n源码：github.com/Aloereed/localsend-ohos')
@@ -127,6 +133,10 @@ struct Index {
           Text(this.store.error || this.store.notice).fontSize(13).layoutWeight(1).fontColor($r('sys.color.font_primary'))
           Button('×').backgroundColor(Color.Transparent).fontColor($r('sys.color.font_primary')).onClick(() => { this.store.error = ''; this.store.notice = ''; })
         }.padding({ left: 20, right: 12, top: 8, bottom: 8 }).width('100%').backgroundColor($r('sys.color.comp_background_tertiary'))
+      }
+      if (this.store.webRequests.length > 0 && this.route !== 'web') {
+        Button(`${this.store.webRequests.length} 个浏览器下载请求 · 点击查看`).width('100%').height(48)
+          .backgroundColor(this.store.settings.accent).onClick(() => this.route = 'web')
       }
       if (this.store.pendingPin) {
         Column({ space: 12 }) {
@@ -162,7 +172,7 @@ struct Index {
                 this.heading('发送', '跨越设备，传递心意')
                 SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
                   onDiscover: () => { localSend.discover(); },
-                  onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web' })
+                  onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; } })
               }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%')
             }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('发送', '↑', 1))

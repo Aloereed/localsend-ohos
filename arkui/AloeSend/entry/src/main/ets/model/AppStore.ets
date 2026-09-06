@@ -57,6 +57,12 @@ export class TransferView {
   encrypted: boolean = true;
 }
 
+export class WebAccessRequest {
+  id: string = '';
+  ip: string = '';
+  fileName: string = '';
+}
+
 export class AppSettings {
   alias: string = '我的鸿蒙设备';
   fingerprint: string = util.generateRandomUUID();
@@ -77,6 +83,7 @@ export class AppSettings {
   advanced: boolean = false;
   https: boolean = true;
   discoveryTimeout: number = 1500;
+  webAutoAccept: boolean = false;
 }
 
 export function formatSize(bytes: number): string {
@@ -118,6 +125,8 @@ export class AppStore {
   pendingReceive: string = '';
   pendingPin: string = '';
   webUrl: string = '';
+  webRequests: WebAccessRequest[] = [];
+  webFiles: ShareFile[] = [];
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
 

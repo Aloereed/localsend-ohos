@@ -303,6 +303,10 @@ export class LocalSendService {
     });
   }
 
+  async handleBrowserRequest(channel: NativeConnection, head: HttpHead): Promise<BodySink> {
+    return this.handle(channel, head);
+  }
+
   private async prepare(channel: NativeConnection, head: HttpHead, bytes: Uint8Array): Promise<void> {
     if (this.receiving && !['complete', 'error', 'cancelled', 'declined'].includes(this.receiving.view.status)) { await channel.respond(409); return; }
     if (this.store.settings.pin) {

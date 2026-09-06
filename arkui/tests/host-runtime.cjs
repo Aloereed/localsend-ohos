@@ -63,7 +63,7 @@ class ServerAdapter {
     this.server = this.isTls ? tls.createServer({ key: options.secureOptions.key, cert: options.secureOptions.cert }, handle) : net.createServer(handle);
     this.server.on('error', error => this.callbacks.error?.(error));
     this.server.on('tlsClientError', () => {});
-    const address = options.address || options;
+    const address = this.isTls ? options.address : options;
     await new Promise((resolve, reject) => { this.server.once('error', reject); this.server.listen(address.port, address.address, resolve); });
   }
   async close() { for (const client of this.clients) client.destroy(); if (this.server?.listening) await new Promise(resolve => this.server.close(resolve)); }
