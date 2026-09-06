@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000042 | [M42-selection-preview](artifacts/AloeSend-2000042-M42-selection-preview-unsigned.hap) | 08cdd042 | EFC4CD6903658B23EB853BF4B403F8462FCC6B30725E26BC768A04C458D78220 |
 | 2000041 | [M41-receive-gallery](artifacts/AloeSend-2000041-M41-receive-gallery-unsigned.hap) | e96bb2fd | 71F966E23BE745683FC481A058A875DA9478E10CAEB97CD71266AAAE2CDD1050 |
 | 2000040 | [M40-startup-recovery](artifacts/AloeSend-2000040-M40-startup-recovery-unsigned.hap) | 932e5df3 | 24E68752AED05ACEAF20739C65D3DAB2368D9710F476C70B1484D3A52D9EBE3A |
 | 2000039 | [M39-share-startup](artifacts/AloeSend-2000039-M39-share-startup-unsigned.hap) | eab0e500 | 821B4D9AEAE1A8A3BFDAC445F80C305738B689411453875E3B05B5D8936BB632 |

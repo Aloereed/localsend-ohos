@@ -24,12 +24,12 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence as of M38:
+implementation evidence as of M42:
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
-| Receive, receive options | Index, ReceiveRequest, TransferList, LocalSendService | Consent/progress, selection and renaming tested; device authorization and progress appearance need M21+ retest. |
-| Send, selected files | SendView, PeerDetail, AppStore | Five input types, editing and batch send implemented; OS file/photo/folder pickers need device coverage. |
+| Receive, receive options | Index, ReceiveRequest, TransferList, LocalSendService | Consent/progress, selection, renaming and per-session gallery prompt tested; device authorization and progress appearance need M21+ retest. |
+| Send, selected files | SendView, PeerDetail, AppStore | Five input types, editing, selected-file preview and batch send implemented; OS file/photo/folder pickers and viewer handoff need device coverage. |
 | Discovery and favorites | LocalSendService, SendView, SettingsView | Automatic discovery schedule, manual addresses and identity matching covered by host tests. |
 | Progress | TransferList, NativeServer, SecureServer | Stable progress nodes, cancel/retry/queue, abandoned receive expiry, storage fallback and 128 MiB real TLS upload verified; ordered restart/pause preserves completed results. System background behavior remains device-dependent. |
 | Messages and history | MessagesView, LibraryView, FileDetailsView | Search, conversation isolation, reading-position-aware new messages, open/export/share, live saved locations, favorite conversation targets and public folder reveal implemented; system interactions need device confirmation. |
