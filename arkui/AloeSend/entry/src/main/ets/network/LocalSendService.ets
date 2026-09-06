@@ -34,6 +34,7 @@ interface PrepareRequest { info: DeviceInfo; files: Record<string, FileInfo>; }
 interface PrepareReply { sessionId: string; files: Record<string, string>; }
 
 class ReceiveSession {
+  legacy: boolean = false;
   id: string = util.generateRandomUUID();
   ip: string = '';
   peer: Peer = new Peer();
@@ -49,13 +50,19 @@ class ReceiveSession {
 class SendSessionRef {
   peer: Peer;
   remoteId: string;
-  constructor(peer: Peer, remoteId: string) { this.peer = peer; this.remoteId = remoteId; }
+  legacy: boolean;
+  constructor(peer: Peer, remoteId: string, legacy: boolean = false) { this.peer = peer; this.remoteId = remoteId; this.legacy = legacy; }
 }
 
 class RetryContext {
   peer: Peer;
   files: ShareFile[];
   constructor(peer: Peer, files: ShareFile[]) { this.peer = peer; this.files = files; }
+}
+
+class PinFailures {
+  count: number = 0;
+  expires: number = Date.now() + 300000;
 }
 
 class UploadSink implements BodySink {
@@ -110,6 +117,7 @@ class UploadSink implements BodySink {
     this.finished = true; this.view.status = 'complete';
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
     entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
+    if (this.fileInfo.preview && this.fileInfo.fileType === 'text/plain' && this.received <= 400000) entry.text = await fs.readText(this.path);
     await this.service.store.addHistory(entry);
     await this.service.store.saveReceivedCopy(entry);
     this.service.finishReceiveFile(this.session);
@@ -142,7 +150,7 @@ export class LocalSendService {
   private timer: number = -1;
   private running: boolean = false;
   private starting: boolean = false;
-  private pinAttempts: Map<string, number> = new Map();
+  private pinAttempts: Map<string, PinFailures> = new Map();
 
   constructor(store: AppStore) { this.store = store; }
 
@@ -173,7 +181,7 @@ export class LocalSendService {
       }
       this.running = true;
       this.store.serverStatus = this.store.settings.https ? '已就绪 · 加密传输' : '已就绪 · 未加密';
-      await this.readAddresses();
+      await this.readAddresses().catch((e: Error) => this.store.log(`读取本机地址失败，可尝试手动连接：${e.message}`));
       try {
         this.udp = socket.constructMulticastSocketInstance();
         await this.udp.bind(address);
@@ -250,6 +258,7 @@ export class LocalSendService {
 
   private peerFrom(info: DeviceInfo, ip: string): Peer {
     const peer = new Peer(); peer.alias = String(info.alias || ip).slice(0, 100); peer.ip = ip;
+    peer.version = info.version || '1.0';
     peer.port = Number.isInteger(info.port) && info.port > 0 && info.port <= 65535 ? info.port : 53317;
     peer.protocol = info.protocol === 'http' ? 'http' : 'https'; peer.fingerprint = info.fingerprint || '';
     peer.deviceModel = info.deviceModel || ''; peer.deviceType = info.deviceType || 'desktop'; return peer;
@@ -261,7 +270,7 @@ export class LocalSendService {
   }
 
   private async register(peer: Peer): Promise<void> {
-    const result = await request(peer, 'POST', '/api/localsend/v2/register', JSON.stringify(this.info()));
+    const result = await request(peer, 'POST', `/api/localsend/${peer.version === '1.0' ? 'v1' : 'v2'}/register`, JSON.stringify(this.info()));
     if (result.status === 200) {
       const info = JSON.parse(result.body) as DeviceInfo;
       const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
@@ -296,17 +305,17 @@ export class LocalSendService {
 
   private async handle(channel: NativeConnection, head: HttpHead): Promise<BodySink> {
     const path = head.target.split('?')[0];
-    if (path.endsWith('/upload') && head.method === 'POST') return this.openUpload(channel, head);
+    if ((/^\/api\/localsend\/v[12]\/upload$/.test(path) || path === '/api/localsend/v1/send') && head.method === 'POST') return this.openUpload(channel, head);
     return new JsonSink(async (bytes: Uint8Array): Promise<void> => {
       if (/^\/api\/localsend\/v[12]\/info$/.test(path) && head.method === 'GET') await channel.respond(200, JSON.stringify(this.info()));
       else if (/^\/api\/localsend\/v[12]\/register$/.test(path) && head.method === 'POST') {
         const info = JSON.parse(decodeText(bytes)) as DeviceInfo;
         if (!info || typeof info.alias !== 'string') { await channel.respond(400); return; }
         this.upsertPeer(this.peerFrom(info, channel.ip)); await channel.respond(200, JSON.stringify(this.info()));
-      } else if (/^\/api\/localsend\/v[12]\/prepare-upload$/.test(path) && head.method === 'POST') await this.prepare(channel, head, bytes);
+      } else if ((/^\/api\/localsend\/v[12]\/prepare-upload$/.test(path) || path === '/api/localsend/v1/send-request') && head.method === 'POST') await this.prepare(channel, head, bytes);
       else if (/^\/api\/localsend\/v[12]\/cancel$/.test(path) && head.method === 'POST') {
         const id = queryValue(head.target, 'sessionId');
-        if (this.receiving?.id === id && this.receiving.ip === channel.ip) this.cancel(id);
+        if (this.receiving && this.receiving.ip === channel.ip && (this.receiving.id === id || (path.includes('/v1/') && this.receiving.legacy))) this.cancel(this.receiving.id);
         await channel.respond(200);
       } else await channel.respond(404);
     });
@@ -319,10 +328,15 @@ export class LocalSendService {
   private async prepare(channel: NativeConnection, head: HttpHead, bytes: Uint8Array): Promise<void> {
     if (this.receiving && !['complete', 'error', 'cancelled', 'declined'].includes(this.receiving.view.status)) { await channel.respond(409); return; }
     if (this.store.settings.pin) {
-      const attempts = this.pinAttempts.get(channel.ip) || 0;
-      if (attempts >= 3) { await channel.respond(429); return; }
+      const savedAttempts = this.pinAttempts.get(channel.ip);
+      const attempts = savedAttempts && savedAttempts.expires > Date.now() ? savedAttempts : new PinFailures();
+      if (attempts.count >= 3) { await channel.respond(429); return; }
       const pin = queryValue(head.target, 'pin');
-      if (pin !== this.store.settings.pin) { if (pin) this.pinAttempts.set(channel.ip, attempts + 1); await channel.respond(401); return; }
+      if (pin !== this.store.settings.pin) {
+        if (pin) { attempts.count++; this.pinAttempts.set(channel.ip, attempts); }
+        for (const address of this.pinAttempts.keys()) { if (this.pinAttempts.get(address)!.expires < Date.now()) this.pinAttempts.delete(address); }
+        await channel.respond(401); return;
+      }
       this.pinAttempts.delete(channel.ip);
     }
     const payload = JSON.parse(decodeText(bytes)) as PrepareRequest;
@@ -330,6 +344,7 @@ export class LocalSendService {
     const ids = Object.keys(payload.files);
     if (!ids.length || ids.length > 10000) { await channel.respond(400); return; }
     const session = new ReceiveSession(); session.ip = channel.ip; session.peer = this.peerFrom(payload.info, channel.ip);
+    session.legacy = head.target.includes('/v1/');
     session.files = payload.files; session.view.id = session.id; session.view.peer = session.peer.alias;
     session.view.direction = 'receive'; session.view.encrypted = channel.encrypted;
     for (const id of ids) {
@@ -361,7 +376,7 @@ export class LocalSendService {
     session.accepted = true;
     const selected = session.view.files.filter((file: TransferFile) => file.selected);
     if (!selected.length) { session.view.status = 'declined'; this.store.updateTransfer(session.view); await channel.respond(403); return; }
-    if (selected.every((file: TransferFile) => !!session.files[file.id].preview && session.files[file.id].fileType === 'text/plain')) {
+    if (!session.legacy && selected.every((file: TransferFile) => !!session.files[file.id].preview && session.files[file.id].fileType === 'text/plain')) {
       for (const file of selected) {
         const entry = new HistoryEntry(); entry.name = file.name; entry.text = session.files[file.id].preview!;
         entry.peer = session.peer.alias; entry.peerInfo = session.peer; entry.size = encodeText(entry.text).length;
@@ -425,7 +440,7 @@ export class LocalSendService {
     this.sending.get(id)?.cancel();
     if (this.store.pendingPin === id) this.submitPin('');
     const sending = this.sendSessions.get(id);
-    if (sending) request(sending.peer, 'POST', `/api/localsend/v2/cancel?sessionId=${encodeURIComponent(sending.remoteId)}`).catch(() => {});
+    if (sending) request(sending.peer, 'POST', sending.legacy ? '/api/localsend/v1/cancel' : `/api/localsend/v2/cancel?sessionId=${encodeURIComponent(sending.remoteId)}`).catch(() => {});
     if (this.receiving?.id === id) {
       this.receiving.cancelled = true; this.receiving.resolve(false); this.receiving.view.status = 'cancelled';
       this.store.pendingReceive = ''; this.store.updateTransfer(this.receiving.view);
@@ -437,8 +452,12 @@ export class LocalSendService {
 
   async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files): Promise<void> {
     if (!selectedFiles.length) { this.store.notice = '请先选择文件或输入文字'; return; }
+    if (this.sending.size >= 4) { this.store.notice = '已有 4 项发送任务，请等待完成后再发送'; return; }
     const files = selectedFiles.slice(); const transfer = new TransferView(); transfer.id = util.generateRandomUUID();
     this.retryContexts.set(transfer.id, new RetryContext(peer, files));
+    if (this.retryContexts.size > 40) {
+      for (const id of this.retryContexts.keys()) { if (!this.sending.has(id)) { this.retryContexts.delete(id); break; } }
+    }
     transfer.peer = peer.alias; transfer.encrypted = peer.protocol === 'https';
     const fileInfos: Record<string, FileInfo> = {};
     for (const file of files) {
@@ -453,12 +472,19 @@ export class LocalSendService {
       const favorite = this.store.favorites.find((item: Peer) => item.ip === peer.ip && item.port === peer.port);
       if (favorite?.fingerprint && favorite.fingerprint !== peer.fingerprint) throw new Error('收藏设备的身份已改变，请核对后重新收藏');
       const payload: PrepareRequest = { info: this.info(), files: fileInfos };
-      let response = await request(peer, 'POST', '/api/localsend/v2/prepare-upload', JSON.stringify(payload), cancellation);
+      let legacy = peer.version === '1.0';
+      let preparePath = legacy ? '/api/localsend/v1/send-request' : '/api/localsend/v2/prepare-upload';
+      let response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
+      if (response.status === 404 && !legacy) {
+        legacy = true; preparePath = '/api/localsend/v1/send-request';
+        response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
+      }
       while (response.status === 401) {
+        if (this.store.pendingPin && this.store.pendingPin !== transfer.id) throw new Error('请先完成另一项传输的 PIN 确认，再重试此任务');
         this.store.pendingPin = transfer.id;
         const pin = await new Promise<string>((resolve) => { this.pinResolver = resolve; });
         if (!pin) { cancellation.cancel(); cancellation.check(); }
-        response = await request(peer, 'POST', `/api/localsend/v2/prepare-upload?pin=${encodeURIComponent(pin)}`, JSON.stringify(payload), cancellation);
+        response = await request(peer, 'POST', `${preparePath}?pin=${encodeURIComponent(pin)}`, JSON.stringify(payload), cancellation);
       }
       if (response.status === 204) {
         for (const file of files) { if (file.text) await this.sentHistory(file, peer); }
@@ -468,9 +494,9 @@ export class LocalSendService {
         }
       } else {
         if (response.status !== 200) throw new Error(response.status === 403 ? '对方拒绝了传输' : response.status === 409 ? '对方正在传输，请稍后重试' : response.status === 429 ? 'PIN 尝试次数过多' : `设备返回 ${response.status}`);
-        const prepared = JSON.parse(response.body) as PrepareReply;
+        const prepared: PrepareReply = legacy ? { sessionId: 'legacy', files: JSON.parse(response.body) as Record<string, string> } : JSON.parse(response.body) as PrepareReply;
         if (!prepared.sessionId || !prepared.files) throw new Error('设备返回了无效传输会话');
-        this.sendSessions.set(transfer.id, new SendSessionRef(peer, prepared.sessionId));
+        this.sendSessions.set(transfer.id, new SendSessionRef(peer, prepared.sessionId, legacy));
         transfer.status = 'transferring'; this.store.updateTransfer(transfer);
         for (const file of files) {
           cancellation.check(); const view = transfer.files.find((item: TransferFile) => item.id === file.id)!;
@@ -478,7 +504,9 @@ export class LocalSendService {
           if (!token) { view.status = 'skipped'; this.store.updateTransfer(transfer); continue; }
           view.status = 'transferring'; this.store.updateTransfer(transfer);
           let lastUpdate = 0;
-          const upload = await exchange(peer, 'POST', `/api/localsend/v2/upload?sessionId=${encodeURIComponent(prepared.sessionId)}&fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}`, file.size,
+          const uploadPath = legacy ? `/api/localsend/v1/send?fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}` :
+            `/api/localsend/v2/upload?sessionId=${encodeURIComponent(prepared.sessionId)}&fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}`;
+          const upload = await exchange(peer, 'POST', uploadPath, file.size,
             async (write: ChunkWriter): Promise<void> => {
               if (file.text) { await write(encodeText(file.text)); view.transferred = file.size; return; }
               const source = await fs.open(file.uri, fs.OpenMode.READ_ONLY);

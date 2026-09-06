@@ -158,7 +158,7 @@ export struct SendView {
           Button('×').fontSize(22).backgroundColor(Color.Transparent).fontColor($r('sys.color.font_secondary'))
             .onClick(() => this.store.removeFile(file.id)).accessibilityText(`移除 ${file.name}`)
         }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
-      }, (file: ShareFile) => file.id)
+      }, (file: ShareFile) => `${file.id}:${file.name}`)
       Row() {
         Text('附近的设备').fontSize(19).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))
         Button('刷新').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => this.onDiscover())
@@ -171,10 +171,10 @@ export struct SendView {
       if (this.store.peers.length === 0) {
         EmptyState({ icon: 'search', title: '寻找另一台设备', description: '在对方设备打开 LocalSend，并连接同一网络。也可以通过 IP 地址直接添加。', accent: this.store.settings.accent })
       }
-      ForEach(this.store.peers, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}`)
+      ForEach(this.store.peers, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
       if (this.store.favorites.length > 0) {
         Text('收藏设备').fontSize(19).fontWeight(FontWeight.Medium).width('100%').fontColor($r('sys.color.font_primary')).margin({ top: 12 })
-        ForEach(this.store.favorites, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}`)
+        ForEach(this.store.favorites, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
       }
       Row({ space: 12 }) {
         Button('通过地址添加').layoutWeight(1).height(46).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.settings.accent)

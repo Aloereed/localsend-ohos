@@ -113,7 +113,7 @@ export struct TransferList {
             Button('重试未完成文件').backgroundColor(this.store.settings.accent).onClick(() => localSend.retry(transfer.id))
           }
         }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
-      }, (transfer: TransferView) => transfer.id)
+      }, (transfer: TransferView) => JSON.stringify(transfer))
     }.width('100%').bindSheet($$this.renameSheet, this.renameEditor(), { height: SheetSize.MEDIUM, showClose: true })
   }
 }

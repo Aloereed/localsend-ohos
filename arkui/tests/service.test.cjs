@@ -148,6 +148,30 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         assert.equal(seen[0].files[file.id].size, data.length);
       } finally { await new Promise(r => remote.close(r)); }
     });
+    await check('legacy v1 uses original send-request/send routes and token-map response', async () => {
+      const prepared = await call(port, '/api/localsend/v1/send-request', offer('legacy.bin', data));
+      assert.equal(prepared.status, 200); const tokens = prepared.json(); assert.equal(typeof tokens.f1, 'string');
+      const received = await call(port, `/api/localsend/v1/send?fileId=f1&token=${tokens.f1}`, data);
+      assert.equal(received.status, 200); assert.deepEqual(await fs.readFile(store.history[0].path), data);
+      let uploaded = Buffer.alloc(0); let fallback = false;
+      const remote = http.createServer((req, res) => {
+        const chunks = []; req.on('data', chunk => chunks.push(chunk)); req.on('end', () => {
+          let body = '{}'; let status = 200;
+          if (req.url === '/api/localsend/v2/prepare-upload') { status = 404; fallback = true; }
+          else if (req.url === '/api/localsend/v1/send-request') {
+            const offer = JSON.parse(Buffer.concat(chunks)); body = JSON.stringify(Object.fromEntries(Object.keys(offer.files).map(id => [id, 'v1-token'])));
+          } else if (req.url.startsWith('/api/localsend/v1/send?')) uploaded = Buffer.concat(chunks);
+          else status = 404;
+          res.writeHead(status, { 'content-length': Buffer.byteLength(body) }); res.end(body);
+        });
+      });
+      await new Promise(r => remote.listen(0, '127.0.0.1', r));
+      try {
+        const peer = new Peer(); peer.ip = '127.0.0.1'; peer.port = remote.address().port; peer.protocol = 'http'; peer.alias = 'Legacy';
+        const file = new ShareFile(); file.name = 'legacy.bin'; file.uri = store.history[0].path; file.size = data.length;
+        await service.send(peer, [file]); assert.equal(store.transfers[0].status, 'complete'); assert.equal(fallback, true); assert.deepEqual(uploaded, data);
+      } finally { await new Promise(r => remote.close(r)); }
+    });
     await check('retry sends only incomplete files and multi-device queue preserves its selection', async () => {
       const offers = []; let failSecond = true;
       const remote = http.createServer((req, res) => {

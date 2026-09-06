@@ -16,6 +16,7 @@ export class ShareFile {
 }
 
 export class Peer {
+  version: string = '2.1';
   alias: string = '';
   ip: string = '';
   port: number = 53317;

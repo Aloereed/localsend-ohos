@@ -32,7 +32,7 @@ export struct MessagesView {
     this.sending = true;
     try {
       await localSend.send(this.peer, [file]);
-      if (this.store.transfers[0]?.status === 'complete') this.draft = '';
+      if (this.store.transfers.find((item) => item.files.some((sent) => sent.id === file.id))?.status === 'complete') this.draft = '';
       else this.store.notice = '消息未发送，草稿已保留。可在传输任务中查看原因';
     } finally { this.sending = false; }
   }
@@ -143,7 +143,7 @@ export struct MessagesView {
                 }.alignItems(HorizontalAlign.Start).layoutWeight(1)
                 Text(String(group.count)).fontSize(12).fontColor($r('sys.color.font_secondary'))
               }.padding(20).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24).onClick(() => this.open(group.peer))
-            }, (group: Conversation) => group.key)
+            }, (group: Conversation) => `${group.key}:${group.last.id}:${group.count}:${group.peer.alias}`)
             Text('发起新会话').fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%').margin({ top: 12 })
             ForEach(this.store.peers, (peer: Peer) => {
               Row({ space: 14 }) {
