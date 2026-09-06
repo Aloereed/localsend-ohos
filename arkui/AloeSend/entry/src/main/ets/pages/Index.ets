@@ -28,6 +28,7 @@ struct Index {
 
   async aboutToAppear(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
+    this.store.onReceiveStarted = () => { this.route = 'transfers'; };
     this.store.onTransferCompleted = (transfer: TransferView) => {
       if (transfer.direction === 'receive' && transfer.peerInfo && this.store.settings.openMessagesOnReceive) {
         this.store.messageTarget = transfer.peerInfo; this.tab = 2; this.route = '';
@@ -39,6 +40,7 @@ struct Index {
       }, 1200);
     };
     await localSend.start();
+    await this.store.ensureDownloadAccess();
     const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
     context.resourceManager.getRawFileContent('LICENSE.txt').then((bytes: Uint8Array) => this.legalText = new util.TextDecoder().decodeToString(bytes)).catch(() => {});
     context.resourceManager.getRawFileContent('CREDITS.txt').then((bytes: Uint8Array) => this.creditsText = new util.TextDecoder().decodeToString(bytes)).catch(() => {});
@@ -122,7 +124,9 @@ struct Index {
       Button('GitHub Sponsors').width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/sponsors/Tienisto'))
       Button('Ko-fi').width('100%').height(48).margin({ top: 16 }).fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_primary')).onClick(() => this.store.openUrl('https://ko-fi.com/tienisto'))
     } else if (this.route === 'network') { NetworkView({ store: this.store }) }
-    else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer, onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; } }) }
+    else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer,
+      onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; },
+      onMessage: () => { this.store.messageTarget = this.selectedPeer; this.route = ''; this.tab = 2; } }) }
     else if (this.route === 'transfers') { TransferList({ store: this.store }) }
     else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
     else if (this.route === 'diagnostics') {
@@ -137,17 +141,21 @@ struct Index {
       })
     } else if (this.route === 'help') {
       this.info(this.store.t('找不到设备？'), this.store.t('确认两台设备连接同一个局域网，关闭路由器的 AP 隔离。允许 LocalSend 通过防火墙，确保 TCP 与 UDP 53317 端口可用。也可通过地址直接添加设备。'))
-      this.info(this.store.t('接收的文件在哪里？'), this.store.t('接收文件保存在应用目录。前往接收历史，选择“另存为”，通过系统文件选择器保存到你选择的位置。'))
+      this.info(this.store.t('接收的文件在哪里？'), this.store.t('允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。'))
       this.info(this.store.t('文字与文件'), this.store.t('发送页可以选择文件、图片、文件夹，以及文字或剪贴板内容。选择后点击目标设备。文件重命名只影响对方收到的名称。'))
     } else if (this.route === 'privacy') {
       this.info(this.store.t('设备之间直接传输'), this.store.t('AloeSend 不要求账号，不将文件上传至云端。内容通过本地网络在发送方和接收方之间传输。'))
       this.info(this.store.t('本地记录'), this.store.t('设备名称、收藏、设置与传输历史只保存在本机。你可以关闭记录或清空历史。清空历史不会删除已接收的文件。'))
       this.info(this.store.t('系统权限'), this.store.t('文件、照片和剪贴板仅在你主动选择相关操作时访问。接收请求默认需要确认，请仅在可信网络上启用自动接收。'))
+      this.info(this.store.t('下载目录'), this.store.t('启动时通过系统 DOWNLOAD 对话框申请本应用下载目录的访问权限，用于保存收到的文件。'))
     } else if (this.route === 'licenses') {
       this.info('LocalSend / AloeSend', this.store.t('基于 LocalSend 项目，遵循 Apache License 2.0。\nhttps://github.com/localsend/localsend\nhttps://github.com/Aloereed/localsend-ohos'))
       this.info(this.store.t('原生实现'), this.store.t('ArkUI 界面和 ArkTS 平台服务使用 HarmonyOS SDK。原项目第三方版权声明保留在仓库对应依赖中。'))
+      this.info('Mbed TLS 3.6.7', 'Apache License 2.0\nhttps://github.com/Mbed-TLS/mbedtls')
       Button(this.store.t('阅读完整许可')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.route = 'license-full')
     } else if (this.route === 'changelog') {
+      this.info('M20', this.store.t('接收后打开进度页；替换系统 TLS 接收实现；大文件批量写入；恢复原版下载目录授权与保存路径。'))
+      this.info('M19', this.store.t('恢复原版 Logo 与图标；修复开关回弹；自动发现设备；提示自动关闭；发送类型单行滑动。'))
       this.info(this.store.t('原生迁移 · M2'), this.store.t('系统文件与照片选择、文件夹选择、文字和剪贴板、选择清单、重命名、历史与消息搜索、另存为、主题与接收设置。'))
       this.info(this.store.t('原生迁移 · M1'), this.store.t('四个原生页面、鸿蒙浅深色资源、本地偏好存储、可追溯的未签名里程碑构建。'))
     } else if (this.route === 'web') {

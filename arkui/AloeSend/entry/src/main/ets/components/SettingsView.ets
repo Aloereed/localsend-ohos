@@ -155,13 +155,14 @@ export struct SettingsView {
         this.toggle(this.store.t('接收后提示保存到相册'), this.store.t('图片和视频接收完成后，通过系统确认保存到相册'), 'gallery')
         Column({ space: 12 }) {
           Text(this.store.t('文件保存位置')).fontSize(16).fontColor($r('sys.color.font_primary')).width('100%')
-          Text(this.store.settings.destinationMode === 'folder' ? this.store.settings.destination : this.store.t('应用内安全保存，可在接收历史中打开、分享或另存为'))
+          Text(this.store.settings.destinationMode !== 'private' ? this.store.settings.destination : this.store.t('应用内安全保存，可在接收历史中打开、分享或另存为'))
             .fontSize(13).lineHeight(20).fontColor($r('sys.color.font_secondary')).width('100%').maxLines(3)
           Row({ space: 10 }) {
             Button(this.store.t('选择保存目录')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText).onClick(() => this.store.chooseDestination())
             if (this.store.settings.destinationMode === 'folder') {
               Button(this.store.t('恢复默认')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => {
-                this.store.settings.destinationMode = 'private'; this.store.settings.destination = ''; this.store.save();
+                this.store.settings.destinationMode = 'download'; this.store.settings.destination = this.store.downloadDirectory;
+                this.store.ensureDownloadAccess(); this.store.save();
               })
             }
           }.width('100%')

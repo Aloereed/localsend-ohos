@@ -1,6 +1,11 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。": "After download access is granted, files are saved to Download/com.aloereed.aloesend. Without access, files stay in the app and can be exported from history.",
+  "下载目录": "Download folder",
+  "启动时通过系统 DOWNLOAD 对话框申请本应用下载目录的访问权限，用于保存收到的文件。": "At startup, the system DOWNLOAD dialog requests access to this app's download folder to save received files.",
+  "接收后打开进度页；替换系统 TLS 接收实现；大文件批量写入；恢复原版下载目录授权与保存路径。": "Show incoming transfer progress, replace system TLS reception, batch large-file writes, and restore the original download authorization and destination.",
+  "恢复原版 Logo 与图标；修复开关回弹；自动发现设备；提示自动关闭；发送类型单行滑动。": "Restore original branding, fix switches, discover peers automatically, dismiss notices, and show a scrolling row of send types.",
   "接收": "Receive",
   "发送": "Send",
   "消息": "Messages",

@@ -1,6 +1,7 @@
 import { socket } from '@kit.NetworkKit';
 import { HttpHead, HttpBodyDecoder, concatBytes, headerEnd, parseHttpHead } from './Protocol';
 import { encodeText } from './Transport';
+import { SecureConnection } from './SecureServer';
 
 export interface BodySink {
   write(bytes: Uint8Array): Promise<void>;
@@ -15,11 +16,12 @@ export class NativeConnection {
   encrypted: boolean = false;
   closed: boolean = false;
   private tcp: socket.TCPSocketConnection | undefined = undefined;
-  private tls: socket.TLSSocketConnection | undefined = undefined;
+  private tls: SecureConnection | undefined = undefined;
   private headBytes: Uint8Array = new Uint8Array(0);
   private decoder: HttpBodyDecoder | undefined = undefined;
   private sink: BodySink | undefined = undefined;
-  private queue: Promise<void> = Promise.resolve();
+  private pending: Uint8Array[] = [];
+  private draining: boolean = false;
   private queuedBytes: number = 0;
   private timeout: number = -1;
   private handler: RequestHandler;
@@ -39,12 +41,12 @@ export class NativeConnection {
     this.touch();
   }
 
-  attachTls(tls: socket.TLSSocketConnection): void {
+  attachTls(tls: SecureConnection): void {
     if (this.closed) { tls.close().catch(() => {}); return; }
     this.tls = tls; this.encrypted = true;
-    tls.on('message', (info: socket.SocketMessageInfo) => { this.ip = info.remoteInfo.address; this.enqueue(new Uint8Array(info.message)); });
-    tls.on('close', () => this.disconnected());
-    tls.on('error', (error) => this.fail(new Error(`TLS ${error.code}`)));
+    tls.onMessage = (info: socket.SocketMessageInfo) => { this.ip = info.remoteInfo.address; this.enqueue(new Uint8Array(info.message)); };
+    tls.onClose = () => this.disconnected();
+    tls.onError = (error: Error) => this.fail(error);
     this.touch();
   }
 
@@ -57,10 +59,30 @@ export class NativeConnection {
     if (this.closed || this.responded) return;
     this.touch(); this.queuedBytes += bytes.length;
     if (this.queuedBytes > 33554432) { this.fail(new Error('写入速度不足，接收缓冲区已满')); return; }
-    this.queue = this.queue.then(async () => {
-      try { if (!this.closed) await this.consume(bytes); }
-      finally { this.queuedBytes -= bytes.length; }
-    }).catch((error: Error) => this.fail(error));
+    this.pending.push(bytes);
+    if (!this.draining) this.drain().catch((error: Error) => this.fail(error));
+  }
+
+  private async drain(): Promise<void> {
+    this.draining = true;
+    try {
+      while (this.pending.length && !this.closed && !this.responded) {
+        // Coalesce packets already waiting for disk I/O. One async write per
+        // 16 KiB TLS record otherwise lets high-speed senders outrun the queue.
+        let count = 0; let size = 0;
+        while (count < this.pending.length && size < 1048576) size += this.pending[count++].length;
+        const chunks = this.pending.splice(0, count);
+        let bytes = chunks[0];
+        if (chunks.length > 1) {
+          bytes = new Uint8Array(size); let offset = 0;
+          for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+        }
+        try { await this.consume(bytes); } finally { this.queuedBytes -= size; }
+      }
+    } finally {
+      this.draining = false;
+      if (this.closed || this.responded) { this.pending = []; this.queuedBytes = 0; }
+    }
   }
 
   private async consume(incoming: Uint8Array): Promise<void> {
@@ -105,6 +127,7 @@ export class NativeConnection {
   close(): void {
     if (this.closed) return;
     this.closed = true;
+    this.pending = [];
     this.onClosed();
     if (!this.completed) this.sink?.abort().catch(() => {});
     if (this.timeout !== -1) clearTimeout(this.timeout);

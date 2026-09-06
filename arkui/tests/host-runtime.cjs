@@ -15,6 +15,7 @@ const caches = new Map();
 const timers = { setTimeout, clearTimeout, setInterval, clearInterval };
 const modes = { READ_ONLY: 0, READ_WRITE: 2, CREATE: 64, TRUNC: 512 };
 const nativeFs = {
+  access: file => fsp.access(file).then(() => true, () => false),
   OpenMode: modes,
   async open(file, mode) {
     const handle = await fsp.open(file.replace(/^file:\/\//, ''), mode & modes.CREATE ? 'w+' : mode & modes.READ_WRITE ? 'r+' : 'r');
@@ -113,6 +114,7 @@ const cryptoFramework = {
   createMd: () => { const hash = crypto.createHash('sha256'); return { update: async blob => { hash.update(blob.data); }, digest: async () => ({ data: new Uint8Array(hash.digest()) }) }; },
 };
 const mocks = {
+  'libaloetls.so': require('../logs/native-host/aloetls.node'),
   '@kit.NetworkKit': { socket: {
     constructTCPSocketInstance: () => new SocketAdapter(false), constructTLSSocketInstance: () => new SocketAdapter(true),
     constructTCPSocketServerInstance: () => new ServerAdapter(false), constructTLSSocketServerInstance: () => new ServerAdapter(true),

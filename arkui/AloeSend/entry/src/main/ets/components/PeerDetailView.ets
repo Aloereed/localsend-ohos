@@ -1,4 +1,4 @@
-import { AppStore, Peer } from '../model/AppStore';
+import { AppStore, Peer, samePeer } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 
@@ -7,9 +7,38 @@ export struct PeerDetailView {
   @ObjectLink store: AppStore;
   @Prop peer: Peer = new Peer();
   @State alias: string = '';
+  @State choosing: boolean = false;
+  @State textMode: boolean = false;
+  @State text: string = '';
   onSend: () => void = () => {};
+  onMessage: () => void = () => {};
 
   aboutToAppear(): void { this.alias = this.peer.alias; }
+
+  async choose(kind: string): Promise<void> {
+    if (kind === 'text') { this.textMode = true; return; }
+    if (kind === 'clipboard') await this.store.paste(); else await this.store.selectFiles(kind);
+    if (this.store.files.length) { this.choosing = false; this.onSend(); }
+  }
+
+  @Builder
+  contentPicker() {
+    Column({ space: 16 }) {
+      Text(this.store.t(this.textMode ? '发送文字或链接' : '先选择要分享的内容')).fontSize(23).fontWeight(FontWeight.Medium)
+      if (this.textMode) {
+        TextArea({ text: this.text, placeholder: this.store.t('写点什么，或粘贴一个链接…') }).height(200).maxLength(100000)
+          .onChange((value: string) => this.text = value)
+        Button(this.store.t('发送')).width('100%').height(48).backgroundColor(this.store.accentFill).enabled(this.text.trim().length > 0)
+          .onClick(() => { this.store.addText(this.text); this.text = ''; this.choosing = false; this.onSend(); })
+      } else {
+        Button(this.store.t('文件')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('file'))
+        Button(this.store.t('照片与视频')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('photo'))
+        Button(this.store.t('文件夹')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('folder'))
+        Button(this.store.t('文字或链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('text'))
+        Button(this.store.t('剪贴板')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('clipboard'))
+      }
+    }.padding(24).width('100%')
+  }
 
   build() {
     Column({ space: 20 }) {
@@ -19,7 +48,11 @@ export struct PeerDetailView {
         Text(this.peer.alias).fontSize(26).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
         Text(this.peer.deviceModel || this.store.t('LocalSend 设备')).fontSize(14).fontColor($r('sys.color.font_secondary'))
         Text(`${this.peer.protocol}://${this.peer.ip}:${this.peer.port}`).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice)
-        Button(this.store.t('发送到这台设备')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.onSend())
+        Button(this.store.t('发送到这台设备')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
+          if (this.store.files.length) this.onSend(); else { this.textMode = false; this.choosing = true; }
+        })
+        Button(this.store.t('消息')).width('100%').height(46).backgroundColor($r('sys.color.comp_background_tertiary'))
+          .fontColor(this.store.accentText).onClick(() => this.onMessage())
         Button(this.store.isFavorite(this.peer) ? this.store.t('取消收藏') : this.store.t('收藏设备')).width('100%').height(46)
           .backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText).onClick(() => this.store.toggleFavorite(this.peer))
       }.padding(28).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
@@ -29,7 +62,7 @@ export struct PeerDetailView {
           TextInput({ text: this.alias }).maxLength(40).onChange((value: string) => this.alias = value)
           Button(this.store.t('保存备注')).backgroundColor(this.store.accentFill).onClick(() => {
             this.store.favorites = this.store.favorites.map((item: Peer) => {
-              if (item.ip !== this.peer.ip || item.port !== this.peer.port) return item;
+              if (!samePeer(item, this.peer)) return item;
               const renamed = JSON.parse(JSON.stringify(item)) as Peer; renamed.alias = this.alias.trim() || item.alias;
               return renamed;
             }); this.store.save(); this.store.notice = this.store.t('收藏备注已保存');
@@ -48,6 +81,6 @@ export struct PeerDetailView {
           localSend.probe(this.peer).then(() => this.store.notice = this.store.t('连接正常')).catch((e: Error) => this.store.fail(this.store.t('连接失败'), e));
         })
       }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
-    }.width('100%')
+    }.width('100%').bindSheet($$this.choosing, this.contentPicker(), { height: SheetSize.FIT_CONTENT, showClose: true })
   }
 }

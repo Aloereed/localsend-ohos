@@ -9,6 +9,7 @@ import { TlsIdentity } from './TlsIdentity';
 import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter } from './Transport';
 import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
 import { batchReceiveNames } from '../model/ReceiveNames';
+import { SecureServer, SecureConnection } from './SecureServer';
 
 export interface DeviceInfo {
   alias: string;
@@ -85,8 +86,18 @@ class UploadSink implements BodySink {
   }
 
   async init(): Promise<void> {
-    const root = `${this.service.store.context!.filesDir}/received/${this.session.id}`;
+    const destination = this.session.view.destination;
+    const downloads = this.service.store.downloadDirectory;
+    const direct = destination === downloads || destination.startsWith(`${downloads}/`);
+    const root = direct ? destination : `${this.service.store.context!.filesDir}/received/${this.session.id}`;
     this.path = `${root}/${safeRelativePath(this.view.name)}`;
+    if (direct) {
+      const original = this.path; let suffix = 1;
+      while (await fs.access(this.path) || await fs.access(`${this.path}.part`)) {
+        const dot = original.lastIndexOf('.'); const split = dot > original.lastIndexOf('/') ? dot : original.length;
+        this.path = `${original.slice(0, split)} (${suffix++})${original.slice(split)}`;
+      }
+    }
     await fs.mkdir(this.path.slice(0, this.path.lastIndexOf('/')), true);
     this.output = await fs.open(`${this.path}.part`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
     if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
@@ -141,7 +152,7 @@ export class LocalSendService {
   private identity: TlsIdentity = new TlsIdentity();
   private udp: socket.MulticastSocket | undefined = undefined;
   private tcp: socket.TCPSocketServer | undefined = undefined;
-  private tls: socket.TLSSocketServer | undefined = undefined;
+  private tls: SecureServer | undefined = undefined;
   private channels: NativeConnection[] = [];
   private receiving: ReceiveSession | undefined = undefined;
   private sending: Map<string, Cancellation> = new Map();
@@ -172,14 +183,10 @@ export class LocalSendService {
       if (this.store.listenerHttps) await this.identity.load(this.store);
       const address: socket.NetAddress = { address: '0.0.0.0', port: this.store.listenerPort, family: 1 };
       if (this.store.listenerHttps) {
-        this.tls = socket.constructTLSSocketServerInstance();
-        // HarmonyOS creates the native event source during listen(). Registering
-        // before it resolves silently leaves the native connect callback null.
-        await this.tls.listen({ address: address, secureOptions: { cert: this.identity.certificate, key: this.identity.privateKey } });
-        this.tls.on('connect', (client: socket.TLSSocketConnection) => {
+        this.tls = new SecureServer();
+        await this.tls.listen(address, this.identity.certificate, this.identity.privateKey, (client: SecureConnection) => {
           const channel = this.newChannel(); channel.attachTls(client);
-        });
-        this.tls.on('error', (error) => { this.store.serverStatus = `接收服务错误 ${error.code}`; this.store.log(this.store.serverStatus); });
+        }, (error: Error) => { this.store.serverStatus = `接收服务错误 ${error.message}`; this.store.log(this.store.serverStatus); });
       } else {
         this.tcp = socket.constructTCPSocketServerInstance();
         await this.tcp.listen(address);
@@ -381,7 +388,7 @@ export class LocalSendService {
     session.files = payload.files; session.view.id = session.id; session.view.peer = session.peer.alias;
     session.view.direction = 'receive'; session.view.encrypted = channel.encrypted;
     session.view.peerInfo = session.peer;
-    session.view.destination = this.store.settings.destinationMode === 'folder' ? this.store.settings.destination : '';
+    session.view.destination = this.store.settings.destinationMode !== 'private' ? this.store.settings.destination : '';
     for (const id of ids) {
       const file = payload.files[id];
       if (!file || typeof file.fileName !== 'string' || !Number.isSafeInteger(file.size) || file.size < 0 || file.id !== id) throw new Error('文件信息无效');

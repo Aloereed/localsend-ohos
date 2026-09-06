@@ -8,12 +8,13 @@ import { LocalSendService, localSend } from './LocalSendService';
 import { TlsIdentity } from './TlsIdentity';
 import { encodeText } from './Transport';
 import { webPage } from './WebPage';
+import { SecureServer, SecureConnection } from './SecureServer';
 
 export class WebShareService {
   private store: AppStore;
   private protocol: LocalSendService;
   private tcp: socket.TCPSocketServer | undefined = undefined;
-  private tls: socket.TLSSocketServer | undefined = undefined;
+  private tls: SecureServer | undefined = undefined;
   private channels: NativeConnection[] = [];
   private token: string = '';
   private encrypted: boolean = false;
@@ -37,9 +38,9 @@ export class WebShareService {
       const address: socket.NetAddress = { address: '0.0.0.0', port: port, family: 1 };
       if (encrypted) {
         const identity = new TlsIdentity(); await identity.load(this.store);
-        this.tls = socket.constructTLSSocketServerInstance();
-        await this.tls.listen({ address: address, secureOptions: { cert: identity.certificate, key: identity.privateKey } });
-        this.tls.on('connect', (client: socket.TLSSocketConnection) => this.channel().attachTls(client));
+        this.tls = new SecureServer();
+        await this.tls.listen(address, identity.certificate, identity.privateKey,
+          (client: SecureConnection) => this.channel().attachTls(client), (error: Error) => this.store.log(error.message));
       } else {
         this.tcp = socket.constructTCPSocketServerInstance();
         await this.tcp.listen(address);

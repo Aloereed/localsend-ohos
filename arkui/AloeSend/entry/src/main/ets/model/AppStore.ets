@@ -141,6 +141,7 @@ export function mimeForName(name: string): string {
 
 @Observed
 export class AppStore {
+  readonly downloadDirectory: string = '/storage/Users/currentUser/Download/com.aloereed.aloesend';
   settings: AppSettings = new AppSettings();
   files: ShareFile[] = [];
   peers: Peer[] = [];
@@ -188,6 +189,7 @@ export class AppStore {
   savingToGallery: boolean = false;
   messageDrafts: Map<string, MessageDraft> = new Map();
   onTransferCompleted: (transfer: TransferView) => void = () => {};
+  onReceiveStarted: (transfer: TransferView) => void = () => {};
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
   private persistentHistory: Set<string> = new Set();
@@ -252,6 +254,7 @@ export class AppStore {
     if (this.context) backgroundKeeper.sync(this.transfers.some((item: TransferView) => item.status === 'transferring'), this.context,
       (message: string) => this.log(message));
     if (transfer.status === 'complete' && previous?.status !== 'complete') this.onTransferCompleted(transfer);
+    if (transfer.direction === 'receive' && transfer.status === 'transferring' && previous?.status !== 'transferring') this.onReceiveStarted(transfer);
   }
 
   fail(title: string, error: Error): void {
@@ -475,6 +478,30 @@ export class AppStore {
     } catch (e) { this.fail('设置目录失败，仍可在历史中另存为', e as Error); }
   }
 
+  async ensureDownloadAccess(): Promise<void> {
+    if (!this.context) return;
+    try {
+      // Match the Flutter DownloadPlugin: DOWNLOAD grants this application's
+      // Download/<bundleName> directory, not an arbitrary folder-picker URI.
+      const options = new picker.DocumentSaveOptions(); options.pickerMode = picker.DocumentPickerMode.DOWNLOAD;
+      const result = await new picker.DocumentViewPicker(this.context).save(options);
+      if (!result.length) {
+        if (this.settings.destinationMode === 'download') { this.settings.destinationMode = 'private'; this.settings.destination = ''; await this.save(); }
+        return;
+      }
+      await fs.mkdir(this.downloadDirectory, true);
+      const probePath = `${this.downloadDirectory}/.access-${util.generateRandomUUID()}`;
+      const probe = await fs.open(probePath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
+      await fs.close(probe); await fs.unlink(probePath);
+      if (this.settings.destinationMode !== 'folder') {
+        this.settings.destinationMode = 'download'; this.settings.destination = this.downloadDirectory; await this.save();
+      }
+    } catch (error) {
+      if (this.settings.destinationMode === 'download') { this.settings.destinationMode = 'private'; this.settings.destination = ''; await this.save(); }
+      this.fail('下载目录授权未完成，文件仍保存在应用内', error as Error);
+    }
+  }
+
   async pickDestination(): Promise<string> {
     if (!this.context) return '';
     let uris: string[];
@@ -491,12 +518,19 @@ export class AppStore {
   }
 
   async saveReceivedCopy(entry: HistoryEntry, sessionDestination: string | undefined = undefined, sessionId: string = ''): Promise<void> {
-    const destination = sessionDestination === undefined ? (this.settings.destinationMode === 'folder' ? this.settings.destination : '') : sessionDestination;
+    const destination = sessionDestination === undefined ? (this.settings.destinationMode !== 'private' ? this.settings.destination : '') : sessionDestination;
     if (!destination || !entry.path) return;
     try {
-      await fileShare.activatePermission([{ uri: destination, operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
+      const download = destination === this.downloadDirectory || destination.startsWith(`${this.downloadDirectory}/`);
+      if (download && entry.path.startsWith(`${destination}/`)) { entry.exportedPath = entry.path; await this.save(); return; }
+      if (!download) await fileShare.activatePermission([{ uri: destination, operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
       // A unique per-transfer directory prevents overwriting unrelated user files.
-      const path = `${destination}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
+      let path = download ? `${destination}/${safeRelativePath(entry.name)}` : `${destination}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
+      const original = path; let suffix = 1;
+      while (download && await fs.access(path)) {
+        const dot = original.lastIndexOf('.'); const split = dot > original.lastIndexOf('/') ? dot : original.length;
+        path = `${original.slice(0, split)} (${suffix++})${original.slice(split)}`;
+      }
       await fs.mkdir(path.slice(0, path.lastIndexOf('/')), true);
       const output = await fs.open(path, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
       try {

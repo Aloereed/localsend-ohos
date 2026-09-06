@@ -55,3 +55,5 @@ vi: @faea726
 zhCn: @nkh0472, @graphemecluster
 zhHk: @graphemecluster
 zhTw: @Neo1102, @graphemecluster
+TLS reception: Mbed TLS 3.6.7 (Apache-2.0 OR GPL-2.0-or-later; used under Apache-2.0).
+https://github.com/Mbed-TLS/mbedtls

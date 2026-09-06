@@ -246,6 +246,38 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         assert.deepEqual(offers.slice(2), [['first', 'second'], ['first', 'second']]);
       } finally { await new Promise(r => remote.close(r)); }
     });
+    await check('128 MiB nonzero binary TLS upload completes with matching SHA-256 and one progress navigation event', async () => {
+      store.settings.quickSave = true; store.settings.pin = '';
+      store.downloadDirectory = path.join(work, 'Download/com.aloereed.aloesend');
+      store.settings.destinationMode = 'download'; store.settings.destination = store.downloadDirectory;
+      const block = Buffer.alloc(65536, 0xa5); const blocks = 2048;
+      const expected = crypto.createHash('sha256'); for (let i = 0; i < blocks; i++) expected.update(block);
+      const digest = expected.digest('hex');
+      let started = 0; store.onReceiveStarted = () => started++;
+      const prepared = await call(port, '/api/localsend/v2/prepare-upload', offer('nonzero-128MiB.bin', { length: block.length * blocks }, { hash: digest }));
+      assert.equal(prepared.status, 200); const session = prepared.json();
+      await new Promise((resolve, reject) => {
+        const upload = https.request({ host: '127.0.0.1', port, path: `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`,
+          method: 'POST', rejectUnauthorized: false, headers: { 'content-length': block.length * blocks } }, response => {
+          const body = []; response.on('data', chunk => body.push(chunk)); response.on('end', () => response.statusCode === 200 ? resolve() : reject(new Error(`upload ${response.statusCode}: ${Buffer.concat(body)}`)));
+        });
+        upload.on('error', reject); upload.setTimeout(60000, () => upload.destroy(new Error('large upload timeout')));
+        let sent = 0;
+        function pump() {
+          while (sent < blocks) { sent++; if (!upload.write(block)) { upload.once('drain', pump); return; } }
+          upload.end();
+        }
+        pump();
+      });
+      const entry = store.history.find(item => item.name === 'nonzero-128MiB.bin'); assert.ok(entry);
+      assert.equal(entry.path, store.downloadDirectory + '/nonzero-128MiB.bin'); assert.equal(entry.exportedPath, entry.path);
+      const actual = crypto.createHash('sha256');
+      for await (const chunk of require('node:fs').createReadStream(entry.path)) actual.update(chunk);
+      assert.equal(actual.digest('hex'), digest); assert.equal(started, 1);
+      assert.equal(store.transfers.find(item => item.id === session.sessionId).status, 'complete');
+      store.onReceiveStarted = () => {};
+      await fs.unlink(entry.path);
+    });
   } finally { await service.stop(); }
   await until(() => handles.size === 0);
   console.log(`${checks} service integration groups passed; zero open file handles`);
