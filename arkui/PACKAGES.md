@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000030 | [M30-settings-recovery](artifacts/AloeSend-2000030-M30-settings-recovery-unsigned.hap) | ad7fa071 | 69E04134DB2C1FF5C75C4AA32B60AF83334967B6A949503148B468F38A37D0BC |
 | 2000029 | [M29-certificate-controls](artifacts/AloeSend-2000029-M29-certificate-controls-unsigned.hap) | 12eefa9a | 026795822798D88F22EE5C19176A92DD74F9D041BDBE84D50C98358B1DD8E789 |
 | 2000028 | [M28-diagnostics](artifacts/AloeSend-2000028-M28-diagnostics-unsigned.hap) | d2a8e332 | D8B24927A376ADBFF55D39CB4E127D13561C671BB9929DDE8365990B07281861 |
 | 2000027 | [M27-transfer-lifecycle](artifacts/AloeSend-2000027-M27-transfer-lifecycle-unsigned.hap) | 6350c11b | 6044905AFB185CDCE37341309568009505CB6DF6878F08E030E808E7DBD50743 |
