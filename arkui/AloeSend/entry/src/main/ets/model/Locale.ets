@@ -1,6 +1,20 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "目录暂时不可用": "Folder temporarily unavailable",
+  "下载目录不能写入时，本次接收会改用应用内目录并提示你。请在接收历史的文件详情中查看实际位置，需要时选择另存为。": "If the download folder is not writable, receiving switches to app storage and shows a notice. Check the actual location in file details under history, and export the file if needed.",
+  "传输与后台": "Transfers and background activity",
+  "前台传输会保持亮屏，结束后恢复正常熄屏。进入后台后会申请系统长时任务；申请结果可在连接诊断查看。": "Foreground transfers keep the screen on and release it when finished. In the background, the app requests a system transfer task. Check connection diagnostics for the result.",
+  "排查连接问题": "Troubleshooting connections",
+  "在设置的连接诊断中查看本机地址、服务状态和发现日志，可搜索并复制诊断信息。修改端口、组播或加密选项后，空闲时重启服务即可生效。": "Connection diagnostics in Settings show local addresses, service status and discovery logs. Search and copy diagnostic information there. Restart the idle service to apply port, multicast or encryption changes.",
+  "接收与保存": "Receiving and saving",
+  "改进大文件接收、进度更新和断开后的错误反馈。修复下载目录重复创建问题；目录不可用时改用应用内保存，并显示实际位置。": "Improved large-file reception, progress updates and disconnection feedback. Fixed repeated download-folder creation. Unavailable folders fall back to app storage with the actual location shown.",
+  "外观与操作": "Appearance and controls",
+  "保留原版图标，采用鸿蒙原生导航与分层材质。修复开关、选择器和动态文字更新，新增轻量效果与纯黑背景，发送类型支持单行滑动。": "Original branding with native HarmonyOS navigation and layered surfaces. Fixed switches, selectors and live text updates. Added reduced effects, black backgrounds and a scrolling row of send types.",
+  "消息与分享": "Messages and sharing",
+  "支持会话搜索、附件、收藏设备发起会话和新消息提示。文件详情可打开、另存、分享或查看所在目录；浏览器分享支持放大二维码与大字链接。": "Search conversations, attach files, message favorite devices and see new-message notices. Open, export, share or locate files from details. Browser sharing offers larger QR codes and links.",
+  "首次使用与排查": "Getting started and diagnostics",
+  "恢复首次隐私说明，完善下载目录授权、传输亮屏、连接日志、证书管理和默认设置恢复。": "Restored first-launch privacy information and improved download authorization, screen wake behavior, connection logs, certificate controls and default-setting recovery.",
   "{0} 条新消息 · 查看": "{0} new messages · View",
   "下载目录暂不可用，已改用应用内保存，可从历史另存为": "The download folder is unavailable. Receiving switched to app storage. You can export files from history.",
   "发送方长时间未继续传输，请让对方重试": "The sender stopped responding. Ask them to try again.",

@@ -189,16 +189,21 @@ struct Index {
       this.info('找不到设备？', '确认两台设备连接同一个局域网，关闭路由器的 AP 隔离。允许 LocalSend 通过防火墙，确保 TCP 与 UDP 53317 端口可用。也可通过地址直接添加设备。')
       this.info('接收的文件在哪里？', '允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。')
       this.info('文字与文件', '发送页可以选择文件、图片、文件夹，以及文字或剪贴板内容。选择后点击目标设备。文件重命名只影响对方收到的名称。')
+      this.info('目录暂时不可用', '下载目录不能写入时，本次接收会改用应用内目录并提示你。请在接收历史的文件详情中查看实际位置，需要时选择另存为。')
+      this.info('传输与后台', '前台传输会保持亮屏，结束后恢复正常熄屏。进入后台后会申请系统长时任务；申请结果可在连接诊断查看。')
+      this.info('排查连接问题', '在设置的连接诊断中查看本机地址、服务状态和发现日志，可搜索并复制诊断信息。修改端口、组播或加密选项后，空闲时重启服务即可生效。')
+      Button(this.store.t('连接诊断')).width('100%').height(48).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).onClick(() => this.route = 'diagnostics')
     } else if (this.route === 'licenses') {
       this.info('LocalSend / AloeSend', '基于 LocalSend 项目，遵循 Apache License 2.0。\nhttps://github.com/localsend/localsend\nhttps://github.com/Aloereed/localsend-ohos')
       this.info('原生实现', 'ArkUI 界面和 ArkTS 平台服务使用 HarmonyOS SDK。原项目第三方版权声明保留在仓库对应依赖中。')
       this.info('Mbed TLS 3.6.7', 'Apache License 2.0\nhttps://github.com/Mbed-TLS/mbedtls')
       Button(this.store.t('阅读完整许可')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.route = 'license-full')
     } else if (this.route === 'changelog') {
-      this.info('M20', '接收后打开进度页；替换系统 TLS 接收实现；大文件批量写入；恢复原版下载目录授权与保存路径。')
-      this.info('M19', '恢复原版 Logo 与图标；修复开关回弹；自动发现设备；提示自动关闭；发送类型单行滑动。')
-      this.info('原生迁移 · M2', '系统文件与照片选择、文件夹选择、文字和剪贴板、选择清单、重命名、历史与消息搜索、另存为、主题与接收设置。')
-      this.info('原生迁移 · M1', '四个原生页面、鸿蒙浅深色资源、本地偏好存储、可追溯的未签名里程碑构建。')
+      Text($r('app.string.build_version')).fontSize(15).fontColor($r('sys.color.font_secondary')).width('100%').margin({ bottom: 20 })
+      this.info('接收与保存', '改进大文件接收、进度更新和断开后的错误反馈。修复下载目录重复创建问题；目录不可用时改用应用内保存，并显示实际位置。')
+      this.info('外观与操作', '保留原版图标，采用鸿蒙原生导航与分层材质。修复开关、选择器和动态文字更新，新增轻量效果与纯黑背景，发送类型支持单行滑动。')
+      this.info('消息与分享', '支持会话搜索、附件、收藏设备发起会话和新消息提示。文件详情可打开、另存、分享或查看所在目录；浏览器分享支持放大二维码与大字链接。')
+      this.info('首次使用与排查', '恢复首次隐私说明，完善下载目录授权、传输亮屏、连接日志、证书管理和默认设置恢复。')
     } else if (this.route === 'web') {
       WebShareView({ store: this.store })
     } else {
