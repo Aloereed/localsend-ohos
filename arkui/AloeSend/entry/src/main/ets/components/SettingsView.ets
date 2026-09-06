@@ -1,5 +1,6 @@
 import { AppStore } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
+import { LengthMetrics } from '@kit.ArkUI';
 
 @Component
 export struct SettingsView {
@@ -76,7 +77,7 @@ export struct SettingsView {
       Column({ space: 12 }) {
         Text(this.store.t('设备名称')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
         TextInput({ text: this.alias, placeholder: this.store.t('设备名称') }).maxLength(40).onChange((value: string) => this.alias = value)
-        Button(this.store.t('保存名称')).type(ButtonType.Capsule).backgroundColor(this.store.settings.accent).onClick(() => {
+        Button(this.store.t('保存名称')).type(ButtonType.Capsule).backgroundColor(this.store.accentFill).onClick(() => {
           this.store.settings.alias = this.alias.trim() || this.store.t('我的鸿蒙设备');
           this.store.save(); this.store.notice = this.store.t('设备名称已保存');
         })
@@ -98,13 +99,17 @@ export struct SettingsView {
               this.store.applyTheme(); this.store.save();
             })
         }.padding(18).width('100%')
-        Row({ space: 12 }) {
-          Text(this.store.t('主题颜色')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-          ForEach(['#168A75', '#2473E8', '#7454C9', '#BB5C36', '#BD4F78'], (color: string) => {
-            Button('').width(28).height(28).backgroundColor(color)
-              .border({ width: this.store.settings.accent === color ? 3 : 0, color: $r('sys.color.font_primary') })
-              .onClick(() => { this.store.settings.accent = color; this.store.save(); }).accessibilityText(this.store.tf('主题色 {0}', [color]))
-          })
+        Column({ space: 10 }) {
+          Text(this.store.t('主题颜色')).width('100%').fontColor($r('sys.color.font_primary'))
+          Flex({ wrap: FlexWrap.Wrap, space: { main: LengthMetrics.vp(8), cross: LengthMetrics.vp(6) } }) {
+            ForEach(['#168A75', '#2473E8', '#7454C9', '#BB5C36', '#BD4F78'], (color: string) => {
+              Button() {
+                Circle().width(28).height(28).fill(color)
+                  .stroke(this.store.settings.accent === color ? $r('sys.color.font_primary') : Color.Transparent).strokeWidth(2)
+              }.width(44).height(44).backgroundColor(Color.Transparent)
+                .onClick(() => { this.store.settings.accent = color; this.store.save(); }).accessibilityText(this.store.tf('主题色 {0}', [color]))
+            })
+          }.width('100%')
         }.padding(18).width('100%')
         this.toggle(this.store.t('界面动画'), this.store.t('自然流畅的页面过渡'), this.store.settings.animations, 'animation')
       }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
@@ -120,9 +125,9 @@ export struct SettingsView {
           Text(this.store.settings.destinationMode === 'folder' ? this.store.settings.destination : this.store.t('应用内安全保存，可在接收历史中打开、分享或另存为'))
             .fontSize(13).lineHeight(20).fontColor($r('sys.color.font_secondary')).width('100%').maxLines(3)
           Row({ space: 10 }) {
-            Button(this.store.t('选择保存目录')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.settings.accent).onClick(() => this.store.chooseDestination())
+            Button(this.store.t('选择保存目录')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText).onClick(() => this.store.chooseDestination())
             if (this.store.settings.destinationMode === 'folder') {
-              Button(this.store.t('恢复默认')).backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => {
+              Button(this.store.t('恢复默认')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => {
                 this.store.settings.destinationMode = 'private'; this.store.settings.destination = ''; this.store.save();
               })
             }
@@ -135,7 +140,7 @@ export struct SettingsView {
             .onChange((value: string) => this.pin = value)
           Button(this.store.t('保存 PIN')).onClick(() => {
             this.store.settings.pin = this.pin; this.store.save(); this.store.notice = this.store.t('接收 PIN 已更新');
-          }).backgroundColor(this.store.settings.accent)
+          }).backgroundColor(this.store.accentFill)
         }.padding(18)
       }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       this.title(this.store.t('网络'))
@@ -147,8 +152,8 @@ export struct SettingsView {
           Column({ space: 12 }) {
             TextInput({ text: this.port, placeholder: this.store.t('端口 53317') }).type(InputType.Number).onChange((value: string) => this.port = value)
             TextInput({ text: this.group, placeholder: this.store.t('组播地址') }).onChange((value: string) => this.group = value)
-            Button(this.store.t('保存网络设置')).backgroundColor(this.store.settings.accent).onClick(() => this.saveNetwork())
-            Button(this.store.t('重启接收服务')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.settings.accent)
+            Button(this.store.t('保存网络设置')).backgroundColor(this.store.accentFill).onClick(() => this.saveNetwork())
+            Button(this.store.t('重启接收服务')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
               .enabled(!this.store.transfers.some((item) => item.status === 'transferring' || item.status === 'waiting'))
               .onClick(() => localSend.restart())
             Row() {

@@ -17,7 +17,7 @@ export struct TransferList {
       Text(this.store.t('接收时重命名')).fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
       TextInput({ text: this.renameText }).onChange((value: string) => this.renameText = value)
       Text(this.store.t('仅影响本次接收的文件名称。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
-      Button(this.store.t('保存名称')).width('100%').height(48).backgroundColor(this.store.settings.accent).onClick(() => {
+      Button(this.store.t('保存名称')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
         if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
       })
     }.width('100%').padding(24)
@@ -47,7 +47,7 @@ export struct TransferList {
       if (this.store.batchRemaining > 0) {
         Row() {
           Text(this.store.tf('队列剩余 {0} 台设备', [String(this.store.batchRemaining)])).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-          Button(this.store.t('停止队列')).fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => localSend.cancelAll())
+          Button(this.store.t('停止队列')).fontColor(this.store.dangerText).backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => localSend.cancelAll())
         }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
       }
       if (this.store.transfers.length === 0) {
@@ -56,7 +56,7 @@ export struct TransferList {
       ForEach(this.store.transfers.filter((transfer: TransferView) => !this.pendingOnly || transfer.id === this.store.pendingReceive), (transfer: TransferView) => {
         Column({ space: 16 }) {
           Row() {
-            AppIcon({ name: transfer.direction === 'receive' ? 'receive' : 'send', iconSize: 30, tint: this.store.settings.accent })
+            AppIcon({ name: transfer.direction === 'receive' ? 'receive' : 'send', iconSize: 30, tint: this.store.accentText })
             Column({ space: 6 }) {
               Text(transfer.peer).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
               Text(`${this.statusLabel(transfer.status)} · ${transfer.encrypted ? this.store.t('TLS 加密') : this.store.t('未加密')}`)
@@ -71,12 +71,12 @@ export struct TransferList {
               Text(this.rate(transfer)).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.width('100%')
           }
-          if (transfer.error) { Text(this.store.t(transfer.error)).fontColor('#C44747').fontSize(14).width('100%') }
+          if (transfer.error) { Text(this.store.t(transfer.error)).fontColor(this.store.dangerText).fontSize(14).width('100%') }
           if (transfer.id === this.store.pendingReceive) {
             Row({ space: 10 }) {
               Text(this.store.tf('共 {0} 项 · {1}', [String(transfer.files.length), formatSize(this.total(transfer))])).layoutWeight(1).fontSize(13).fontColor($r('sys.color.font_secondary'))
-              Button(this.store.t('全选')).backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('all'))
-              Button(this.store.t('反选')).backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('invert'))
+              Button(this.store.t('全选')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('all'))
+              Button(this.store.t('反选')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('invert'))
             }.width('100%')
           }
           ForEach(transfer.files, (file: TransferFile) => {
@@ -92,9 +92,9 @@ export struct TransferList {
                 }
                 Text(`${formatSize(file.size)} · ${this.statusLabel(file.status)}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
               }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-              if (file.status === 'complete') { Text('✓').fontColor(this.store.settings.accent).fontSize(20) }
+              if (file.status === 'complete') { Text('✓').fontColor(this.store.accentText).fontSize(20) }
               if (transfer.id === this.store.pendingReceive && !file.preview) {
-                Button(this.store.t('改名')).fontSize(12).fontColor(this.store.settings.accent).backgroundColor(Color.Transparent)
+                Button(this.store.t('改名')).fontSize(12).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
                   .onClick(() => { this.renameId = file.id; this.renameText = file.name; this.renameSheet = true; })
               }
             }.width('100%').padding({ top: 8, bottom: 8 })
@@ -104,13 +104,13 @@ export struct TransferList {
             Row({ space: 12 }) {
               Button(this.store.t('拒绝')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor($r('sys.color.font_primary'))
                 .onClick(() => localSend.acceptReceive(false))
-              Button(this.store.t('接收所选')).layoutWeight(1).height(48).backgroundColor(this.store.settings.accent)
+              Button(this.store.t('接收所选')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill)
                 .enabled(transfer.files.some((file: TransferFile) => file.selected)).onClick(() => localSend.acceptReceive(true))
             }.width('100%')
           } else if (transfer.status === 'waiting' || transfer.status === 'transferring') {
-            Button(this.store.t('取消传输')).fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => { if (!webShare.cancel(transfer.id)) localSend.cancel(transfer.id); })
+            Button(this.store.t('取消传输')).fontColor(this.store.dangerText).backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => { if (!webShare.cancel(transfer.id)) localSend.cancel(transfer.id); })
           } else if (transfer.direction === 'send' && (transfer.status === 'error' || transfer.status === 'cancelled')) {
-            Button(this.store.t('重试未完成文件')).backgroundColor(this.store.settings.accent).onClick(() => localSend.retry(transfer.id))
+            Button(this.store.t('重试未完成文件')).backgroundColor(this.store.accentFill).onClick(() => localSend.retry(transfer.id))
           }
         }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
       }, (transfer: TransferView) => JSON.stringify(transfer))

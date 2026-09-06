@@ -6,6 +6,7 @@ import { pasteboard } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText } from './Locale';
+import { readableColor } from './Colors';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -138,6 +139,7 @@ export class AppStore {
   webFiles: ShareFile[] = [];
   batchRemaining: number = 0;
   incomingShare: boolean = false;
+  systemDark: boolean = false;
   onTransferCompleted: () => void = () => {};
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
@@ -174,6 +176,15 @@ export class AppStore {
   }
 
   t(text: string): string { return uiText(text, this.settings.language); }
+  get dark(): boolean { return this.settings.theme === 'dark' || (this.settings.theme === 'system' && this.systemDark); }
+  get accentText(): string { return readableColor(this.settings.accent, this.dark ? '#383838' : '#F1F3F5'); }
+  get accentFill(): string { return readableColor(this.settings.accent, '#FFFFFF'); }
+  get dangerText(): string { return readableColor('#C44747', this.dark ? '#383838' : '#F1F3F5'); }
+
+  refreshSystemTheme(): void {
+    try { this.systemDark = this.context?.resourceManager.getConfigurationSync().colorMode === 0; }
+    catch (_) { /* A host test context may not expose native resource configuration. */ }
+  }
   tf(text: string, values: string[]): string {
     let translated = this.t(text);
     for (let index = 0; index < values.length; index++) translated = translated.replace(`{${index}}`, values[index]);
@@ -209,6 +220,7 @@ export class AppStore {
     const mode = this.settings.theme === 'dark' ? ConfigurationConstant.ColorMode.COLOR_MODE_DARK :
       this.settings.theme === 'light' ? ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT : ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET;
     this.context?.getApplicationContext().setColorMode(mode);
+    this.refreshSystemTheme();
   }
 
   async selectFiles(kind: string): Promise<void> {

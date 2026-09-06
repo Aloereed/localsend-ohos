@@ -74,8 +74,8 @@ struct Index {
   receive() {
     this.heading(this.store.t('接收'), this.store.t('靠近一点，分享多一点'))
     Column({ space: 16 }) {
-      Stack() { AppIcon({ name: 'receive', iconSize: 40, tint: Color.White }) }
-        .width(88).height(88).backgroundColor(this.store.settings.accent).borderRadius(30).margin({ top: 8, bottom: 8 })
+      Stack() { Image($r('app.media.aloe_mark')).width(54).height(54).accessibilityLevel('no') }
+        .width(88).height(88).backgroundColor(this.store.accentFill).borderRadius(30).margin({ top: 8, bottom: 8 })
       Text(this.store.settings.alias).fontSize(26).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
       Row({ space: 7 }) {
         Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.settings.accent : '#B88632')
@@ -86,12 +86,12 @@ struct Index {
       })
     }.width('100%').padding(32).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28).margin({ bottom: 24 })
     Row({ space: 12 }) {
-      Button(this.store.t('接收历史')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.settings.accent)
+      Button(this.store.t('接收历史')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText)
         .onClick(() => this.route = 'history')
-      Button(this.store.t('接收设置')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.settings.accent)
+      Button(this.store.t('接收设置')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText)
         .onClick(() => this.tab = 3)
     }.width('100%').margin({ bottom: 24 })
-    Button(this.store.t('查看传输任务')).backgroundColor(this.store.settings.accent).onClick(() => this.route = 'transfers').margin({ bottom: 20 })
+    Button(this.store.t('查看传输任务')).backgroundColor(this.store.accentFill).onClick(() => this.route = 'transfers').margin({ bottom: 20 })
     this.info(this.store.t('同一网络，自由分享'), this.store.t('保持双方的 LocalSend 打开，连接同一 Wi-Fi。收到请求时，先查看内容，再决定是否接收。'))
     this.info(this.store.t('文件留在你手中'), this.store.t('接收后可在历史中打开或另存为。文字和链接在消息页集中查看。'))
   }
@@ -104,10 +104,10 @@ struct Index {
     else if (this.route === 'diagnostics') {
       this.info(this.store.t('接收服务'), this.store.serverStatus)
       this.info(this.store.t('本机证书指纹'), this.store.settings.fingerprint)
-      Button(this.store.t('重启接收服务')).backgroundColor(this.store.settings.accent).onClick(() => localSend.restart())
+      Button(this.store.t('重启接收服务')).backgroundColor(this.store.accentFill).onClick(() => localSend.restart())
       this.info(this.store.t('本机地址'), this.store.localIps.length ? this.store.localIps.join('\n') : this.store.t('尚未读取到网络地址'))
       this.info(this.store.t('连接参数'), this.store.tf('端口 {0}\n组播 {1}\n协议 LocalSend 2.1', [String(this.store.settings.port), this.store.settings.multicast]))
-      Button(this.store.t('复制诊断信息')).backgroundColor(this.store.settings.accent).onClick(() => this.store.copy(this.store.logs.join('\n')))
+      Button(this.store.t('复制诊断信息')).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.logs.join('\n')))
       ForEach(this.store.logs, (line: string) => {
         Text(line).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%').padding(10).copyOption(CopyOptions.LocalDevice)
       })
@@ -154,10 +154,10 @@ struct Index {
       }
       if (this.store.webRequests.length > 0 && this.route !== 'web') {
         Button(this.store.tf('{0} 个浏览器下载请求 · 点击查看', [String(this.store.webRequests.length)])).width('100%').height(48)
-          .backgroundColor(this.store.settings.accent).onClick(() => this.route = 'web')
+          .backgroundColor(this.store.accentFill).onClick(() => this.route = 'web')
       }
       if (this.store.incomingShare) {
-        Button(this.store.t('内容已就绪 · 前往发送')).width('100%').height(48).backgroundColor(this.store.settings.accent)
+        Button(this.store.t('内容已就绪 · 前往发送')).width('100%').height(48).backgroundColor(this.store.accentFill)
           .onClick(() => { this.store.incomingShare = false; this.route = ''; this.tab = 1; })
       }
       if (this.store.pendingPin) {
@@ -166,7 +166,7 @@ struct Index {
           TextInput({ text: this.pinText, placeholder: 'PIN' }).type(InputType.Number).maxLength(12).onChange((value: string) => this.pinText = value)
           Row({ space: 12 }) {
             Button(this.store.t('取消')).onClick(() => localSend.submitPin(''))
-            Button(this.store.t('确认')).backgroundColor(this.store.settings.accent).onClick(() => { localSend.submitPin(this.pinText); this.pinText = ''; })
+            Button(this.store.t('确认')).backgroundColor(this.store.accentFill).onClick(() => { localSend.submitPin(this.pinText); this.pinText = ''; })
           }
         }.padding(24).width('100%')
       }
@@ -179,7 +179,7 @@ struct Index {
         }.layoutWeight(1).width('100%')
       } else if (this.route) {
         Row() {
-          Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => this.route = '')
+          Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.route = '')
           Text(this.title()).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
         }.width('100%').padding(12)
         Scroll() { Column() { this.details() }.padding(24).constraintSize({ maxWidth: 720 }).width('100%') }.layoutWeight(1).width('100%').align(Alignment.Top)
