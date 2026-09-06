@@ -8,7 +8,7 @@ dependencies:
   desktop_drop: 0.5.0
   device_apps: 2.2.0
   device_info_plus: 11.1.1
-  dynamic_color: 1.7.0
+  dynamic_color: 1.9.0
   file_picker: 8.1.4
   file_picker_ohos:
     path: ./fluttertpc_file_picker/ohos
