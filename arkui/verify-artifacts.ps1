@@ -17,6 +17,16 @@ try {
         $package = Get-Item -LiteralPath (Join-Path $artifacts $name)
         if ($package.Length -ne $manifest.bytes) { throw "Package size mismatch: $name" }
         if ((Get-FileHash -LiteralPath $package.FullName -Algorithm SHA256).Hash -ne $manifest.sha256) { throw "Package hash mismatch: $name" }
+        $archive = [System.IO.Compression.ZipFile]::OpenRead($package.FullName)
+        try {
+            $moduleEntry = $archive.GetEntry('module.json')
+            if (!$moduleEntry -or !$archive.GetEntry('ets/modules.abc')) { throw "Missing native application payload: $name" }
+            $reader = [System.IO.StreamReader]::new($moduleEntry.Open())
+            try { $moduleData = $reader.ReadToEnd() | ConvertFrom-Json } finally { $reader.Dispose() }
+            if ($moduleData.app.bundleName -ne 'com.aloereed.aloesend' -or $moduleData.app.versionCode -ne $manifest.versionCode) { throw "Embedded package version mismatch: $name" }
+            if ($manifest.versionCode -ge 2000020 -and !$archive.GetEntry('libs/arm64-v8a/libaloetls.so')) { throw "Missing native TLS library: $name" }
+            if (@($archive.Entries | Where-Object { $_.FullName -match '(^|/)libflutter\.so$' }).Count) { throw "Unexpected Flutter runtime: $name" }
+        } finally { $archive.Dispose() }
         if ($manifest.sourceCommit -notmatch '^[0-9a-f]{40}$') { throw "Missing milestone commit: $name" }
         $profile = (git show "$($manifest.sourceCommit):arkui/AloeSend/AppScope/app.json5") -join "`n"
         if ($LASTEXITCODE -ne 0 -or $profile -notmatch ('"versionCode"\s*:\s*' + $manifest.versionCode + '\b')) { throw "Commit version mismatch: $name" }
