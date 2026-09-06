@@ -26,7 +26,7 @@ export default class EntryAbility extends UIAbility {
 
   private async importWant(want: Want): Promise<void> {
     await appStore.init(this.context);
-    if (!appStore.privacyAccepted) {
+    if (!appStore.ready || !appStore.privacyAccepted) {
       if (want.action === 'ohos.want.action.sendData' || want.action === 'ohos.want.action.viewData') this.pendingWants.push(want);
       return;
     }
@@ -49,7 +49,7 @@ export default class EntryAbility extends UIAbility {
     this.foreground = true;
     this.screenKeeper?.sync(appStore.transfers.some((item) => item.status === 'transferring'));
     appStore.log('应用已回到前台');
-    appStore.init(this.context).then(async (): Promise<void> => { if (appStore.privacyAccepted) await localSend.discover(false); }).catch((error: Error) => appStore.log(error.message));
+    appStore.init(this.context).then(async (): Promise<void> => { if (appStore.ready && appStore.privacyAccepted) await localSend.discover(false); }).catch((error: Error) => appStore.log(error.message));
   }
   onConfigurationUpdate(configuration: Configuration): void { appStore.refreshSystemTheme(); }
   onBackground(): void {

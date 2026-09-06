@@ -1,6 +1,9 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "暂时无法读取应用数据": "Unable to load app data",
+  "重试不会删除设置或收到的文件。": "Retrying will not delete your settings or received files.",
+  "重新读取": "Try again",
   "目录暂时不可用": "Folder temporarily unavailable",
   "下载目录不能写入时，本次接收会改用应用内目录并提示你。请在接收历史的文件详情中查看实际位置，需要时选择另存为。": "If the download folder is not writable, receiving switches to app storage and shows a notice. Check the actual location in file details under history, and export the file if needed.",
   "传输与后台": "Transfers and background activity",

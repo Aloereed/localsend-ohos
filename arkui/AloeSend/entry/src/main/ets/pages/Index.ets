@@ -34,7 +34,12 @@ struct Index {
   private directoryResolver: ((path: string) => void) | undefined = undefined;
 
   async aboutToAppear(): Promise<void> {
+    await this.initializePage();
+  }
+
+  async initializePage(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
+    if (!this.store.ready) return;
     this.store.onReceiveStarted = () => { this.route = 'transfers'; };
     this.store.onPickDownloadDirectory = (path: string) => new Promise<string>((resolve) => {
       this.directoryResolver?.(''); this.directoryResolver = resolve;
@@ -57,7 +62,7 @@ struct Index {
   }
 
   async startServices(): Promise<void> {
-    if (!this.store.privacyAccepted) return;
+    if (!this.store.ready || !this.store.privacyAccepted) return;
     await localSend.start();
     await this.store.ensureDownloadAccess();
     await this.store.onPrivacyAccepted();
@@ -232,7 +237,16 @@ struct Index {
   build() {
     Stack({ alignContent: Alignment.Top }) {
     if (!this.store.ready) {
-      LoadingProgress().width(48).height(48).margin({ top: 120 })
+      if (this.store.initializationError) {
+        Column({ space: 18 }) {
+          Text(this.store.t('暂时无法读取应用数据')).fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+          Text(this.store.t('重试不会删除设置或收到的文件。')).fontSize(15).fontColor($r('sys.color.font_secondary'))
+          Text(this.store.initializationError).fontSize(12).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
+          Button(this.store.t('重新读取')).height(48).backgroundColor(this.store.accentFill).onClick(() => this.initializePage())
+        }.padding(28).constraintSize({ maxWidth: 520 }).margin({ top: 100 })
+      } else {
+        LoadingProgress().width(48).height(48).margin({ top: 120 })
+      }
     } else if (!this.store.privacyAccepted) {
       PrivacyView({ store: this.store, firstLaunch: true, accepting: this.acceptingPrivacy, onAccept: () => this.acceptPrivacy() })
     } else {

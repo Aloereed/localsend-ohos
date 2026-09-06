@@ -215,15 +215,19 @@ export class AppStore {
   private storage: preferences.Preferences | undefined = undefined;
   private persistentHistory: Set<string> = new Set();
   private initialization: Promise<void> | undefined = undefined;
+  initializationError: string = '';
 
   async init(context: common.UIAbilityContext): Promise<void> {
     if (this.ready) return;
     if (!this.initialization) this.initialization = this.load(context);
-    await this.initialization;
+    const pending = this.initialization;
+    await pending;
+    if (!this.ready && this.initialization === pending) this.initialization = undefined;
   }
 
   private async load(context: common.UIAbilityContext): Promise<void> {
     this.context = context;
+    this.initializationError = '';
     try {
       this.storage = await preferences.getPreferences(context, 'aloesend-native-v1');
       this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
@@ -247,7 +251,7 @@ export class AppStore {
       this.applyTheme();
       this.ready = true;
       this.log('原生状态层已初始化');
-    } catch (e) { this.fail('读取设置失败', e as Error); }
+    } catch (e) { this.initializationError = (e as Error).message || String(e); this.fail('读取设置失败', e as Error); }
   }
 
   log(message: string): void {
