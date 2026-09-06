@@ -1,6 +1,10 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "上传 PIN": "Upload PIN",
+  "请让对方连接同一网络": "Ask the other person to connect to the same network",
+  "放大二维码": "Larger QR code",
+  "大字链接": "Large link",
   "恢复默认设置": "Restore default settings",
   "恢复默认设置？": "Restore default settings?",
   "恢复": "Restore",

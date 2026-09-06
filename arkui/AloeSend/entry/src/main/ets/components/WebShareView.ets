@@ -3,8 +3,44 @@ import { webShare } from '../network/WebShareService';
 
 @Component
 export struct WebShareView {
-  @ObjectLink store: AppStore;
+  @ObjectLink @Watch('checkShare') store: AppStore;
   @State encrypted: boolean = false;
+  @State presenting: boolean = false;
+  @State presentationMode: string = 'qr';
+
+  checkShare(): void { if (!this.store.webUrl) this.presenting = false; }
+
+  @Builder
+  presentation() {
+    Stack() {
+    Column({ space: 20 }) {
+      Row() {
+        Text(this.store.t('通过链接分享')).fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
+        Button('×').width(44).height(44).fontSize(24).fontColor($r('sys.color.font_primary')).backgroundColor(this.store.controlSurface)
+          .accessibilityText(this.store.t('关闭')).onClick(() => this.presenting = false)
+      }.width('100%')
+      Scroll() {
+        Column({ space: 24 }) {
+          if (this.presentationMode === 'qr' && this.store.webUrl) {
+            QRCode(this.store.webUrl).width('80%').aspectRatio(1).constraintSize({ maxWidth: 380, maxHeight: 380 })
+              .color('#101318').backgroundColor('#FFFFFF').padding(16).borderRadius(24)
+          }
+          Text(this.store.webUrl).fontSize(this.presentationMode === 'qr' ? 17 : 36).lineHeight(this.presentationMode === 'qr' ? 26 : 48)
+            .fontColor($r('sys.color.font_primary')).width('100%').textAlign(TextAlign.Center).wordBreak(WordBreak.BREAK_ALL).copyOption(CopyOptions.LocalDevice)
+          if (this.store.settings.pin) {
+            Text(`${this.store.t('上传 PIN')} · ${this.store.settings.pin}`).fontSize(24).fontColor(this.store.accentText)
+          }
+          Text(this.store.t('请让对方连接同一网络')).fontSize(15).fontColor($r('sys.color.font_secondary')).textAlign(TextAlign.Center)
+        }.width('100%').padding({ top: 24, bottom: 24 })
+      }.width('100%').layoutWeight(1)
+      if (this.store.webRequests.length > 0) {
+        Button(this.store.tf('{0} 个浏览器下载请求 · 点击查看', [String(this.store.webRequests.length)]))
+          .width('100%').height(48).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).onClick(() => this.presenting = false)
+      }
+      Button(this.store.t('复制链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.webUrl))
+    }.width('100%').height('100%').padding(24).constraintSize({ maxWidth: 720 })
+    }.width('100%').height('100%').backgroundColor(this.store.canvasColor)
+  }
 
   build() {
     Column({ space: 20 }) {
@@ -29,6 +65,12 @@ export struct WebShareView {
           Text(this.store.webUrl).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice).textAlign(TextAlign.Center)
           Text(this.store.t('链接有效期 1 小时；停止分享后立即失效。')).fontSize(12).fontColor($r('sys.color.font_secondary'))
           Button(this.store.t('复制链接')).width('100%').height(46).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.webUrl))
+          Row({ space: 12 }) {
+            Button(this.store.t('放大二维码')).layoutWeight(1).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+              .onClick(() => { this.presentationMode = 'qr'; this.presenting = true; })
+            Button(this.store.t('大字链接')).layoutWeight(1).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+              .onClick(() => { this.presentationMode = 'link'; this.presenting = true; })
+          }.width('100%')
           Row() {
             Text(this.store.t('自动允许浏览器下载')).layoutWeight(1).fontSize(14).fontColor($r('sys.color.font_primary'))
             Toggle({ type: ToggleType.Switch, isOn: this.store.settings.webAutoAccept }).selectedColor(this.store.settings.accent)
@@ -54,6 +96,8 @@ export struct WebShareView {
           }.padding(18).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(20)
         }, (file: ShareFile) => file.id)
       }
-    }.width('100%')
+    }.width('100%').bindContentCover($$this.presenting, this.presentation(), {
+      modalTransition: this.store.settings.animations ? ModalTransition.DEFAULT : ModalTransition.NONE
+    })
   }
 }
