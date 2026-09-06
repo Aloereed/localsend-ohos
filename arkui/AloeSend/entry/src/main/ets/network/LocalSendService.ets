@@ -149,7 +149,7 @@ class UploadSink implements BodySink {
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
     entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
     if (this.fileInfo.preview && this.fileInfo.fileType === 'text/plain' && this.received <= 400000) entry.text = await fs.readText(this.path);
-    await this.service.store.addHistory(entry);
+    await this.service.store.addHistory(entry, this.session.view.offerGallerySave);
     await this.service.store.saveReceivedCopy(entry, this.session.view.destination, this.session.id);
     this.service.finishReceiveFile(this.session);
     await this.channel.respond(200);
@@ -296,6 +296,12 @@ export class LocalSendService {
   }
 
   certificate(): string { return this.identity.certificate; }
+
+  setReceiveGalleryOffer(value: boolean): void {
+    if (!this.receiving || this.receiving.accepted || this.receiving.cancelled) return;
+    this.receiving.view.offerGallerySave = value;
+    this.store.updateTransfer(this.receiving.view);
+  }
 
   private newChannel(): NativeConnection {
     this.channels = this.channels.filter((channel: NativeConnection) => !channel.closed);
@@ -458,6 +464,7 @@ export class LocalSendService {
     session.view.direction = 'receive'; session.view.encrypted = channel.encrypted;
     session.view.peerInfo = session.peer;
     session.view.destination = this.store.settings.destinationMode !== 'private' ? this.store.settings.destination : '';
+    session.view.offerGallerySave = this.store.settings.offerGallerySave;
     for (const id of ids) {
       const file = payload.files[id];
       if (!file || typeof file.fileName !== 'string' || !Number.isSafeInteger(file.size) || file.size < 0 || file.id !== id) throw new Error('文件信息无效');

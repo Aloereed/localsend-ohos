@@ -328,6 +328,24 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         assert.equal(store.settings.destination, publicFolder, 'a temporary failure must not overwrite the chosen global destination');
       } finally { nativeFs.access = access; }
     });
+    await check('per-receive gallery choice overrides the default without changing later transfers', async () => {
+      store.settings.quickSave = false;
+      for (const preferred of [true, false]) {
+        store.settings.offerGallerySave = !preferred; store.galleryQueue = [];
+        const preparing = call(port, '/api/localsend/v2/prepare-upload', offer(`gallery-${preferred}.png`, data));
+        await until(() => !!store.pendingReceive);
+        service.setReceiveGalleryOffer(preferred);
+        assert.equal(store.transfers.find(item => item.id === store.pendingReceive).offerGallerySave, preferred);
+        service.acceptReceive(true);
+        const session = (await preparing).json();
+        service.setReceiveGalleryOffer(!preferred);
+        const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
+        assert.equal(result.status, 200);
+        assert.equal(store.galleryQueue.some(entry => entry.name === `gallery-${preferred}.png`), preferred);
+        assert.equal(store.settings.offerGallerySave, !preferred);
+      }
+      store.settings.quickSave = true; store.settings.offerGallerySave = false; store.galleryQueue = [];
+    });
     await check('stopping the listener preserves completed receive results', async () => {
       const completedId = service.receiving.id;
       assert.equal(store.transfers.find(item => item.id === completedId).status, 'complete');

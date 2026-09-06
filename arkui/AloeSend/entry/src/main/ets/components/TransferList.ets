@@ -131,6 +131,16 @@ export struct TransferList {
           if (this.current(transfer.id).error) { Text(this.store.t(this.current(transfer.id).error)).fontColor(this.store.dangerText).fontSize(14).width('100%') }
           if (this.current(transfer.id).storageNotice) { Text(this.store.t(this.current(transfer.id).storageNotice)).fontColor(this.store.accentText).fontSize(14).width('100%') }
           if (transfer.id === this.store.pendingReceive) {
+            Row({ space: 12 }) {
+              Column({ space: 5 }) {
+                Text(this.store.t('本次接收提示保存到相册')).fontSize(15).fontColor($r('sys.color.font_primary'))
+                Text(this.store.t('仅影响本次图片和视频，完成后通过系统确认保存')).fontSize(12).fontColor($r('sys.color.font_secondary'))
+              }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+              Toggle({ type: ToggleType.Switch, isOn: this.current(transfer.id).offerGallerySave })
+                .selectedColor(this.store.settings.accent).onChange((value: boolean) => {
+                  if (value !== this.current(transfer.id).offerGallerySave) localSend.setReceiveGalleryOffer(value);
+                }).accessibilityText(this.store.t('本次接收提示保存到相册'))
+            }.width('100%')
             Row({ space: 8 }) {
               Button(this.store.t('批量重命名')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
                 .onClick(() => { this.batchEdit = true; this.renameSheet = true; })

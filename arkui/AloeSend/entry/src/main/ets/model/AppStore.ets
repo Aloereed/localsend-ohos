@@ -78,6 +78,7 @@ export class NetworkLogEntry {
 }
 
 export class TransferView {
+  offerGallerySave: boolean = false;
   id: string = '';
   storageNotice: string = '';
   peer: string = '';
@@ -498,9 +499,9 @@ export class AppStore {
     this.save();
   }
 
-  async addHistory(entry: HistoryEntry): Promise<void> {
+  async addHistory(entry: HistoryEntry, offerGallerySave: boolean = this.settings.offerGallerySave): Promise<void> {
     this.history = [entry, ...this.history].slice(0, 1000);
-    if (this.settings.offerGallerySave && entry.direction === 'receive' && entry.path && this.isMedia(entry)) {
+    if (offerGallerySave && entry.direction === 'receive' && entry.path && this.isMedia(entry)) {
       this.galleryQueue = [...this.galleryQueue, entry];
     }
     if (this.settings.saveHistory) this.persistentHistory.add(entry.id);
