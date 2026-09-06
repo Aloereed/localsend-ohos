@@ -36,6 +36,7 @@ export class HistoryEntry {
   path: string = '';
   text: string = '';
   status: string = 'complete';
+  peerInfo: Peer | undefined = undefined;
 }
 
 export class TransferFile {
@@ -45,6 +46,7 @@ export class TransferFile {
   transferred: number = 0;
   status: string = 'waiting';
   selected: boolean = true;
+  preview: string = '';
 }
 
 export class TransferView {

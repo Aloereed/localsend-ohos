@@ -109,7 +109,7 @@ class UploadSink implements BodySink {
     await fs.rename(`${this.path}.part`, this.path);
     this.finished = true; this.view.status = 'complete';
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
-    entry.size = this.received; entry.path = this.path;
+    entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
     await this.service.store.addHistory(entry);
     await this.service.store.saveReceivedCopy(entry);
     this.service.finishReceiveFile(this.session);
@@ -337,7 +337,7 @@ export class LocalSendService {
       if (!file || typeof file.fileName !== 'string' || !Number.isSafeInteger(file.size) || file.size < 0 || file.id !== id) throw new Error('文件信息无效');
       const view = new TransferFile(); view.id = id;
       view.name = uniqueName(safeRelativePath(file.fileName), session.view.files.map((item: TransferFile) => item.name)); view.size = file.size;
-      if (file.preview && file.fileType === 'text/plain') view.name = file.fileName.slice(0, 100);
+      if (file.preview && file.fileType === 'text/plain') { view.name = file.fileName.slice(0, 100); view.preview = file.preview.slice(0, 100000); }
       session.view.files.push(view);
     }
     this.receiving = session; this.store.updateTransfer(session.view); this.upsertPeer(session.peer);
@@ -364,7 +364,7 @@ export class LocalSendService {
     if (selected.every((file: TransferFile) => !!session.files[file.id].preview && session.files[file.id].fileType === 'text/plain')) {
       for (const file of selected) {
         const entry = new HistoryEntry(); entry.name = file.name; entry.text = session.files[file.id].preview!;
-        entry.peer = session.peer.alias; entry.size = encodeText(entry.text).length;
+        entry.peer = session.peer.alias; entry.peerInfo = session.peer; entry.size = encodeText(entry.text).length;
         await this.store.addHistory(entry); file.status = 'complete'; file.transferred = file.size;
       }
       session.view.status = 'complete'; session.view.finished = Date.now(); this.store.updateTransfer(session.view); await channel.respond(204); return;
@@ -381,6 +381,23 @@ export class LocalSendService {
   selectReceiveFile(id: string, selected: boolean): void {
     const file = this.receiving?.view.files.find((item: TransferFile) => item.id === id);
     if (file && this.receiving) { file.selected = selected; this.store.updateTransfer(this.receiving.view); }
+  }
+
+  selectAllReceive(mode: string): void {
+    if (!this.receiving || this.receiving.accepted) return;
+    for (const file of this.receiving.view.files) file.selected = mode === 'all' ? true : mode === 'none' ? false : !file.selected;
+    this.store.updateTransfer(this.receiving.view);
+  }
+
+  renameReceive(id: string, name: string): boolean {
+    if (!this.receiving || this.receiving.accepted) return false;
+    const file = this.receiving.view.files.find((item: TransferFile) => item.id === id);
+    if (!file) return false;
+    try {
+      const safe = safeRelativePath(name.trim());
+      file.name = uniqueName(safe, this.receiving.view.files.filter((item: TransferFile) => item.id !== id).map((item: TransferFile) => item.name));
+      this.store.updateTransfer(this.receiving.view); return true;
+    } catch (e) { this.store.fail('文件名无效', e as Error); return false; }
   }
 
   private async openUpload(channel: NativeConnection, head: HttpHead): Promise<BodySink> {
@@ -489,7 +506,7 @@ export class LocalSendService {
   }
 
   private async sentHistory(file: ShareFile, peer: Peer): Promise<void> {
-    const entry = new HistoryEntry(); entry.name = file.name; entry.peer = peer.alias; entry.direction = 'send'; entry.size = file.size; entry.text = file.text;
+    const entry = new HistoryEntry(); entry.name = file.name; entry.peer = peer.alias; entry.peerInfo = peer; entry.direction = 'send'; entry.size = file.size; entry.text = file.text; entry.path = file.uri;
     await this.store.addHistory(entry);
   }
 

@@ -109,6 +109,19 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       const response = await call(port, '/api/localsend/v2/prepare-upload?pin=123456', offer('pin.bin', data));
       assert.equal(response.status, 200); service.cancel(response.json().sessionId); store.settings.pin = '';
     });
+    await check('receive consent supports preview, rename and batch selection without changing file identity', async () => {
+      store.settings.quickSave = false;
+      const pending = call(port, '/api/localsend/v2/prepare-upload', offer('original.bin', data));
+      await until(() => !!store.pendingReceive);
+      assert.equal(service.renameReceive('f1', '../escape'), false);
+      assert.equal(service.renameReceive('f1', 'chosen/renamed.bin'), true);
+      service.selectAllReceive('none'); assert.equal(store.transfers[0].files[0].selected, false);
+      service.selectAllReceive('invert'); assert.equal(store.transfers[0].files[0].selected, true);
+      service.acceptReceive(true); const session = (await pending).json();
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data)).status, 200);
+      assert.match(store.history[0].path, /chosen\/renamed\.bin$/); assert.equal(store.history[0].peerInfo.fingerprint, 'test-peer');
+      assert.deepEqual(await fs.readFile(store.history[0].path), data); store.settings.quickSave = true;
+    });
     await check('text preview creates message history and sends 204', async () => {
       const text = '你好，HarmonyOS 👋'; const bytes = Buffer.from(text);
       const result = await call(port, '/api/localsend/v2/prepare-upload', offer('message.txt', bytes, { fileType: 'text/plain', preview: text }));

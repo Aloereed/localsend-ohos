@@ -1,11 +1,27 @@
 import { AppStore, TransferView, TransferFile, formatSize } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
+import { AppIcon } from './AppIcon';
 
 @Component
 export struct TransferList {
   @ObjectLink store: AppStore;
   @Prop pendingOnly: boolean = false;
+  @State renameSheet: boolean = false;
+  @State renameId: string = '';
+  @State renameText: string = '';
+
+  @Builder
+  renameEditor() {
+    Column({ space: 18 }) {
+      Text('接收时重命名').fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+      TextInput({ text: this.renameText }).onChange((value: string) => this.renameText = value)
+      Text('仅影响本次接收的文件名称。').fontSize(13).fontColor($r('sys.color.font_secondary'))
+      Button('保存名称').width('100%').height(48).backgroundColor(this.store.settings.accent).onClick(() => {
+        if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
+      })
+    }.width('100%').padding(24)
+  }
 
   statusLabel(status: string): string {
     if (status === 'waiting') return '等待确认';
@@ -40,7 +56,7 @@ export struct TransferList {
       ForEach(this.store.transfers.filter((transfer: TransferView) => !this.pendingOnly || transfer.id === this.store.pendingReceive), (transfer: TransferView) => {
         Column({ space: 16 }) {
           Row() {
-            Text(transfer.direction === 'receive' ? '↓' : '↑').fontSize(30).fontColor(this.store.settings.accent).width(44)
+            AppIcon({ name: transfer.direction === 'receive' ? 'receive' : 'send', iconSize: 30, tint: this.store.settings.accent })
             Column({ space: 6 }) {
               Text(transfer.peer).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
               Text(`${this.statusLabel(transfer.status)} · ${transfer.encrypted ? 'TLS 加密' : '未加密'}`)
@@ -56,6 +72,13 @@ export struct TransferList {
             }.width('100%')
           }
           if (transfer.error) { Text(transfer.error).fontColor('#C44747').fontSize(14).width('100%') }
+          if (transfer.id === this.store.pendingReceive) {
+            Row({ space: 10 }) {
+              Text(`共 ${transfer.files.length} 项 · ${formatSize(this.total(transfer))}`).layoutWeight(1).fontSize(13).fontColor($r('sys.color.font_secondary'))
+              Button('全选').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('all'))
+              Button('反选').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('invert'))
+            }.width('100%')
+          }
           ForEach(transfer.files, (file: TransferFile) => {
             Row({ space: 10 }) {
               if (transfer.id === this.store.pendingReceive) {
@@ -64,9 +87,16 @@ export struct TransferList {
               }
               Column({ space: 5 }) {
                 Text(file.name).fontSize(15).maxLines(2).fontColor($r('sys.color.font_primary'))
+                if (file.preview) {
+                  Text(file.preview).fontSize(16).lineHeight(23).maxLines(10).fontColor($r('sys.color.font_primary')).copyOption(CopyOptions.LocalDevice)
+                }
                 Text(`${formatSize(file.size)} · ${this.statusLabel(file.status)}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
               }.alignItems(HorizontalAlign.Start).layoutWeight(1)
               if (file.status === 'complete') { Text('✓').fontColor(this.store.settings.accent).fontSize(20) }
+              if (transfer.id === this.store.pendingReceive && !file.preview) {
+                Button('改名').fontSize(12).fontColor(this.store.settings.accent).backgroundColor(Color.Transparent)
+                  .onClick(() => { this.renameId = file.id; this.renameText = file.name; this.renameSheet = true; })
+              }
             }.width('100%').padding({ top: 8, bottom: 8 })
           }, (file: TransferFile) => file.id)
           if (transfer.id === this.store.pendingReceive) {
@@ -84,6 +114,6 @@ export struct TransferList {
           }
         }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
       }, (transfer: TransferView) => transfer.id)
-    }.width('100%')
+    }.width('100%').bindSheet($$this.renameSheet, this.renameEditor(), { height: SheetSize.MEDIUM, showClose: true })
   }
 }

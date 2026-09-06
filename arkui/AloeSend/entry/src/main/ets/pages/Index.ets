@@ -8,6 +8,7 @@ import { localSend } from '../network/LocalSendService';
 import { WebShareView } from '../components/WebShareView';
 import { PeerDetailView } from '../components/PeerDetailView';
 import { AppIcon } from '../components/AppIcon';
+import { MessagesView } from '../components/MessagesView';
 
 @Entry
 @Component
@@ -18,6 +19,7 @@ struct Index {
   @State pinText: string = '';
   @State selectedPeer: Peer = new Peer();
   @State windowWidth: number = 400;
+  @State messageDetail: boolean = false;
 
   async aboutToAppear(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
@@ -33,6 +35,7 @@ struct Index {
 
   onBackPress(): boolean {
     if (this.route) { this.route = ''; return true; }
+    if (this.tab === 2 && this.messageDetail) { this.messageDetail = false; return true; }
     if (this.tab !== 0) { this.tab = 0; return true; }
     return false;
   }
@@ -196,7 +199,7 @@ struct Index {
             }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('发送', '↑', 1))
           TabContent() {
-            Scroll() { Column() { this.heading('消息', '让每一句话都有来处'); LibraryView({ store: this.store }) }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
+            MessagesView({ store: this.store, detailOpen: $messageDetail, onTransfers: () => this.route = 'transfers' })
           }.tabBar(this.tabItem('消息', '≋', 2))
           TabContent() {
             Scroll() { Column() { this.heading('设置', '按你的习惯，恰到好处'); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
