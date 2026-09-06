@@ -4,6 +4,7 @@ const net = require('node:net');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const vm = require('node:vm');
 const { load, handles } = require('./host-runtime.cjs');
 const { AppStore, ShareFile } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
@@ -38,6 +39,10 @@ async function until(predicate) { const start = Date.now(); while (!(await predi
       assert.ok(html.includes('&lt;script&gt;')); assert.ok(!html.includes('<script>alert(1)</script>'));
       assert.ok(html.includes('hello &lt;world&gt;.bin')); assert.ok(html.includes('ondrop'));
       assert.match(page.headers['content-type'], /^text\/html/);
+      new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
+      const english = (await call(base + '?lang=en')).body.toString();
+      assert.ok(english.includes('Shared with you')); assert.ok(english.includes('lang="en"'));
+      new vm.Script(english.match(/<script>([\s\S]*?)<\/script>/)[1]);
     });
     await check('invalid capability and cross-origin POST are rejected', async () => {
       assert.equal((await call(origin + '/s/wrong/')).status, 404);
@@ -49,6 +54,11 @@ async function until(predicate) { const start = Date.now(); while (!(await predi
       const result = await downloading; assert.equal(result.status, 200); assert.deepEqual(result.body, data);
       assert.match(result.headers['content-disposition'], /attachment/);
       await until(() => store.transfers[0].status === 'complete');
+    });
+    await check('closed browser tab dismisses a pending download request', async () => {
+      const req = http.get(base + 'file/' + file.id); req.on('error', () => {});
+      await until(() => store.webRequests.length === 1); req.destroy();
+      await until(() => store.webRequests.length === 0);
     });
     await check('native decline prevents browser download', async () => {
       const downloading = call(base + 'file/' + file.id);

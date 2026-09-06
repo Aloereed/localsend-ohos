@@ -380,6 +380,9 @@ export class LocalSendService {
       session.view.files.push(view);
     }
     this.receiving = session; this.store.updateTransfer(session.view); this.upsertPeer(session.peer);
+    channel.onClosed = () => {
+      if (!session.accepted) { session.cancelled = true; session.resolve(false); }
+    };
     let automatic = this.store.settings.quickSave;
     if (!automatic && this.store.settings.favoriteQuickSave && channel.encrypted && session.peer.protocol === 'https' &&
       this.store.favorites.some((peer: Peer) => !!peer.fingerprint && peer.fingerprint === session.peer.fingerprint)) {
@@ -388,14 +391,17 @@ export class LocalSendService {
       try { automatic = (await request(session.peer, 'GET', '/api/localsend/v2/info')).status === 200; }
       catch (_) { this.store.log('收藏身份验证失败，转为手动确认'); }
     }
+    if (channel.closed || session.cancelled) {
+      session.view.status = 'cancelled'; this.store.updateTransfer(session.view); return;
+    }
     if (!automatic) {
       this.store.pendingReceive = session.id;
       const accepted = await new Promise<boolean>((resolve) => {
         const timer = setTimeout(() => resolve(false), 120000);
         session.resolve = (value: boolean) => { clearTimeout(timer); resolve(value); };
       });
-      this.store.pendingReceive = '';
-      if (!accepted || session.cancelled || channel.closed) { session.view.status = 'declined'; this.store.updateTransfer(session.view); await channel.respond(403); return; }
+      if (this.store.pendingReceive === session.id) this.store.pendingReceive = '';
+      if (!accepted || session.cancelled || channel.closed) { session.view.status = session.cancelled || channel.closed ? 'cancelled' : 'declined'; this.store.updateTransfer(session.view); await channel.respond(403); return; }
     }
     session.accepted = true;
     const selected = session.view.files.filter((file: TransferFile) => file.selected);

@@ -26,6 +26,7 @@ export class NativeConnection {
   private responded: boolean = false;
   private completed: boolean = false;
   onError: (message: string) => void = () => {};
+  onClosed: () => void = () => {};
 
   constructor(handler: RequestHandler) { this.handler = handler; }
 
@@ -73,6 +74,7 @@ export class NativeConnection {
       this.decoder = new HttpBodyDecoder(head);
       bytes = this.headBytes.slice(end + 4); this.headBytes = new Uint8Array(0);
       this.sink = await this.handler(this, head);
+      if (this.closed) { await this.sink.abort(); return; }
     }
     if (this.responded) return;
     for (const piece of this.decoder.push(bytes)) await this.sink!.write(piece);
@@ -103,14 +105,17 @@ export class NativeConnection {
   close(): void {
     if (this.closed) return;
     this.closed = true;
+    this.onClosed();
     if (!this.completed) this.sink?.abort().catch(() => {});
     if (this.timeout !== -1) clearTimeout(this.timeout);
     this.tcp?.close().catch(() => {}); this.tls?.close().catch(() => {});
   }
 
   private disconnected(): void {
+    const wasClosed = this.closed;
     if (!this.closed && !this.completed) this.sink?.abort().catch(() => {});
     this.closed = true;
+    if (!wasClosed) this.onClosed();
     if (this.timeout !== -1) clearTimeout(this.timeout);
   }
 

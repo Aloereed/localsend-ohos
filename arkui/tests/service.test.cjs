@@ -156,6 +156,17 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       assert.match(store.history[0].path, /chosen\/renamed\.bin$/); assert.equal(store.history[0].peerInfo.fingerprint, 'test-peer');
       assert.deepEqual(await fs.readFile(store.history[0].path), data); store.settings.quickSave = true;
     });
+    await check('disconnecting a prepare request dismisses native consent immediately', async () => {
+      store.settings.quickSave = false;
+      const bytes = Buffer.from(JSON.stringify(offer('cancel-before-consent.bin', data)));
+      const req = https.request({ host: '127.0.0.1', port, path: '/api/localsend/v2/prepare-upload', method: 'POST', rejectUnauthorized: false,
+        headers: { 'content-length': bytes.length } });
+      req.on('error', () => {}); req.end(bytes);
+      await until(() => !!store.pendingReceive); const id = store.pendingReceive;
+      req.destroy(); await until(() => !store.pendingReceive);
+      assert.equal(store.transfers.find(item => item.id === id).status, 'cancelled');
+      store.settings.quickSave = true;
+    });
     await check('text preview creates message history and sends 204', async () => {
       const text = '你好，HarmonyOS 👋'; const bytes = Buffer.from(text);
       const result = await call(port, '/api/localsend/v2/prepare-upload', offer('message.txt', bytes, { fileType: 'text/plain', preview: text }));

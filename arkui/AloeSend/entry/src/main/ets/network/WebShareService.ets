@@ -2,7 +2,7 @@ import { socket } from '@kit.NetworkKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { AppStore, appStore, ShareFile, WebAccessRequest, TransferView, TransferFile, HistoryEntry } from '../model/AppStore';
-import { HttpHead } from './Protocol';
+import { HttpHead, queryValue } from './Protocol';
 import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { LocalSendService, localSend } from './LocalSendService';
 import { TlsIdentity } from './TlsIdentity';
@@ -21,10 +21,14 @@ export class WebShareService {
   private pending: Map<string, (value: boolean) => void> = new Map();
   private files: ShareFile[] = [];
   private downloads: Map<string, NativeConnection> = new Map();
+  private expiryTimer: number = -1;
+  private starting: boolean = false;
 
   constructor(store: AppStore, protocol: LocalSendService) { this.store = store; this.protocol = protocol; }
 
   async start(encrypted: boolean = false): Promise<void> {
+    if (this.starting) return;
+    this.starting = true;
     try {
       await this.stop();
       this.encrypted = encrypted; this.token = util.generateRandomUUID(); this.expiresAt = Date.now() + 3600000;
@@ -44,11 +48,14 @@ export class WebShareService {
       const host = this.store.localIps[0];
       if (!host) { await this.stop(); throw new Error('请先连接可用的局域网'); }
       this.store.webUrl = `${encrypted ? 'https' : 'http'}://${host}:${port}/s/${this.token}/`;
+      this.expiryTimer = setTimeout(() => { this.stop(); this.store.notice = '分享链接已到期，可以重新开始分享'; }, 3600000);
       this.store.log('浏览器分享已启动，链接有效期 1 小时');
-    } catch (e) { this.store.fail('启动浏览器分享失败', e as Error); }
+    } catch (e) { await this.stop(); this.store.fail('启动浏览器分享失败', e as Error); }
+    finally { this.starting = false; }
   }
 
   async stop(): Promise<void> {
+    if (this.expiryTimer !== -1) { clearTimeout(this.expiryTimer); this.expiryTimer = -1; }
     this.token = ''; this.store.webUrl = ''; this.store.webFiles = [];
     for (const resolve of this.pending.values()) resolve(false); this.pending.clear(); this.store.webRequests = [];
     for (const channel of this.channels) channel.close(); this.channels = [];
@@ -87,7 +94,10 @@ export class WebShareService {
     }
     return new JsonSink(async (): Promise<void> => {
       if (head.method !== 'GET') { await channel.respond(405); return; }
-      if (!relative) { await channel.respond(200, webPage(this.store.settings.alias, this.files), 'text/html; charset=utf-8'); return; }
+      if (!relative.split('?')[0]) {
+        const language = queryValue(head.target, 'lang') || this.store.settings.language;
+        await channel.respond(200, webPage(this.store.settings.alias, this.files, language, this.store.settings.accent), 'text/html; charset=utf-8'); return;
+      }
       if (relative.startsWith('file/')) {
         const id = decodeURIComponent(relative.slice(5)); const file = this.files.find((item: ShareFile) => item.id === id);
         if (file) { await this.download(channel, file); return; }
@@ -103,6 +113,7 @@ export class WebShareService {
       const accepted = await new Promise<boolean>((resolve) => {
         const timer = setTimeout(() => resolve(false), 120000);
         this.pending.set(offer.id, (value: boolean) => { clearTimeout(timer); resolve(value); });
+        channel.onClosed = () => this.pending.get(offer.id)?.(false);
       });
       this.pending.delete(offer.id); this.store.webRequests = this.store.webRequests.filter((item: WebAccessRequest) => item.id !== offer.id);
       if (!accepted) { await channel.respond(403, '下载未获批准', 'text/plain; charset=utf-8'); return; }

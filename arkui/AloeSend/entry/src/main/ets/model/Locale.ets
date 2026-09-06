@@ -320,6 +320,7 @@ const english: Record<string, string> = {
   "当前连接继续使用原设置。空闲时重启即可应用新设置。": "Current connections keep their existing settings. Restart when idle to apply changes.",
   "重新启动": "Restart",
   "当前监听": "Currently listening",
+  "分享链接已到期，可以重新开始分享": "The sharing link expired. Start sharing again to create a new one.",
   "批量重命名": "Batch rename",
   "只修改选中的文件，保留文件夹层级和扩展名。": "Rename selected files while keeping folders and extensions.",
   "连续编号": "Sequential numbers",
