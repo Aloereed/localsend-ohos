@@ -7,6 +7,7 @@ import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText } from './Locale';
 import { readableColor } from './Colors';
+import { LocalInterface } from '../network/Addresses';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -93,6 +94,8 @@ export class AppSettings {
   advanced: boolean = false;
   https: boolean = true;
   discoveryTimeout: number = 1500;
+  networkFilter: string = 'none';
+  networkPatterns: string[] = [];
   webAutoAccept: boolean = false;
 }
 
@@ -131,6 +134,7 @@ export class AppStore {
   ready: boolean = false;
   serverStatus: string = '未启动';
   localIps: string[] = [];
+  interfaces: LocalInterface[] = [];
   transfers: TransferView[] = [];
   pendingReceive: string = '';
   pendingPin: string = '';
@@ -160,6 +164,8 @@ export class AppStore {
       if (!this.settings.destinationMode) this.settings.destinationMode = 'private';
       if (!this.settings.deviceModel) this.settings.deviceModel = 'HarmonyOS';
       if (!this.settings.deviceType) this.settings.deviceType = 'mobile';
+      if (!this.settings.networkFilter) this.settings.networkFilter = 'none';
+      if (!this.settings.networkPatterns) this.settings.networkPatterns = [];
       // Older native milestones did not persist this field. Missing must never
       // silently downgrade an existing installation to clear-text transport.
       if (typeof this.settings.https !== 'boolean') this.settings.https = true;

@@ -1,0 +1,18 @@
+const assert = require('node:assert/strict');
+const { load } = require('./host-runtime.cjs');
+const { parseAddress, ignoredInterface, sameSubnet, matchesPattern } = load('network/Addresses');
+for (const input of ['192.168.1.10', 'https://192.168.1.10:53317/', 'http://[::1]:8080', '[fe80::1%25wlan0]:53317', '2001:db8::1', '::ffff:192.0.2.1']) assert.ok(parseAddress(input).ip);
+assert.equal(parseAddress('http://[::1]:8080').protocol, 'http');
+assert.equal(parseAddress('[fe80::1%25wlan0]:53317').ip, 'fe80::1%wlan0');
+for (const invalid of ['999.1.1.1', '192.168.1.1:', '[::1]:0', '[::1]:65536', '[::1]:oops', '1:::2', '1:2:3:4:5:6:7', 'http://example.com', '[::1]/other', '[::1]\r\nX: bad']) assert.throws(() => parseAddress(invalid), invalid);
+assert.equal(matchesPattern('192.168.1.5', '192.168.1.*'), true);
+assert.equal(matchesPattern('192x168x1x5', '192.168.1.*'), false);
+assert.equal(matchesPattern('127.0.0.1', '(a+)+$'), false);
+assert.equal(ignoredInterface(['192.168.1.5', 'fe80::1'], 'allow', ['192.168.*.*']), false);
+assert.equal(ignoredInterface(['192.168.1.5'], 'allow', []), true);
+assert.equal(ignoredInterface(['192.168.1.5'], 'deny', []), false);
+assert.equal(ignoredInterface(['10.0.0.5', '192.168.1.5'], 'deny', ['10.*.*.*']), true);
+assert.equal(sameSubnet('192.168.1.1', '192.168.1.255', 24), true);
+assert.equal(sameSubnet('192.168.1.1', '192.168.2.1', 24), false);
+assert.equal(sameSubnet('192.168.1.1', '192.168.1.2', 32), false);
+console.log('PASS IPv4/IPv6 addresses, explicit protocols, malformed input, subnet checks and interface filters');

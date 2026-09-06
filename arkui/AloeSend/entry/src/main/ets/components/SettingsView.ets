@@ -10,12 +10,15 @@ export struct SettingsView {
   @State port: string = '';
   @State group: string = '';
   @State pin: string = '';
+  @State timeout: string = '';
+  @State model: string = '';
 
   aboutToAppear(): void {
     this.alias = this.store.settings.alias;
     this.port = String(this.store.settings.port);
     this.group = this.store.settings.multicast;
     this.pin = this.store.settings.pin;
+    this.timeout = String(this.store.settings.discoveryTimeout); this.model = this.store.settings.deviceModel;
   }
 
   @Builder
@@ -60,6 +63,8 @@ export struct SettingsView {
 
   saveNetwork(): void {
     const port = Number(this.port);
+    const timeout = Number(this.timeout);
+    if (!Number.isInteger(timeout) || timeout < 500 || timeout > 30000) { this.store.error = this.store.t('发现超时范围为 500–30000 毫秒'); return; }
     if (!Number.isInteger(port) || port < 1024 || port > 65535) { this.store.error = this.store.t('端口范围为 1024–65535'); return; }
     const parts = this.group.split('.').map((part: string) => Number(part));
     if (parts.length !== 4 || parts.some((part: number) => !Number.isInteger(part) || part < 0 || part > 255) || parts[0] < 224 || parts[0] > 239) {
@@ -67,6 +72,7 @@ export struct SettingsView {
     }
     this.store.settings.port = port;
     this.store.settings.multicast = this.group;
+    this.store.settings.discoveryTimeout = timeout; this.store.settings.deviceModel = this.model.trim() || 'HarmonyOS';
     this.store.save();
     this.store.notice = this.store.t('网络设置已保存，重启接收服务后生效');
   }
@@ -146,10 +152,15 @@ export struct SettingsView {
       this.title(this.store.t('网络'))
       Column() {
         this.link(this.store.t('连接诊断'), this.store.serverStatus, 'diagnostics')
+        this.link(this.store.t('网络接口'), this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选'), 'network')
         this.toggle(this.store.t('高级设置'), this.store.t('端口与组播地址'), this.store.settings.advanced, 'advanced')
         if (this.store.settings.advanced) {
           this.toggle(this.store.t('HTTPS 加密传输'), this.store.t('建议保持开启；修改后需重启接收服务'), this.store.settings.https, 'https')
           Column({ space: 12 }) {
+            Text(this.store.t('设备型号')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
+            TextInput({ text: this.model, placeholder: 'HarmonyOS' }).maxLength(80).onChange((value: string) => this.model = value)
+            Text(this.store.t('发现超时（毫秒）')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
+            TextInput({ text: this.timeout, placeholder: '1500' }).type(InputType.Number).onChange((value: string) => this.timeout = value)
             TextInput({ text: this.port, placeholder: this.store.t('端口 53317') }).type(InputType.Number).onChange((value: string) => this.port = value)
             TextInput({ text: this.group, placeholder: this.store.t('组播地址') }).onChange((value: string) => this.group = value)
             Button(this.store.t('保存网络设置')).backgroundColor(this.store.accentFill).onClick(() => this.saveNetwork())

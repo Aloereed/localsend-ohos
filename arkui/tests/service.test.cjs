@@ -51,6 +51,22 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       peer.fingerprint = '0'.repeat(64);
       await assert.rejects(request(peer, 'GET', '/api/localsend/v2/info'), /指纹/);
     });
+    await check('native transport connects to IPv6 and honors discovery response timeout', async () => {
+      const sockets = new Set();
+      const remote = http.createServer((req, res) => {
+        if (req.url === '/slow') return;
+        res.writeHead(200, { 'content-length': 2 }); res.end('{}');
+      });
+      remote.on('connection', socket => { sockets.add(socket); socket.on('close', () => sockets.delete(socket)); });
+      await new Promise((resolve, reject) => { remote.once('error', reject); remote.listen(0, '::1', resolve); });
+      try {
+        const peer = new Peer(); peer.ip = '::1'; peer.port = remote.address().port; peer.protocol = 'http';
+        assert.equal((await request(peer, 'GET', '/')).status, 200);
+        const { Cancellation } = load('network/Transport'); const started = Date.now();
+        await assert.rejects(request(peer, 'GET', '/slow', '', new Cancellation(), 100), /超时/);
+        assert.ok(Date.now() - started < 1500);
+      } finally { for (const socket of sockets) socket.destroy(); await new Promise(r => remote.close(r)); }
+    });
     await check('register populates actual device state', async () => {
       const result = await call(port, '/api/localsend/v2/register', peerInfo); assert.equal(result.status, 200);
       assert.ok(store.peers.some(p => p.alias === peerInfo.alias));

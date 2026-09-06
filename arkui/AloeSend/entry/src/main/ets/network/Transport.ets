@@ -23,12 +23,12 @@ export class HttpReply {
 export type ChunkWriter = (bytes: Uint8Array) => Promise<void>;
 export type BodyProducer = (write: ChunkWriter) => Promise<void>;
 
-export async function request(peer: Peer, method: string, path: string, body: string = '', token: Cancellation = new Cancellation()): Promise<HttpReply> {
+export async function request(peer: Peer, method: string, path: string, body: string = '', token: Cancellation = new Cancellation(), timeoutMs: number = 120000): Promise<HttpReply> {
   const bytes = encodeText(body);
-  return exchange(peer, method, path, bytes.length, async (write: ChunkWriter) => { if (bytes.length) await write(bytes); }, token);
+  return exchange(peer, method, path, bytes.length, async (write: ChunkWriter) => { if (bytes.length) await write(bytes); }, token, timeoutMs);
 }
 
-export async function exchange(peer: Peer, method: string, path: string, size: number, produce: BodyProducer, token: Cancellation): Promise<HttpReply> {
+export async function exchange(peer: Peer, method: string, path: string, size: number, produce: BodyProducer, token: Cancellation, timeoutMs: number = 120000): Promise<HttpReply> {
   token.check();
   const tcp = peer.protocol === 'https' ? undefined : socket.constructTCPSocketInstance();
   const tls = peer.protocol === 'https' ? socket.constructTLSSocketInstance() : undefined;
@@ -48,7 +48,7 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
     const fail = (error: Error): void => { if (!finished) { finished = true; close(); reject(error); } };
     const touch = (): void => {
       if (timeout !== -1) clearTimeout(timeout);
-      timeout = setTimeout(() => fail(new Error('等待设备响应超时')), 120000);
+      timeout = setTimeout(() => fail(new Error('等待设备响应超时')), timeoutMs);
     };
     const complete = (): void => {
       if (finished || !head || !decoder?.done) return;

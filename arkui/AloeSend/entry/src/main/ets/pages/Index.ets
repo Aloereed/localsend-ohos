@@ -9,6 +9,7 @@ import { WebShareView } from '../components/WebShareView';
 import { PeerDetailView } from '../components/PeerDetailView';
 import { AppIcon } from '../components/AppIcon';
 import { MessagesView } from '../components/MessagesView';
+import { NetworkView } from '../components/NetworkView';
 
 @Entry
 @Component
@@ -41,6 +42,7 @@ struct Index {
   }
 
   title(): string {
+    if (this.route === 'network') return this.store.t('网络接口');
     if (this.route === 'peer') return this.store.t('设备详情');
     if (this.route === 'transfers') return this.store.t('传输任务');
     if (this.route === 'history') return this.store.t('接收历史');
@@ -98,7 +100,8 @@ struct Index {
 
   @Builder
   details() {
-    if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer, onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; } }) }
+    if (this.route === 'network') { NetworkView({ store: this.store }) }
+    else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer, onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; } }) }
     else if (this.route === 'transfers') { TransferList({ store: this.store }) }
     else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
     else if (this.route === 'diagnostics') {

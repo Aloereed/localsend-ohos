@@ -7,6 +7,7 @@ import { HttpHead, queryValue, safeRelativePath, uniqueName } from './Protocol';
 import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { TlsIdentity } from './TlsIdentity';
 import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter } from './Transport';
+import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
 
 export interface DeviceInfo {
   alias: string;
@@ -220,20 +221,26 @@ export class LocalSendService {
     return channel;
   }
 
-  private async readAddresses(): Promise<void> {
+  async readAddresses(): Promise<void> {
     const addresses: string[] = [];
+    const interfaces: LocalInterface[] = [];
     for (const net of await connection.getAllNets()) {
       const props = await connection.getConnectionProperties(net);
+      const ignored = ignoredInterface(props.linkAddresses.map((link: connection.LinkAddress) => link.address.address), this.store.settings.networkFilter, this.store.settings.networkPatterns);
       for (const link of props.linkAddresses) {
         const ip = link.address.address;
-        if (ip && !ip.startsWith('127.') && !ip.includes(':') && !addresses.includes(ip)) addresses.push(ip);
+        const local = new LocalInterface(); local.name = props.interfaceName; local.ip = ip; local.prefixLength = link.prefixLength; local.ignored = ignored;
+        if (ip && !ip.startsWith('127.') && ip !== '::1') interfaces.push(local);
+        if (!ignored && ip && !ip.startsWith('127.') && !ip.includes(':') && !addresses.includes(ip)) addresses.push(ip);
       }
     }
     this.store.localIps = addresses;
+    this.store.interfaces = interfaces;
   }
 
   async announce(): Promise<void> {
     if (!this.store.settings.visible || !this.running) return;
+    if (this.store.settings.networkFilter !== 'none' && !this.store.localIps.length) return;
     await this.udp?.send({ data: JSON.stringify(this.info(true)), address: { address: this.store.settings.multicast, port: this.store.settings.port, family: 1 } });
   }
 
@@ -247,6 +254,8 @@ export class LocalSendService {
 
   private discovered(message: socket.SocketMessageInfo): void {
     if (message.message.byteLength > 16384) return;
+    if (this.store.settings.networkFilter !== 'none' && !this.store.interfaces.some((local: LocalInterface) =>
+      !local.ignored && sameSubnet(local.ip, message.remoteInfo.address, local.prefixLength))) return;
     try {
       const info = JSON.parse(decodeText(new Uint8Array(message.message))) as DeviceInfo;
       if (!info || typeof info.alias !== 'string' || typeof info.fingerprint !== 'string' || info.fingerprint === this.store.settings.fingerprint) return;
@@ -270,7 +279,7 @@ export class LocalSendService {
   }
 
   private async register(peer: Peer): Promise<void> {
-    const result = await request(peer, 'POST', `/api/localsend/${peer.version === '1.0' ? 'v1' : 'v2'}/register`, JSON.stringify(this.info()));
+    const result = await request(peer, 'POST', `/api/localsend/${peer.version === '1.0' ? 'v1' : 'v2'}/register`, JSON.stringify(this.info()), new Cancellation(), this.store.settings.discoveryTimeout);
     if (result.status === 200) {
       const info = JSON.parse(result.body) as DeviceInfo;
       const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
@@ -280,8 +289,8 @@ export class LocalSendService {
   }
 
   async probe(peer: Peer): Promise<void> {
-    let reply = await request(peer, 'GET', '/api/localsend/v2/info');
-    if (reply.status === 404) reply = await request(peer, 'GET', '/api/localsend/v1/info');
+    let reply = await request(peer, 'GET', '/api/localsend/v2/info', '', new Cancellation(), this.store.settings.discoveryTimeout);
+    if (reply.status === 404) reply = await request(peer, 'GET', '/api/localsend/v1/info', '', new Cancellation(), this.store.settings.discoveryTimeout);
     if (reply.status !== 200) throw new Error(`设备返回 ${reply.status}`);
     const info = JSON.parse(reply.body) as DeviceInfo;
     const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
@@ -292,13 +301,10 @@ export class LocalSendService {
 
   async addAddress(address: string): Promise<void> {
     try {
-      const clean = address.trim(); const parts = clean.replace(/^https?:\/\//, '').replace(/\/$/, '').split(':');
-      if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(parts[0]) || parts[0].split('.').some((part: string) => Number(part) > 255)) throw new Error('请输入有效 IPv4 地址');
-      const peer = new Peer(); peer.ip = parts[0]; peer.port = parts[1] ? Number(parts[1]) : 53317;
-      if (!Number.isInteger(peer.port) || peer.port < 1 || peer.port > 65535) throw new Error('端口无效');
-      peer.protocol = clean.startsWith('http://') ? 'http' : 'https';
+      const parsed = parseAddress(address);
+      const peer = new Peer(); peer.ip = parsed.ip; peer.port = parsed.port; peer.protocol = parsed.protocol;
       try { await this.probe(peer); }
-      catch (e) { if (clean.startsWith('https://') || peer.protocol === 'http') throw e as Error; peer.protocol = 'http'; await this.probe(peer); }
+      catch (e) { if (parsed.explicitProtocol) throw e as Error; peer.protocol = 'http'; await this.probe(peer); }
       this.store.notice = '设备已添加';
     } catch (e) { this.store.fail('添加设备失败', e as Error); }
   }
