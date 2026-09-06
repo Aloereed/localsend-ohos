@@ -177,7 +177,7 @@ export class LocalSendService {
   }
 
   async start(): Promise<void> {
-    if (this.paused || this.running || this.starting || !this.store.ready) return;
+    if (this.store.identityResetting || this.paused || this.running || this.starting || !this.store.ready) return;
     this.starting = true; this.store.serverStatus = '正在启动接收服务';
     this.store.listenerPort = this.store.settings.port; this.store.listenerHttps = this.store.settings.https;
     this.store.listenerMulticast = this.store.settings.multicast;
@@ -234,20 +234,37 @@ export class LocalSendService {
   }
 
   async restart(): Promise<void> {
+    if (this.store.identityResetting) return;
     if (this.starting) return;
     if (this.store.activeTransfers) { this.store.notice = '请等待当前传输结束后重启服务'; return; }
     this.paused = false; await this.stop(); await this.start();
   }
 
   async pause(): Promise<void> {
+    if (this.store.identityResetting) return;
     if (this.starting) return;
     if (this.store.activeTransfers) { this.store.notice = '请等待当前传输结束后停止服务'; return; }
     this.paused = true; await this.stop();
   }
 
   async resume(): Promise<void> {
+    if (this.store.identityResetting) return;
     this.paused = false; await this.start();
   }
+
+  async resetIdentity(): Promise<void> {
+    if (this.store.identityResetting || this.starting || this.store.activeTransfers || this.store.webUrl) {
+      this.store.notice = '请先结束传输并停止浏览器分享'; return;
+    }
+    const resume = !this.paused;
+    this.store.identityResetting = true;
+    this.paused = true;
+    try { await this.stop(); await this.identity.reset(this.store); this.store.notice = '本机证书已重新生成'; }
+    catch (error) { this.store.fail('重置证书失败', error as Error); }
+    finally { this.store.identityResetting = false; if (resume) { this.paused = false; await this.start(); } }
+  }
+
+  certificate(): string { return this.identity.certificate; }
 
   private newChannel(): NativeConnection {
     this.channels = this.channels.filter((channel: NativeConnection) => !channel.closed);
@@ -545,6 +562,7 @@ export class LocalSendService {
   submitPin(pin: string): void { this.pinResolver?.(pin); this.pinResolver = undefined; this.store.pendingPin = ''; }
 
   async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files): Promise<void> {
+    if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return; }
     if (!selectedFiles.length) { this.store.notice = '请先选择文件或输入文字'; return; }
     if (this.sending.size >= 4) { this.store.notice = '已有 4 项发送任务，请等待完成后再发送'; return; }
     const files = selectedFiles.slice(); const transfer = new TransferView(); transfer.id = util.generateRandomUUID();
@@ -634,6 +652,7 @@ export class LocalSendService {
   }
 
   async sendMany(peers: Peer[]): Promise<void> {
+    if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return; }
     if (this.store.batchRemaining > 0) { this.store.notice = '已有多设备发送任务'; return; }
     const files = this.store.files.slice();
     if (!files.length) { this.store.notice = '请先选择发送内容'; return; }

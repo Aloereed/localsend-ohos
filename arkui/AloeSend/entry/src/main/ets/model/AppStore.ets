@@ -182,6 +182,7 @@ export class AppStore {
   busy: boolean = false;
   ready: boolean = false;
   privacyAccepted: boolean = false;
+  identityResetting: boolean = false;
   onPrivacyAccepted: () => Promise<void> = async () => {};
   serverStatus: string = '未启动';
   listenerRunning: boolean = false;

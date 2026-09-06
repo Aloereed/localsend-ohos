@@ -7,6 +7,14 @@ export struct DiagnosticsView {
   @State category: number = 0;
   @State query: string = '';
   @State limit: number = 50;
+  @State showCertificate: boolean = false;
+
+  resetCertificate(): void {
+    this.getUIContext().showAlertDialog({ title: this.store.t('重新生成本机证书？'),
+      message: this.store.t('设备指纹会改变，其他设备可能需要重新收藏或确认本机。已保存文件不受影响。'),
+      primaryButton: { value: this.store.t('取消'), action: () => {} },
+      secondaryButton: { value: this.store.t('重新生成'), action: () => { localSend.resetIdentity(); } } });
+  }
 
   lines(): string[] {
     const source = this.category === 0 ? this.store.logs : this.store.networkLogs.filter((entry: NetworkLogEntry) =>
@@ -34,6 +42,15 @@ export struct DiagnosticsView {
         Text(`${this.store.localIps.join('\n')}\n${this.store.listenerPort} · ${this.store.listenerMulticast}`).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%').copyOption(CopyOptions.LocalDevice)
         Text(this.store.t('本机证书指纹')).fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
         Text(this.store.settings.fingerprint).fontSize(13).fontColor($r('sys.color.font_primary')).width('100%').copyOption(CopyOptions.LocalDevice)
+        Row({ space: 10 }) {
+          Button(this.store.t('查看证书')).layoutWeight(1).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+            .enabled(!!localSend.certificate()).onClick(() => this.showCertificate = !this.showCertificate)
+          Button(this.store.t('重新生成')).layoutWeight(1).height(44).fontColor(this.store.dangerText).backgroundColor(this.store.controlSurface)
+            .enabled(!this.store.activeTransfers && !this.store.webUrl && !this.store.identityResetting).onClick(() => this.resetCertificate())
+        }.width('100%')
+        if (this.showCertificate) {
+          Text(localSend.certificate()).fontSize(12).lineHeight(19).fontColor($r('sys.color.font_secondary')).width('100%').copyOption(CopyOptions.LocalDevice)
+        }
         Row({ space: 10 }) {
           Button(this.store.t('刷新附近设备')).layoutWeight(1).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).onClick(() => localSend.discover())
           Button(this.store.t('重新启动')).layoutWeight(1).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).enabled(!this.store.activeTransfers).onClick(() => localSend.restart())

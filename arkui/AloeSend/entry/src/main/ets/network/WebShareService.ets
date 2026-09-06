@@ -28,6 +28,7 @@ export class WebShareService {
   constructor(store: AppStore, protocol: LocalSendService) { this.store = store; this.protocol = protocol; }
 
   async start(encrypted: boolean = false): Promise<void> {
+    if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return; }
     if (this.starting) return;
     this.starting = true;
     try {

@@ -1,6 +1,14 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "查看证书": "View certificate",
+  "重新生成": "Regenerate",
+  "重新生成本机证书？": "Regenerate this device's certificate?",
+  "设备指纹会改变，其他设备可能需要重新收藏或确认本机。已保存文件不受影响。": "The device fingerprint will change. Other devices may need to favorite or confirm this device again. Saved files are unaffected.",
+  "请先结束传输并停止浏览器分享": "Finish transfers and stop browser sharing first",
+  "正在重置证书，请稍后": "Regenerating certificate. Please wait.",
+  "本机证书已重新生成": "Device certificate regenerated",
+  "重置证书失败": "Could not regenerate certificate",
   "运行日志": "Runtime logs",
   "发现日志": "Discovery logs",
   "搜索日志": "Search logs",
