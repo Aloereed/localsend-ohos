@@ -171,6 +171,10 @@ export struct SendView {
             if (!file.text) { this.store.error = ''; this.renameId = file.id; this.renameText = file.name; this.openSheet('rename'); }
             else { this.textId = file.id; this.text = file.text; this.openSheet('text'); }
           })
+          if (file.uri && !file.text) {
+            Button(this.store.t('打开')).height(44).fontSize(12).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
+              .onClick(() => this.store.openSelectedFile(file)).accessibilityText(this.store.tf('打开 {0}', [file.name]))
+          }
           Button('×').fontSize(22).backgroundColor(Color.Transparent).fontColor($r('sys.color.font_secondary'))
             .onClick(() => this.store.removeFile(file.id)).accessibilityText(this.store.tf('移除 {0}', [file.name]))
         }.padding(16).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(20)

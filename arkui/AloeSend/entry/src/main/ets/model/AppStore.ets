@@ -545,6 +545,15 @@ export class AppStore {
     } catch (e) { this.fail('打开文件失败，可尝试另存为', e as Error); }
   }
 
+  async openSelectedFile(file: ShareFile): Promise<void> {
+    if (!file.uri) return;
+    try {
+      await this.context?.startAbility({ action: 'ohos.want.action.viewData',
+        uri: file.uri.startsWith('file://') ? file.uri : fileUri.getUriFromPath(file.uri),
+        type: file.mime, flags: 1 });
+    } catch (e) { this.fail('打开所选文件失败', e as Error); }
+  }
+
   folderUri(entry: HistoryEntry): string {
     return publicParentUri(entry.exportedPath) || publicParentUri(entry.path);
   }
