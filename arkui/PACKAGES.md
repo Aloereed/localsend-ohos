@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000033 | [M33-share-presentation](artifacts/AloeSend-2000033-M33-share-presentation-unsigned.hap) | d2f62971 | A20B47754D54E2455A46FFB9EE7CDF9EAA5AF61A0A92CBDD0F6AA777134518D5 |
 | 2000032 | [M32-live-file-details](artifacts/AloeSend-2000032-M32-live-file-details-unsigned.hap) | 1af93620 | 4AE91637C66EF2165C3B913552C3700C06DE7B609E42ECD1123E62F995A7847B |
 | 2000031 | [M31-live-labels](artifacts/AloeSend-2000031-M31-live-labels-unsigned.hap) | f70c0168 | 0B025DC317248FEA6BF695516D2D80A4E079D4FD241C44F077CB7BA26E88C95C |
 | 2000030 | [M30-settings-recovery](artifacts/AloeSend-2000030-M30-settings-recovery-unsigned.hap) | ad7fa071 | 69E04134DB2C1FF5C75C4AA32B60AF83334967B6A949503148B468F38A37D0BC |
