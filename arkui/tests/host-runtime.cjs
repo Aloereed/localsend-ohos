@@ -108,6 +108,7 @@ const mocks = {
   '@kit.CoreFileKit': { fileIo: nativeFs, fileUri: { FileUri: class { constructor(uri) { this.name = path.basename(uri); } }, getUriFromPath: file => file }, picker: {} },
   '@kit.BasicServicesKit': { pasteboard: {} },
   '@kit.ShareKit': { systemShare: {} },
+  '@kit.LocalizationKit': { i18n: { System: { getSystemLanguage: () => 'zh-Hans' } } },
   '@kit.BackgroundTasksKit': { backgroundTaskManager: { BackgroundMode: { DATA_TRANSFER: 1 }, startBackgroundRunning: async () => {}, stopBackgroundRunning: async () => {} } },
   '@kit.AbilityKit': { ConfigurationConstant: { ColorMode: { COLOR_MODE_DARK: 0, COLOR_MODE_LIGHT: 1, COLOR_MODE_NOT_SET: -1 } } },
   '@kit.ArkData': { preferences: { getPreferences: async context => {

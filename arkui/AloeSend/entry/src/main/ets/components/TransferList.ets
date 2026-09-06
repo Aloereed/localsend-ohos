@@ -14,23 +14,23 @@ export struct TransferList {
   @Builder
   renameEditor() {
     Column({ space: 18 }) {
-      Text('接收时重命名').fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+      Text(this.store.t('接收时重命名')).fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
       TextInput({ text: this.renameText }).onChange((value: string) => this.renameText = value)
-      Text('仅影响本次接收的文件名称。').fontSize(13).fontColor($r('sys.color.font_secondary'))
-      Button('保存名称').width('100%').height(48).backgroundColor(this.store.settings.accent).onClick(() => {
+      Text(this.store.t('仅影响本次接收的文件名称。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
+      Button(this.store.t('保存名称')).width('100%').height(48).backgroundColor(this.store.settings.accent).onClick(() => {
         if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
       })
     }.width('100%').padding(24)
   }
 
   statusLabel(status: string): string {
-    if (status === 'waiting') return '等待确认';
-    if (status === 'transferring') return '正在传输';
-    if (status === 'complete') return '传输完成';
-    if (status === 'declined') return '已拒绝';
-    if (status === 'cancelled') return '已取消';
-    if (status === 'skipped') return '已跳过';
-    return '传输未完成';
+    if (status === 'waiting') return this.store.t('等待确认');
+    if (status === 'transferring') return this.store.t('正在传输');
+    if (status === 'complete') return this.store.t('传输完成');
+    if (status === 'declined') return this.store.t('已拒绝');
+    if (status === 'cancelled') return this.store.t('已取消');
+    if (status === 'skipped') return this.store.t('已跳过');
+    return this.store.t('传输未完成');
   }
 
   total(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + file.size, 0); }
@@ -39,19 +39,19 @@ export struct TransferList {
     const seconds = Math.max(1, ((transfer.finished || Date.now()) - transfer.started) / 1000);
     const speed = this.done(transfer) / seconds;
     const remaining = speed > 0 ? Math.ceil((this.total(transfer) - this.done(transfer)) / speed) : 0;
-    return `${formatSize(Math.round(speed))}/s${remaining > 0 ? ` · 剩余 ${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}` : ''}`;
+    return `${formatSize(Math.round(speed))}/s${remaining > 0 ? this.store.tf(' · 剩余 {0}', [`${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`]) : ''}`;
   }
 
   build() {
     Column({ space: 18 }) {
       if (this.store.batchRemaining > 0) {
         Row() {
-          Text(`队列剩余 ${this.store.batchRemaining} 台设备`).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-          Button('停止队列').fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => localSend.cancelAll())
+          Text(this.store.tf('队列剩余 {0} 台设备', [String(this.store.batchRemaining)])).layoutWeight(1).fontColor($r('sys.color.font_primary'))
+          Button(this.store.t('停止队列')).fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => localSend.cancelAll())
         }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
       }
       if (this.store.transfers.length === 0) {
-        Text('暂无传输任务').fontSize(18).fontColor($r('sys.color.font_secondary')).padding(40)
+        Text(this.store.t('暂无传输任务')).fontSize(18).fontColor($r('sys.color.font_secondary')).padding(40)
       }
       ForEach(this.store.transfers.filter((transfer: TransferView) => !this.pendingOnly || transfer.id === this.store.pendingReceive), (transfer: TransferView) => {
         Column({ space: 16 }) {
@@ -59,7 +59,7 @@ export struct TransferList {
             AppIcon({ name: transfer.direction === 'receive' ? 'receive' : 'send', iconSize: 30, tint: this.store.settings.accent })
             Column({ space: 6 }) {
               Text(transfer.peer).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
-              Text(`${this.statusLabel(transfer.status)} · ${transfer.encrypted ? 'TLS 加密' : '未加密'}`)
+              Text(`${this.statusLabel(transfer.status)} · ${transfer.encrypted ? this.store.t('TLS 加密') : this.store.t('未加密')}`)
                 .fontSize(13).fontColor($r('sys.color.font_secondary'))
             }.alignItems(HorizontalAlign.Start).layoutWeight(1)
           }.width('100%')
@@ -71,12 +71,12 @@ export struct TransferList {
               Text(this.rate(transfer)).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.width('100%')
           }
-          if (transfer.error) { Text(transfer.error).fontColor('#C44747').fontSize(14).width('100%') }
+          if (transfer.error) { Text(this.store.t(transfer.error)).fontColor('#C44747').fontSize(14).width('100%') }
           if (transfer.id === this.store.pendingReceive) {
             Row({ space: 10 }) {
-              Text(`共 ${transfer.files.length} 项 · ${formatSize(this.total(transfer))}`).layoutWeight(1).fontSize(13).fontColor($r('sys.color.font_secondary'))
-              Button('全选').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('all'))
-              Button('反选').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('invert'))
+              Text(this.store.tf('共 {0} 项 · {1}', [String(transfer.files.length), formatSize(this.total(transfer))])).layoutWeight(1).fontSize(13).fontColor($r('sys.color.font_secondary'))
+              Button(this.store.t('全选')).backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('all'))
+              Button(this.store.t('反选')).backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => localSend.selectAllReceive('invert'))
             }.width('100%')
           }
           ForEach(transfer.files, (file: TransferFile) => {
@@ -94,23 +94,23 @@ export struct TransferList {
               }.alignItems(HorizontalAlign.Start).layoutWeight(1)
               if (file.status === 'complete') { Text('✓').fontColor(this.store.settings.accent).fontSize(20) }
               if (transfer.id === this.store.pendingReceive && !file.preview) {
-                Button('改名').fontSize(12).fontColor(this.store.settings.accent).backgroundColor(Color.Transparent)
+                Button(this.store.t('改名')).fontSize(12).fontColor(this.store.settings.accent).backgroundColor(Color.Transparent)
                   .onClick(() => { this.renameId = file.id; this.renameText = file.name; this.renameSheet = true; })
               }
             }.width('100%').padding({ top: 8, bottom: 8 })
           }, (file: TransferFile) => file.id)
           if (transfer.id === this.store.pendingReceive) {
-            Text('只接收你信任的内容。文件保存在本机，可在历史中另存为。').fontSize(13).fontColor($r('sys.color.font_secondary'))
+            Text(this.store.t('只接收你信任的内容。文件保存在本机，可在历史中另存为。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
             Row({ space: 12 }) {
-              Button('拒绝').layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor($r('sys.color.font_primary'))
+              Button(this.store.t('拒绝')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor($r('sys.color.font_primary'))
                 .onClick(() => localSend.acceptReceive(false))
-              Button('接收所选').layoutWeight(1).height(48).backgroundColor(this.store.settings.accent)
+              Button(this.store.t('接收所选')).layoutWeight(1).height(48).backgroundColor(this.store.settings.accent)
                 .enabled(transfer.files.some((file: TransferFile) => file.selected)).onClick(() => localSend.acceptReceive(true))
             }.width('100%')
           } else if (transfer.status === 'waiting' || transfer.status === 'transferring') {
-            Button('取消传输').fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => { if (!webShare.cancel(transfer.id)) localSend.cancel(transfer.id); })
+            Button(this.store.t('取消传输')).fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => { if (!webShare.cancel(transfer.id)) localSend.cancel(transfer.id); })
           } else if (transfer.direction === 'send' && (transfer.status === 'error' || transfer.status === 'cancelled')) {
-            Button('重试未完成文件').backgroundColor(this.store.settings.accent).onClick(() => localSend.retry(transfer.id))
+            Button(this.store.t('重试未完成文件')).backgroundColor(this.store.settings.accent).onClick(() => localSend.retry(transfer.id))
           }
         }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
       }, (transfer: TransferView) => JSON.stringify(transfer))

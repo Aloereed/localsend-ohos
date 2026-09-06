@@ -5,6 +5,7 @@ import { systemShare } from '@kit.ShareKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
+import { uiText } from './Locale';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -170,6 +171,13 @@ export class AppStore {
 
   log(message: string): void {
     this.logs = [`${new Date().toLocaleTimeString()}  ${message}`, ...this.logs].slice(0, 300);
+  }
+
+  t(text: string): string { return uiText(text, this.settings.language); }
+  tf(text: string, values: string[]): string {
+    let translated = this.t(text);
+    for (let index = 0; index < values.length; index++) translated = translated.replace(`{${index}}`, values[index]);
+    return translated;
   }
 
   updateTransfer(transfer: TransferView): void {
