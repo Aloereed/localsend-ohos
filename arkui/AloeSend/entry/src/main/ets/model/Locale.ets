@@ -1,6 +1,13 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "恢复默认设置": "Restore default settings",
+  "恢复默认设置？": "Restore default settings?",
+  "恢复": "Restore",
+  "恢复名称、外观、接收策略和网络偏好。收藏、历史、文件、证书及已同意的隐私选择保留。网络设置需重启服务后生效。": "Restore the name, appearance, receive policies and network preferences. Favorites, history, files, certificate and privacy acceptance are kept. Restart the service to apply network settings.",
+  "默认设置已恢复，网络设置重启服务后生效": "Defaults restored. Restart the service to apply network settings.",
+  "默认设置已恢复": "Default settings restored",
+  "恢复设置失败": "Could not restore settings",
   "查看证书": "View certificate",
   "重新生成": "Regenerate",
   "重新生成本机证书？": "Regenerate this device's certificate?",

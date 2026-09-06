@@ -16,6 +16,13 @@ export struct DiagnosticsView {
       secondaryButton: { value: this.store.t('重新生成'), action: () => { localSend.resetIdentity(); } } });
   }
 
+  restoreSettings(): void {
+    this.getUIContext().showAlertDialog({ title: this.store.t('恢复默认设置？'),
+      message: this.store.t('恢复名称、外观、接收策略和网络偏好。收藏、历史、文件、证书及已同意的隐私选择保留。网络设置需重启服务后生效。'),
+      primaryButton: { value: this.store.t('取消'), action: () => {} },
+      secondaryButton: { value: this.store.t('恢复'), action: () => { this.store.restoreSettings(); } } });
+  }
+
   lines(): string[] {
     const source = this.category === 0 ? this.store.logs : this.store.networkLogs.filter((entry: NetworkLogEntry) =>
       entry.category === (this.category === 1 ? 'discovery' : 'http')).map((entry: NetworkLogEntry) => `${new Date(entry.time).toLocaleTimeString()}  ${entry.message}`);
@@ -71,6 +78,8 @@ export struct DiagnosticsView {
       if (this.lines().length > this.limit) {
         Button(this.store.t('查看更多')).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).onClick(() => this.limit += 50)
       }
+      Button(this.store.t('恢复默认设置')).width('100%').height(48).fontColor(this.store.dangerText).backgroundColor(this.store.controlSurface)
+        .enabled(!this.store.activeTransfers && !this.store.webUrl && !this.store.identityResetting).onClick(() => this.restoreSettings())
     }.width('100%')
   }
 }

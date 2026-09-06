@@ -269,6 +269,26 @@ export class AppStore {
     } catch (e) { this.fail('保存隐私选择失败，请重试', e as Error); return false; }
   }
 
+  async restoreSettings(): Promise<boolean> {
+    if (this.activeTransfers || this.identityResetting || this.webUrl) {
+      this.notice = '请先结束传输并停止浏览器分享'; return false;
+    }
+    if (!this.storage) return false;
+    const previous = JSON.stringify(this.settings);
+    const defaults = new AppSettings(); defaults.fingerprint = this.settings.fingerprint;
+    if (this.downloadAccess) { defaults.destinationMode = 'download'; defaults.destination = this.downloadDirectory; }
+    try {
+      await this.storage.put('settings', JSON.stringify(defaults));
+      await this.storage.flush();
+      this.settings = defaults; this.galleryQueue = []; this.applyTheme();
+      this.notice = this.listenerRunning ? '默认设置已恢复，网络设置重启服务后生效' : '默认设置已恢复';
+      return true;
+    } catch (error) {
+      await this.storage.put('settings', previous).then(() => this.storage?.flush()).catch(() => {});
+      this.fail('恢复设置失败', error as Error); return false;
+    }
+  }
+
   t(text: string): string { return uiText(text, this.settings.language); }
   get dark(): boolean { return this.settings.theme === 'dark' || (this.settings.theme === 'system' && this.systemDark); }
   get canvasColor(): string { return this.dark ? this.settings.pureBlack ? '#000000' : '#101318' : '#F3F5F9'; }

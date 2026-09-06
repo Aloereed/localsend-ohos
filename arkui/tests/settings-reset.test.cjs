@@ -1,0 +1,26 @@
+const assert = require('node:assert/strict');
+const { load } = require('./host-runtime.cjs');
+const { AppStore, HistoryEntry, Peer } = load('model/AppStore');
+(async () => {
+  const store = new AppStore(); await store.init({ filesDir: 'unused', getApplicationContext: () => ({ setColorMode() {} }) });
+  await store.acceptPrivacy();
+  const fingerprint = store.settings.fingerprint;
+  const history = new HistoryEntry(); history.name = 'kept.txt'; store.history = [history];
+  const peer = new Peer(); store.favorites = [peer];
+  store.settings.port = 54321; store.settings.https = false; store.settings.quickSave = true; store.settings.pureBlack = true;
+  store.settings.alias = 'custom'; store.downloadAccess = true;
+  store.webUrl = 'active'; assert.equal(await store.restoreSettings(), false); assert.equal(store.settings.port, 54321);
+  store.webUrl = ''; store.transfers = [{ status: 'waiting' }]; assert.equal(await store.restoreSettings(), false); store.transfers = [];
+  const previous = JSON.stringify(store.settings); await store.save();
+  const flush = store.storage.flush; let rejectOnce = true;
+  store.storage.flush = async () => { if (rejectOnce) { rejectOnce = false; throw new Error('write failure'); } };
+  assert.equal(await store.restoreSettings(), false); assert.equal(JSON.stringify(store.settings), previous);
+  assert.equal(await store.storage.get('settings', ''), previous, 'failed reset rolls back cached preferences');
+  store.storage.flush = flush; assert.equal(await store.restoreSettings(), true);
+  assert.equal(store.settings.port, 53317); assert.equal(store.settings.https, true); assert.equal(store.settings.quickSave, false);
+  assert.equal(store.settings.pureBlack, false); assert.equal(store.settings.fingerprint, fingerprint);
+  assert.equal(store.settings.destination, store.downloadDirectory); assert.equal(store.settings.destinationMode, 'download');
+  assert.equal(store.privacyAccepted, true); assert.deepEqual(store.history, [history]); assert.deepEqual(store.favorites, [peer]);
+  store.error = ''; store.notice = '';
+  console.log('PASS default restoration, active-session guards, persistence rollback and preservation of identity/history/favorites/consent');
+})().catch(error => { console.error(error); process.exitCode = 1; });
