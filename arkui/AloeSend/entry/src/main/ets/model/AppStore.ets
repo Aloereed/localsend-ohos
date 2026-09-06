@@ -103,6 +103,8 @@ export class AppSettings {
   openMessagesOnReceive: boolean = false;
   offerGallerySave: boolean = false;
   animations: boolean = true;
+  reduceEffects: boolean = false;
+  pureBlack: boolean = false;
   visible: boolean = true;
   pin: string = '';
   port: number = 53317;
@@ -221,6 +223,8 @@ export class AppStore {
       if (typeof this.settings.https !== 'boolean') this.settings.https = true;
       if (typeof this.settings.openMessagesOnReceive !== 'boolean') this.settings.openMessagesOnReceive = false;
       if (typeof this.settings.offerGallerySave !== 'boolean') this.settings.offerGallerySave = false;
+      if (typeof this.settings.reduceEffects !== 'boolean') this.settings.reduceEffects = false;
+      if (typeof this.settings.pureBlack !== 'boolean') this.settings.pureBlack = false;
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
       this.history = JSON.parse(await this.storage.get('history', '[]') as string) as HistoryEntry[];
       this.persistentHistory = new Set(this.history.map((entry: HistoryEntry) => entry.id));
@@ -236,12 +240,12 @@ export class AppStore {
 
   t(text: string): string { return uiText(text, this.settings.language); }
   get dark(): boolean { return this.settings.theme === 'dark' || (this.settings.theme === 'system' && this.systemDark); }
-  get canvasColor(): string { return this.dark ? '#101318' : '#F3F5F9'; }
-  get surfaceColor(): string { return this.dark ? '#F0242931' : '#EFFFFFFF'; }
+  get canvasColor(): string { return this.dark ? this.settings.pureBlack ? '#000000' : '#101318' : '#F3F5F9'; }
+  get surfaceColor(): string { return this.settings.reduceEffects ? this.dark ? '#242931' : '#FFFFFF' : this.dark ? '#F0242931' : '#EFFFFFFF'; }
   get controlSurface(): string { return this.dark ? '#343A43' : '#E9EEF5'; }
-  get glassColor(): string { return this.dark ? '#D02A3038' : '#CFFFFFFF'; }
+  get glassColor(): string { return this.settings.reduceEffects ? this.dark ? '#2A3038' : '#FFFFFF' : this.dark ? '#D02A3038' : '#CFFFFFFF'; }
   get hairlineColor(): string { return this.dark ? '#24FFFFFF' : '#BFFFFFFF'; }
-  get ambientColor(): string { return this.dark ? '#17283B' : '#E2EBF9'; }
+  get ambientColor(): string { return this.settings.reduceEffects || (this.dark && this.settings.pureBlack) ? this.canvasColor : this.dark ? '#17283B' : '#E2EBF9'; }
   get accentText(): string { return readableColor(this.settings.accent, this.controlSurface); }
   get accentFill(): string { return readableColor(this.settings.accent, '#FFFFFF'); }
   get dangerText(): string { return readableColor('#C44747', this.controlSurface); }

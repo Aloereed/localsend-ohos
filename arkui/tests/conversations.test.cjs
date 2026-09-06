@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const { load } = require('./host-runtime.cjs');
 const { HistoryEntry, Peer, AppStore } = load('model/AppStore');
-const { conversationList, inConversation } = load('model/Conversations');
+const { conversationList, conversationTargets, inConversation } = load('model/Conversations');
 const oldPeer = new Peer(); oldPeer.alias = 'Laptop'; oldPeer.ip = '192.168.1.2'; oldPeer.fingerprint = 'identity-a';
 const movedPeer = new Peer(); movedPeer.alias = 'Renamed laptop'; movedPeer.ip = '192.168.1.99'; movedPeer.fingerprint = 'identity-a';
 const stranger = new Peer(); stranger.alias = 'Laptop'; stranger.ip = '192.168.1.3'; stranger.fingerprint = 'identity-b';
@@ -20,4 +20,8 @@ const store = new AppStore(); store.favorites = [oldPeer];
 assert.equal(store.isFavorite(movedPeer), true);
 const replacement = new Peer(); replacement.ip = oldPeer.ip; replacement.port = oldPeer.port; replacement.fingerprint = 'replacement';
 assert.equal(store.isFavorite(replacement), false, 'IP reuse must not inherit a known fingerprint favorite');
+const targets = conversationTargets([movedPeer, replacement], [oldPeer, stranger]);
+assert.deepEqual(targets, [movedPeer, replacement, stranger], 'nearby address wins for the same identity; a different identity sharing an old IP remains separate');
+assert.deepEqual(conversationTargets([movedPeer], [oldPeer, stranger], '192.168.1.3'), [stranger]);
+assert.deepEqual(conversationTargets([movedPeer], [oldPeer], 'renamed'), [movedPeer]);
 console.log('PASS conversations follow identity across address/name changes, separate same-name devices, sort newest first, and retain legacy history');

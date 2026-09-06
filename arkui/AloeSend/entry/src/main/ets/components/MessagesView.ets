@@ -1,5 +1,5 @@
 import { AppStore, HistoryEntry, Peer, ShareFile, MessageDraft, formatSize, samePeer } from '../model/AppStore';
-import { Conversation, conversationList, inConversation, peerKey } from '../model/Conversations';
+import { Conversation, conversationList, conversationTargets, inConversation, peerKey } from '../model/Conversations';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 import { EmptyState } from './EmptyState';
@@ -199,7 +199,7 @@ export struct MessagesView {
             Button(this.sending ? this.store.t('发送中…') : this.store.t('发送')).height(44).constraintSize({ minWidth: 88 }).backgroundColor(this.store.accentFill)
               .enabled(!!this.peer.ip && (!!this.draft.trim() || this.attachments.length > 0) && !this.sending).onClick(() => this.sendText())
           }.width('100%')
-        }.padding(14).backgroundColor(this.store.glassColor).backgroundBlurStyle(BlurStyle.COMPONENT_THIN).borderRadius(26)
+        }.padding(14).backgroundColor(this.store.glassColor).backgroundBlurStyle(this.store.settings.reduceEffects ? BlurStyle.NONE : BlurStyle.COMPONENT_THIN).borderRadius(26)
           .border({ width: 0.5, color: this.store.hairlineColor })
       } else {
         Text(this.store.t('消息')).fontSize(30).fontWeight(FontWeight.Bold).width('100%').fontColor($r('sys.color.font_primary')).margin({ top: 20 })
@@ -224,13 +224,17 @@ export struct MessagesView {
               }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24).onClick(() => this.open(group.peer))
             }, (group: Conversation) => `${group.key}:${group.last.id}:${group.count}:${group.peer.alias}`)
             Text(this.store.t('发起新会话')).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%').margin({ top: 12 })
-            ForEach(this.store.peers, (peer: Peer) => {
+            ForEach(conversationTargets(this.store.peers, this.store.favorites, this.query), (peer: Peer) => {
               Row({ space: 14 }) {
                 AppIcon({ name: 'message', iconSize: 24, tint: this.store.accentText })
-                Text(peer.alias).fontSize(16).layoutWeight(1).fontColor($r('sys.color.font_primary'))
+                Column({ space: 4 }) {
+                  Text(peer.alias).fontSize(16).fontColor($r('sys.color.font_primary'))
+                  Text(this.store.t(this.store.peers.some((item: Peer) => samePeer(item, peer)) ? '附近设备' : '收藏设备 · 尝试连接'))
+                    .fontSize(12).fontColor($r('sys.color.font_secondary'))
+                }.alignItems(HorizontalAlign.Start).layoutWeight(1)
                 Text(this.store.t('开始')).fontSize(13).fontColor(this.store.accentText)
               }.padding(18).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(22).onClick(() => this.open(peer))
-            }, (peer: Peer) => `${peer.ip}:${peer.port}`)
+            }, (peer: Peer) => `${peerKey(peer)}:${peer.ip}:${peer.port}:${peer.alias}`)
             if (this.store.peers.length === 0) {
               Text(this.store.t('附近暂时没有设备，请确认双方连接同一网络。')).fontSize(13).lineHeight(22).fontColor($r('sys.color.font_secondary'))
               Button(this.store.t('刷新附近设备')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.discover())

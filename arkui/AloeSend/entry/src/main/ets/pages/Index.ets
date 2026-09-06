@@ -113,7 +113,7 @@ struct Index {
       Stack() {
         Circle().width(192).height(192).fill(Color.Transparent).stroke(this.store.hairlineColor).strokeWidth(1)
         Circle().width(158).height(158).fill(this.store.glassColor)
-          .shadow({ radius: 26, color: this.store.dark ? '#28000000' : '#18314665', offsetY: 10 })
+          .shadow({ radius: this.store.settings.reduceEffects ? 0 : 26, color: this.store.dark ? '#28000000' : '#18314665', offsetY: 10 })
         Image($r('app.media.aloesend_logo')).width(112).height(112).objectFit(ImageFit.Contain).accessibilityLevel('no')
       }.width(208).height(208).margin({ top: 4, bottom: 6 })
         .radialGradient({ center: ['50%', '50%'], radius: 104, colors: [[this.store.ambientColor, 0], [Color.Transparent, 1]] })
@@ -266,7 +266,7 @@ struct Index {
             .onClick(() => this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : '')
           Text(this.title()).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
         }.width('100%').padding({ left: 8, right: 20, top: 10, bottom: 10 })
-          .backgroundColor(this.store.glassColor).backgroundBlurStyle(BlurStyle.COMPONENT_THIN)
+          .backgroundColor(this.store.glassColor).backgroundBlurStyle(this.store.settings.reduceEffects ? BlurStyle.NONE : BlurStyle.COMPONENT_THIN)
         Scroll() { Column() { this.details() }.padding(24).constraintSize({ maxWidth: 720 }).width('100%') }.layoutWeight(1).width('100%').align(Alignment.Top)
       } else {
         Tabs({ barPosition: this.windowWidth >= 840 ? BarPosition.Start : BarPosition.End, index: this.tab }) {
@@ -290,7 +290,7 @@ struct Index {
             Scroll() { Column() { this.heading('设置', ''); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('设置', '⚙', 3))
         }.vertical(this.windowWidth >= 840).barWidth(this.windowWidth >= 840 ? 96 : '100%').barHeight(this.windowWidth >= 840 ? '100%' : 76)
-          .barBackgroundColor(this.store.glassColor).barBackgroundBlurStyle(BlurStyle.COMPONENT_THIN)
+          .barBackgroundColor(this.store.glassColor).barBackgroundBlurStyle(this.store.settings.reduceEffects ? BlurStyle.NONE : BlurStyle.COMPONENT_THIN)
           .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index).layoutWeight(1)
       }
     }.width('100%').height('100%')
@@ -302,9 +302,9 @@ struct Index {
         Button('×').width(40).height(40).fontSize(21).backgroundColor(Color.Transparent).fontColor($r('sys.color.font_secondary'))
           .accessibilityText(this.store.t('关闭')).onClick(() => { this.store.error = ''; this.store.notice = ''; })
       }.padding({ left: 20, right: 8, top: 8, bottom: 8 }).width('92%').constraintSize({ maxWidth: 560 })
-        .backgroundColor(this.store.glassColor).backgroundBlurStyle(BlurStyle.COMPONENT_REGULAR)
+        .backgroundColor(this.store.glassColor).backgroundBlurStyle(this.store.settings.reduceEffects ? BlurStyle.NONE : BlurStyle.COMPONENT_REGULAR)
         .borderRadius(24).border({ width: 0.5, color: this.store.hairlineColor })
-        .shadow({ radius: 20, color: this.store.dark ? '#40000000' : '#18314665', offsetY: 6 }).margin({ top: 12 })
+        .shadow({ radius: this.store.settings.reduceEffects ? 0 : 20, color: this.store.dark ? '#40000000' : '#18314665', offsetY: 6 }).margin({ top: 12 })
     }
     }.linearGradient({ angle: 155, colors: [[this.store.ambientColor, 0], [this.store.canvasColor, 0.38], [this.store.canvasColor, 1]] })
       .width('100%').height('100%')

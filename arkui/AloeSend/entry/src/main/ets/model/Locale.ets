@@ -1,6 +1,12 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "轻量效果": "Reduce visual effects",
+  "关闭背景模糊，使用实色表面": "Turn off background blur and use solid surfaces",
+  "OLED 纯黑背景": "OLED black background",
+  "深色模式下使用纯黑背景": "Use a pure black background in dark mode",
+  "附近设备": "Nearby device",
+  "收藏设备 · 尝试连接": "Favorite · connect directly",
   "选择内容，再选择设备": "Choose content, then a device",
   "启动接收服务": "Start receiving service",
   "停止服务": "Stop service",

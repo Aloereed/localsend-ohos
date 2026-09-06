@@ -1,4 +1,13 @@
-import { HistoryEntry, Peer } from './AppStore';
+import { HistoryEntry, Peer, samePeer } from './AppStore';
+
+export function conversationTargets(nearby: Peer[], favorites: Peer[], query: string = ''): Peer[] {
+  const targets = nearby.slice();
+  for (const peer of favorites) {
+    if (!targets.some((target: Peer) => samePeer(target, peer))) targets.push(peer);
+  }
+  const search = query.trim().toLowerCase();
+  return targets.filter((peer: Peer) => `${peer.alias} ${peer.ip}`.toLowerCase().includes(search));
+}
 
 export class Conversation {
   key: string = '';

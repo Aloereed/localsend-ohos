@@ -47,6 +47,8 @@ export struct SettingsView {
     if (key === 'messages') return settings.openMessagesOnReceive;
     if (key === 'gallery') return settings.offerGallerySave;
     if (key === 'animation') return settings.animations;
+    if (key === 'effects') return settings.reduceEffects;
+    if (key === 'black') return settings.pureBlack;
     if (key === 'visible') return settings.visible;
     if (key === 'advanced') return settings.advanced;
     return settings.https;
@@ -69,6 +71,8 @@ export struct SettingsView {
           if (key === 'messages') this.store.settings.openMessagesOnReceive = value;
           if (key === 'gallery') { this.store.settings.offerGallerySave = value; if (!value) this.store.galleryQueue = []; }
           if (key === 'animation') this.store.settings.animations = value;
+          if (key === 'effects') this.store.settings.reduceEffects = value;
+          if (key === 'black') this.store.settings.pureBlack = value;
           if (key === 'visible') this.store.settings.visible = value;
           if (key === 'advanced') this.store.settings.advanced = value;
           if (key === 'https') this.store.settings.https = value;
@@ -144,6 +148,8 @@ export struct SettingsView {
           }.width('100%')
         }.padding(18).width('100%')
         this.toggle(this.store.t('界面动画'), this.store.t('自然流畅的页面过渡'), 'animation')
+        this.toggle(this.store.t('轻量效果'), this.store.t('关闭背景模糊，使用实色表面'), 'effects')
+        this.toggle(this.store.t('OLED 纯黑背景'), this.store.t('深色模式下使用纯黑背景'), 'black')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       this.title(this.store.t('接收'))
       Column() {
