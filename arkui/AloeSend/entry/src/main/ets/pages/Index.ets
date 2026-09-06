@@ -115,10 +115,11 @@ struct Index {
   }
 
   @Builder
-  info(title: string, description: string) {
+  info(title: string, description: string, source: string = '') {
     Column({ space: 10 }) {
-      Text(title).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
-      Text(description).fontSize(14).lineHeight(24).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
+      Text(this.store.t(title)).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+      Text(this.store.t(source === 'license' ? this.legalText || '正在读取…' : source === 'credits' ? this.creditsText || '正在读取…' : description))
+        .fontSize(14).lineHeight(24).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
     }.alignItems(HorizontalAlign.Start).width('100%').padding(24)
       .backgroundColor(this.store.surfaceColor).borderRadius(24).margin({ bottom: 16 })
   }
@@ -169,11 +170,11 @@ struct Index {
   @Builder
   details() {
     if (this.route === 'license-full') {
-      this.info('Apache License 2.0', this.legalText || this.store.t('正在读取…'))
+      this.info('Apache License 2.0', '', 'license')
     } else if (this.route === 'credits') {
-      this.info(this.store.t('感谢每一位贡献者'), this.creditsText || this.store.t('正在读取…'))
+      this.info('感谢每一位贡献者', '', 'credits')
     } else if (this.route === 'donate') {
-      this.info(this.store.t('支持开源项目'), this.store.t('你可以自愿支持 LocalSend 的持续开发。所有文件分享功能均可免费使用。'))
+      this.info('支持开源项目', '你可以自愿支持 LocalSend 的持续开发。所有文件分享功能均可免费使用。')
       Button('GitHub Sponsors').width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/sponsors/Tienisto'))
       Button('Ko-fi').width('100%').height(48).margin({ top: 16 }).fontColor(this.store.accentText).backgroundColor(this.store.surfaceColor).onClick(() => this.store.openUrl('https://ko-fi.com/tienisto'))
     } else if (this.route === 'network') { NetworkView({ store: this.store }) }
@@ -185,26 +186,26 @@ struct Index {
     else if (this.route === 'diagnostics') {
       DiagnosticsView({ store: this.store })
     } else if (this.route === 'help') {
-      this.info(this.store.t('找不到设备？'), this.store.t('确认两台设备连接同一个局域网，关闭路由器的 AP 隔离。允许 LocalSend 通过防火墙，确保 TCP 与 UDP 53317 端口可用。也可通过地址直接添加设备。'))
-      this.info(this.store.t('接收的文件在哪里？'), this.store.t('允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。'))
-      this.info(this.store.t('文字与文件'), this.store.t('发送页可以选择文件、图片、文件夹，以及文字或剪贴板内容。选择后点击目标设备。文件重命名只影响对方收到的名称。'))
+      this.info('找不到设备？', '确认两台设备连接同一个局域网，关闭路由器的 AP 隔离。允许 LocalSend 通过防火墙，确保 TCP 与 UDP 53317 端口可用。也可通过地址直接添加设备。')
+      this.info('接收的文件在哪里？', '允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。')
+      this.info('文字与文件', '发送页可以选择文件、图片、文件夹，以及文字或剪贴板内容。选择后点击目标设备。文件重命名只影响对方收到的名称。')
     } else if (this.route === 'licenses') {
-      this.info('LocalSend / AloeSend', this.store.t('基于 LocalSend 项目，遵循 Apache License 2.0。\nhttps://github.com/localsend/localsend\nhttps://github.com/Aloereed/localsend-ohos'))
-      this.info(this.store.t('原生实现'), this.store.t('ArkUI 界面和 ArkTS 平台服务使用 HarmonyOS SDK。原项目第三方版权声明保留在仓库对应依赖中。'))
+      this.info('LocalSend / AloeSend', '基于 LocalSend 项目，遵循 Apache License 2.0。\nhttps://github.com/localsend/localsend\nhttps://github.com/Aloereed/localsend-ohos')
+      this.info('原生实现', 'ArkUI 界面和 ArkTS 平台服务使用 HarmonyOS SDK。原项目第三方版权声明保留在仓库对应依赖中。')
       this.info('Mbed TLS 3.6.7', 'Apache License 2.0\nhttps://github.com/Mbed-TLS/mbedtls')
       Button(this.store.t('阅读完整许可')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.route = 'license-full')
     } else if (this.route === 'changelog') {
-      this.info('M20', this.store.t('接收后打开进度页；替换系统 TLS 接收实现；大文件批量写入；恢复原版下载目录授权与保存路径。'))
-      this.info('M19', this.store.t('恢复原版 Logo 与图标；修复开关回弹；自动发现设备；提示自动关闭；发送类型单行滑动。'))
-      this.info(this.store.t('原生迁移 · M2'), this.store.t('系统文件与照片选择、文件夹选择、文字和剪贴板、选择清单、重命名、历史与消息搜索、另存为、主题与接收设置。'))
-      this.info(this.store.t('原生迁移 · M1'), this.store.t('四个原生页面、鸿蒙浅深色资源、本地偏好存储、可追溯的未签名里程碑构建。'))
+      this.info('M20', '接收后打开进度页；替换系统 TLS 接收实现；大文件批量写入；恢复原版下载目录授权与保存路径。')
+      this.info('M19', '恢复原版 Logo 与图标；修复开关回弹；自动发现设备；提示自动关闭；发送类型单行滑动。')
+      this.info('原生迁移 · M2', '系统文件与照片选择、文件夹选择、文字和剪贴板、选择清单、重命名、历史与消息搜索、另存为、主题与接收设置。')
+      this.info('原生迁移 · M1', '四个原生页面、鸿蒙浅深色资源、本地偏好存储、可追溯的未签名里程碑构建。')
     } else if (this.route === 'web') {
       WebShareView({ store: this.store })
     } else {
       Image($r('app.media.aloesend_logo')).width(104).height(104).objectFit(ImageFit.Contain).margin({ bottom: 24 })
-      this.info('AloeSend', this.store.t('为鸿蒙重新设计的本地分享体验。\n跨越设备，传递心意。\n原生 ArkUI · 无需账号 · 不经云端'))
+      this.info('AloeSend', '为鸿蒙重新设计的本地分享体验。\n跨越设备，传递心意。\n原生 ArkUI · 无需账号 · 不经云端')
       Text($r('app.string.build_version')).fontSize(14).fontColor($r('sys.color.font_secondary')).margin({ bottom: 24 })
-      this.info(this.store.t('感谢开源社区'), this.store.t('LocalSend 和所有贡献者，让跨平台分享成为可能。\n源码：github.com/Aloereed/localsend-ohos'))
+      this.info('感谢开源社区', 'LocalSend 和所有贡献者，让跨平台分享成为可能。\n源码：github.com/Aloereed/localsend-ohos')
       Button(this.store.t('贡献者与翻译者')).width('100%').height(48).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText).onClick(() => this.route = 'credits')
       Row({ space: 12 }) {
         Button(this.store.t('源代码')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/Aloereed/localsend-ohos'))

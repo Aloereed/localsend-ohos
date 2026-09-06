@@ -23,19 +23,19 @@ export struct SettingsView {
 
   @Builder
   title(text: string) {
-    Text(text).fontSize(15).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_secondary'))
+    Text(this.store.t(text)).fontSize(15).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_secondary'))
       .width('100%').padding({ left: 8, top: 22, bottom: 10 })
   }
 
   @Builder
   link(text: string, detail: string, destination: string) {
     Row({ space: 10 }) {
-      Text(text).fontSize(16).fontColor($r('sys.color.font_primary')).layoutWeight(1)
-      Text(destination === 'diagnostics' ? this.store.t(this.store.serverStatus) : destination === 'network' ? this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选') : detail)
+      Text(this.store.t(text)).fontSize(16).fontColor($r('sys.color.font_primary')).layoutWeight(1)
+      Text(destination === 'diagnostics' ? this.store.t(this.store.serverStatus) : destination === 'network' ? this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选') : this.store.t(detail))
         .fontSize(13).fontColor($r('sys.color.font_secondary'))
       Text('›').fontSize(24).fontColor($r('sys.color.font_secondary'))
     }.padding(18).width('100%').constraintSize({ minHeight: 58 }).onClick(() => this.onNavigate(destination))
-      .accessibilityText(`${text} ${detail}`)
+      .accessibilityText(`${this.store.t(text)} ${this.store.t(detail)}`)
   }
 
   toggleValue(key: string): boolean {
@@ -58,8 +58,8 @@ export struct SettingsView {
   toggle(title: string, detail: string, key: string) {
     Row({ space: 12 }) {
       Column({ space: 5 }) {
-        Text(title).fontSize(16).fontColor($r('sys.color.font_primary'))
-        Text(detail).fontSize(12).fontColor($r('sys.color.font_secondary'))
+        Text(this.store.t(title)).fontSize(16).fontColor($r('sys.color.font_primary'))
+        Text(this.store.t(detail)).fontSize(12).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1)
       Toggle({ type: ToggleType.Switch, isOn: this.toggleValue(key) }).selectedColor(this.store.settings.accent)
         .onChange((value: boolean) => {
@@ -79,7 +79,7 @@ export struct SettingsView {
           this.store.save();
           if (key === 'visible') localSend.announce();
           if (key === 'https') this.store.notice = this.store.t('加密设置已保存，请在没有传输时重启服务');
-        }).accessibilityText(title)
+        }).accessibilityText(this.store.t(title))
     }.padding(18).width('100%')
   }
 
@@ -101,7 +101,7 @@ export struct SettingsView {
 
   build() {
     Column() {
-      this.title(this.store.t('设备'))
+      this.title('设备')
       Column({ space: 12 }) {
         Text(this.store.t('设备名称')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
         TextInput({ text: this.alias, placeholder: this.store.t('设备名称') }).maxLength(40).onChange((value: string) => this.alias = value)
@@ -116,7 +116,7 @@ export struct SettingsView {
           this.store.save(); localSend.announce(); this.store.notice = this.store.t('设备名称已保存');
         })
       }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-      this.title(this.store.t('外观'))
+      this.title('外观')
       Column() {
         Row() {
           Text(this.store.t('语言')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
@@ -147,19 +147,19 @@ export struct SettingsView {
             })
           }.width('100%')
         }.padding(18).width('100%')
-        this.toggle(this.store.t('界面动画'), this.store.t('自然流畅的页面过渡'), 'animation')
-        this.toggle(this.store.t('轻量效果'), this.store.t('关闭背景模糊，使用实色表面'), 'effects')
-        this.toggle(this.store.t('OLED 纯黑背景'), this.store.t('深色模式下使用纯黑背景'), 'black')
+        this.toggle('界面动画', '自然流畅的页面过渡', 'animation')
+        this.toggle('轻量效果', '关闭背景模糊，使用实色表面', 'effects')
+        this.toggle('OLED 纯黑背景', '深色模式下使用纯黑背景', 'black')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-      this.title(this.store.t('接收'))
+      this.title('接收')
       Column() {
-        this.toggle(this.store.t('允许发现'), this.store.t('在同一网络中显示本设备'), 'visible')
-        this.toggle(this.store.t('自动接收'), this.store.t('信任当前网络时使用，无需逐次确认'), 'quickSave')
-        this.toggle(this.store.t('仅收藏设备自动接收'), this.store.t('其他设备仍需手动确认'), 'favorites')
-        this.toggle(this.store.t('保留历史'), this.store.t('记录仅保存在当前设备'), 'history')
-        this.toggle(this.store.t('自动完成'), this.store.t('成功传输后结束会话'), 'finish')
-        this.toggle(this.store.t('接收后打开消息'), this.store.t('文件或文字收到后切换到对应会话'), 'messages')
-        this.toggle(this.store.t('接收后提示保存到相册'), this.store.t('图片和视频接收完成后，通过系统确认保存到相册'), 'gallery')
+        this.toggle('允许发现', '在同一网络中显示本设备', 'visible')
+        this.toggle('自动接收', '信任当前网络时使用，无需逐次确认', 'quickSave')
+        this.toggle('仅收藏设备自动接收', '其他设备仍需手动确认', 'favorites')
+        this.toggle('保留历史', '记录仅保存在当前设备', 'history')
+        this.toggle('自动完成', '成功传输后结束会话', 'finish')
+        this.toggle('接收后打开消息', '文件或文字收到后切换到对应会话', 'messages')
+        this.toggle('接收后提示保存到相册', '图片和视频接收完成后，通过系统确认保存到相册', 'gallery')
         Column({ space: 12 }) {
           Text(this.store.t('文件保存位置')).fontSize(16).fontColor($r('sys.color.font_primary')).width('100%')
           Text(this.store.settings.destinationMode !== 'private' ? this.store.settings.destination : this.store.t('应用内安全保存，可在接收历史中打开、分享或另存为'))
@@ -174,7 +174,7 @@ export struct SettingsView {
             }
           }.width('100%')
         }.padding(18)
-        this.link(this.store.t('接收历史'), '', 'history')
+        this.link('接收历史', '', 'history')
         Column({ space: 10 }) {
           Text(this.store.t('接收 PIN')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
           TextInput({ text: this.pin, placeholder: this.store.t('留空表示不设 PIN') }).type(InputType.Number).maxLength(12)
@@ -184,7 +184,7 @@ export struct SettingsView {
           }).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
         }.padding(18)
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-      this.title(this.store.t('网络'))
+      this.title('网络')
       Column() {
         Column({ space: 12 }) {
           Text(this.store.t(this.store.serverStatus)).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
@@ -196,11 +196,11 @@ export struct SettingsView {
               .enabled(this.store.listenerRunning && !this.store.activeTransfers).onClick(() => localSend.pause())
           }.width('100%')
         }.padding(18).width('100%')
-        this.link(this.store.t('连接诊断'), this.store.t(this.store.serverStatus), 'diagnostics')
-        this.link(this.store.t('网络接口'), this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选'), 'network')
-        this.toggle(this.store.t('高级设置'), this.store.t('端口与组播地址'), 'advanced')
+        this.link('连接诊断', this.store.t(this.store.serverStatus), 'diagnostics')
+        this.link('网络接口', this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选'), 'network')
+        this.toggle('高级设置', '端口与组播地址', 'advanced')
         if (this.store.settings.advanced) {
-          this.toggle(this.store.t('HTTPS 加密传输'), this.store.t('建议保持开启；修改后需重启接收服务'), 'https')
+          this.toggle('HTTPS 加密传输', '建议保持开启；修改后需重启接收服务', 'https')
           Column({ space: 12 }) {
             Text(this.store.t('设备型号')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
             TextInput({ text: this.model, placeholder: 'HarmonyOS' }).maxLength(80).onChange((value: string) => this.model = value)
@@ -219,14 +219,14 @@ export struct SettingsView {
           }.padding(18)
         }
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-      this.title(this.store.t('帮助与支持'))
+      this.title('帮助与支持')
       Column() {
-        this.link(this.store.t('使用帮助'), '', 'help')
-        this.link(this.store.t('隐私政策'), '', 'privacy')
-        this.link(this.store.t('开源许可'), '', 'licenses')
-        this.link(this.store.t('更新记录'), '', 'changelog')
-        this.link(this.store.t('关于 AloeSend'), this.store.t('原生鸿蒙'), 'about')
-        this.link(this.store.t('支持开源项目'), '', 'donate')
+        this.link('使用帮助', '', 'help')
+        this.link('隐私政策', '', 'privacy')
+        this.link('开源许可', '', 'licenses')
+        this.link('更新记录', '', 'changelog')
+        this.link('关于 AloeSend', '原生鸿蒙', 'about')
+        this.link('支持开源项目', '', 'donate')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
     }.width('100%')
   }

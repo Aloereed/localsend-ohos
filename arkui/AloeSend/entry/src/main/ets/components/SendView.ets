@@ -75,7 +75,7 @@ export struct SendView {
   action(label: string, symbol: string, kind: string) {
     Column({ space: 8 }) {
       AppIcon({ name: kind, iconSize: 28, tint: this.store.accentText })
-      Text(label).fontSize(13).fontColor($r('sys.color.font_primary'))
+      Text(this.store.t(label)).fontSize(13).fontColor($r('sys.color.font_primary'))
     }.width(104).constraintSize({ minHeight: 96 }).padding({ top: 20, bottom: 20 }).backgroundColor(this.store.surfaceColor).borderRadius(24)
       .border({ width: 0.5, color: this.store.hairlineColor })
       .onClick(() => {
@@ -142,11 +142,11 @@ export struct SendView {
     Column({ space: 14 }) {
       Scroll() {
         Row({ space: 10 }) {
-        this.action(this.store.t('文件'), '▤', 'file')
-        this.action(this.store.t('照片'), '▧', 'photo')
-        this.action(this.store.t('文件夹'), '▱', 'folder')
-        this.action(this.store.t('文字 / 链接'), 'Aa', 'text')
-        this.action(this.store.t('剪贴板'), '▣', 'clipboard')
+        this.action('文件', '▤', 'file')
+        this.action('照片', '▧', 'photo')
+        this.action('文件夹', '▱', 'folder')
+        this.action('文字 / 链接', 'Aa', 'text')
+        this.action('剪贴板', '▣', 'clipboard')
         }
       }.width('100%').scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off)
       if (this.store.busy) { LoadingProgress().width(32).height(32) }

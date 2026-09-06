@@ -9,7 +9,7 @@ export struct FileDetailsView {
   @Builder
   field(label: string, value: string) {
     Column({ space: 6 }) {
-      Text(label).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
+      Text(this.store.t(label)).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
       Text(value).fontSize(15).lineHeight(22).fontColor($r('sys.color.font_primary')).width('100%').copyOption(CopyOptions.LocalDevice)
     }.width('100%').padding({ top: 8, bottom: 8 })
   }
@@ -24,14 +24,14 @@ export struct FileDetailsView {
           } else {
             AppIcon({ name: this.entry.text ? 'text' : 'file', iconSize: 48, tint: this.store.accentText })
           }
-          this.field(this.store.t('名称'), this.entry.name)
-          this.field(this.store.t('大小与类型'), `${formatSize(this.entry.size)} · ${mimeForName(this.entry.name)}`)
-          this.field(this.store.t('设备'), this.entry.peer)
-          this.field(this.store.t('时间'), new Date(this.entry.time).toLocaleString())
-          if (this.entry.text) { this.field(this.store.t('文字'), this.entry.text) }
-          if (this.entry.exportedPath) { this.field(this.store.t('已另存到'), this.entry.exportedPath) }
-          if (this.entry.galleryPath) { this.field(this.store.t('相册副本'), this.entry.galleryPath) }
-          if (this.entry.path) { this.field(this.store.t('文件位置'), this.entry.path) }
+          this.field('名称', this.entry.name)
+          this.field('大小与类型', `${formatSize(this.entry.size)} · ${mimeForName(this.entry.name)}`)
+          this.field('设备', this.entry.peer)
+          this.field('时间', new Date(this.entry.time).toLocaleString())
+          if (this.entry.text) { this.field('文字', this.entry.text) }
+          if (this.entry.exportedPath) { this.field('已另存到', this.entry.exportedPath) }
+          if (this.entry.galleryPath) { this.field('相册副本', this.entry.galleryPath) }
+          if (this.entry.path) { this.field('文件位置', this.entry.path) }
         }.width('100%').padding({ bottom: 20 })
       }.width('100%').layoutWeight(1)
       if (this.entry.path) {
