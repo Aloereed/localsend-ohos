@@ -4,16 +4,28 @@ import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 import { EmptyState } from './EmptyState';
 import { util } from '@kit.ArkTS';
+import { FileDetailsView } from './FileDetailsView';
 
 @Component
 export struct MessagesView {
-  @ObjectLink store: AppStore;
+  @ObjectLink @Watch('consumeTarget') store: AppStore;
   @Link detailOpen: boolean;
   @State peer: Peer = new Peer();
   @State query: string = '';
   @State draft: string = '';
   @State sending: boolean = false;
+  @State showDetails: boolean = false;
+  @State detailEntry: HistoryEntry = new HistoryEntry();
   onTransfers: () => void = () => {};
+
+  aboutToAppear(): void { this.consumeTarget(); }
+  consumeTarget(): void {
+    const target = this.store.messageTarget;
+    if (target) { this.store.messageTarget = undefined; this.open(target); }
+  }
+
+  @Builder
+  detailsSheet() { FileDetailsView({ store: this.store, entry: this.detailEntry }) }
 
   open(peer: Peer): void {
     this.peer = this.store.peers.find((item: Peer) => peer.fingerprint ? item.fingerprint === peer.fingerprint : item.alias === peer.alias) || peer;
@@ -76,6 +88,7 @@ export struct MessagesView {
             .fontSize(11).fontColor($r('sys.color.font_secondary')).layoutWeight(1)
           Button(this.store.t('更多')).fontSize(12).height(30).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
             .bindMenu([
+              { value: this.store.t('详情'), action: () => { this.detailEntry = entry; this.showDetails = true; } },
               { value: entry.text ? this.store.t('复制文字') : this.store.t('打开文件'), action: () => { if (entry.text) this.store.copy(entry.text); else this.store.openFile(entry); } },
               { value: this.store.t('系统分享'), action: () => this.store.shareEntry(entry) },
               { value: this.store.t('再次发送'), action: () => this.store.resend(entry) },
@@ -160,5 +173,6 @@ export struct MessagesView {
         }.width('100%').layoutWeight(1).align(Alignment.Top)
       }
     }.width('100%').height('100%').padding({ left: 24, right: 24, top: 8, bottom: 12 }).constraintSize({ maxWidth: 720 })
+      .bindSheet($$this.showDetails, this.detailsSheet(), { height: SheetSize.LARGE, showClose: true })
   }
 }

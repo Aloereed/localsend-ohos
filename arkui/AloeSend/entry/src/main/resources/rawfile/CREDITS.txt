@@ -1,0 +1,57 @@
+LocalSend / AloeSend
+
+LocalSend: Tien Do Nam (@Tienisto)
+HarmonyOS: Aloereed
+
+Contributors
+Gabriel Lima (@TheGB0077)
+@Caesarovich
+@gitstart
+@brogers5
+@Nixuge
+@proletarius101
+@sikmir
+@sitiom
+
+packagers
+Chocolatey: @brogers5
+Winget: @sitiom, @Tienisto
+Scoop: @sitiom
+Homebrew: @Tienisto
+Flathub: @proletarius101, @Tienisto
+Nix: @sikmir, @linsui
+Snapcraft: @thatLeaflet
+AUR: @Nixuge
+F-Droid: @linsui, @Tienisto
+
+translators
+ar: @Adam1141
+bn: @RishiASheth
+cs: @Amereyeu
+da: @Limfjorden
+de: Tien Do Nam (@Tienisto)
+el: Petros Kyladitis (@multipetros)
+en: Tien Do Nam (@Tienisto), @Coopydood
+esEs: Esteban Daniel Saracho (@esaracho), Rafael González (@LoboGuardian)
+fa: @farshad991
+filPh: Bryan James Ilaga (@BryanJames16), Linwel Colmo (@leanwell)
+fr: @Nixuge
+he: @ShlomoCode
+hu: @gidano
+it: Francesco Marastoni (@Francesco146), Dario Landucci (@LandOfDar)
+ja: soya_daizu (@soya-daizu)
+km: Chandara H. Wei (@nidexingg)
+ko: @mgmix
+nl: Martijn van Berkel (@Flitskikker), @stijnphr, @jan-vandenberg
+pl: @Radplay, @trag1c, @j-koziel
+ptBr: Gabriel Lima (@TheGB0077), Arthur Lobo (@ArthurLobopro)
+ro: @UnifeGi
+ru: Sergiy Tkachuk (@sergd88)
+sr: Nebojsa Tomic (@nebojsatomic), Nemanja Dimitrijevic (@nemanya-d)
+th: @watchakorn-18k
+tr: Mert Şişmanoğlu (@mertssmnoglu), Ali Mert Erdogan (@aliwert)
+uk: Sergiy Tkachuk (@sergd88)
+vi: @faea726
+zhCn: @nkh0472, @graphemecluster
+zhHk: @graphemecluster
+zhTw: @Neo1102, @graphemecluster

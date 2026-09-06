@@ -120,7 +120,7 @@ class UploadSink implements BodySink {
     entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
     if (this.fileInfo.preview && this.fileInfo.fileType === 'text/plain' && this.received <= 400000) entry.text = await fs.readText(this.path);
     await this.service.store.addHistory(entry);
-    await this.service.store.saveReceivedCopy(entry);
+    await this.service.store.saveReceivedCopy(entry, this.session.view.destination, this.session.id);
     this.service.finishReceiveFile(this.session);
     await this.channel.respond(200);
   }
@@ -353,6 +353,8 @@ export class LocalSendService {
     session.legacy = head.target.includes('/v1/');
     session.files = payload.files; session.view.id = session.id; session.view.peer = session.peer.alias;
     session.view.direction = 'receive'; session.view.encrypted = channel.encrypted;
+    session.view.peerInfo = session.peer;
+    session.view.destination = this.store.settings.destinationMode === 'folder' ? this.store.settings.destination : '';
     for (const id of ids) {
       const file = payload.files[id];
       if (!file || typeof file.fileName !== 'string' || !Number.isSafeInteger(file.size) || file.size < 0 || file.id !== id) throw new Error('文件信息无效');
@@ -398,6 +400,14 @@ export class LocalSendService {
   }
 
   acceptReceive(accepted: boolean): void { this.receiving?.resolve(accepted); }
+
+  async chooseReceiveDestination(): Promise<void> {
+    const session = this.receiving; if (!session || session.accepted) return;
+    try {
+      const directory = await this.store.pickDestination();
+      if (directory && this.receiving === session && !session.accepted) { session.view.destination = directory; this.store.updateTransfer(session.view); }
+    } catch (e) { this.store.fail('选择本次接收目录失败', e as Error); }
+  }
 
   selectReceiveFile(id: string, selected: boolean): void {
     const file = this.receiving?.view.files.find((item: TransferFile) => item.id === id);
@@ -465,6 +475,7 @@ export class LocalSendService {
       for (const id of this.retryContexts.keys()) { if (!this.sending.has(id)) { this.retryContexts.delete(id); break; } }
     }
     transfer.peer = peer.alias; transfer.encrypted = peer.protocol === 'https';
+    transfer.peerInfo = peer;
     const fileInfos: Record<string, FileInfo> = {};
     for (const file of files) {
       const view = new TransferFile(); view.id = file.id; view.name = file.name; view.size = file.size; transfer.files.push(view);

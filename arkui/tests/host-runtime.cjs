@@ -24,6 +24,14 @@ const nativeFs = {
   async read(fd, data) { return (await handles.get(fd).read(new Uint8Array(data), 0, data.byteLength, null)).bytesRead; },
   async write(fd, data) { const b = typeof data === 'string' ? Buffer.from(data) : Buffer.from(data); return (await handles.get(fd).write(b, 0, b.length, null)).bytesWritten; },
   readText: file => fsp.readFile(file, 'utf8'),
+  async copyFile(source, destination) {
+    const buffer = Buffer.alloc(65536); let position = 0;
+    while (true) {
+      const { bytesRead } = await handles.get(source).read(buffer, 0, buffer.length, position);
+      if (!bytesRead) break;
+      await handles.get(destination).write(buffer, 0, bytesRead, position); position += bytesRead;
+    }
+  },
   mkdir: (file, recursion) => fsp.mkdir(file, { recursive: !!recursion }),
   rename: (a, b) => fsp.rename(a, b),
   unlink: file => fsp.unlink(file),
@@ -105,7 +113,8 @@ const mocks = {
     Base64Helper: class { encodeToStringSync(data) { return Buffer.from(data).toString('base64'); } decodeSync(data) { return new Uint8Array(Buffer.from(data, 'base64')); } },
   } },
   '@kit.CryptoArchitectureKit': { cryptoFramework },
-  '@kit.CoreFileKit': { fileIo: nativeFs, fileUri: { FileUri: class { constructor(uri) { this.name = path.basename(uri); } }, getUriFromPath: file => file }, picker: {} },
+  '@kit.CoreFileKit': { fileIo: nativeFs, fileUri: { FileUri: class { constructor(uri) { this.name = path.basename(uri); } }, getUriFromPath: file => file }, picker: {},
+    fileShare: { OperationMode: { READ_MODE: 1, WRITE_MODE: 2 }, activatePermission: async () => {}, persistPermission: async () => {} } },
   '@kit.BasicServicesKit': { pasteboard: {} },
   '@kit.ShareKit': { systemShare: {} },
   '@kit.LocalizationKit': { i18n: { System: { getSystemLanguage: () => 'zh-Hans' } } },

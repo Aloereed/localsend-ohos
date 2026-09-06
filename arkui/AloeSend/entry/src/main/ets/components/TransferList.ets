@@ -100,6 +100,11 @@ export struct TransferList {
             }.width('100%').padding({ top: 8, bottom: 8 })
           }, (file: TransferFile) => file.id)
           if (transfer.id === this.store.pendingReceive) {
+            Column({ space: 8 }) {
+              Text(this.store.t('本次保存位置')).fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
+              Text(transfer.destination || this.store.t('应用内安全保存')).fontSize(12).maxLines(3).fontColor($r('sys.color.font_secondary')).width('100%')
+              Button(this.store.t('更改本次目录')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.chooseReceiveDestination())
+            }.width('100%')
             Text(this.store.t('只接收你信任的内容。文件保存在本机，可在历史中另存为。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
             Row({ space: 12 }) {
               Button(this.store.t('拒绝')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor($r('sys.color.font_primary'))

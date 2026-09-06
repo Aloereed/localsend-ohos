@@ -2,6 +2,7 @@ import { AppStore, HistoryEntry, formatSize } from '../model/AppStore';
 import { EmptyState } from './EmptyState';
 import { AppIcon } from './AppIcon';
 import { LengthMetrics } from '@kit.ArkUI';
+import { FileDetailsView } from './FileDetailsView';
 
 @Component
 export struct LibraryView {
@@ -13,15 +14,7 @@ export struct LibraryView {
 
   @Builder
   previewSheet() {
-    Column({ space: 18 }) {
-      Text(this.preview.name).fontSize(20).fontWeight(FontWeight.Medium).maxLines(2).fontColor($r('sys.color.font_primary'))
-      Image(this.preview.path.startsWith('file://') ? this.preview.path : `file://${this.preview.path}`)
-        .width('100%').layoutWeight(1).objectFit(ImageFit.Contain)
-      Row({ space: 12 }) {
-        Button(this.store.t('分享')).layoutWeight(1).onClick(() => this.store.shareEntry(this.preview)).backgroundColor(this.store.accentFill)
-        Button(this.store.t('另存为')).layoutWeight(1).onClick(() => this.store.exportFile(this.preview)).backgroundColor(this.store.accentFill)
-      }.width('100%')
-    }.padding(24).width('100%').height('100%')
+    FileDetailsView({ store: this.store, entry: this.preview })
   }
 
   entries(): HistoryEntry[] {
@@ -49,6 +42,8 @@ export struct LibraryView {
           Text(`${new Date(entry.time).toLocaleString()} · ${formatSize(entry.size)}`)
             .fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
           Flex({ wrap: FlexWrap.Wrap, space: { main: LengthMetrics.vp(8), cross: LengthMetrics.vp(10) } }) {
+            Button(this.store.t('详情')).onClick(() => { this.preview = entry; this.showPreview = true; })
+              .fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_tertiary'))
             if (entry.text) {
               Button(this.store.t('复制')).onClick(() => this.store.copy(entry.text)).fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_tertiary'))
             } else if (entry.path) {

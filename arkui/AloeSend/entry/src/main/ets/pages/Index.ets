@@ -1,5 +1,5 @@
 import { common } from '@kit.AbilityKit';
-import { AppStore, appStore, Peer } from '../model/AppStore';
+import { AppStore, appStore, Peer, TransferView } from '../model/AppStore';
 import { SettingsView } from '../components/SettingsView';
 import { SendView } from '../components/SendView';
 import { LibraryView } from '../components/LibraryView';
@@ -10,6 +10,7 @@ import { PeerDetailView } from '../components/PeerDetailView';
 import { AppIcon } from '../components/AppIcon';
 import { MessagesView } from '../components/MessagesView';
 import { NetworkView } from '../components/NetworkView';
+import { util } from '@kit.ArkTS';
 
 @Entry
 @Component
@@ -21,10 +22,15 @@ struct Index {
   @State selectedPeer: Peer = new Peer();
   @State windowWidth: number = 400;
   @State messageDetail: boolean = false;
+  @State legalText: string = '';
+  @State creditsText: string = '';
 
   async aboutToAppear(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
-    this.store.onTransferCompleted = () => {
+    this.store.onTransferCompleted = (transfer: TransferView) => {
+      if (transfer.direction === 'receive' && transfer.peerInfo && this.store.settings.openMessagesOnReceive) {
+        this.store.messageTarget = transfer.peerInfo; this.tab = 2; this.route = '';
+      }
       if (!this.store.settings.autoFinish) return;
       setTimeout(() => {
         if (this.route === 'transfers' && this.store.batchRemaining === 0 &&
@@ -32,16 +38,22 @@ struct Index {
       }, 1200);
     };
     await localSend.start();
+    const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
+    context.resourceManager.getRawFileContent('LICENSE.txt').then((bytes: Uint8Array) => this.legalText = new util.TextDecoder().decodeToString(bytes)).catch(() => {});
+    context.resourceManager.getRawFileContent('CREDITS.txt').then((bytes: Uint8Array) => this.creditsText = new util.TextDecoder().decodeToString(bytes)).catch(() => {});
   }
 
   onBackPress(): boolean {
-    if (this.route) { this.route = ''; return true; }
+    if (this.route) { this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : ''; return true; }
     if (this.tab === 2 && this.messageDetail) { this.messageDetail = false; return true; }
     if (this.tab !== 0) { this.tab = 0; return true; }
     return false;
   }
 
   title(): string {
+    if (this.route === 'donate') return this.store.t('支持开源项目');
+    if (this.route === 'credits') return this.store.t('贡献者与翻译者');
+    if (this.route === 'license-full') return 'Apache License 2.0';
     if (this.route === 'network') return this.store.t('网络接口');
     if (this.route === 'peer') return this.store.t('设备详情');
     if (this.route === 'transfers') return this.store.t('传输任务');
@@ -100,7 +112,15 @@ struct Index {
 
   @Builder
   details() {
-    if (this.route === 'network') { NetworkView({ store: this.store }) }
+    if (this.route === 'license-full') {
+      this.info('Apache License 2.0', this.legalText || this.store.t('正在读取…'))
+    } else if (this.route === 'credits') {
+      this.info(this.store.t('感谢每一位贡献者'), this.creditsText || this.store.t('正在读取…'))
+    } else if (this.route === 'donate') {
+      this.info(this.store.t('支持开源项目'), this.store.t('你可以自愿支持 LocalSend 的持续开发。所有文件分享功能均可免费使用。'))
+      Button('GitHub Sponsors').width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/sponsors/Tienisto'))
+      Button('Ko-fi').width('100%').height(48).margin({ top: 16 }).fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_primary')).onClick(() => this.store.openUrl('https://ko-fi.com/tienisto'))
+    } else if (this.route === 'network') { NetworkView({ store: this.store }) }
     else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer, onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; } }) }
     else if (this.route === 'transfers') { TransferList({ store: this.store }) }
     else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
@@ -125,14 +145,22 @@ struct Index {
     } else if (this.route === 'licenses') {
       this.info('LocalSend / AloeSend', this.store.t('基于 LocalSend 项目，遵循 Apache License 2.0。\nhttps://github.com/localsend/localsend\nhttps://github.com/Aloereed/localsend-ohos'))
       this.info(this.store.t('原生实现'), this.store.t('ArkUI 界面和 ArkTS 平台服务使用 HarmonyOS SDK。原项目第三方版权声明保留在仓库对应依赖中。'))
+      Button(this.store.t('阅读完整许可')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.route = 'license-full')
     } else if (this.route === 'changelog') {
       this.info(this.store.t('原生迁移 · M2'), this.store.t('系统文件与照片选择、文件夹选择、文字和剪贴板、选择清单、重命名、历史与消息搜索、另存为、主题与接收设置。'))
       this.info(this.store.t('原生迁移 · M1'), this.store.t('四个原生页面、鸿蒙浅深色资源、本地偏好存储、可追溯的未签名里程碑构建。'))
     } else if (this.route === 'web') {
       WebShareView({ store: this.store })
     } else {
+      Stack() { Image($r('app.media.aloe_mark')).width(62).height(62) }.width(104).height(104).borderRadius(34).backgroundColor(this.store.accentFill).margin({ bottom: 24 })
       this.info('AloeSend', this.store.t('为鸿蒙重新设计的本地分享体验。\n跨越设备，传递心意。\n原生 ArkUI · 无需账号 · 不经云端'))
+      Text($r('app.string.build_version')).fontSize(14).fontColor($r('sys.color.font_secondary')).margin({ bottom: 24 })
       this.info(this.store.t('感谢开源社区'), this.store.t('LocalSend 和所有贡献者，让跨平台分享成为可能。\n源码：github.com/Aloereed/localsend-ohos'))
+      Button(this.store.t('贡献者与翻译者')).width('100%').height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText).onClick(() => this.route = 'credits')
+      Row({ space: 12 }) {
+        Button(this.store.t('源代码')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/Aloereed/localsend-ohos'))
+        Button(this.store.t('报告问题')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/Aloereed/localsend-ohos/issues'))
+      }.width('100%').margin({ top: 16 })
     }
   }
 
@@ -182,7 +210,8 @@ struct Index {
         }.layoutWeight(1).width('100%')
       } else if (this.route) {
         Row() {
-          Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.route = '')
+          Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
+            .onClick(() => this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : '')
           Text(this.title()).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
         }.width('100%').padding(12)
         Scroll() { Column() { this.details() }.padding(24).constraintSize({ maxWidth: 720 }).width('100%') }.layoutWeight(1).width('100%').align(Alignment.Top)

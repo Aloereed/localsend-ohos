@@ -2,12 +2,13 @@ import { preferences } from '@kit.ArkData';
 import { common, ConfigurationConstant, abilityAccessCtrl } from '@kit.AbilityKit';
 import { picker, fileIo as fs, fileUri, fileShare } from '@kit.CoreFileKit';
 import { systemShare } from '@kit.ShareKit';
-import { pasteboard } from '@kit.BasicServicesKit';
+import { pasteboard, deviceInfo } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText } from './Locale';
 import { readableColor } from './Colors';
 import { LocalInterface } from '../network/Addresses';
+import { safeRelativePath } from '../network/Protocol';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -38,6 +39,7 @@ export class HistoryEntry {
   time: number = Date.now();
   size: number = 0;
   path: string = '';
+  exportedPath: string = '';
   text: string = '';
   status: string = 'complete';
   peerInfo: Peer | undefined = undefined;
@@ -63,6 +65,8 @@ export class TransferView {
   started: number = Date.now();
   finished: number = 0;
   encrypted: boolean = true;
+  peerInfo: Peer | undefined = undefined;
+  destination: string = '';
 }
 
 export class WebAccessRequest {
@@ -81,6 +85,7 @@ export class AppSettings {
   favoriteQuickSave: boolean = false;
   saveHistory: boolean = true;
   autoFinish: boolean = true;
+  openMessagesOnReceive: boolean = false;
   animations: boolean = true;
   visible: boolean = true;
   pin: string = '';
@@ -144,9 +149,11 @@ export class AppStore {
   batchRemaining: number = 0;
   incomingShare: boolean = false;
   systemDark: boolean = false;
-  onTransferCompleted: () => void = () => {};
+  messageTarget: Peer | undefined = undefined;
+  onTransferCompleted: (transfer: TransferView) => void = () => {};
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
+  private persistentHistory: Set<string> = new Set();
   private initialization: Promise<void> | undefined = undefined;
 
   async init(context: common.UIAbilityContext): Promise<void> {
@@ -169,8 +176,10 @@ export class AppStore {
       // Older native milestones did not persist this field. Missing must never
       // silently downgrade an existing installation to clear-text transport.
       if (typeof this.settings.https !== 'boolean') this.settings.https = true;
+      if (typeof this.settings.openMessagesOnReceive !== 'boolean') this.settings.openMessagesOnReceive = false;
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
       this.history = JSON.parse(await this.storage.get('history', '[]') as string) as HistoryEntry[];
+      this.persistentHistory = new Set(this.history.map((entry: HistoryEntry) => entry.id));
       this.applyTheme();
       this.ready = true;
       this.log('原生状态层已初始化');
@@ -203,7 +212,7 @@ export class AppStore {
     this.transfers = [snapshot, ...this.transfers.filter((item: TransferView) => item.id !== transfer.id)].slice(0, 30);
     if (this.context) backgroundKeeper.sync(this.transfers.some((item: TransferView) => item.status === 'transferring'), this.context,
       (message: string) => this.log(message));
-    if (transfer.status === 'complete' && previous?.status !== 'complete') this.onTransferCompleted();
+    if (transfer.status === 'complete' && previous?.status !== 'complete') this.onTransferCompleted(transfer);
   }
 
   fail(title: string, error: Error): void {
@@ -217,7 +226,7 @@ export class AppStore {
       this.settings = JSON.parse(JSON.stringify(this.settings)) as AppSettings;
       await this.storage?.put('settings', JSON.stringify(this.settings));
       await this.storage?.put('favorites', JSON.stringify(this.favorites));
-      await this.storage?.put('history', JSON.stringify(this.history));
+      await this.storage?.put('history', JSON.stringify(this.history.filter((entry: HistoryEntry) => this.persistentHistory.has(entry.id))));
       await this.storage?.flush();
     } catch (e) { this.fail('保存设置失败', e as Error); }
   }
@@ -332,8 +341,9 @@ export class AppStore {
   }
 
   async addHistory(entry: HistoryEntry): Promise<void> {
-    if (!this.settings.saveHistory) return;
     this.history = [entry, ...this.history].slice(0, 1000);
+    if (this.settings.saveHistory) this.persistentHistory.add(entry.id);
+    this.persistentHistory = new Set(this.history.filter((item: HistoryEntry) => this.persistentHistory.has(item.id)).map((item: HistoryEntry) => item.id));
     await this.save();
   }
 
@@ -361,6 +371,7 @@ export class AppStore {
         try { await fs.copyFile(source.fd, destination.fd); }
         finally { await fs.close(destination); }
       } finally { await fs.close(source); }
+      entry.exportedPath = destinations[0]; await this.save();
       this.notice = '文件已保存到所选位置';
     } catch (e) { this.fail('保存文件失败', e as Error); }
   }
@@ -373,39 +384,43 @@ export class AppStore {
   }
 
   async chooseDestination(): Promise<void> {
-    if (!this.context) return;
     try {
-      let uris: string[];
-      if (canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
-        const options = new picker.DocumentSelectOptions(); options.maxSelectNumber = 1; options.selectMode = picker.DocumentSelectMode.FOLDER;
-        uris = await new picker.DocumentViewPicker(this.context).select(options);
-      } else {
-        const options = new picker.DocumentSaveOptions(); options.pickerMode = picker.DocumentPickerMode.DOWNLOAD;
-        uris = await new picker.DocumentViewPicker(this.context).save(options);
-      }
-      if (!uris.length) return;
-      const policy: fileShare.PolicyInfo[] = [{ uri: uris[0], operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }];
-      await fileShare.persistPermission(policy);
-      await fileShare.activatePermission(policy);
-      this.settings.destination = uris[0]; this.settings.destinationMode = 'folder'; await this.save();
+      const destination = await this.pickDestination(); if (!destination) return;
+      this.settings.destination = destination; this.settings.destinationMode = 'folder'; await this.save();
       this.notice = '接收后会自动保存到此目录，并保留应用内副本';
     } catch (e) { this.fail('设置目录失败，仍可在历史中另存为', e as Error); }
   }
 
-  async saveReceivedCopy(entry: HistoryEntry): Promise<void> {
-    if (this.settings.destinationMode !== 'folder' || !this.settings.destination || !entry.path) return;
+  async pickDestination(): Promise<string> {
+    if (!this.context) return '';
+    let uris: string[];
+    if (canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
+      const options = new picker.DocumentSelectOptions(); options.maxSelectNumber = 1; options.selectMode = picker.DocumentSelectMode.FOLDER;
+      uris = await new picker.DocumentViewPicker(this.context).select(options);
+    } else {
+      const options = new picker.DocumentSaveOptions(); options.pickerMode = picker.DocumentPickerMode.DOWNLOAD;
+      uris = await new picker.DocumentViewPicker(this.context).save(options);
+    }
+    if (!uris.length) return '';
+    const policy: fileShare.PolicyInfo[] = [{ uri: uris[0], operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }];
+    await fileShare.persistPermission(policy); await fileShare.activatePermission(policy); return uris[0];
+  }
+
+  async saveReceivedCopy(entry: HistoryEntry, sessionDestination: string | undefined = undefined, sessionId: string = ''): Promise<void> {
+    const destination = sessionDestination === undefined ? (this.settings.destinationMode === 'folder' ? this.settings.destination : '') : sessionDestination;
+    if (!destination || !entry.path) return;
     try {
-      await fileShare.activatePermission([{ uri: this.settings.destination, operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
+      await fileShare.activatePermission([{ uri: destination, operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
       // A unique per-transfer directory prevents overwriting unrelated user files.
-      const directory = `${this.settings.destination}/AloeSend-${entry.id}`;
-      await fs.mkdir(directory, true);
-      const name = entry.name.split('/').pop() || 'file';
-      const output = await fs.open(`${directory}/${name}`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
+      const path = `${destination}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
+      await fs.mkdir(path.slice(0, path.lastIndexOf('/')), true);
+      const output = await fs.open(path, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
       try {
         const input = await fs.open(entry.path, fs.OpenMode.READ_ONLY);
         try { await fs.copyFile(input.fd, output.fd); }
         finally { await fs.close(input); }
       } finally { await fs.close(output); }
+      entry.exportedPath = path; await this.save();
     } catch (e) { this.fail('文件已接收，但另存到所选目录失败', e as Error); }
   }
 
@@ -413,7 +428,8 @@ export class AppStore {
     if (!this.context) return;
     try {
       const record: systemShare.SharedRecord = entry.text ? { utd: 'general.plain-text', content: entry.text } :
-        { utd: 'general.file', uri: entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), title: entry.name };
+        { utd: mimeForName(entry.name).startsWith('image/') ? 'general.image' : mimeForName(entry.name).startsWith('video/') ? 'general.video' : 'general.file',
+          uri: entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), title: entry.name };
       const controller = new systemShare.ShareController(new systemShare.SharedData(record));
       await controller.show(this.context, { previewMode: systemShare.SharePreviewMode.DETAIL });
     } catch (e) { this.fail('打开系统分享失败', e as Error); }
@@ -426,6 +442,22 @@ export class AppStore {
       else { this.notice = '请重新选择原文件'; return; }
       this.incomingShare = true;
     } catch (e) { this.fail('原文件已不可用', e as Error); }
+  }
+
+  async openUrl(url: string): Promise<void> {
+    if (!/^https?:\/\//i.test(url)) return;
+    try { await this.context?.startAbility({ action: 'ohos.want.action.viewData', uri: url }); }
+    catch (e) { this.fail('打开链接失败', e as Error); }
+  }
+
+  systemDeviceName(): string {
+    try { return deviceInfo.marketName || deviceInfo.productModel || 'HarmonyOS'; }
+    catch (_) { return 'HarmonyOS'; }
+  }
+
+  randomAlias(): string {
+    const names = this.settings.language === 'en' ? ['Aloe', 'Mint', 'Bamboo', 'Lime', 'Cedar'] : ['芦荟', '薄荷', '竹影', '青柠', '雪松'];
+    return `${names[Math.floor(Math.random() * names.length)]} ${Math.floor(1000 + Math.random() * 9000)}`;
   }
 }
 
