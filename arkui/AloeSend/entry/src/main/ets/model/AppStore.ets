@@ -173,6 +173,8 @@ export class AppStore {
   }
   busy: boolean = false;
   ready: boolean = false;
+  privacyAccepted: boolean = false;
+  onPrivacyAccepted: () => Promise<void> = async () => {};
   serverStatus: string = '未启动';
   listenerRunning: boolean = false;
   listenerPort: number = 53317;
@@ -212,6 +214,7 @@ export class AppStore {
     this.context = context;
     try {
       this.storage = await preferences.getPreferences(context, 'aloesend-native-v1');
+      this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
       const saved = await this.storage.get('settings', '') as string;
       if (saved) this.settings = JSON.parse(saved) as AppSettings;
       if (!this.settings.destinationMode) this.settings.destinationMode = 'private';
@@ -237,6 +240,17 @@ export class AppStore {
 
   log(message: string): void {
     this.logs = [`${new Date().toLocaleTimeString()}  ${message}`, ...this.logs].slice(0, 300);
+  }
+
+  async acceptPrivacy(): Promise<boolean> {
+    if (this.privacyAccepted) return true;
+    if (!this.storage) return false;
+    try {
+      await this.storage.put('privacy_policy_accepted', true);
+      await this.storage.flush();
+      this.privacyAccepted = true;
+      return true;
+    } catch (e) { this.fail('保存隐私选择失败，请重试', e as Error); return false; }
   }
 
   t(text: string): string { return uiText(text, this.settings.language); }

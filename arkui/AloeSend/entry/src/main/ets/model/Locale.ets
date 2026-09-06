@@ -1,6 +1,20 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "保存隐私选择失败，请重试": "Could not save your privacy choice. Please try again.",
+  "退出应用失败": "Could not close the app",
+  "启动应用失败": "Could not start the app",
+  "隐私优先，本地优先": "Privacy first, local first",
+  "AloeSend 基于 LocalSend 构建，专注于局域网传输。": "AloeSend is built on LocalSend for local network transfers.",
+  "数据使用": "Data use",
+  "不为广告、行为分析或用户画像收集数据。设备名称和标识用于局域网发现与连接，传输内容只发送给你选择的设备。": "We do not collect data for advertising, behavioral analytics or profiling. Device names and identifiers support local discovery and connections. Transfer content goes only to devices you select.",
+  "同意后通过系统对话框申请下载目录权限。拒绝目录授权仍可接收到应用内，并在历史中另存为。传输期间会申请系统后台传输任务。": "After you agree, a system dialog requests download folder access. If declined, files can still be received in app storage and exported from history. Active transfers request a system background task.",
+  "系统与第三方": "System and third parties",
+  "操作系统、设备制造商和其他应用可能依据各自规则处理数据，请同时查阅它们的隐私政策。": "Your operating system, device manufacturer and other apps may process data under their own rules. Please also review their privacy policies.",
+  "政策更新": "Policy updates",
+  "更新后的隐私说明会在应用内展示。你可以随时从设置重新阅读。": "Updated privacy information will appear in the app. You can read it again in Settings at any time.",
+  "不同意并退出": "Decline and exit",
+  "同意并继续": "Agree and continue",
   "所在文件夹": "Show folder",
   "无法打开所在文件夹，可复制文件位置": "Could not open the folder. You can copy the file location.",
   "轻量效果": "Reduce visual effects",

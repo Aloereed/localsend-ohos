@@ -13,6 +13,7 @@ import { NetworkView } from '../components/NetworkView';
 import { util } from '@kit.ArkTS';
 import { ReceiveRequestView } from '../components/ReceiveRequestView';
 import { DownloadDirectoryPicker } from '../components/DownloadDirectoryPicker';
+import { PrivacyView } from '../components/PrivacyView';
 
 @Entry
 @Component
@@ -28,6 +29,7 @@ struct Index {
   @State creditsText: string = '';
   @State directoryVisible: boolean = false;
   @State directoryInitial: string = '';
+  @State acceptingPrivacy: boolean = false;
   private directoryResolver: ((path: string) => void) | undefined = undefined;
 
   async aboutToAppear(): Promise<void> {
@@ -47,11 +49,25 @@ struct Index {
           !this.store.transfers.some((item) => item.status === 'waiting' || item.status === 'transferring')) this.route = '';
       }, 1200);
     };
-    await localSend.start();
-    await this.store.ensureDownloadAccess();
+    if (this.store.privacyAccepted) await this.startServices();
     const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
     context.resourceManager.getRawFileContent('LICENSE.txt').then((bytes: Uint8Array) => this.legalText = new util.TextDecoder().decodeToString(bytes)).catch(() => {});
     context.resourceManager.getRawFileContent('CREDITS.txt').then((bytes: Uint8Array) => this.creditsText = new util.TextDecoder().decodeToString(bytes)).catch(() => {});
+  }
+
+  async startServices(): Promise<void> {
+    if (!this.store.privacyAccepted) return;
+    await localSend.start();
+    await this.store.ensureDownloadAccess();
+    await this.store.onPrivacyAccepted();
+  }
+
+  async acceptPrivacy(): Promise<void> {
+    if (this.acceptingPrivacy) return;
+    this.acceptingPrivacy = true;
+    try { if (await this.store.acceptPrivacy()) await this.startServices(); }
+    catch (error) { this.store.fail('启动应用失败', error as Error); }
+    finally { this.acceptingPrivacy = false; }
   }
 
   onBackPress(): boolean {
@@ -179,11 +195,6 @@ struct Index {
       this.info(this.store.t('找不到设备？'), this.store.t('确认两台设备连接同一个局域网，关闭路由器的 AP 隔离。允许 LocalSend 通过防火墙，确保 TCP 与 UDP 53317 端口可用。也可通过地址直接添加设备。'))
       this.info(this.store.t('接收的文件在哪里？'), this.store.t('允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。'))
       this.info(this.store.t('文字与文件'), this.store.t('发送页可以选择文件、图片、文件夹，以及文字或剪贴板内容。选择后点击目标设备。文件重命名只影响对方收到的名称。'))
-    } else if (this.route === 'privacy') {
-      this.info(this.store.t('设备之间直接传输'), this.store.t('AloeSend 不要求账号，不将文件上传至云端。内容通过本地网络在发送方和接收方之间传输。'))
-      this.info(this.store.t('本地记录'), this.store.t('设备名称、收藏、设置与传输历史只保存在本机。你可以关闭记录或清空历史。清空历史不会删除已接收的文件。'))
-      this.info(this.store.t('系统权限'), this.store.t('文件、照片和剪贴板仅在你主动选择相关操作时访问。接收请求默认需要确认，请仅在可信网络上启用自动接收。'))
-      this.info(this.store.t('下载目录'), this.store.t('启动时通过系统 DOWNLOAD 对话框申请本应用下载目录的访问权限，用于保存收到的文件。'))
     } else if (this.route === 'licenses') {
       this.info('LocalSend / AloeSend', this.store.t('基于 LocalSend 项目，遵循 Apache License 2.0。\nhttps://github.com/localsend/localsend\nhttps://github.com/Aloereed/localsend-ohos'))
       this.info(this.store.t('原生实现'), this.store.t('ArkUI 界面和 ArkTS 平台服务使用 HarmonyOS SDK。原项目第三方版权声明保留在仓库对应依赖中。'))
@@ -221,6 +232,11 @@ struct Index {
 
   build() {
     Stack({ alignContent: Alignment.Top }) {
+    if (!this.store.ready) {
+      LoadingProgress().width(48).height(48).margin({ top: 120 })
+    } else if (!this.store.privacyAccepted) {
+      PrivacyView({ store: this.store, firstLaunch: true, accepting: this.acceptingPrivacy, onAccept: () => this.acceptPrivacy() })
+    } else {
     Column() {
       if (this.store.networkPending && !this.store.pendingReceive) {
         Row({ space: 12 }) {
@@ -260,6 +276,10 @@ struct Index {
       }
       if (this.store.pendingReceive) {
         ReceiveRequestView({ store: this.store }).layoutWeight(1)
+      } else if (this.route === 'privacy') {
+        Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
+          .alignSelf(ItemAlign.Start).onClick(() => this.route = '')
+        PrivacyView({ store: this.store }).layoutWeight(1)
       } else if (this.route) {
         Row() {
           Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
@@ -294,6 +314,7 @@ struct Index {
           .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index).layoutWeight(1)
       }
     }.width('100%').height('100%')
+    }
     if (this.store.error || this.store.notice) {
       Row({ space: 12 }) {
         Text(this.store.error ? '!' : '✓').fontSize(18).fontWeight(FontWeight.Medium)
