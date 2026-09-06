@@ -1,6 +1,11 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "运行日志": "Runtime logs",
+  "发现日志": "Discovery logs",
+  "搜索日志": "Search logs",
+  "暂无日志": "No logs yet",
+  "查看更多": "Show more",
   "保存隐私选择失败，请重试": "Could not save your privacy choice. Please try again.",
   "退出应用失败": "Could not close the app",
   "启动应用失败": "Could not start the app",

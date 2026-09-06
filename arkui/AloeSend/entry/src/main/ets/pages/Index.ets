@@ -14,6 +14,7 @@ import { util } from '@kit.ArkTS';
 import { ReceiveRequestView } from '../components/ReceiveRequestView';
 import { DownloadDirectoryPicker } from '../components/DownloadDirectoryPicker';
 import { PrivacyView } from '../components/PrivacyView';
+import { DiagnosticsView } from '../components/DiagnosticsView';
 
 @Entry
 @Component
@@ -182,15 +183,7 @@ struct Index {
     else if (this.route === 'transfers') { TransferList({ store: this.store }) }
     else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
     else if (this.route === 'diagnostics') {
-      this.info(this.store.t('接收服务'), this.store.t(this.store.serverStatus))
-      this.info(this.store.t('本机证书指纹'), this.store.settings.fingerprint)
-      Button(this.store.t('重启接收服务')).backgroundColor(this.store.accentFill).enabled(!this.store.activeTransfers).onClick(() => localSend.restart())
-      this.info(this.store.t('本机地址'), this.store.localIps.length ? this.store.localIps.join('\n') : this.store.t('尚未读取到网络地址'))
-      this.info(this.store.t('当前监听'), this.store.tf('端口 {0}\n组播 {1}\n协议 LocalSend 2.1', [String(this.store.listenerPort), this.store.listenerMulticast]))
-      Button(this.store.t('复制诊断信息')).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.logs.join('\n')))
-      ForEach(this.store.logs, (line: string) => {
-        Text(line).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%').padding(10).copyOption(CopyOptions.LocalDevice)
-      })
+      DiagnosticsView({ store: this.store })
     } else if (this.route === 'help') {
       this.info(this.store.t('找不到设备？'), this.store.t('确认两台设备连接同一个局域网，关闭路由器的 AP 隔离。允许 LocalSend 通过防火墙，确保 TCP 与 UDP 53317 端口可用。也可通过地址直接添加设备。'))
       this.info(this.store.t('接收的文件在哪里？'), this.store.t('允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。'))

@@ -70,6 +70,13 @@ export class TransferFile {
   preview: string = '';
 }
 
+export class NetworkLogEntry {
+  id: string = util.generateRandomUUID();
+  time: number = Date.now();
+  category: string = '';
+  message: string = '';
+}
+
 export class TransferView {
   id: string = '';
   peer: string = '';
@@ -153,6 +160,7 @@ export class AppStore {
   favorites: Peer[] = [];
   history: HistoryEntry[] = [];
   logs: string[] = [];
+  networkLogs: NetworkLogEntry[] = [];
   private errorText: string = '';
   private noticeText: string = '';
   private errorTimer: number = -1;
@@ -241,6 +249,12 @@ export class AppStore {
 
   log(message: string): void {
     this.logs = [`${new Date().toLocaleTimeString()}  ${message}`, ...this.logs].slice(0, 300);
+  }
+
+  networkLog(category: string, message: string): void {
+    const entry = new NetworkLogEntry(); entry.category = category;
+    entry.message = message.replace(/[\r\n\t]/g, ' ').slice(0, 500);
+    this.networkLogs = [entry, ...this.networkLogs].slice(0, 300);
   }
 
   async acceptPrivacy(): Promise<boolean> {

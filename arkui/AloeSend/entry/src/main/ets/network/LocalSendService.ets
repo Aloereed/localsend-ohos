@@ -292,6 +292,7 @@ export class LocalSendService {
       if (notify) this.store.fail('发现设备失败', e); else this.store.log(`自动发现：${e.message}`);
     });
     if (notify) this.store.notice = '已发送发现请求';
+    this.store.networkLog('discovery', `发现广播 · ${this.store.localIps.join(', ')}`);
     for (const peer of this.store.favorites) this.probe(peer).catch(() => {});
   }
 
@@ -303,6 +304,7 @@ export class LocalSendService {
       const info = JSON.parse(decodeText(new Uint8Array(message.message))) as DeviceInfo;
       if (!info || typeof info.alias !== 'string' || typeof info.fingerprint !== 'string' || info.fingerprint === this.store.settings.fingerprint) return;
       const peer = this.peerFrom(info, message.remoteInfo.address);
+      this.store.networkLog('discovery', `${peer.alias} · ${peer.ip}:${peer.port} · ${peer.protocol}`);
       this.upsertPeer(peer);
       if (info.announce && this.store.settings.visible) this.register(peer).catch((e: Error) => this.store.log(`设备握手：${e.message}`));
     } catch (_) { /* Ignore malformed UDP datagrams from unrelated applications. */ }
@@ -361,6 +363,9 @@ export class LocalSendService {
 
   private async handle(channel: NativeConnection, head: HttpHead): Promise<BodySink> {
     const path = head.target.split('?')[0];
+    // Only protocol route names: never record PINs, tokens, query strings or bodies.
+    const route = /^\/api\/localsend\/v[12]\/(info|register|prepare-upload|send-request|upload|send|cancel)$/.test(path) ? path : '(unknown route)';
+    this.store.networkLog('http', `${head.method} ${route} ← ${channel.ip}`);
     if ((/^\/api\/localsend\/v[12]\/upload$/.test(path) || path === '/api/localsend/v1/send') && head.method === 'POST') return this.openUpload(channel, head);
     return new JsonSink(async (bytes: Uint8Array): Promise<void> => {
       if (/^\/api\/localsend\/v[12]\/info$/.test(path) && head.method === 'GET') await channel.respond(200, JSON.stringify(this.info()));
