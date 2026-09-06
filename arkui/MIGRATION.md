@@ -22,6 +22,26 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 ## Feature acceptance inventory
 
+The checkboxes below are final acceptance, not merely source presence. They remain
+open until device verification and the remaining parity audit are complete. Current
+implementation evidence as of M23:
+
+| Flutter flow | Native implementation | Evidence / remaining checks |
+| --- | --- | --- |
+| Receive, receive options | Index, ReceiveRequest, TransferList, LocalSendService | Consent/progress, selection and renaming tested; device authorization and progress appearance need M21+ retest. |
+| Send, selected files | SendView, PeerDetail, AppStore | Five input types, editing and batch send implemented; OS file/photo/folder pickers need device coverage. |
+| Discovery and favorites | LocalSendService, SendView, SettingsView | Automatic discovery schedule, manual addresses and identity matching covered by host tests. |
+| Progress | TransferList, NativeServer, SecureServer | Cancel/retry/queue and 128 MiB real TLS upload verified; system background behavior remains device-dependent. |
+| Messages and history | MessagesView, LibraryView, FileDetailsView | Search, conversation isolation, open/export/share and metadata implemented; new-conversation favorites and folder reveal still need parity review. |
+| Browser sharing | WebShareView, WebShareService, WebPage | Real HTTP consent, upload/download, PIN, cancellation and resource tests pass. |
+| Settings and appearance | SettingsView, Locale, AppStore | Chinese/English/system, colors, theme, animations, receive and network controls implemented; original extra theme presets and full translation coverage not claimed. |
+| Help, privacy, credits, diagnostics | Index information routes and SettingsView | Native routes implemented; first-launch privacy flow and developer-only screens need final parity review. |
+| Legacy UI | Shared native flows | No duplicate legacy navigation shell; equivalent actions are consolidated. Final interaction audit pending. |
+| Android/desktop-only actions | Platform scope | APK installed-app picker, desktop tray, autostart and shell integration are not HarmonyOS equivalents. |
+| Upstream Rust rewrite | Preserved upstream reference | LocalSend interoperability is implemented; Rust-only WebRTC/pairing parity is not claimed. |
+
+See `README.md` for morning checks and `PACKAGES.md` for verified archived packages.
+
 - [ ] Receive: device identity, local addresses, visibility, receiving options and consent.
 - [ ] Send: files, media, directories, text/link, clipboard, selection review, rename/remove.
 - [ ] Discovery: multicast, manual address, refresh, favorites add/edit/remove and direct send.
