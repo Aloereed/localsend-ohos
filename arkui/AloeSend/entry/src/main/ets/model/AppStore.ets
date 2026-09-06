@@ -526,7 +526,7 @@ export class AppStore {
         try { await fs.copyFile(source.fd, destination.fd); }
         finally { await fs.close(destination); }
       } finally { await fs.close(source); }
-      entry.exportedPath = destinations[0]; await this.save();
+      this.updateHistoryLocation(entry, destinations[0]); await this.save();
       this.notice = '文件已保存到所选位置';
     } catch (e) { this.fail('保存文件失败', e as Error); }
   }
@@ -540,6 +540,16 @@ export class AppStore {
 
   folderUri(entry: HistoryEntry): string {
     return publicParentUri(entry.exportedPath) || publicParentUri(entry.path);
+  }
+
+  updateHistoryLocation(entry: HistoryEntry, location: string, gallery: boolean = false): void {
+    if (gallery) entry.galleryPath = location; else entry.exportedPath = location;
+    this.history = this.history.map((item: HistoryEntry) => {
+      if (item.id !== entry.id) return item;
+      const current = JSON.parse(JSON.stringify(item)) as HistoryEntry;
+      if (gallery) current.galleryPath = location; else current.exportedPath = location;
+      return current;
+    });
   }
 
   async revealFile(entry: HistoryEntry): Promise<void> {
@@ -597,7 +607,7 @@ export class AppStore {
     if (!destination || !entry.path) return;
     try {
       const download = destination === this.downloadDirectory || destination.startsWith(`${this.downloadDirectory}/`);
-      if (download && entry.path.startsWith(`${destination}/`)) { entry.exportedPath = entry.path; await this.save(); return; }
+      if (download && entry.path.startsWith(`${destination}/`)) { this.updateHistoryLocation(entry, entry.path); await this.save(); return; }
       if (!download) await fileShare.activatePermission([{ uri: destination, operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
       // A unique per-transfer directory prevents overwriting unrelated user files.
       let path = download ? `${destination}/${safeRelativePath(entry.name)}` : `${destination}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
@@ -613,7 +623,7 @@ export class AppStore {
         try { await fs.copyFile(input.fd, output.fd); }
         finally { await fs.close(input); }
       } finally { await fs.close(output); }
-      entry.exportedPath = path; await this.save();
+      this.updateHistoryLocation(entry, path); await this.save();
     } catch (e) { this.fail('文件已接收，但另存到所选目录失败', e as Error); }
   }
 
@@ -645,7 +655,7 @@ export class AppStore {
           try { await fs.copyFile(source.fd, destination.fd); }
           finally { await fs.close(destination); }
         } finally { await fs.close(source); }
-        media[index].galleryPath = destinations[index]; saved++;
+        this.updateHistoryLocation(media[index], destinations[index], true); saved++;
         this.galleryQueue = this.galleryQueue.filter((entry: HistoryEntry) => entry.id !== media[index].id);
       }
       if (saved) { await this.save(); this.notice = this.tf('已保存 {0} 项到相册', [String(saved)]); }
