@@ -197,6 +197,7 @@ export class AppStore {
   messageDrafts: Map<string, MessageDraft> = new Map();
   onTransferCompleted: (transfer: TransferView) => void = () => {};
   onReceiveStarted: (transfer: TransferView) => void = () => {};
+  onTransferActivity: (active: boolean) => void = () => {};
   onPickDownloadDirectory: (path: string) => Promise<string> = async () => '';
   downloadAccess: boolean = false;
   context: common.UIAbilityContext | undefined = undefined;
@@ -276,11 +277,14 @@ export class AppStore {
   }
 
   updateTransfer(transfer: TransferView): void {
+    const wasActive = this.transfers.some((item: TransferView) => item.status === 'transferring');
     const previous = this.transfers.find((item: TransferView) => item.id === transfer.id);
     if (!transfer.activeStarted && transfer.status === 'transferring') transfer.activeStarted = Date.now();
     const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
     this.transfers = previous ? this.transfers.map((item: TransferView) => item.id === transfer.id ? snapshot : item) : [snapshot, ...this.transfers].slice(0, 30);
-    if (this.context) backgroundKeeper.sync(this.transfers.some((item: TransferView) => item.status === 'transferring'), this.context,
+    const active = this.transfers.some((item: TransferView) => item.status === 'transferring');
+    if (active !== wasActive) this.onTransferActivity(active);
+    if (this.context) backgroundKeeper.sync(active, this.context,
       (message: string) => this.log(message));
     if (transfer.status === 'complete' && previous?.status !== 'complete') this.onTransferCompleted(transfer);
     if (transfer.direction === 'receive' && transfer.status === 'transferring' && previous?.status !== 'transferring') this.onReceiveStarted(transfer);

@@ -1,0 +1,23 @@
+const assert = require('node:assert/strict');
+const { load } = require('./host-runtime.cjs');
+const { ScreenKeeper } = load('platform/ScreenKeeper');
+const { AppStore, TransferView } = load('model/AppStore');
+const tick = () => new Promise(resolve => setImmediate(resolve));
+(async () => {
+  const calls = []; let release;
+  const keeper = new ScreenKeeper(async enabled => { calls.push(enabled); if (enabled) await new Promise(resolve => release = resolve); }, () => {});
+  const start = keeper.sync(true); await tick();
+  const finish = keeper.sync(false); release(); await Promise.all([start, finish]);
+  assert.deepEqual(calls, [true, false], 'finishing while enable is pending must release the screen');
+  await keeper.sync(false); assert.equal(calls.length, 2);
+  const failures = []; let fail = true;
+  const retry = new ScreenKeeper(async () => { if (fail) throw new Error('window unavailable'); }, message => failures.push(message));
+  await retry.sync(true); assert.equal(failures.length, 1); fail = false; await retry.sync(true); await retry.sync(false);
+  const store = new AppStore(); const active = []; store.onTransferActivity = value => active.push(value);
+  const a = new TransferView(); a.id = 'a'; a.status = 'transferring'; store.updateTransfer(a);
+  a.files = []; store.updateTransfer(a);
+  const b = new TransferView(); b.id = 'b'; b.status = 'transferring'; store.updateTransfer(b);
+  a.status = 'complete'; store.updateTransfer(a); assert.deepEqual(active, [true], 'another active transfer retains the screen');
+  b.status = 'cancelled'; store.updateTransfer(b); assert.deepEqual(active, [true, false]);
+  console.log('PASS screen enable/finish race, failure recovery and multi-transfer activity aggregation');
+})().catch(error => { console.error(error); process.exitCode = 1; });
