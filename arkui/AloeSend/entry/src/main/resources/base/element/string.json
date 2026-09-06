@@ -1,5 +1,6 @@
 {
   "string": [
+    { "name": "clipboard_reason", "value": "将你选择的剪贴板文字发送到其他设备" },
     {
       "name": "module_desc",
       "value": "module description"
