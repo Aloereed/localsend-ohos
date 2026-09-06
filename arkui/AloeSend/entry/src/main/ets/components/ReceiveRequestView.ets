@@ -25,11 +25,11 @@ export struct ReceiveRequestView {
           .fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
         Row({ space: 12 }) {
           Button(this.store.t('拒绝')).layoutWeight(1).height(50).fontColor($r('sys.color.font_primary'))
-            .backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => localSend.acceptReceive(false))
+            .backgroundColor(this.store.controlSurface).onClick(() => localSend.acceptReceive(false))
           Button(this.store.t('接收所选')).layoutWeight(1).height(50).backgroundColor(this.store.accentFill)
             .enabled(this.selected().length > 0).onClick(() => localSend.acceptReceive(true))
         }.width('100%')
-      }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary'))
+      }.padding(24).width('100%').backgroundColor(this.store.surfaceColor)
     }.width('100%').height('100%').constraintSize({ maxWidth: 720 })
   }
 }

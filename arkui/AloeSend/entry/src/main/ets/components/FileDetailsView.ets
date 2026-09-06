@@ -35,17 +35,17 @@ export struct FileDetailsView {
         }.width('100%').padding({ bottom: 20 })
       }.width('100%').layoutWeight(1)
       if (this.entry.path && this.store.isMedia(this.entry)) {
-        Button(this.store.t('保存到相册')).width('100%').height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+        Button(this.store.t('保存到相册')).width('100%').height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
           .enabled(!this.store.savingToGallery).onClick(() => this.store.saveToGallery([this.entry]))
       }
       if (/^https?:\/\/\S+$/i.test(this.entry.text.trim())) {
-        Button(this.store.t('打开链接')).width('100%').height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+        Button(this.store.t('打开链接')).width('100%').height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
           .onClick(() => this.store.openUrl(this.entry.text.trim()))
       }
       Row({ space: 12 }) {
         Button(this.store.t('分享')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.shareEntry(this.entry))
         if (this.entry.path) {
-          Button(this.store.t('另存为')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText).onClick(() => this.store.exportFile(this.entry))
+          Button(this.store.t('另存为')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.store.exportFile(this.entry))
         }
       }.width('100%')
     }.width('100%').height('100%').padding(24)

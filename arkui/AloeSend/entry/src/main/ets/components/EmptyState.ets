@@ -10,10 +10,10 @@ export struct EmptyState {
   build() {
     Column({ space: 14 }) {
       Stack() { AppIcon({ name: this.icon, iconSize: 32, tint: this.accent }) }
-        .width(76).height(76).borderRadius(26).backgroundColor($r('sys.color.comp_background_tertiary')).margin({ bottom: 6 })
+        .width(64).height(64).borderRadius(22).backgroundColor($r('sys.color.comp_background_tertiary')).margin({ bottom: 6 })
       Text(this.title).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).textAlign(TextAlign.Center)
       Text(this.description).fontSize(14).lineHeight(22).fontColor($r('sys.color.font_secondary')).textAlign(TextAlign.Center).constraintSize({ maxWidth: 360 })
     }.width('100%').padding({ top: 36, bottom: 36, left: 24, right: 24 })
-      .backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
+      .backgroundColor(Color.Transparent)
   }
 }

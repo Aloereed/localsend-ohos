@@ -43,7 +43,7 @@ export struct NetworkView {
         }
         Button(this.store.t('应用发现规则')).width('100%').height(48).backgroundColor(this.store.accentFill)
           .onClick(() => this.save().catch((error: Error) => this.store.fail(this.store.t('应用规则失败'), error)))
-      }.padding(22).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(26)
+      }.padding(22).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(26)
       Row() {
         Text(this.store.t('当前网络接口')).fontSize(19).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
         Button(this.store.t('刷新')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
@@ -56,11 +56,11 @@ export struct NetworkView {
             Text(this.store.t(local.ignored ? '已排除' : '已启用')).fontSize(12).fontColor($r('sys.color.font_secondary'))
           }.width('100%')
           Text(`${local.ip}/${local.prefixLength}`).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice).width('100%')
-          Button(this.store.t('加入规则')).fontSize(13).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText).onClick(() => {
+          Button(this.store.t('加入规则')).fontSize(13).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => {
             this.patterns = this.patterns ? `${this.patterns}\n${local.ip}` : local.ip;
             if (this.mode === 'none') this.mode = 'allow';
           })
-        }.padding(20).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+        }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       }, (local: LocalInterface) => `${local.name}:${local.ip}:${local.ignored}`)
       if (!this.store.interfaces.length) {
         Text(this.store.t('尚未读取到网络地址')).fontSize(14).fontColor($r('sys.color.font_secondary')).padding(24)

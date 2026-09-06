@@ -45,7 +45,7 @@ export struct MessagesView {
                 }.alignItems(HorizontalAlign.Start).layoutWeight(1)
                 Button('×').width(44).height(44).fontColor(this.store.dangerText).backgroundColor(Color.Transparent).enabled(!this.sending)
                   .accessibilityText(this.store.tf('移除 {0}', [file.name])).onClick(() => { this.attachments = this.attachments.filter((item: ShareFile) => item.id !== file.id); this.rememberDraft(); })
-              }.padding(12).width('100%').backgroundColor($r('sys.color.comp_background_tertiary')).borderRadius(18)
+              }.padding(12).width('100%').backgroundColor(this.store.controlSurface).borderRadius(18)
             }, (file: ShareFile) => file.id)
           }.width('100%')
         }.layoutWeight(1).width('100%')
@@ -148,7 +148,7 @@ export struct MessagesView {
             ])
         }.width('100%')
       }.padding(18).layoutWeight(1).borderRadius(22)
-        .backgroundColor(entry.direction === 'send' ? $r('sys.color.comp_background_tertiary') : $r('sys.color.comp_background_primary'))
+        .backgroundColor(entry.direction === 'send' ? this.store.controlSurface : this.store.surfaceColor)
         .border({ width: entry.direction === 'send' ? 1 : 0, color: this.store.settings.accent })
       if (entry.direction !== 'send') { Blank().width(32) }
     }.width('100%')
@@ -185,13 +185,13 @@ export struct MessagesView {
         Column({ space: 10 }) {
           if (this.attachments.length > 0) {
             Button(this.store.tf('{0} 个附件 · 查看与编辑', [String(this.attachments.length)]))
-              .width('100%').height(40).fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_tertiary'))
+              .width('100%').height(40).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
               .onClick(() => { this.detailsKind = 'attachments'; this.showDetails = true; })
           }
           TextArea({ text: this.draft, placeholder: this.peer.ip ? this.store.t('写消息，或粘贴链接…') : this.store.t('设备上线后可回复') })
             .height(80).maxLength(100000).enabled(!this.sending).onChange((value: string) => { this.draft = value; this.rememberDraft(); })
           Row({ space: 12 }) {
-            Button(this.store.t('添加文件')).height(44).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+            Button(this.store.t('添加文件')).height(44).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
               .enabled(!!this.peer.ip && !this.sending && !this.store.busy).bindMenu([
                 { value: this.store.t('文件'), action: () => this.attach('file') }, { value: this.store.t('照片与视频'), action: () => this.attach('photo') }
               ])
@@ -199,9 +199,10 @@ export struct MessagesView {
             Button(this.sending ? this.store.t('发送中…') : this.store.t('发送')).height(44).constraintSize({ minWidth: 88 }).backgroundColor(this.store.accentFill)
               .enabled(!!this.peer.ip && (!!this.draft.trim() || this.attachments.length > 0) && !this.sending).onClick(() => this.sendText())
           }.width('100%')
-        }.padding(14).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+        }.padding(14).backgroundColor(this.store.glassColor).backgroundBlurStyle(BlurStyle.COMPONENT_THIN).borderRadius(26)
+          .border({ width: 0.5, color: this.store.hairlineColor })
       } else {
-        Text(this.store.t('消息')).fontSize(32).fontWeight(FontWeight.Bold).width('100%').fontColor($r('sys.color.font_primary')).margin({ top: 16 })
+        Text(this.store.t('消息')).fontSize(30).fontWeight(FontWeight.Bold).width('100%').fontColor($r('sys.color.font_primary')).margin({ top: 20 })
         Text(this.store.t('选择一台设备，继续你们的对话')).fontSize(14).width('100%').fontColor($r('sys.color.font_secondary'))
         Search({ value: this.query, placeholder: this.store.t('搜索会话、文字或文件') }).onChange((value: string) => this.query = value)
         Scroll() {
@@ -220,7 +221,7 @@ export struct MessagesView {
                   Text(group.last.text || group.last.name).fontSize(13).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_secondary'))
                 }.alignItems(HorizontalAlign.Start).layoutWeight(1)
                 Text(String(group.count)).fontSize(12).fontColor($r('sys.color.font_secondary'))
-              }.padding(20).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24).onClick(() => this.open(group.peer))
+              }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24).onClick(() => this.open(group.peer))
             }, (group: Conversation) => `${group.key}:${group.last.id}:${group.count}:${group.peer.alias}`)
             Text(this.store.t('发起新会话')).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%').margin({ top: 12 })
             ForEach(this.store.peers, (peer: Peer) => {
@@ -228,7 +229,7 @@ export struct MessagesView {
                 AppIcon({ name: 'message', iconSize: 24, tint: this.store.accentText })
                 Text(peer.alias).fontSize(16).layoutWeight(1).fontColor($r('sys.color.font_primary'))
                 Text(this.store.t('开始')).fontSize(13).fontColor(this.store.accentText)
-              }.padding(18).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(22).onClick(() => this.open(peer))
+              }.padding(18).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(22).onClick(() => this.open(peer))
             }, (peer: Peer) => `${peer.ip}:${peer.port}`)
             if (this.store.peers.length === 0) {
               Text(this.store.t('附近暂时没有设备，请确认双方连接同一网络。')).fontSize(13).lineHeight(22).fontColor($r('sys.color.font_secondary'))

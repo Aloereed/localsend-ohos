@@ -57,7 +57,7 @@ export struct DownloadDirectoryPicker {
               AppIcon({ name: 'folder', iconSize: 26, tint: this.store.accentText })
               Text(name).fontSize(16).maxLines(2).fontColor($r('sys.color.font_primary')).layoutWeight(1)
               Text('›').fontSize(24).fontColor($r('sys.color.font_secondary'))
-            }.width('100%').padding(18).backgroundColor($r('sys.color.comp_background_tertiary')).borderRadius(18)
+            }.width('100%').padding(18).backgroundColor(this.store.controlSurface).borderRadius(18)
               .onClick(() => this.load(`${this.path}/${name}`)).accessibilityText(name)
           }, (name: string) => `${this.path}/${name}`)
           if (this.folders.length > this.limit) {

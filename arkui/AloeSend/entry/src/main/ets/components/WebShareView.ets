@@ -21,7 +21,7 @@ export struct WebShareView {
           Text(this.encrypted ? this.store.t('使用本机自签名证书，浏览器会要求确认。') : this.store.t('HTTP 浏览器模式不加密，仅在可信网络中使用。LocalSend 设备之间的加密传输不受影响。'))
             .fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary'))
           Button(this.store.t('开始分享')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => webShare.start(this.encrypted))
-        }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
+        }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(28)
       } else {
         Column({ space: 18 }) {
           Text(this.store.t('扫码或打开链接')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
@@ -34,9 +34,9 @@ export struct WebShareView {
             Toggle({ type: ToggleType.Switch, isOn: this.store.settings.webAutoAccept }).selectedColor(this.store.settings.accent)
               .onChange((value: boolean) => { this.store.settings.webAutoAccept = value; this.store.save(); })
           }.width('100%')
-          Button(this.store.t('停止分享')).width('100%').height(46).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.dangerText)
+          Button(this.store.t('停止分享')).width('100%').height(46).backgroundColor(this.store.controlSurface).fontColor(this.store.dangerText)
             .onClick(() => webShare.stop())
-        }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
+        }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(28)
         ForEach(this.store.webRequests, (request: WebAccessRequest) => {
           Column({ space: 12 }) {
             Text(this.store.tf('{0} 请求下载', [request.ip])).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
@@ -45,13 +45,13 @@ export struct WebShareView {
               Button(this.store.t('拒绝')).layoutWeight(1).onClick(() => webShare.respond(request.id, false))
               Button(this.store.t('允许')).layoutWeight(1).backgroundColor(this.store.accentFill).onClick(() => webShare.respond(request.id, true))
             }.width('100%')
-          }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+          }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
         }, (request: WebAccessRequest) => request.id)
         ForEach(this.store.webFiles, (file: ShareFile) => {
           Row() {
             Text(file.name).fontSize(15).layoutWeight(1).maxLines(2).fontColor($r('sys.color.font_primary'))
             Text(formatSize(file.size)).fontSize(12).fontColor($r('sys.color.font_secondary'))
-          }.padding(18).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
+          }.padding(18).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(20)
         }, (file: ShareFile) => file.id)
       }
     }.width('100%')

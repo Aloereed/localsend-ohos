@@ -91,10 +91,10 @@ struct Index {
 
   @Builder
   heading(title: string, subtitle: string) {
-    Column({ space: 8 }) {
-      Text(title).fontSize(32).fontWeight(FontWeight.Bold).fontColor($r('sys.color.font_primary'))
-      Text(subtitle).fontSize(14).fontColor($r('sys.color.font_secondary'))
-    }.alignItems(HorizontalAlign.Start).width('100%').padding({ top: 24, bottom: 24 })
+    Column({ space: 6 }) {
+      Text(this.store.t(title)).fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('sys.color.font_primary'))
+      if (subtitle) { Text(this.store.t(subtitle)).fontSize(13).fontColor($r('sys.color.font_secondary')) }
+    }.alignItems(HorizontalAlign.Start).width('100%').padding({ top: 28, bottom: 22 })
   }
 
   @Builder
@@ -103,33 +103,50 @@ struct Index {
       Text(title).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
       Text(description).fontSize(14).lineHeight(24).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
     }.alignItems(HorizontalAlign.Start).width('100%').padding(24)
-      .backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24).margin({ bottom: 16 })
+      .backgroundColor(this.store.surfaceColor).borderRadius(24).margin({ bottom: 16 })
   }
 
   @Builder
   receive() {
-    this.heading(this.store.t('接收'), this.store.t('靠近一点，分享多一点'))
-    Column({ space: 16 }) {
-      Image($r('app.media.aloesend_logo')).width(88).height(88).objectFit(ImageFit.Contain)
-        .accessibilityLevel('no').margin({ top: 8, bottom: 8 })
-      Text(this.store.settings.alias).fontSize(26).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
+    this.heading('接收', '')
+    Column({ space: 14 }) {
+      Stack() {
+        Circle().width(192).height(192).fill(Color.Transparent).stroke(this.store.hairlineColor).strokeWidth(1)
+        Circle().width(158).height(158).fill(this.store.glassColor)
+          .shadow({ radius: 26, color: this.store.dark ? '#28000000' : '#18314665', offsetY: 10 })
+        Image($r('app.media.aloesend_logo')).width(112).height(112).objectFit(ImageFit.Contain).accessibilityLevel('no')
+      }.width(208).height(208).margin({ top: 4, bottom: 6 })
+        .radialGradient({ center: ['50%', '50%'], radius: 104, colors: [[this.store.ambientColor, 0], [Color.Transparent, 1]] })
+      Text(this.store.settings.alias).fontSize(28).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
       Row({ space: 7 }) {
         Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.settings.accent : '#B88632')
         Text(this.store.settings.visible ? this.store.t(this.store.serverStatus) : this.store.t('当前已隐藏，可通过地址连接')).fontSize(13).fontColor($r('sys.color.font_secondary'))
-      }.padding({ left: 14, right: 14, top: 8, bottom: 8 }).backgroundColor($r('sys.color.comp_background_tertiary')).borderRadius(18)
+      }.padding({ left: 14, right: 14, top: 8, bottom: 8 }).backgroundColor(this.store.glassColor).borderRadius(20)
       ForEach(this.store.localIps, (ip: string) => {
         Text(`${ip}:${this.store.listenerPort}`).fontSize(13).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
       })
-    }.width('100%').padding(32).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28).margin({ bottom: 24 })
-    Row({ space: 12 }) {
-      Button(this.store.t('接收历史')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText)
-        .onClick(() => this.route = 'history')
-      Button(this.store.t('接收设置')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText)
-        .onClick(() => this.tab = 3)
-    }.width('100%').margin({ bottom: 24 })
-    Button(this.store.t('查看传输任务')).backgroundColor(this.store.accentFill).onClick(() => this.route = 'transfers').margin({ bottom: 20 })
-    this.info(this.store.t('同一网络，自由分享'), this.store.t('保持双方的 LocalSend 打开，连接同一 Wi-Fi。收到请求时，先查看内容，再决定是否接收。'))
-    this.info(this.store.t('文件留在你手中'), this.store.t('接收后可在历史中打开或另存为。文字和链接在消息页集中查看。'))
+    }.width('100%').padding({ left: 20, right: 20, bottom: 32 })
+    Column() {
+      this.receiveShortcut('接收历史', 'history', 'history')
+      Divider().color(this.store.controlSurface).margin({ left: 60 }).width('80%')
+      this.receiveShortcut('查看传输任务', 'receive', 'transfers')
+      Divider().color(this.store.controlSurface).margin({ left: 60 }).width('80%')
+      this.receiveShortcut('接收设置', 'settings', 'settings')
+    }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
+      .border({ width: 0.5, color: this.store.hairlineColor })
+    Text(this.store.t('保持双方的 LocalSend 打开，连接同一 Wi-Fi。收到请求时，先查看内容，再决定是否接收。'))
+      .fontSize(13).lineHeight(21).textAlign(TextAlign.Center).fontColor($r('sys.color.font_secondary')).width('100%').padding({ top: 22, left: 16, right: 16, bottom: 24 })
+  }
+
+  @Builder
+  receiveShortcut(title: string, icon: string, route: string) {
+    Row({ space: 16 }) {
+      AppIcon({ name: icon, iconSize: 24, tint: this.store.accentText })
+      Text(this.store.t(title)).fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
+      Text('›').fontSize(24).fontColor($r('sys.color.font_secondary'))
+    }.width('100%').padding({ left: 22, right: 20, top: 20, bottom: 20 })
+      .onClick(() => { if (route === 'settings') this.tab = 3; else this.route = route; })
+      .accessibilityText(this.store.t(title))
   }
 
   @Builder
@@ -141,7 +158,7 @@ struct Index {
     } else if (this.route === 'donate') {
       this.info(this.store.t('支持开源项目'), this.store.t('你可以自愿支持 LocalSend 的持续开发。所有文件分享功能均可免费使用。'))
       Button('GitHub Sponsors').width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/sponsors/Tienisto'))
-      Button('Ko-fi').width('100%').height(48).margin({ top: 16 }).fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_primary')).onClick(() => this.store.openUrl('https://ko-fi.com/tienisto'))
+      Button('Ko-fi').width('100%').height(48).margin({ top: 16 }).fontColor(this.store.accentText).backgroundColor(this.store.surfaceColor).onClick(() => this.store.openUrl('https://ko-fi.com/tienisto'))
     } else if (this.route === 'network') { NetworkView({ store: this.store }) }
     else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer,
       onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; },
@@ -184,7 +201,7 @@ struct Index {
       this.info('AloeSend', this.store.t('为鸿蒙重新设计的本地分享体验。\n跨越设备，传递心意。\n原生 ArkUI · 无需账号 · 不经云端'))
       Text($r('app.string.build_version')).fontSize(14).fontColor($r('sys.color.font_secondary')).margin({ bottom: 24 })
       this.info(this.store.t('感谢开源社区'), this.store.t('LocalSend 和所有贡献者，让跨平台分享成为可能。\n源码：github.com/Aloereed/localsend-ohos'))
-      Button(this.store.t('贡献者与翻译者')).width('100%').height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText).onClick(() => this.route = 'credits')
+      Button(this.store.t('贡献者与翻译者')).width('100%').height(48).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText).onClick(() => this.route = 'credits')
       Row({ space: 12 }) {
         Button(this.store.t('源代码')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/Aloereed/localsend-ohos'))
         Button(this.store.t('报告问题')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/Aloereed/localsend-ohos/issues'))
@@ -195,15 +212,15 @@ struct Index {
   @Builder
   tabItem(title: string, mark: string, index: number) {
     Column({ space: 4 }) {
-      Stack() { AppIcon({ name: ['receive', 'send', 'message', 'settings'][index], iconSize: 23,
-        tint: this.tab === index ? this.store.settings.accent : $r('sys.color.font_secondary') }) }
-        .width(58).height(32).borderRadius(18).backgroundColor(this.tab === index ? $r('sys.color.comp_background_tertiary') : Color.Transparent)
-      Text(title).fontSize(12).fontWeight(this.tab === index ? FontWeight.Medium : FontWeight.Regular)
-        .fontColor(this.tab === index ? this.store.settings.accent : $r('sys.color.font_secondary'))
-    }.width('100%').height(this.windowWidth >= 840 ? 80 : 64).justifyContent(FlexAlign.Center).accessibilityText(title)
+      AppIcon({ name: ['receive', 'send', 'message', 'settings'][index], iconSize: 25,
+        tint: this.tab === index ? this.store.accentText : $r('sys.color.font_secondary') })
+      Text(this.store.t(title)).fontSize(12).fontWeight(this.tab === index ? FontWeight.Medium : FontWeight.Regular)
+        .fontColor(this.tab === index ? this.store.accentText : $r('sys.color.font_secondary'))
+    }.width('100%').height(this.windowWidth >= 840 ? 88 : 64).justifyContent(FlexAlign.Center).accessibilityText(this.store.t(title))
   }
 
   build() {
+    Stack({ alignContent: Alignment.Top }) {
     Column() {
       if (this.store.networkPending && !this.store.pendingReceive) {
         Row({ space: 12 }) {
@@ -212,13 +229,7 @@ struct Index {
             Text(this.store.t('当前连接继续使用原设置。空闲时重启即可应用新设置。')).fontSize(12).fontColor($r('sys.color.font_secondary'))
           }.alignItems(HorizontalAlign.Start).layoutWeight(1)
           Button(this.store.t('重新启动')).fontSize(13).backgroundColor(this.store.accentFill).enabled(!this.store.activeTransfers).onClick(() => localSend.restart())
-        }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_tertiary'))
-      }
-      if (this.store.error || this.store.notice) {
-        Row({ space: 12 }) {
-          Text(this.store.t(this.store.error || this.store.notice)).fontSize(13).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-          Button('×').backgroundColor(Color.Transparent).fontColor($r('sys.color.font_primary')).onClick(() => { this.store.error = ''; this.store.notice = ''; })
-        }.padding({ left: 20, right: 12, top: 8, bottom: 8 }).width('100%').backgroundColor($r('sys.color.comp_background_tertiary'))
+        }.padding(16).width('100%').backgroundColor(this.store.controlSurface)
       }
       if (this.store.webRequests.length > 0 && this.route !== 'web') {
         Button(this.store.tf('{0} 个浏览器下载请求 · 点击查看', [String(this.store.webRequests.length)])).width('100%').height(48)
@@ -254,33 +265,49 @@ struct Index {
           Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
             .onClick(() => this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : '')
           Text(this.title()).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
-        }.width('100%').padding(12)
+        }.width('100%').padding({ left: 8, right: 20, top: 10, bottom: 10 })
+          .backgroundColor(this.store.glassColor).backgroundBlurStyle(BlurStyle.COMPONENT_THIN)
         Scroll() { Column() { this.details() }.padding(24).constraintSize({ maxWidth: 720 }).width('100%') }.layoutWeight(1).width('100%').align(Alignment.Top)
       } else {
         Tabs({ barPosition: this.windowWidth >= 840 ? BarPosition.Start : BarPosition.End, index: this.tab }) {
           TabContent() {
             Scroll() { Column() { this.receive() }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
-          }.tabBar(this.tabItem(this.store.t('接收'), '↓', 0))
+          }.tabBar(this.tabItem('接收', '↓', 0))
           TabContent() {
             Scroll() {
               Column() {
-                this.heading(this.store.t('发送'), this.store.t('跨越设备，传递心意'))
+                this.heading('发送', '选择内容，再选择设备')
                 SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
                   onDiscover: () => { localSend.discover(); },
                   onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; }, onSendMany: (peers: Peer[]) => { localSend.sendMany(peers); this.route = 'transfers'; } })
               }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%')
             }.width('100%').height('100%').align(Alignment.Top)
-          }.tabBar(this.tabItem(this.store.t('发送'), '↑', 1))
+          }.tabBar(this.tabItem('发送', '↑', 1))
           TabContent() {
             MessagesView({ store: this.store, detailOpen: $messageDetail, onTransfers: () => this.route = 'transfers' })
-          }.tabBar(this.tabItem(this.store.t('消息'), '≋', 2))
+          }.tabBar(this.tabItem('消息', '≋', 2))
           TabContent() {
-            Scroll() { Column() { this.heading(this.store.t('设置'), this.store.t('按你的习惯，恰到好处')); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
-          }.tabBar(this.tabItem(this.store.t('设置'), '⚙', 3))
+            Scroll() { Column() { this.heading('设置', ''); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
+          }.tabBar(this.tabItem('设置', '⚙', 3))
         }.vertical(this.windowWidth >= 840).barWidth(this.windowWidth >= 840 ? 96 : '100%').barHeight(this.windowWidth >= 840 ? '100%' : 76)
-          .animationDuration(this.store.settings.animations ? 240 : 0).onChange((index: number) => this.tab = index).layoutWeight(1)
+          .barBackgroundColor(this.store.glassColor).barBackgroundBlurStyle(BlurStyle.COMPONENT_THIN)
+          .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index).layoutWeight(1)
       }
-    }.backgroundColor($r('sys.color.background_primary')).width('100%').height('100%')
+    }.width('100%').height('100%')
+    if (this.store.error || this.store.notice) {
+      Row({ space: 12 }) {
+        Text(this.store.error ? '!' : '✓').fontSize(18).fontWeight(FontWeight.Medium)
+          .fontColor(this.store.error ? this.store.dangerText : this.store.accentText)
+        Text(this.store.t(this.store.error || this.store.notice)).fontSize(14).lineHeight(21).layoutWeight(1).fontColor($r('sys.color.font_primary'))
+        Button('×').width(40).height(40).fontSize(21).backgroundColor(Color.Transparent).fontColor($r('sys.color.font_secondary'))
+          .accessibilityText(this.store.t('关闭')).onClick(() => { this.store.error = ''; this.store.notice = ''; })
+      }.padding({ left: 20, right: 8, top: 8, bottom: 8 }).width('92%').constraintSize({ maxWidth: 560 })
+        .backgroundColor(this.store.glassColor).backgroundBlurStyle(BlurStyle.COMPONENT_REGULAR)
+        .borderRadius(24).border({ width: 0.5, color: this.store.hairlineColor })
+        .shadow({ radius: 20, color: this.store.dark ? '#40000000' : '#18314665', offsetY: 6 }).margin({ top: 12 })
+    }
+    }.linearGradient({ angle: 155, colors: [[this.store.ambientColor, 0], [this.store.canvasColor, 0.38], [this.store.canvasColor, 1]] })
+      .width('100%').height('100%')
       .onAreaChange((oldArea: Area, newArea: Area) => this.windowWidth = Number(newArea.width))
       .bindSheet($$this.directoryVisible, this.directorySheet(), { height: SheetSize.LARGE, showClose: true, onDisappear: () => this.closeDirectory('') })
   }

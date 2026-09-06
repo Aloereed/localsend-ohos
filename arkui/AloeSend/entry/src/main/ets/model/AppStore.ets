@@ -235,9 +235,15 @@ export class AppStore {
 
   t(text: string): string { return uiText(text, this.settings.language); }
   get dark(): boolean { return this.settings.theme === 'dark' || (this.settings.theme === 'system' && this.systemDark); }
-  get accentText(): string { return readableColor(this.settings.accent, this.dark ? '#383838' : '#F1F3F5'); }
+  get canvasColor(): string { return this.dark ? '#101318' : '#F3F5F9'; }
+  get surfaceColor(): string { return this.dark ? '#F0242931' : '#EFFFFFFF'; }
+  get controlSurface(): string { return this.dark ? '#343A43' : '#E9EEF5'; }
+  get glassColor(): string { return this.dark ? '#D02A3038' : '#CFFFFFFF'; }
+  get hairlineColor(): string { return this.dark ? '#24FFFFFF' : '#BFFFFFFF'; }
+  get ambientColor(): string { return this.dark ? '#17283B' : '#E2EBF9'; }
+  get accentText(): string { return readableColor(this.settings.accent, this.controlSurface); }
   get accentFill(): string { return readableColor(this.settings.accent, '#FFFFFF'); }
-  get dangerText(): string { return readableColor('#C44747', this.dark ? '#383838' : '#F1F3F5'); }
+  get dangerText(): string { return readableColor('#C44747', this.controlSurface); }
 
   refreshSystemTheme(): void {
     try { this.systemDark = this.context?.resourceManager.getConfigurationSync().colorMode === 0; }

@@ -31,7 +31,8 @@ export struct SettingsView {
   link(text: string, detail: string, destination: string) {
     Row({ space: 10 }) {
       Text(text).fontSize(16).fontColor($r('sys.color.font_primary')).layoutWeight(1)
-      Text(detail).fontSize(13).fontColor($r('sys.color.font_secondary'))
+      Text(destination === 'diagnostics' ? this.store.t(this.store.serverStatus) : destination === 'network' ? this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选') : detail)
+        .fontSize(13).fontColor($r('sys.color.font_secondary'))
       Text('›').fontSize(24).fontColor($r('sys.color.font_secondary'))
     }.padding(18).width('100%').constraintSize({ minHeight: 58 }).onClick(() => this.onNavigate(destination))
       .accessibilityText(`${text} ${detail}`)
@@ -101,16 +102,16 @@ export struct SettingsView {
         Text(this.store.t('设备名称')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
         TextInput({ text: this.alias, placeholder: this.store.t('设备名称') }).maxLength(40).onChange((value: string) => this.alias = value)
         Row({ space: 8 }) {
-          Button(this.store.t('随机名称')).fontSize(13).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+          Button(this.store.t('随机名称')).fontSize(13).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
             .onClick(() => this.alias = this.store.randomAlias())
-          Button(this.store.t('使用机型名称')).fontSize(13).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+          Button(this.store.t('使用机型名称')).fontSize(13).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
             .onClick(() => this.alias = this.store.systemDeviceName())
         }.width('100%')
-        Button(this.store.t('保存名称')).type(ButtonType.Capsule).backgroundColor(this.store.accentFill).onClick(() => {
+        Button(this.store.t('保存名称')).type(ButtonType.Capsule).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => {
           this.store.settings.alias = this.alias.trim() || this.store.t('我的鸿蒙设备');
           this.store.save(); localSend.announce(); this.store.notice = this.store.t('设备名称已保存');
         })
-      }.padding(20).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+      }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       this.title(this.store.t('外观'))
       Column() {
         Row() {
@@ -143,7 +144,7 @@ export struct SettingsView {
           }.width('100%')
         }.padding(18).width('100%')
         this.toggle(this.store.t('界面动画'), this.store.t('自然流畅的页面过渡'), 'animation')
-      }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+      }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       this.title(this.store.t('接收'))
       Column() {
         this.toggle(this.store.t('允许发现'), this.store.t('在同一网络中显示本设备'), 'visible')
@@ -158,7 +159,7 @@ export struct SettingsView {
           Text(this.store.settings.destinationMode !== 'private' ? this.store.settings.destination : this.store.t('应用内安全保存，可在接收历史中打开、分享或另存为'))
             .fontSize(13).lineHeight(20).fontColor($r('sys.color.font_secondary')).width('100%').maxLines(3)
           Row({ space: 10 }) {
-            Button(this.store.t('选择保存目录')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText).onClick(() => this.store.chooseDestination())
+            Button(this.store.t('选择保存目录')).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.store.chooseDestination())
             if (this.store.settings.destinationMode === 'folder') {
               Button(this.store.t('恢复默认')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => {
                 this.store.settings.destinationMode = 'download'; this.store.settings.destination = this.store.downloadDirectory;
@@ -174,18 +175,18 @@ export struct SettingsView {
             .onChange((value: string) => this.pin = value)
           Button(this.store.t('保存 PIN')).onClick(() => {
             this.store.settings.pin = this.pin; this.store.save(); this.store.notice = this.store.t('接收 PIN 已更新');
-          }).backgroundColor(this.store.accentFill)
+          }).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
         }.padding(18)
-      }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+      }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       this.title(this.store.t('网络'))
       Column() {
         Column({ space: 12 }) {
           Text(this.store.t(this.store.serverStatus)).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
           Row({ space: 12 }) {
             Button(this.store.t(this.store.listenerRunning ? '重启接收服务' : '启动接收服务')).layoutWeight(1).height(46)
-              .backgroundColor(this.store.accentFill).enabled(!this.store.activeTransfers && !this.store.serverStatus.startsWith('正在启动'))
+              .backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).enabled(!this.store.activeTransfers && !this.store.serverStatus.startsWith('正在启动'))
               .onClick(() => { if (this.store.listenerRunning) localSend.restart(); else localSend.resume(); })
-            Button(this.store.t('停止服务')).height(46).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+            Button(this.store.t('停止服务')).height(46).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
               .enabled(this.store.listenerRunning && !this.store.activeTransfers).onClick(() => localSend.pause())
           }.width('100%')
         }.padding(18).width('100%')
@@ -201,7 +202,7 @@ export struct SettingsView {
             TextInput({ text: this.timeout, placeholder: '1500' }).type(InputType.Number).onChange((value: string) => this.timeout = value)
             TextInput({ text: this.port, placeholder: this.store.t('端口 53317') }).type(InputType.Number).onChange((value: string) => this.port = value)
             TextInput({ text: this.group, placeholder: this.store.t('组播地址') }).onChange((value: string) => this.group = value)
-            Button(this.store.t('保存网络设置')).backgroundColor(this.store.accentFill).onClick(() => this.saveNetwork())
+            Button(this.store.t('保存网络设置')).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.saveNetwork())
             Row() {
               Text(this.store.t('设备类型')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
               Select([{ value: this.store.t('手机 / 平板') }, { value: this.store.t('电脑') }, { value: this.store.t('无界面设备') }])
@@ -211,7 +212,7 @@ export struct SettingsView {
             }.width('100%')
           }.padding(18)
         }
-      }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+      }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       this.title(this.store.t('帮助与支持'))
       Column() {
         this.link(this.store.t('使用帮助'), '', 'help')
@@ -220,7 +221,7 @@ export struct SettingsView {
         this.link(this.store.t('更新记录'), '', 'changelog')
         this.link(this.store.t('关于 AloeSend'), this.store.t('原生鸿蒙'), 'about')
         this.link(this.store.t('支持开源项目'), '', 'donate')
-      }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+      }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
     }.width('100%')
   }
 }

@@ -76,7 +76,8 @@ export struct SendView {
     Column({ space: 8 }) {
       AppIcon({ name: kind, iconSize: 28, tint: this.store.accentText })
       Text(label).fontSize(13).fontColor($r('sys.color.font_primary'))
-    }.width(104).constraintSize({ minHeight: 96 }).padding({ top: 20, bottom: 20 }).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+    }.width(104).constraintSize({ minHeight: 96 }).padding({ top: 20, bottom: 20 }).backgroundColor(this.store.surfaceColor).borderRadius(24)
+      .border({ width: 0.5, color: this.store.hairlineColor })
       .onClick(() => {
         this.pendingPeer = undefined;
         if (kind === 'text') { this.textId = ''; this.text = ''; this.openSheet('text'); }
@@ -126,15 +127,15 @@ export struct SendView {
   peerCard(peer: Peer) {
     Row({ space: 14 }) {
       Stack() { AppIcon({ name: peer.deviceType === 'mobile' ? 'mobile' : 'desktop', iconSize: 27, tint: this.store.accentText }) }
-        .width(48).height(56).borderRadius(17).backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => this.onDetails(peer))
+        .width(48).height(56).borderRadius(17).backgroundColor(this.store.controlSurface).onClick(() => this.onDetails(peer))
       Column({ space: 5 }) {
         Text(peer.alias || peer.ip).fontSize(17).fontWeight(FontWeight.Medium).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
         Text(`${peer.ip}:${peer.port}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
         Text(`${peer.protocol === 'https' ? this.store.t('加密连接') : this.store.t('未加密')}${this.store.isFavorite(peer) ? this.store.t(' · 已收藏') : ''}`).fontSize(11).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onDetails(peer))
       Button(this.store.settings.sendMode === 'multiple' ? (this.targets.includes(`${peer.ip}:${peer.port}`) ? this.store.t('已选') : this.store.t('选择')) : this.store.t('发送'))
-        .height(44).constraintSize({ minWidth: 64 }).backgroundColor(this.store.accentFill).onClick(() => this.beginSend(peer))
-    }.padding(18).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(22)
+        .height(44).constraintSize({ minWidth: 64 }).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.beginSend(peer))
+    }.padding(18).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(22)
   }
 
   build() {
@@ -149,13 +150,13 @@ export struct SendView {
         }
       }.width('100%').scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off)
       if (this.store.busy) { LoadingProgress().width(32).height(32) }
-      Row() {
+      if (this.store.files.length > 0) { Row() {
         Text(this.store.tf('已选 {0} 项', [String(this.store.files.length)])).fontSize(17).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))
         Text(formatSize(this.store.files.reduce((sum: number, file: ShareFile) => sum + file.size, 0))).fontSize(13).fontColor($r('sys.color.font_secondary'))
         if (this.store.files.length > 0) {
           Button(this.store.t('清空')).fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.store.files = [])
         }
-      }.width('100%').margin({ top: 10 })
+      }.width('100%').margin({ top: 10 }) }
       ForEach(this.store.files.slice(0, this.fileLimit), (file: ShareFile) => {
         Row({ space: 12 }) {
           if (file.mime.startsWith('image/') && file.uri) {
@@ -172,7 +173,7 @@ export struct SendView {
           })
           Button('×').fontSize(22).backgroundColor(Color.Transparent).fontColor($r('sys.color.font_secondary'))
             .onClick(() => this.store.removeFile(file.id)).accessibilityText(this.store.tf('移除 {0}', [file.name]))
-        }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
+        }.padding(16).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(20)
       }, (file: ShareFile) => `${file.id}:${file.name}:${file.size}`)
       if (this.store.files.length > this.fileLimit) {
         Button(this.store.tf('继续查看 · 还有 {0} 项', [String(this.store.files.length - this.fileLimit)]))
@@ -183,14 +184,12 @@ export struct SendView {
       }
       Row() {
         Text(this.store.t('附近的设备')).fontSize(19).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-        Button(this.store.t('刷新')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.onDiscover())
-      }.width('100%').margin({ top: 16 })
-      Row() {
-        Text(this.store.t('发送方式')).layoutWeight(1).fontSize(14).fontColor($r('sys.color.font_secondary'))
         Select([{ value: this.store.t('单台设备') }, { value: this.store.t('多台设备') }]).selected(this.store.settings.sendMode === 'multiple' ? 1 : 0)
           .value(this.store.t(this.store.settings.sendMode === 'multiple' ? '多台设备' : '单台设备'))
+          .font({ size: 13 }).accessibilityText(this.store.t('发送方式'))
           .onSelect((index: number) => { this.store.settings.sendMode = index === 1 ? 'multiple' : 'single'; this.store.save(); })
-      }.width('100%')
+        Button(this.store.t('刷新')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.onDiscover())
+      }.width('100%').margin({ top: 16 })
       if (this.store.peers.length === 0) {
         EmptyState({ icon: 'search', title: this.store.t('寻找另一台设备'), description: this.store.t('在对方设备打开 LocalSend，并连接同一网络。也可以通过 IP 地址直接添加。'), accent: this.store.accentText })
       }
@@ -200,9 +199,9 @@ export struct SendView {
         ForEach(this.store.favorites, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
       }
       Row({ space: 12 }) {
-        Button(this.store.t('通过地址添加')).layoutWeight(1).height(46).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText)
+        Button(this.store.t('通过地址添加')).layoutWeight(1).height(46).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText)
           .onClick(() => this.openSheet('address'))
-        Button(this.store.t('通过链接分享')).layoutWeight(1).height(46).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.accentText)
+        Button(this.store.t('通过链接分享')).layoutWeight(1).height(46).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText)
           .onClick(() => this.onWebShare())
       }.width('100%').margin({ top: 8 })
       if (this.store.settings.sendMode === 'multiple') {

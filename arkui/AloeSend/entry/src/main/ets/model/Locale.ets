@@ -1,6 +1,7 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "选择内容，再选择设备": "Choose content, then a device",
   "启动接收服务": "Start receiving service",
   "停止服务": "Stop service",
   "请等待当前传输结束后停止服务": "Wait for the current transfer to finish before stopping the service",
