@@ -25,6 +25,7 @@ export struct TransferList {
         Text(this.store.t('批量重命名')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
         Text(this.store.t('只修改选中的文件，保留文件夹层级和扩展名。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
         Select([{ value: this.store.t('连续编号') }, { value: this.store.t('随机名称') }]).selected(this.batchMode === 'counter' ? 0 : 1)
+          .value(this.store.t(this.batchMode === 'counter' ? '连续编号' : '随机名称'))
           .onSelect((index: number) => this.batchMode = index === 0 ? 'counter' : 'random')
         if (this.batchMode === 'counter') {
           TextInput({ text: this.prefix, placeholder: this.store.t('文件名前缀（可留空）') }).maxLength(100).onChange((value: string) => this.prefix = value)

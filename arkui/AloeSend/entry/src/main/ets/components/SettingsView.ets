@@ -102,12 +102,14 @@ export struct SettingsView {
           Text(this.store.t('语言')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
           Select([{ value: this.store.t('跟随系统') }, { value: '简体中文' }, { value: 'English' }])
             .selected(this.store.settings.language === 'system' ? 0 : this.store.settings.language === 'en' ? 2 : 1)
+            .value(this.store.settings.language === 'system' ? this.store.t('跟随系统') : this.store.settings.language === 'en' ? 'English' : '简体中文')
             .onSelect((index: number) => { this.store.settings.language = ['system', 'zh', 'en'][index]; this.store.save(); })
         }.padding(18).width('100%')
         Row() {
           Text(this.store.t('深浅模式')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
           Select([{ value: this.store.t('跟随系统') }, { value: this.store.t('浅色') }, { value: this.store.t('深色') }])
             .selected(this.store.settings.theme === 'light' ? 1 : this.store.settings.theme === 'dark' ? 2 : 0)
+            .value(this.store.t(this.store.settings.theme === 'light' ? '浅色' : this.store.settings.theme === 'dark' ? '深色' : '跟随系统'))
             .onSelect((index: number) => {
               this.store.settings.theme = ['system', 'light', 'dark'][index];
               this.store.applyTheme(); this.store.save();
@@ -181,6 +183,7 @@ export struct SettingsView {
               Text(this.store.t('设备类型')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
               Select([{ value: this.store.t('手机 / 平板') }, { value: this.store.t('电脑') }, { value: this.store.t('无界面设备') }])
                 .selected(this.store.settings.deviceType === 'desktop' ? 1 : this.store.settings.deviceType === 'headless' ? 2 : 0)
+                .value(this.store.t(this.store.settings.deviceType === 'desktop' ? '电脑' : this.store.settings.deviceType === 'headless' ? '无界面设备' : '手机 / 平板'))
                 .onSelect((index: number) => { this.store.settings.deviceType = ['mobile', 'desktop', 'headless'][index]; this.store.save(); localSend.announce(); })
             }.width('100%')
           }.padding(18)

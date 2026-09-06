@@ -62,7 +62,12 @@ class SocketAdapter {
 
 class ServerAdapter {
   constructor(isTls) { this.isTls = isTls; this.callbacks = {}; this.clients = new Set(); }
-  on(name, cb) { this.callbacks[name] = cb; }
+  on(name, cb) {
+    // Both HarmonyOS server APIs require successful listen before subscribing.
+    // Node normally permits the reverse order, which concealed a device bug.
+    if (!this.server?.listening) throw new Error('HarmonyOS server.on requires listen to complete first');
+    this.callbacks[name] = cb;
+  }
   async listen(options) {
     const handle = client => {
       this.clients.add(client); client.on('close', () => this.clients.delete(client));

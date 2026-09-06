@@ -29,10 +29,12 @@ export struct AppIcon {
   }
 
   build() {
-    Stack() {
-      Path().commands(this.path()).fill(Color.Transparent).stroke(this.tint).strokeWidth(1.7)
-        .strokeLineCap(LineCapStyle.Round).strokeLineJoin(LineJoinStyle.Round).width(24).height(24)
-        .scale({ x: this.iconSize / 24, y: this.iconSize / 24 })
-    }.width(this.iconSize).height(this.iconSize).accessibilityLevel('no')
+    // Path commands use physical pixels. An explicit px viewport maps the
+    // 24-unit drawing to the component's vp size on every display density.
+    Shape() {
+      Path().commands(this.path()).fill(Color.Transparent).stroke(this.tint).strokeWidth('1.7px')
+        .strokeLineCap(LineCapStyle.Round).strokeLineJoin(LineJoinStyle.Round)
+    }.viewPort({ x: '0px', y: '0px', width: '24px', height: '24px' })
+      .width(this.iconSize).height(this.iconSize).accessibilityLevel('no')
   }
 }

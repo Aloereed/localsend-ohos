@@ -31,7 +31,9 @@ export struct NetworkView {
         Row() {
           Text(this.store.t('发现范围')).fontSize(16).layoutWeight(1).fontColor($r('sys.color.font_primary'))
           Select([{ value: this.store.t('全部网络') }, { value: this.store.t('仅包含') }, { value: this.store.t('排除') }])
-            .selected(this.mode === 'allow' ? 1 : this.mode === 'deny' ? 2 : 0).onSelect((index: number) => this.mode = ['none', 'allow', 'deny'][index])
+            .selected(this.mode === 'allow' ? 1 : this.mode === 'deny' ? 2 : 0)
+            .value(this.store.t(this.mode === 'allow' ? '仅包含' : this.mode === 'deny' ? '排除' : '全部网络'))
+            .onSelect((index: number) => this.mode = ['none', 'allow', 'deny'][index])
         }.width('100%')
         if (this.mode !== 'none') {
           TextArea({ text: this.patterns, placeholder: '192.168.1.*\n10.0.*.*' }).height(150)

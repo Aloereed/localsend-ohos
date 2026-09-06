@@ -172,16 +172,18 @@ export class LocalSendService {
       const address: socket.NetAddress = { address: '0.0.0.0', port: this.store.listenerPort, family: 1 };
       if (this.store.listenerHttps) {
         this.tls = socket.constructTLSSocketServerInstance();
+        // HarmonyOS creates the native event source during listen(). Registering
+        // before it resolves silently leaves the native connect callback null.
+        await this.tls.listen({ address: address, secureOptions: { cert: this.identity.certificate, key: this.identity.privateKey } });
         this.tls.on('connect', (client: socket.TLSSocketConnection) => {
           const channel = this.newChannel(); channel.attachTls(client);
         });
         this.tls.on('error', (error) => { this.store.serverStatus = `接收服务错误 ${error.code}`; this.store.log(this.store.serverStatus); });
-        await this.tls.listen({ address: address, secureOptions: { cert: this.identity.certificate, key: this.identity.privateKey } });
       } else {
         this.tcp = socket.constructTCPSocketServerInstance();
+        await this.tcp.listen(address);
         this.tcp.on('connect', (client: socket.TCPSocketConnection) => { const channel = this.newChannel(); channel.attachTcp(client); });
         this.tcp.on('error', (error) => { this.store.serverStatus = `接收服务错误 ${error.code}`; this.store.log(this.store.serverStatus); });
-        await this.tcp.listen(address);
       }
       this.running = true;
       this.store.listenerRunning = true;

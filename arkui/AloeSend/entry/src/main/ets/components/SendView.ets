@@ -188,6 +188,7 @@ export struct SendView {
       Row() {
         Text(this.store.t('发送方式')).layoutWeight(1).fontSize(14).fontColor($r('sys.color.font_secondary'))
         Select([{ value: this.store.t('单台设备') }, { value: this.store.t('多台设备') }]).selected(this.store.settings.sendMode === 'multiple' ? 1 : 0)
+          .value(this.store.t(this.store.settings.sendMode === 'multiple' ? '多台设备' : '单台设备'))
           .onSelect((index: number) => { this.store.settings.sendMode = index === 1 ? 'multiple' : 'single'; this.store.save(); })
       }.width('100%')
       if (this.store.peers.length === 0) {

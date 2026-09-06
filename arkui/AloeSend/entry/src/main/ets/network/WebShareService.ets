@@ -38,12 +38,12 @@ export class WebShareService {
       if (encrypted) {
         const identity = new TlsIdentity(); await identity.load(this.store);
         this.tls = socket.constructTLSSocketServerInstance();
-        this.tls.on('connect', (client: socket.TLSSocketConnection) => this.channel().attachTls(client));
         await this.tls.listen({ address: address, secureOptions: { cert: identity.certificate, key: identity.privateKey } });
+        this.tls.on('connect', (client: socket.TLSSocketConnection) => this.channel().attachTls(client));
       } else {
         this.tcp = socket.constructTCPSocketServerInstance();
-        this.tcp.on('connect', (client: socket.TCPSocketConnection) => this.channel().attachTcp(client));
         await this.tcp.listen(address);
+        this.tcp.on('connect', (client: socket.TCPSocketConnection) => this.channel().attachTcp(client));
       }
       const host = this.store.localIps[0];
       if (!host) { await this.stop(); throw new Error('请先连接可用的局域网'); }
