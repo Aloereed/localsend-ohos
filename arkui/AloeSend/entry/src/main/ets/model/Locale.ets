@@ -320,6 +320,12 @@ const english: Record<string, string> = {
   "当前连接继续使用原设置。空闲时重启即可应用新设置。": "Current connections keep their existing settings. Restart when idle to apply changes.",
   "重新启动": "Restart",
   "当前监听": "Currently listening",
+  "已选 {0} 项 · {1}": "{0} selected · {1}",
+  "继续查看 · 还有 {0} 项": "Show more · {0} remaining",
+  "保存修改": "Save changes",
+  "收起清单": "Collapse selection",
+  "阅读全文": "Read full message",
+  "查看更早的消息": "Earlier messages",
   "没有匹配的会话": "No matching conversations",
   "换个关键词，搜索设备、文字或文件名。": "Try another device name, message or file name."
 };

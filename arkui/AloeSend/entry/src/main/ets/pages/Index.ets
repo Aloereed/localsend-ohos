@@ -11,6 +11,7 @@ import { AppIcon } from '../components/AppIcon';
 import { MessagesView } from '../components/MessagesView';
 import { NetworkView } from '../components/NetworkView';
 import { util } from '@kit.ArkTS';
+import { ReceiveRequestView } from '../components/ReceiveRequestView';
 
 @Entry
 @Component
@@ -211,12 +212,7 @@ struct Index {
         }.padding(24).width('100%')
       }
       if (this.store.pendingReceive) {
-        Scroll() {
-          Column() {
-            this.heading(this.store.t('收到分享请求'), this.store.t('查看内容，再决定是否接收'))
-            TransferList({ store: this.store, pendingOnly: true })
-          }.padding(24).constraintSize({ maxWidth: 720 }).width('100%')
-        }.layoutWeight(1).width('100%')
+        ReceiveRequestView({ store: this.store }).layoutWeight(1)
       } else if (this.route) {
         Row() {
           Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)

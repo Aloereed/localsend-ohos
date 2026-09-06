@@ -18,6 +18,8 @@ export struct SendView {
   @State renameId: string = '';
   @State renameText: string = '';
   @State targets: string[] = [];
+  @State textId: string = '';
+  @State fileLimit: number = 6;
   private pendingPeer: Peer | undefined = undefined;
 
   openSheet(kind: string, peer: Peer | undefined = undefined): void {
@@ -43,7 +45,7 @@ export struct SendView {
   }
 
   async chooseForPeer(kind: string): Promise<void> {
-    if (kind === 'text') { this.sheetKind = 'text'; return; }
+    if (kind === 'text') { this.textId = ''; this.text = ''; this.sheetKind = 'text'; return; }
     this.sheetVisible = false;
     await this.store.selectFiles(kind);
     if (this.store.files.length && this.pendingPeer) this.onSend(this.pendingPeer);
@@ -77,7 +79,7 @@ export struct SendView {
     }.layoutWeight(1).constraintSize({ minHeight: 96 }).padding({ top: 20, bottom: 20 }).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       .onClick(() => {
         this.pendingPeer = undefined;
-        if (kind === 'text') this.openSheet('text');
+        if (kind === 'text') { this.textId = ''; this.text = ''; this.openSheet('text'); }
         else if (kind === 'clipboard') this.store.paste();
         else this.store.selectFiles(kind);
       }).enabled(!this.store.busy).accessibilityText(this.store.tf('选择{0}', [label])).accessibilityLevel('yes')
@@ -89,9 +91,10 @@ export struct SendView {
       Text(this.store.t('发送文字或链接')).fontSize(23).fontWeight(FontWeight.Medium)
       TextArea({ text: this.text, placeholder: this.store.t('写点什么，或粘贴一个链接…') }).height(200).maxLength(100000)
         .onChange((value: string) => this.text = value)
-      Button(this.store.t('加入发送清单')).width('100%').height(48).enabled(this.text.trim().length > 0)
+      Button(this.store.t(this.textId ? '保存修改' : '加入发送清单')).width('100%').height(48).enabled(this.text.trim().length > 0)
         .backgroundColor(this.store.accentFill).onClick(() => {
-          this.store.addText(this.text); this.text = ''; this.sheetVisible = false;
+          if (this.textId) this.store.editText(this.textId, this.text); else this.store.addText(this.text);
+          this.text = ''; this.textId = ''; this.sheetVisible = false;
           if (this.pendingPeer) { this.onSend(this.pendingPeer); this.pendingPeer = undefined; }
         })
     }.padding(24).width('100%')
@@ -153,7 +156,7 @@ export struct SendView {
           Button(this.store.t('清空')).fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.store.files = [])
         }
       }.width('100%').margin({ top: 10 })
-      ForEach(this.store.files, (file: ShareFile) => {
+      ForEach(this.store.files.slice(0, this.fileLimit), (file: ShareFile) => {
         Row({ space: 12 }) {
           if (file.mime.startsWith('image/') && file.uri) {
             Image(file.uri).width(48).height(48).objectFit(ImageFit.Cover).borderRadius(12)
@@ -165,11 +168,19 @@ export struct SendView {
             Text(`${formatSize(file.size)} · ${file.text ? this.store.t('文字') : file.mime}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
           }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => {
             if (!file.text) { this.store.error = ''; this.renameId = file.id; this.renameText = file.name; this.openSheet('rename'); }
+            else { this.textId = file.id; this.text = file.text; this.openSheet('text'); }
           })
           Button('×').fontSize(22).backgroundColor(Color.Transparent).fontColor($r('sys.color.font_secondary'))
             .onClick(() => this.store.removeFile(file.id)).accessibilityText(this.store.tf('移除 {0}', [file.name]))
         }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
-      }, (file: ShareFile) => `${file.id}:${file.name}`)
+      }, (file: ShareFile) => `${file.id}:${file.name}:${file.size}`)
+      if (this.store.files.length > this.fileLimit) {
+        Button(this.store.tf('继续查看 · 还有 {0} 项', [String(this.store.files.length - this.fileLimit)]))
+          .width('100%').height(44).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.fileLimit += 30)
+      }
+      if (this.fileLimit > 6 && this.store.files.length > 6) {
+        Button(this.store.t('收起清单')).fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.fileLimit = 6)
+      }
       Row() {
         Text(this.store.t('附近的设备')).fontSize(19).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))
         Button(this.store.t('刷新')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.onDiscover())

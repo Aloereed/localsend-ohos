@@ -16,6 +16,8 @@ export struct MessagesView {
   @State sending: boolean = false;
   @State showDetails: boolean = false;
   @State detailEntry: HistoryEntry = new HistoryEntry();
+  @State visibleCount: number = 40;
+  private messageScroller: Scroller = new Scroller();
   onTransfers: () => void = () => {};
 
   aboutToAppear(): void { this.consumeTarget(); }
@@ -29,7 +31,12 @@ export struct MessagesView {
 
   open(peer: Peer): void {
     this.peer = this.store.peers.find((item: Peer) => samePeer(item, peer)) || peer;
-    this.query = ''; this.draft = ''; this.detailOpen = true;
+    this.query = ''; this.draft = ''; this.visibleCount = 40; this.detailOpen = true;
+    this.scrollToLatest();
+  }
+
+  scrollToLatest(): void {
+    setTimeout(() => { if (this.detailOpen) this.messageScroller.scrollEdge(Edge.Bottom, { velocity: 0 }); }, 100);
   }
 
   entries(): HistoryEntry[] {
@@ -44,7 +51,7 @@ export struct MessagesView {
     this.sending = true;
     try {
       await localSend.send(this.peer, [file]);
-      if (this.store.transfers.find((item) => item.files.some((sent) => sent.id === file.id))?.status === 'complete') this.draft = '';
+      if (this.store.transfers.find((item) => item.files.some((sent) => sent.id === file.id))?.status === 'complete') { this.draft = ''; this.scrollToLatest(); }
       else this.store.notice = this.store.t('消息未发送，草稿已保留。可在传输任务中查看原因');
     } finally { this.sending = false; }
   }
@@ -73,7 +80,11 @@ export struct MessagesView {
       if (entry.direction === 'send') { Blank().width(32) }
       Column({ space: 10 }) {
         if (entry.text) {
-          Text(entry.text).fontSize(16).lineHeight(24).fontColor($r('sys.color.font_primary')).copyOption(CopyOptions.LocalDevice).width('100%')
+          Text(entry.text).fontSize(16).lineHeight(24).maxLines(20).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary')).copyOption(CopyOptions.LocalDevice).width('100%')
+          if (entry.text.length > 160 || entry.text.split('\n').length > 6) {
+            Button(this.store.t('阅读全文')).height(36).fontSize(13).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+              .onClick(() => { this.detailEntry = entry; this.showDetails = true; })
+          }
         } else {
           Row({ space: 12 }) {
             AppIcon({ name: 'file', iconSize: 26, tint: this.store.accentText })
@@ -117,13 +128,17 @@ export struct MessagesView {
             { value: this.store.t('传输任务'), action: () => this.onTransfers() }, { value: this.store.t('清空会话'), action: () => this.clearConversation() }
           ])
         }.width('100%')
-        Search({ value: this.query, placeholder: this.store.t('搜索这段会话') }).onChange((value: string) => this.query = value)
-        Scroll() {
+        Search({ value: this.query, placeholder: this.store.t('搜索这段会话') }).onChange((value: string) => { this.query = value; this.visibleCount = 40; })
+        Scroll(this.messageScroller) {
           Column({ space: 12 }) {
+            if (this.entries().length > this.visibleCount) {
+              Button(this.store.t('查看更早的消息')).height(44).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+                .onClick(() => this.visibleCount += 40)
+            }
             if (this.entries().length === 0) {
               EmptyState({ icon: 'message', title: this.query ? this.store.t('没有匹配的消息') : this.store.t('从一句问候开始'), description: this.store.t('文字和文件直接送达这台设备。'), accent: this.store.accentText })
             }
-            ForEach(this.entries(), (entry: HistoryEntry) => { this.bubble(entry) }, (entry: HistoryEntry) => entry.id)
+            ForEach(this.entries().slice(-this.visibleCount), (entry: HistoryEntry) => { this.bubble(entry) }, (entry: HistoryEntry) => entry.id)
           }.width('100%').padding({ top: 8, bottom: 16 })
         }.width('100%').layoutWeight(1).align(Alignment.Bottom)
         Column({ space: 10 }) {

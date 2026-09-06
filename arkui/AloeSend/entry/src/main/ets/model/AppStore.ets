@@ -68,6 +68,7 @@ export class TransferView {
   error: string = '';
   files: TransferFile[] = [];
   started: number = Date.now();
+  activeStarted: number = 0;
   finished: number = 0;
   encrypted: boolean = true;
   peerInfo: Peer | undefined = undefined;
@@ -217,6 +218,7 @@ export class AppStore {
 
   updateTransfer(transfer: TransferView): void {
     const previous = this.transfers.find((item: TransferView) => item.id === transfer.id);
+    if (!transfer.activeStarted && transfer.status === 'transferring') transfer.activeStarted = Date.now();
     const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
     this.transfers = [snapshot, ...this.transfers.filter((item: TransferView) => item.id !== transfer.id)].slice(0, 30);
     if (this.context) backgroundKeeper.sync(this.transfers.some((item: TransferView) => item.status === 'transferring'), this.context,
@@ -307,6 +309,16 @@ export class AppStore {
     file.size = new util.TextEncoder().encodeInto(text).length;
     this.files = [...this.files, file];
     this.notice = '文字已加入发送清单';
+  }
+
+  editText(id: string, text: string): void {
+    if (!text.trim()) return;
+    this.files = this.files.map((file: ShareFile) => {
+      if (file.id !== id || !file.text) return file;
+      const edited = JSON.parse(JSON.stringify(file)) as ShareFile;
+      edited.text = text; edited.name = text.trim().slice(0, 70); edited.size = new util.TextEncoder().encodeInto(text).length;
+      return edited;
+    });
   }
 
   async paste(): Promise<void> {

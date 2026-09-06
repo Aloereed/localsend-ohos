@@ -7,6 +7,8 @@ import { AppIcon } from './AppIcon';
 export struct TransferList {
   @ObjectLink store: AppStore;
   @Prop pendingOnly: boolean = false;
+  @Prop consentActions: boolean = true;
+  @State fileLimit: number = 30;
   @State renameSheet: boolean = false;
   @State renameId: string = '';
   @State renameText: string = '';
@@ -33,10 +35,10 @@ export struct TransferList {
     return this.store.t('传输未完成');
   }
 
-  total(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + file.size, 0); }
+  total(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + (file.selected ? file.size : 0), 0); }
   done(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + file.transferred, 0); }
   rate(transfer: TransferView): string {
-    const seconds = Math.max(1, ((transfer.finished || Date.now()) - transfer.started) / 1000);
+    const seconds = Math.max(1, ((transfer.finished || Date.now()) - (transfer.activeStarted || transfer.started)) / 1000);
     const speed = this.done(transfer) / seconds;
     const remaining = speed > 0 ? Math.ceil((this.total(transfer) - this.done(transfer)) / speed) : 0;
     return `${formatSize(Math.round(speed))}/s${remaining > 0 ? this.store.tf(' · 剩余 {0}', [`${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`]) : ''}`;
@@ -79,7 +81,7 @@ export struct TransferList {
               Button(this.store.t('反选')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('invert'))
             }.width('100%')
           }
-          ForEach(transfer.files, (file: TransferFile) => {
+          ForEach(transfer.files.slice(0, this.fileLimit), (file: TransferFile) => {
             Row({ space: 10 }) {
               if (transfer.id === this.store.pendingReceive) {
                 Checkbox().select(file.selected).selectedColor(this.store.settings.accent)
@@ -99,6 +101,11 @@ export struct TransferList {
               }
             }.width('100%').padding({ top: 8, bottom: 8 })
           }, (file: TransferFile) => file.id)
+          if (transfer.files.length > this.fileLimit) {
+            Button(this.store.tf('继续查看 · 还有 {0} 项', [String(transfer.files.length - this.fileLimit)]))
+              .width('100%').height(44).fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_tertiary'))
+              .onClick(() => this.fileLimit += 50)
+          }
           if (transfer.id === this.store.pendingReceive) {
             Column({ space: 8 }) {
               Text(this.store.t('本次保存位置')).fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
@@ -106,12 +113,12 @@ export struct TransferList {
               Button(this.store.t('更改本次目录')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.chooseReceiveDestination())
             }.width('100%')
             Text(this.store.t('只接收你信任的内容。文件保存在本机，可在历史中另存为。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
-            Row({ space: 12 }) {
+            if (this.consentActions) { Row({ space: 12 }) {
               Button(this.store.t('拒绝')).layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor($r('sys.color.font_primary'))
                 .onClick(() => localSend.acceptReceive(false))
               Button(this.store.t('接收所选')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill)
                 .enabled(transfer.files.some((file: TransferFile) => file.selected)).onClick(() => localSend.acceptReceive(true))
-            }.width('100%')
+            }.width('100%') }
           } else if (transfer.status === 'waiting' || transfer.status === 'transferring') {
             Button(this.store.t('取消传输')).fontColor(this.store.dangerText).backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => { if (!webShare.cancel(transfer.id)) localSend.cancel(transfer.id); })
           } else if (transfer.direction === 'send' && (transfer.status === 'error' || transfer.status === 'cancelled')) {
