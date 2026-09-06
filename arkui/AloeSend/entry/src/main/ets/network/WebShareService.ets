@@ -23,16 +23,29 @@ export class WebShareService {
   private files: ShareFile[] = [];
   private downloads: Map<string, NativeConnection> = new Map();
   private expiryTimer: number = -1;
-  private starting: boolean = false;
+  private lifecycle: Promise<void> = Promise.resolve();
 
   constructor(store: AppStore, protocol: LocalSendService) { this.store = store; this.protocol = protocol; }
 
   async start(encrypted: boolean = false): Promise<void> {
     if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return; }
-    if (this.starting) return;
-    this.starting = true;
+    if (this.store.webStarting) return;
+    this.store.webStarting = true;
+    try { await this.scheduleLifecycle(() => this.startNow(encrypted)); }
+    finally { this.store.webStarting = false; }
+  }
+
+  private scheduleLifecycle(action: () => Promise<void>): Promise<void> {
+    const operation = this.lifecycle.then(action);
+    this.lifecycle = operation.catch(() => {});
+    return operation;
+  }
+
+  stop(): Promise<void> { return this.scheduleLifecycle(() => this.stopNow()); }
+
+  private async startNow(encrypted: boolean): Promise<void> {
     try {
-      await this.stop();
+      await this.stopNow();
       this.encrypted = encrypted; this.token = util.generateRandomUUID(); this.expiresAt = Date.now() + 3600000;
       this.files = this.store.files.slice(); this.store.webFiles = this.files;
       const port = this.store.settings.port < 65535 ? this.store.settings.port + 1 : this.store.settings.port - 1;
@@ -48,15 +61,14 @@ export class WebShareService {
         this.tcp.on('connect', (client: socket.TCPSocketConnection) => this.channel().attachTcp(client));
       }
       const host = this.store.localIps[0];
-      if (!host) { await this.stop(); throw new Error('请先连接可用的局域网'); }
+      if (!host) throw new Error('请先连接可用的局域网');
       this.store.webUrl = `${encrypted ? 'https' : 'http'}://${host}:${port}/s/${this.token}/`;
       this.expiryTimer = setTimeout(() => { this.stop(); this.store.notice = '分享链接已到期，可以重新开始分享'; }, 3600000);
       this.store.log('浏览器分享已启动，链接有效期 1 小时');
-    } catch (e) { await this.stop(); this.store.fail('启动浏览器分享失败', e as Error); }
-    finally { this.starting = false; }
+    } catch (e) { await this.stopNow(); this.store.fail('启动浏览器分享失败', e as Error); }
   }
 
-  async stop(): Promise<void> {
+  private async stopNow(): Promise<void> {
     if (this.expiryTimer !== -1) { clearTimeout(this.expiryTimer); this.expiryTimer = -1; }
     this.token = ''; this.store.webUrl = ''; this.store.webFiles = [];
     for (const resolve of this.pending.values()) resolve(false); this.pending.clear(); this.store.webRequests = [];

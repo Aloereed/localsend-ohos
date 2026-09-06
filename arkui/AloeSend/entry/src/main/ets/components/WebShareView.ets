@@ -56,7 +56,8 @@ export struct WebShareView {
           }.width('100%')
           Text(this.encrypted ? this.store.t('使用本机自签名证书，浏览器会要求确认。') : this.store.t('HTTP 浏览器模式不加密，仅在可信网络中使用。LocalSend 设备之间的加密传输不受影响。'))
             .fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary'))
-          Button(this.store.t('开始分享')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => webShare.start(this.encrypted))
+          Button(this.store.t('开始分享')).width('100%').height(48).backgroundColor(this.store.accentFill)
+            .enabled(!this.store.webStarting).onClick(() => webShare.start(this.encrypted))
         }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(28)
       } else {
         Column({ space: 18 }) {

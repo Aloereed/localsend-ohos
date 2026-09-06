@@ -284,7 +284,7 @@ export class LocalSendService {
   }
 
   private async resetIdentityNow(): Promise<void> {
-    if (this.store.identityResetting || this.starting || this.store.activeTransfers || this.store.webUrl) {
+    if (this.store.identityResetting || this.starting || this.store.activeTransfers || this.store.webUrl || this.store.webStarting) {
       this.store.notice = '请先结束传输并停止浏览器分享'; return;
     }
     const resume = !this.paused;

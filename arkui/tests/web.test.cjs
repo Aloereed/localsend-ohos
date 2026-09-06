@@ -5,7 +5,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const vm = require('node:vm');
-const { load, handles } = require('./host-runtime.cjs');
+const { load, handles, mocks } = require('./host-runtime.cjs');
 const { AppStore, ShareFile } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
 const { WebShareService } = load('network/WebShareService');
@@ -33,6 +33,38 @@ async function until(predicate) { const start = Date.now(); while (!(await predi
   const file = new ShareFile(); file.uri = source; file.size = data.length; file.name = 'hello <world>.bin'; store.files = [file];
   const protocol = new LocalSendService(store); const web = new WebShareService(store, protocol);
   try {
+    await check('stop during browser startup waits for binding and startup blocks identity/settings replacement', async () => {
+      const sockets = mocks['@kit.NetworkKit'].socket;
+      const construct = sockets.constructTCPSocketServerInstance;
+      let release; let entered = false;
+      const gate = new Promise(resolve => { release = resolve; });
+      sockets.constructTCPSocketServerInstance = () => {
+        const server = construct(); const listen = server.listen.bind(server);
+        server.listen = async address => { entered = true; await gate; await listen(address); };
+        return server;
+      };
+      const starting = web.start(false);
+      try {
+        assert.equal(store.webStarting, true);
+        await until(() => entered);
+        assert.equal(store.webUrl, '');
+        assert.equal(await store.restoreSettings(), false);
+        const fingerprint = store.settings.fingerprint;
+        await protocol.resetIdentity();
+        assert.equal(store.settings.fingerprint, fingerprint);
+        const stopping = web.stop(); release();
+        await Promise.all([starting, stopping]);
+        assert.equal(store.webStarting, false); assert.equal(store.webUrl, '');
+        const probe = net.createServer();
+        await new Promise((resolve, reject) => { probe.once('error', reject); probe.listen(port, '0.0.0.0', resolve); });
+        await new Promise(resolve => probe.close(resolve));
+      } finally { release(); await starting; sockets.constructTCPSocketServerInstance = construct; await web.stop(); }
+    });
+    await check('failed browser startup clears busy state and allows another attempt', async () => {
+      store.localIps = []; await web.start(false);
+      assert.equal(store.webStarting, false); assert.equal(store.webUrl, '');
+      store.localIps = ['127.0.0.1']; store.error = ''; store.notice = '';
+    });
     await web.start(false); assert.ok(store.webUrl);
     const base = store.webUrl; const origin = new URL(base).origin;
     await check('real browser page contains files and escapes peer-supplied HTML', async () => {

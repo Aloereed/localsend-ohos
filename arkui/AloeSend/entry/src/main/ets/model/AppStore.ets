@@ -196,6 +196,7 @@ export class AppStore {
   pendingReceive: string = '';
   pendingPin: string = '';
   webUrl: string = '';
+  webStarting: boolean = false;
   webRequests: WebAccessRequest[] = [];
   webFiles: ShareFile[] = [];
   batchRemaining: number = 0;
@@ -271,7 +272,7 @@ export class AppStore {
   }
 
   async restoreSettings(): Promise<boolean> {
-    if (this.activeTransfers || this.identityResetting || this.webUrl) {
+    if (this.activeTransfers || this.identityResetting || this.webUrl || this.webStarting) {
       this.notice = '请先结束传输并停止浏览器分享'; return false;
     }
     if (!this.storage) return false;

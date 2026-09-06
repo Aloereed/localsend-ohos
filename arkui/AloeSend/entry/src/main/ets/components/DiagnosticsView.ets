@@ -53,7 +53,7 @@ export struct DiagnosticsView {
           Button(this.store.t('查看证书')).layoutWeight(1).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
             .enabled(!!localSend.certificate()).onClick(() => this.showCertificate = !this.showCertificate)
           Button(this.store.t('重新生成')).layoutWeight(1).height(44).fontColor(this.store.dangerText).backgroundColor(this.store.controlSurface)
-            .enabled(!this.store.activeTransfers && !this.store.webUrl && !this.store.identityResetting).onClick(() => this.resetCertificate())
+            .enabled(!this.store.activeTransfers && !this.store.webUrl && !this.store.webStarting && !this.store.identityResetting).onClick(() => this.resetCertificate())
         }.width('100%')
         if (this.showCertificate) {
           Text(localSend.certificate()).fontSize(12).lineHeight(19).fontColor($r('sys.color.font_secondary')).width('100%').copyOption(CopyOptions.LocalDevice)
@@ -79,7 +79,7 @@ export struct DiagnosticsView {
         Button(this.store.t('查看更多')).height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).onClick(() => this.limit += 50)
       }
       Button(this.store.t('恢复默认设置')).width('100%').height(48).fontColor(this.store.dangerText).backgroundColor(this.store.controlSurface)
-        .enabled(!this.store.activeTransfers && !this.store.webUrl && !this.store.identityResetting).onClick(() => this.restoreSettings())
+        .enabled(!this.store.activeTransfers && !this.store.webUrl && !this.store.webStarting && !this.store.identityResetting).onClick(() => this.restoreSettings())
     }.width('100%')
   }
 }
