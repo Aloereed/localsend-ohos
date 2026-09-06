@@ -1,5 +1,6 @@
 import { AppStore, TransferView, TransferFile, formatSize } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
+import { webShare } from '../network/WebShareService';
 
 @Component
 export struct TransferList {
@@ -27,6 +28,12 @@ export struct TransferList {
 
   build() {
     Column({ space: 18 }) {
+      if (this.store.batchRemaining > 0) {
+        Row() {
+          Text(`队列剩余 ${this.store.batchRemaining} 台设备`).layoutWeight(1).fontColor($r('sys.color.font_primary'))
+          Button('停止队列').fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => localSend.cancelAll())
+        }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
+      }
       if (this.store.transfers.length === 0) {
         Text('暂无传输任务').fontSize(18).fontColor($r('sys.color.font_secondary')).padding(40)
       }
@@ -71,7 +78,9 @@ export struct TransferList {
                 .enabled(transfer.files.some((file: TransferFile) => file.selected)).onClick(() => localSend.acceptReceive(true))
             }.width('100%')
           } else if (transfer.status === 'waiting' || transfer.status === 'transferring') {
-            Button('取消传输').fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => localSend.cancel(transfer.id))
+            Button('取消传输').fontColor('#C44747').backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => { if (!webShare.cancel(transfer.id)) localSend.cancel(transfer.id); })
+          } else if (transfer.direction === 'send' && (transfer.status === 'error' || transfer.status === 'cancelled')) {
+            Button('重试未完成文件').backgroundColor(this.store.settings.accent).onClick(() => localSend.retry(transfer.id))
           }
         }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
       }, (transfer: TransferView) => transfer.id)

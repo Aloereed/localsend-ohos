@@ -3,6 +3,7 @@ import { common, ConfigurationConstant, abilityAccessCtrl } from '@kit.AbilityKi
 import { picker, fileIo as fs, fileUri } from '@kit.CoreFileKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
+import { backgroundKeeper } from '../platform/BackgroundKeeper';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -127,11 +128,19 @@ export class AppStore {
   webUrl: string = '';
   webRequests: WebAccessRequest[] = [];
   webFiles: ShareFile[] = [];
+  batchRemaining: number = 0;
+  incomingShare: boolean = false;
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
+  private initialization: Promise<void> | undefined = undefined;
 
   async init(context: common.UIAbilityContext): Promise<void> {
     if (this.ready) return;
+    if (!this.initialization) this.initialization = this.load(context);
+    await this.initialization;
+  }
+
+  private async load(context: common.UIAbilityContext): Promise<void> {
     this.context = context;
     try {
       this.storage = await preferences.getPreferences(context, 'aloesend-native-v1');
@@ -155,6 +164,8 @@ export class AppStore {
   updateTransfer(transfer: TransferView): void {
     const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
     this.transfers = [snapshot, ...this.transfers.filter((item: TransferView) => item.id !== transfer.id)].slice(0, 30);
+    if (this.context) backgroundKeeper.sync(this.transfers.some((item: TransferView) => item.status === 'transferring'), this.context,
+      (message: string) => this.log(message));
   }
 
   fail(title: string, error: Error): void {
@@ -264,7 +275,11 @@ export class AppStore {
     if (!trimmed || /[\\/:*?"<>|]/.test(trimmed) || trimmed === '.' || trimmed === '..') {
       this.error = '请输入不包含路径分隔符的文件名'; return;
     }
-    this.files = this.files.map((file: ShareFile) => { if (file.id === id) file.name = trimmed; return file; });
+    this.files = this.files.map((file: ShareFile) => {
+      if (file.id !== id) return file;
+      const renamed = JSON.parse(JSON.stringify(file)) as ShareFile;
+      renamed.name = trimmed; return renamed;
+    });
   }
 
   isFavorite(peer: Peer): boolean { return this.favorites.some((item: Peer) => item.ip === peer.ip && item.port === peer.port); }

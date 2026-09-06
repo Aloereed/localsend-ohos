@@ -52,6 +52,12 @@ class SendSessionRef {
   constructor(peer: Peer, remoteId: string) { this.peer = peer; this.remoteId = remoteId; }
 }
 
+class RetryContext {
+  peer: Peer;
+  files: ShareFile[];
+  constructor(peer: Peer, files: ShareFile[]) { this.peer = peer; this.files = files; }
+}
+
 class UploadSink implements BodySink {
   private service: LocalSendService;
   private session: ReceiveSession;
@@ -129,6 +135,8 @@ export class LocalSendService {
   private receiving: ReceiveSession | undefined = undefined;
   private sending: Map<string, Cancellation> = new Map();
   private sendSessions: Map<string, SendSessionRef> = new Map();
+  private retryContexts: Map<string, RetryContext> = new Map();
+  private batchCancelled: boolean = false;
   private pinResolver: ((pin: string) => void) | undefined = undefined;
   private timer: number = -1;
   private running: boolean = false;
@@ -409,9 +417,10 @@ export class LocalSendService {
 
   submitPin(pin: string): void { this.pinResolver?.(pin); this.pinResolver = undefined; this.store.pendingPin = ''; }
 
-  async send(peer: Peer): Promise<void> {
-    if (!this.store.files.length) { this.store.notice = '请先选择文件或输入文字'; return; }
-    const files = this.store.files.slice(); const transfer = new TransferView(); transfer.id = util.generateRandomUUID();
+  async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files): Promise<void> {
+    if (!selectedFiles.length) { this.store.notice = '请先选择文件或输入文字'; return; }
+    const files = selectedFiles.slice(); const transfer = new TransferView(); transfer.id = util.generateRandomUUID();
+    this.retryContexts.set(transfer.id, new RetryContext(peer, files));
     transfer.peer = peer.alias; transfer.encrypted = peer.protocol === 'https';
     const fileInfos: Record<string, FileInfo> = {};
     for (const file of files) {
@@ -473,6 +482,7 @@ export class LocalSendService {
       transfer.status = 'complete'; transfer.finished = Date.now(); this.store.notice = `已发送到 ${peer.alias}`;
     } catch (e) {
       transfer.status = cancellation.cancelled ? 'cancelled' : 'error'; transfer.error = (e as Error).message;
+      for (const file of transfer.files) { if (file.status === 'transferring') file.status = transfer.status; }
       this.store.log(`发送：${transfer.error}`);
     } finally { this.sending.delete(transfer.id); this.sendSessions.delete(transfer.id); this.store.updateTransfer(transfer); }
   }
@@ -480,6 +490,32 @@ export class LocalSendService {
   private async sentHistory(file: ShareFile, peer: Peer): Promise<void> {
     const entry = new HistoryEntry(); entry.name = file.name; entry.peer = peer.alias; entry.direction = 'send'; entry.size = file.size; entry.text = file.text;
     await this.store.addHistory(entry);
+  }
+
+  async sendMany(peers: Peer[]): Promise<void> {
+    if (this.store.batchRemaining > 0) { this.store.notice = '已有多设备发送任务'; return; }
+    const files = this.store.files.slice();
+    if (!files.length) { this.store.notice = '请先选择发送内容'; return; }
+    this.batchCancelled = false; this.store.batchRemaining = peers.length;
+    try {
+      for (const peer of peers) {
+        if (this.batchCancelled) break;
+        await this.send(peer, files); this.store.batchRemaining--;
+      }
+    } finally { this.store.batchRemaining = 0; }
+  }
+
+  cancelAll(): void {
+    this.batchCancelled = true;
+    for (const id of this.sending.keys()) this.cancel(id);
+  }
+
+  async retry(id: string): Promise<void> {
+    const context = this.retryContexts.get(id);
+    const previous = this.store.transfers.find((transfer: TransferView) => transfer.id === id);
+    if (!context || !previous) { this.store.notice = '请重新选择原文件后发送'; return; }
+    const incomplete = previous.files.filter((file: TransferFile) => file.status !== 'complete' && file.status !== 'skipped').map((file: TransferFile) => file.id);
+    await this.send(context.peer, context.files.filter((file: ShareFile) => incomplete.includes(file.id)));
   }
 }
 

@@ -135,6 +135,35 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         assert.equal(seen[0].files[file.id].size, data.length);
       } finally { await new Promise(r => remote.close(r)); }
     });
+    await check('retry sends only incomplete files and multi-device queue preserves its selection', async () => {
+      const offers = []; let failSecond = true;
+      const remote = http.createServer((req, res) => {
+        const chunks = []; req.on('data', chunk => chunks.push(chunk)); req.on('end', () => {
+          if (req.url.includes('prepare-upload')) {
+            const payload = JSON.parse(Buffer.concat(chunks)); offers.push(Object.keys(payload.files));
+            const files = Object.fromEntries(Object.keys(payload.files).map(id => [id, 'token']));
+            const body = JSON.stringify({ sessionId: 'retry-session', files });
+            res.writeHead(200, { 'content-length': Buffer.byteLength(body) }); res.end(body);
+          } else {
+            const bad = req.url.includes('fileId=second') && failSecond;
+            res.writeHead(bad ? 500 : 200, { 'content-length': 2 }); res.end('{}');
+          }
+        });
+      });
+      await new Promise(r => remote.listen(0, '127.0.0.1', r));
+      try {
+        const first = new ShareFile(); first.id = 'first'; first.name = 'one'; first.text = '1'; first.size = 1;
+        const second = new ShareFile(); second.id = 'second'; second.name = 'two'; second.text = '2'; second.size = 1;
+        store.files = [first, second]; const peer = new Peer(); peer.ip = '127.0.0.1'; peer.port = remote.address().port; peer.protocol = 'http'; peer.alias = 'Retry peer';
+        await service.send(peer); const previous = store.transfers[0];
+        assert.equal(previous.status, 'error'); assert.equal(previous.files[0].status, 'complete');
+        failSecond = false; await service.retry(previous.id);
+        assert.equal(store.transfers[0].status, 'complete'); assert.deepEqual(offers[1], ['second']);
+        const queue = service.sendMany([peer, peer]); store.files = [];
+        await queue; assert.equal(store.batchRemaining, 0);
+        assert.deepEqual(offers.slice(2), [['first', 'second'], ['first', 'second']]);
+      } finally { await new Promise(r => remote.close(r)); }
+    });
   } finally { await service.stop(); }
   await until(() => handles.size === 0);
   console.log(`${checks} service integration groups passed; zero open file handles`);

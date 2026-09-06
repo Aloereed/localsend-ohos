@@ -19,6 +19,7 @@
         "usedScene": { "abilities": ["EntryAbility"], "when": "inuse" }
       },
       { "name": "ohos.permission.INTERNET" },
+      { "name": "ohos.permission.KEEP_BACKGROUND_RUNNING" },
       { "name": "ohos.permission.GET_NETWORK_INFO" }
     ],
     "abilities": [
@@ -31,6 +32,7 @@
         "startWindowIcon": "$media:startIcon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
+        "backgroundModes": ["dataTransfer"],
         "skills": [
           {
             "entities": [
@@ -39,6 +41,11 @@
             "actions": [
               "ohos.want.action.home"
             ]
+          },
+          {
+            "actions": ["ohos.want.action.sendData"],
+            "uris": [{ "scheme": "file", "utd": "general.object", "maxFileSupported": 100 },
+              { "scheme": "", "utd": "general.text" }, { "scheme": "", "utd": "general.hyperlink" }]
           }
         ]
       }

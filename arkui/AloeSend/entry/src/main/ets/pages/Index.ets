@@ -138,6 +138,10 @@ struct Index {
         Button(`${this.store.webRequests.length} 个浏览器下载请求 · 点击查看`).width('100%').height(48)
           .backgroundColor(this.store.settings.accent).onClick(() => this.route = 'web')
       }
+      if (this.store.incomingShare) {
+        Button('查看系统分享的内容').width('100%').height(48).backgroundColor(this.store.settings.accent)
+          .onClick(() => { this.store.incomingShare = false; this.route = ''; this.tab = 1; })
+      }
       if (this.store.pendingPin) {
         Column({ space: 12 }) {
           Text('请输入对方设备的接收 PIN').fontSize(18).fontColor($r('sys.color.font_primary'))
@@ -172,7 +176,7 @@ struct Index {
                 this.heading('发送', '跨越设备，传递心意')
                 SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
                   onDiscover: () => { localSend.discover(); },
-                  onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; } })
+                  onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; }, onSendMany: (peers: Peer[]) => { localSend.sendMany(peers); this.route = 'transfers'; } })
               }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%')
             }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('发送', '↑', 1))

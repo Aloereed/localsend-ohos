@@ -8,6 +8,7 @@ export struct SendView {
   onAddress: (address: string) => void = () => {};
   onWebShare: () => void = () => {};
   onDetails: (peer: Peer) => void = () => {};
+  onSendMany: (peers: Peer[]) => void = () => {};
   @State textSheet: boolean = false;
   @State text: string = '';
   @State addressSheet: boolean = false;
@@ -15,6 +16,46 @@ export struct SendView {
   @State renameSheet: boolean = false;
   @State renameId: string = '';
   @State renameText: string = '';
+  @State targets: string[] = [];
+  @State chooseSheet: boolean = false;
+  private pendingPeer: Peer | undefined = undefined;
+
+  beginSend(peer: Peer): void {
+    if (this.store.settings.sendMode === 'multiple') {
+      const key = `${peer.ip}:${peer.port}`;
+      this.targets = this.targets.includes(key) ? this.targets.filter((item: string) => item !== key) : [...this.targets, key];
+      return;
+    }
+    if (!this.store.files.length) { this.pendingPeer = peer; this.chooseSheet = true; return; }
+    this.onSend(peer);
+  }
+
+  async chooseForPeer(kind: string): Promise<void> {
+    this.chooseSheet = false;
+    if (kind === 'text') { this.textSheet = true; return; }
+    await this.store.selectFiles(kind);
+    if (this.store.files.length && this.pendingPeer) this.onSend(this.pendingPeer);
+    this.pendingPeer = undefined;
+  }
+
+  sendSelected(): void {
+    const peers: Peer[] = [];
+    for (const peer of [...this.store.peers, ...this.store.favorites]) {
+      if (this.targets.includes(`${peer.ip}:${peer.port}`) && !peers.some((item: Peer) => item.ip === peer.ip && item.port === peer.port)) peers.push(peer);
+    }
+    this.onSendMany(peers);
+  }
+
+  @Builder
+  chooseEditor() {
+    Column({ space: 16 }) {
+      Text('先选择要分享的内容').fontSize(23).fontWeight(FontWeight.Medium)
+      Text('选择后直接发送到这台设备。').fontSize(14).fontColor($r('sys.color.font_secondary'))
+      Button('文件').width('100%').height(48).backgroundColor(this.store.settings.accent).onClick(() => this.chooseForPeer('file'))
+      Button('照片与视频').width('100%').height(48).backgroundColor(this.store.settings.accent).onClick(() => this.chooseForPeer('photo'))
+      Button('文字或链接').width('100%').height(48).backgroundColor(this.store.settings.accent).onClick(() => this.chooseForPeer('text'))
+    }.padding(24).width('100%')
+  }
 
   @Builder
   action(label: string, symbol: string, kind: string) {
@@ -38,6 +79,7 @@ export struct SendView {
       Button('加入发送清单').width('100%').height(48).enabled(this.text.trim().length > 0)
         .backgroundColor(this.store.settings.accent).onClick(() => {
           this.store.addText(this.text); this.text = ''; this.textSheet = false;
+          if (this.pendingPeer) { this.onSend(this.pendingPeer); this.pendingPeer = undefined; }
         })
     }.padding(24).width('100%')
   }
@@ -74,7 +116,8 @@ export struct SendView {
       }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onDetails(peer))
       Button(this.store.isFavorite(peer) ? '★' : '☆').fontColor(this.store.settings.accent)
         .backgroundColor(Color.Transparent).onClick(() => this.store.toggleFavorite(peer)).accessibilityText('收藏设备')
-      Button('发送').backgroundColor(this.store.settings.accent).onClick(() => this.onSend(peer))
+      Button(this.store.settings.sendMode === 'multiple' ? (this.targets.includes(`${peer.ip}:${peer.port}`) ? '已选' : '选择') : '发送')
+        .backgroundColor(this.store.settings.accent).onClick(() => this.beginSend(peer))
     }.padding(18).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(22)
   }
 
@@ -114,6 +157,11 @@ export struct SendView {
         Text('附近的设备').fontSize(19).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))
         Button('刷新').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => this.onDiscover())
       }.width('100%').margin({ top: 16 })
+      Row() {
+        Text('发送方式').layoutWeight(1).fontSize(14).fontColor($r('sys.color.font_secondary'))
+        Select([{ value: '单台设备' }, { value: '多台设备' }]).selected(this.store.settings.sendMode === 'multiple' ? 1 : 0)
+          .onSelect((index: number) => { this.store.settings.sendMode = index === 1 ? 'multiple' : 'single'; this.store.save(); })
+      }.width('100%')
       if (this.store.peers.length === 0) {
         Column({ space: 12 }) {
           Text('等待发现附近设备').fontSize(17).fontColor($r('sys.color.font_primary'))
@@ -131,9 +179,14 @@ export struct SendView {
         Button('通过链接分享').layoutWeight(1).height(46).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.settings.accent)
           .onClick(() => this.onWebShare())
       }.width('100%').margin({ top: 8 })
+      if (this.store.settings.sendMode === 'multiple') {
+        Button(`发送给 ${this.targets.length} 台设备`).width('100%').height(48).backgroundColor(this.store.settings.accent)
+          .enabled(this.targets.length > 0 && this.store.files.length > 0).onClick(() => this.sendSelected())
+      }
     }.width('100%')
       .bindSheet($$this.textSheet, this.textEditor(), { height: SheetSize.MEDIUM, showClose: true })
       .bindSheet($$this.addressSheet, this.addressEditor(), { height: SheetSize.MEDIUM, showClose: true })
       .bindSheet($$this.renameSheet, this.renameEditor(), { height: SheetSize.MEDIUM, showClose: true })
+      .bindSheet($$this.chooseSheet, this.chooseEditor(), { height: SheetSize.MEDIUM, showClose: true })
   }
 }

@@ -20,6 +20,7 @@ export class WebShareService {
   private expiresAt: number = 0;
   private pending: Map<string, (value: boolean) => void> = new Map();
   private files: ShareFile[] = [];
+  private downloads: Map<string, NativeConnection> = new Map();
 
   constructor(store: AppStore, protocol: LocalSendService) { this.store = store; this.protocol = protocol; }
 
@@ -56,6 +57,11 @@ export class WebShareService {
   }
 
   respond(id: string, accepted: boolean): void { this.pending.get(id)?.(accepted); }
+  cancel(id: string): boolean {
+    const channel = this.downloads.get(id);
+    if (!channel) return false;
+    channel.close(); return true;
+  }
 
   private channel(): NativeConnection {
     this.channels = this.channels.filter((channel: NativeConnection) => !channel.closed);
@@ -106,6 +112,7 @@ export class WebShareService {
     transfer.encrypted = this.encrypted; transfer.status = 'transferring';
     const item = new TransferFile(); item.id = file.id; item.name = file.name; item.size = file.size; item.status = 'transferring'; transfer.files = [item];
     this.store.updateTransfer(transfer);
+    this.downloads.set(transfer.id, channel);
     try {
       await channel.beginResponse(200, file.size, file.mime, `Content-Disposition: attachment; filename*=UTF-8''${encodeURIComponent(file.name)}\r\nCache-Control: no-store\r\n`);
       if (file.text) await channel.send(encodeText(file.text));
@@ -124,8 +131,8 @@ export class WebShareService {
       item.status = 'complete'; item.transferred = file.size; transfer.status = 'complete'; transfer.finished = Date.now();
       const entry = new HistoryEntry(); entry.name = file.name; entry.size = file.size; entry.peer = transfer.peer; entry.direction = 'send'; entry.text = file.text;
       await this.store.addHistory(entry);
-    } catch (e) { transfer.status = 'error'; transfer.error = (e as Error).message; }
-    finally { channel.close(); this.store.updateTransfer(transfer); }
+    } catch (e) { transfer.status = channel.closed ? 'cancelled' : 'error'; item.status = transfer.status; transfer.error = (e as Error).message; }
+    finally { this.downloads.delete(transfer.id); channel.close(); this.store.updateTransfer(transfer); }
   }
 }
 
