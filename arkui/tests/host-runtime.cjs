@@ -12,6 +12,7 @@ const ts = require(process.env.TYPESCRIPT_PATH || 'E:/Huawei/DevEco_Studio/tools
 const root = path.join(__dirname, '../AloeSend/entry/src/main/ets');
 const handles = new Map(); let nextFd = 1;
 const caches = new Map();
+const timers = { setTimeout, clearTimeout, setInterval, clearInterval };
 const modes = { READ_ONLY: 0, READ_WRITE: 2, CREATE: 64, TRUNC: 512 };
 const nativeFs = {
   OpenMode: modes,
@@ -142,7 +143,7 @@ function load(relative) {
   const output = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2021, module: ts.ModuleKind.CommonJS, experimentalDecorators: true } }).outputText;
   const exports = {}; caches.set(file, exports);
   const localRequire = name => name.startsWith('.') ? load(path.resolve(path.dirname(file), name)) : mocks[name] || require(name);
-  vm.runInNewContext(output, { exports, require: localRequire, Observed: value => value, Uint8Array, ArrayBuffer, Date, Error, Promise, Map, Set, Number, Object, JSON, String, Math, RegExp, parseInt, encodeURIComponent, decodeURIComponent, setTimeout, clearTimeout, setInterval, clearInterval, console }, { filename: file });
+  vm.runInNewContext(output, { exports, require: localRequire, Observed: value => value, Uint8Array, ArrayBuffer, Date, Error, Promise, Map, Set, Number, Object, JSON, String, Math, RegExp, parseInt, encodeURIComponent, decodeURIComponent, ...timers, console }, { filename: file });
   return exports;
 }
-module.exports = { load, handles, mocks };
+module.exports = { load, handles, mocks, timers };

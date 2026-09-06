@@ -76,7 +76,7 @@ export struct SendView {
     Column({ space: 8 }) {
       AppIcon({ name: kind, iconSize: 28, tint: this.store.accentText })
       Text(label).fontSize(13).fontColor($r('sys.color.font_primary'))
-    }.layoutWeight(1).constraintSize({ minHeight: 96 }).padding({ top: 20, bottom: 20 }).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+    }.width(104).constraintSize({ minHeight: 96 }).padding({ top: 20, bottom: 20 }).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       .onClick(() => {
         this.pendingPeer = undefined;
         if (kind === 'text') { this.textId = ''; this.text = ''; this.openSheet('text'); }
@@ -139,15 +139,15 @@ export struct SendView {
 
   build() {
     Column({ space: 14 }) {
-      Row({ space: 10 }) {
+      Scroll() {
+        Row({ space: 10 }) {
         this.action(this.store.t('文件'), '▤', 'file')
         this.action(this.store.t('照片'), '▧', 'photo')
         this.action(this.store.t('文件夹'), '▱', 'folder')
-      }.width('100%')
-      Row({ space: 10 }) {
         this.action(this.store.t('文字 / 链接'), 'Aa', 'text')
         this.action(this.store.t('剪贴板'), '▣', 'clipboard')
-      }.width('100%')
+        }
+      }.width('100%').scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off)
       if (this.store.busy) { LoadingProgress().width(32).height(32) }
       Row() {
         Text(this.store.tf('已选 {0} 项', [String(this.store.files.length)])).fontSize(17).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))

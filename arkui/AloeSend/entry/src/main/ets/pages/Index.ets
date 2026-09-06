@@ -89,8 +89,8 @@ struct Index {
   receive() {
     this.heading(this.store.t('接收'), this.store.t('靠近一点，分享多一点'))
     Column({ space: 16 }) {
-      Stack() { Image($r('app.media.aloe_mark')).width(54).height(54).accessibilityLevel('no') }
-        .width(88).height(88).backgroundColor(this.store.accentFill).borderRadius(30).margin({ top: 8, bottom: 8 })
+      Image($r('app.media.aloesend_logo')).width(88).height(88).objectFit(ImageFit.Contain)
+        .accessibilityLevel('no').margin({ top: 8, bottom: 8 })
       Text(this.store.settings.alias).fontSize(26).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
       Row({ space: 7 }) {
         Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.settings.accent : '#B88632')
@@ -153,7 +153,7 @@ struct Index {
     } else if (this.route === 'web') {
       WebShareView({ store: this.store })
     } else {
-      Stack() { Image($r('app.media.aloe_mark')).width(62).height(62) }.width(104).height(104).borderRadius(34).backgroundColor(this.store.accentFill).margin({ bottom: 24 })
+      Image($r('app.media.aloesend_logo')).width(104).height(104).objectFit(ImageFit.Contain).margin({ bottom: 24 })
       this.info('AloeSend', this.store.t('为鸿蒙重新设计的本地分享体验。\n跨越设备，传递心意。\n原生 ArkUI · 无需账号 · 不经云端'))
       Text($r('app.string.build_version')).fontSize(14).fontColor($r('sys.color.font_secondary')).margin({ bottom: 24 })
       this.info(this.store.t('感谢开源社区'), this.store.t('LocalSend 和所有贡献者，让跨平台分享成为可能。\n源码：github.com/Aloereed/localsend-ohos'))

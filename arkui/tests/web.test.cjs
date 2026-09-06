@@ -26,7 +26,8 @@ async function until(predicate) { const start = Date.now(); while (!(await predi
   await fs.mkdir(work, { recursive: true });
   const reservation = net.createServer(); await new Promise(r => reservation.listen(0, '127.0.0.1', r));
   const port = reservation.address().port; await new Promise(r => reservation.close(r));
-  const store = new AppStore(); await store.init({ filesDir: work, getApplicationContext: () => ({ setColorMode() {} }) });
+  const store = new AppStore(); await store.init({ filesDir: work, getApplicationContext: () => ({ setColorMode() {} }),
+    resourceManager: { getRawFileContent: name => fs.readFile(path.join(__dirname, '../AloeSend/entry/src/main/resources/rawfile', name)).then(b => Uint8Array.from(b)) } });
   store.settings.port = port - 1; store.localIps = ['127.0.0.1']; store.settings.alias = '<script>alert(1)</script>';
   const data = crypto.randomBytes(100000); const source = path.join(work, 'source.bin'); await fs.writeFile(source, data);
   const file = new ShareFile(); file.uri = source; file.size = data.length; file.name = 'hello <world>.bin'; store.files = [file];
@@ -43,6 +44,10 @@ async function until(predicate) { const start = Date.now(); while (!(await predi
       const english = (await call(base + '?lang=en')).body.toString();
       assert.ok(english.includes('Shared with you')); assert.ok(english.includes('lang="en"'));
       new vm.Script(english.match(/<script>([\s\S]*?)<\/script>/)[1]);
+      assert.ok(html.includes('src="logo.png"'));
+      const logo = await call(base + 'logo.png'); assert.equal(logo.status, 200);
+      assert.equal(logo.headers['content-type'], 'image/png');
+      assert.deepEqual(logo.body, await fs.readFile(path.join(__dirname, '../../app/assets/img/logo-128.png')));
     });
     await check('invalid capability and cross-origin POST are rejected', async () => {
       assert.equal((await call(origin + '/s/wrong/')).status, 404);

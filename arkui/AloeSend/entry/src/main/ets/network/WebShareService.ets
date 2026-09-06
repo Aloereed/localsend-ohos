@@ -98,6 +98,11 @@ export class WebShareService {
         const language = queryValue(head.target, 'lang') || this.store.settings.language;
         await channel.respond(200, webPage(this.store.settings.alias, this.files, language, this.store.settings.accent), 'text/html; charset=utf-8'); return;
       }
+      if (relative === 'logo.png' && this.store.context) {
+        const bytes = await this.store.context.resourceManager.getRawFileContent('logo.png');
+        await channel.beginResponse(200, bytes.byteLength, 'image/png');
+        await channel.send(bytes); channel.close(); return;
+      }
       if (relative.startsWith('file/')) {
         const id = decodeURIComponent(relative.slice(5)); const file = this.files.find((item: ShareFile) => item.id === id);
         if (file) { await this.download(channel, file); return; }

@@ -37,15 +37,30 @@ export struct SettingsView {
       .accessibilityText(`${text} ${detail}`)
   }
 
+  toggleValue(key: string): boolean {
+    const settings = this.store.settings;
+    if (key === 'quickSave') return settings.quickSave;
+    if (key === 'favorites') return settings.favoriteQuickSave;
+    if (key === 'history') return settings.saveHistory;
+    if (key === 'finish') return settings.autoFinish;
+    if (key === 'messages') return settings.openMessagesOnReceive;
+    if (key === 'gallery') return settings.offerGallerySave;
+    if (key === 'animation') return settings.animations;
+    if (key === 'visible') return settings.visible;
+    if (key === 'advanced') return settings.advanced;
+    return settings.https;
+  }
+
   @Builder
-  toggle(title: string, detail: string, enabled: boolean, key: string) {
+  toggle(title: string, detail: string, key: string) {
     Row({ space: 12 }) {
       Column({ space: 5 }) {
         Text(title).fontSize(16).fontColor($r('sys.color.font_primary'))
         Text(detail).fontSize(12).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-      Toggle({ type: ToggleType.Switch, isOn: enabled }).selectedColor(this.store.settings.accent)
+      Toggle({ type: ToggleType.Switch, isOn: this.toggleValue(key) }).selectedColor(this.store.settings.accent)
         .onChange((value: boolean) => {
+          if (value === this.toggleValue(key)) return;
           if (key === 'quickSave') this.store.settings.quickSave = value;
           if (key === 'favorites') this.store.settings.favoriteQuickSave = value;
           if (key === 'history') this.store.settings.saveHistory = value;
@@ -127,17 +142,17 @@ export struct SettingsView {
             })
           }.width('100%')
         }.padding(18).width('100%')
-        this.toggle(this.store.t('界面动画'), this.store.t('自然流畅的页面过渡'), this.store.settings.animations, 'animation')
+        this.toggle(this.store.t('界面动画'), this.store.t('自然流畅的页面过渡'), 'animation')
       }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       this.title(this.store.t('接收'))
       Column() {
-        this.toggle(this.store.t('允许发现'), this.store.t('在同一网络中显示本设备'), this.store.settings.visible, 'visible')
-        this.toggle(this.store.t('自动接收'), this.store.t('信任当前网络时使用，无需逐次确认'), this.store.settings.quickSave, 'quickSave')
-        this.toggle(this.store.t('仅收藏设备自动接收'), this.store.t('其他设备仍需手动确认'), this.store.settings.favoriteQuickSave, 'favorites')
-        this.toggle(this.store.t('保留历史'), this.store.t('记录仅保存在当前设备'), this.store.settings.saveHistory, 'history')
-        this.toggle(this.store.t('自动完成'), this.store.t('成功传输后结束会话'), this.store.settings.autoFinish, 'finish')
-        this.toggle(this.store.t('接收后打开消息'), this.store.t('文件或文字收到后切换到对应会话'), this.store.settings.openMessagesOnReceive, 'messages')
-        this.toggle(this.store.t('接收后提示保存到相册'), this.store.t('图片和视频接收完成后，通过系统确认保存到相册'), this.store.settings.offerGallerySave, 'gallery')
+        this.toggle(this.store.t('允许发现'), this.store.t('在同一网络中显示本设备'), 'visible')
+        this.toggle(this.store.t('自动接收'), this.store.t('信任当前网络时使用，无需逐次确认'), 'quickSave')
+        this.toggle(this.store.t('仅收藏设备自动接收'), this.store.t('其他设备仍需手动确认'), 'favorites')
+        this.toggle(this.store.t('保留历史'), this.store.t('记录仅保存在当前设备'), 'history')
+        this.toggle(this.store.t('自动完成'), this.store.t('成功传输后结束会话'), 'finish')
+        this.toggle(this.store.t('接收后打开消息'), this.store.t('文件或文字收到后切换到对应会话'), 'messages')
+        this.toggle(this.store.t('接收后提示保存到相册'), this.store.t('图片和视频接收完成后，通过系统确认保存到相册'), 'gallery')
         Column({ space: 12 }) {
           Text(this.store.t('文件保存位置')).fontSize(16).fontColor($r('sys.color.font_primary')).width('100%')
           Text(this.store.settings.destinationMode === 'folder' ? this.store.settings.destination : this.store.t('应用内安全保存，可在接收历史中打开、分享或另存为'))
@@ -165,9 +180,9 @@ export struct SettingsView {
       Column() {
         this.link(this.store.t('连接诊断'), this.store.t(this.store.serverStatus), 'diagnostics')
         this.link(this.store.t('网络接口'), this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选'), 'network')
-        this.toggle(this.store.t('高级设置'), this.store.t('端口与组播地址'), this.store.settings.advanced, 'advanced')
+        this.toggle(this.store.t('高级设置'), this.store.t('端口与组播地址'), 'advanced')
         if (this.store.settings.advanced) {
-          this.toggle(this.store.t('HTTPS 加密传输'), this.store.t('建议保持开启；修改后需重启接收服务'), this.store.settings.https, 'https')
+          this.toggle(this.store.t('HTTPS 加密传输'), this.store.t('建议保持开启；修改后需重启接收服务'), 'https')
           Column({ space: 12 }) {
             Text(this.store.t('设备型号')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
             TextInput({ text: this.model, placeholder: 'HarmonyOS' }).maxLength(80).onChange((value: string) => this.model = value)

@@ -150,6 +150,7 @@ export class LocalSendService {
   private batchCancelled: boolean = false;
   private pinResolver: ((pin: string) => void) | undefined = undefined;
   private timer: number = -1;
+  private discoveryRetries: number[] = [];
   private running: boolean = false;
   private starting: boolean = false;
   private pinAttempts: Map<string, PinFailures> = new Map();
@@ -199,7 +200,11 @@ export class LocalSendService {
         await this.udp.setMulticastTTL(1);
         await this.announce();
       } catch (e) { this.store.log(`组播不可用，可通过地址连接：${(e as Error).message}`); }
-      this.timer = setInterval(() => { this.announce().catch(() => {}); }, 30000);
+      // The first multicast can precede Wi-Fi readiness or another peer's listener.
+      // Retry without requiring a tap and refresh addresses on subsequent scans.
+      this.discoveryRetries = [800, 2500, 6000].map((delay: number) =>
+        setTimeout(() => { if (this.running) this.discover(false); }, delay));
+      this.timer = setInterval(() => { this.discover(false); }, 15000);
       this.store.log('LocalSend 接收服务启动');
     } catch (e) { this.store.fail('接收服务启动失败', e as Error); this.store.serverStatus = '启动失败'; await this.stop(); }
     finally { this.starting = false; }
@@ -209,6 +214,8 @@ export class LocalSendService {
     this.running = false;
     this.store.listenerRunning = false;
     if (this.timer !== -1) { clearInterval(this.timer); this.timer = -1; }
+    for (const retry of this.discoveryRetries) clearTimeout(retry);
+    this.discoveryRetries = [];
     if (this.receiving) this.cancel(this.receiving.id);
     for (const channel of this.channels) channel.close(); this.channels = [];
     await this.udp?.close().catch(() => {}); this.udp = undefined;
@@ -255,11 +262,13 @@ export class LocalSendService {
     await this.udp?.send({ data: JSON.stringify(this.info(true)), address: { address: this.store.listenerMulticast, port: this.store.listenerPort, family: 1 } });
   }
 
-  async discover(): Promise<void> {
+  async discover(notify: boolean = true): Promise<void> {
     if (!this.running) await this.start();
     await this.readAddresses().catch(() => {});
-    await this.announce().catch((e: Error) => this.store.fail('发现设备失败', e));
-    this.store.notice = '已发送发现请求';
+    await this.announce().catch((e: Error) => {
+      if (notify) this.store.fail('发现设备失败', e); else this.store.log(`自动发现：${e.message}`);
+    });
+    if (notify) this.store.notice = '已发送发现请求';
     for (const peer of this.store.favorites) this.probe(peer).catch(() => {});
   }
 

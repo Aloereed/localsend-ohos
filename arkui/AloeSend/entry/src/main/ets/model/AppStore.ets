@@ -147,8 +147,24 @@ export class AppStore {
   favorites: Peer[] = [];
   history: HistoryEntry[] = [];
   logs: string[] = [];
-  error: string = '';
-  notice: string = '';
+  private errorText: string = '';
+  private noticeText: string = '';
+  private errorTimer: number = -1;
+  private noticeTimer: number = -1;
+
+  get error(): string { return this.errorText; }
+  set error(value: string) {
+    if (this.errorTimer !== -1) clearTimeout(this.errorTimer);
+    this.errorText = value;
+    this.errorTimer = value ? setTimeout(() => { this.errorText = ''; this.errorTimer = -1; }, 8000) : -1;
+  }
+
+  get notice(): string { return this.noticeText; }
+  set notice(value: string) {
+    if (this.noticeTimer !== -1) clearTimeout(this.noticeTimer);
+    this.noticeText = value;
+    this.noticeTimer = value ? setTimeout(() => { this.noticeText = ''; this.noticeTimer = -1; }, 3500) : -1;
+  }
   busy: boolean = false;
   ready: boolean = false;
   serverStatus: string = '未启动';
