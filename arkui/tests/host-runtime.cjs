@@ -117,6 +117,7 @@ const mocks = {
     fileShare: { OperationMode: { READ_MODE: 1, WRITE_MODE: 2 }, activatePermission: async () => {}, persistPermission: async () => {} } },
   '@kit.BasicServicesKit': { pasteboard: {} },
   '@kit.ShareKit': { systemShare: {} },
+  '@kit.MediaLibraryKit': { photoAccessHelper: {} },
   '@kit.LocalizationKit': { i18n: { System: { getSystemLanguage: () => 'zh-Hans' } } },
   '@kit.BackgroundTasksKit': { backgroundTaskManager: { BackgroundMode: { DATA_TRANSFER: 1 }, startBackgroundRunning: async () => {}, stopBackgroundRunning: async () => {} } },
   '@kit.AbilityKit': { ConfigurationConstant: { ColorMode: { COLOR_MODE_DARK: 0, COLOR_MODE_LIGHT: 1, COLOR_MODE_NOT_SET: -1 } } },
@@ -134,4 +135,4 @@ function load(relative) {
   vm.runInNewContext(output, { exports, require: localRequire, Observed: value => value, Uint8Array, ArrayBuffer, Date, Error, Promise, Map, Set, Number, Object, JSON, String, Math, RegExp, parseInt, encodeURIComponent, decodeURIComponent, setTimeout, clearTimeout, setInterval, clearInterval, console }, { filename: file });
   return exports;
 }
-module.exports = { load, handles };
+module.exports = { load, handles, mocks };

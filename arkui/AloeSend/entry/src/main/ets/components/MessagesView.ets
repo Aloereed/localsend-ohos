@@ -1,5 +1,5 @@
-import { AppStore, HistoryEntry, Peer, ShareFile, formatSize, samePeer } from '../model/AppStore';
-import { Conversation, conversationList, inConversation } from '../model/Conversations';
+import { AppStore, HistoryEntry, Peer, ShareFile, MessageDraft, formatSize, samePeer } from '../model/AppStore';
+import { Conversation, conversationList, inConversation, peerKey } from '../model/Conversations';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 import { EmptyState } from './EmptyState';
@@ -17,6 +17,8 @@ export struct MessagesView {
   @State showDetails: boolean = false;
   @State detailEntry: HistoryEntry = new HistoryEntry();
   @State visibleCount: number = 40;
+  @State attachments: ShareFile[] = [];
+  @State detailsKind: string = 'file';
   private messageScroller: Scroller = new Scroller();
   onTransfers: () => void = () => {};
 
@@ -27,11 +29,42 @@ export struct MessagesView {
   }
 
   @Builder
-  detailsSheet() { FileDetailsView({ store: this.store, entry: this.detailEntry }) }
+  detailsSheet() {
+    if (this.detailsKind === 'attachments') {
+      Column({ space: 16 }) {
+        Text(this.store.t('待发送附件')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
+        Text(this.store.t('点击发送后，文字和附件会一起发出。')).fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
+        Scroll() {
+          Column({ space: 12 }) {
+            ForEach(this.attachments, (file: ShareFile) => {
+              Row({ space: 12 }) {
+                AppIcon({ name: file.mime.startsWith('image/') ? 'photo' : 'file', iconSize: 24, tint: this.store.accentText })
+                Column({ space: 4 }) {
+                  Text(file.name).fontSize(15).maxLines(2).fontColor($r('sys.color.font_primary'))
+                  Text(formatSize(file.size)).fontSize(12).fontColor($r('sys.color.font_secondary'))
+                }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+                Button('×').width(44).height(44).fontColor(this.store.dangerText).backgroundColor(Color.Transparent).enabled(!this.sending)
+                  .accessibilityText(this.store.tf('移除 {0}', [file.name])).onClick(() => { this.attachments = this.attachments.filter((item: ShareFile) => item.id !== file.id); this.rememberDraft(); })
+              }.padding(12).width('100%').backgroundColor($r('sys.color.comp_background_tertiary')).borderRadius(18)
+            }, (file: ShareFile) => file.id)
+          }.width('100%')
+        }.layoutWeight(1).width('100%')
+        Button(this.store.t('完成')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.showDetails = false)
+      }.padding(24).height('100%').width('100%')
+    } else { FileDetailsView({ store: this.store, entry: this.detailEntry }) }
+  }
+
+  openDetails(entry: HistoryEntry): void { this.detailsKind = 'file'; this.detailEntry = entry; this.showDetails = true; }
+
+  rememberDraft(): void {
+    const value = new MessageDraft(); value.text = this.draft; value.files = this.attachments;
+    this.store.messageDrafts.set(peerKey(this.peer), value);
+  }
 
   open(peer: Peer): void {
     this.peer = this.store.peers.find((item: Peer) => samePeer(item, peer)) || peer;
-    this.query = ''; this.draft = ''; this.visibleCount = 40; this.detailOpen = true;
+    const saved = this.store.messageDrafts.get(peerKey(this.peer));
+    this.query = ''; this.draft = saved?.text || ''; this.attachments = saved?.files || []; this.visibleCount = 40; this.detailOpen = true;
     this.scrollToLatest();
   }
 
@@ -45,26 +78,31 @@ export struct MessagesView {
   }
 
   async sendText(): Promise<void> {
-    if (!this.draft.trim() || this.sending || !this.peer.ip) return;
-    const file = new ShareFile(); file.name = 'message.txt'; file.text = this.draft;
-    file.mime = 'text/plain'; file.size = new util.TextEncoder().encodeInto(file.text).length;
+    if ((!this.draft.trim() && !this.attachments.length) || this.sending || !this.peer.ip) return;
+    const files = this.attachments.slice(); const targetKey = peerKey(this.peer);
+    if (this.draft.trim()) {
+      const file = new ShareFile(); file.name = 'message.txt'; file.text = this.draft;
+      file.mime = 'text/plain'; file.size = new util.TextEncoder().encodeInto(file.text).length; files.push(file);
+    }
     this.sending = true;
     try {
-      await localSend.send(this.peer, [file]);
-      if (this.store.transfers.find((item) => item.files.some((sent) => sent.id === file.id))?.status === 'complete') { this.draft = ''; this.scrollToLatest(); }
+      await localSend.send(this.peer, files);
+      if (this.store.transfers.find((item) => item.files.some((sent) => sent.id === files[0].id))?.status === 'complete') {
+        this.store.messageDrafts.delete(targetKey);
+        if (peerKey(this.peer) === targetKey) { this.draft = ''; this.attachments = []; this.scrollToLatest(); }
+      }
       else this.store.notice = this.store.t('消息未发送，草稿已保留。可在传输任务中查看原因');
     } finally { this.sending = false; }
   }
 
-  async attach(): Promise<void> {
+  async attach(kind: string): Promise<void> {
     if (!this.peer.ip || this.sending) return;
-    const before = this.store.files.map((file: ShareFile) => file.id);
-    await this.store.selectFiles('file');
-    const selected = this.store.files.filter((file: ShareFile) => !before.includes(file.id));
-    if (!selected.length) return;
-    this.sending = true;
-    try { await localSend.send(this.peer, selected); }
-    finally { this.sending = false; }
+    const target = peerKey(this.peer);
+    const selected = await this.store.selectAttachments(kind);
+    const saved = this.store.messageDrafts.get(target) || new MessageDraft();
+    saved.files = [...saved.files, ...selected.filter((file: ShareFile) => !saved.files.some((item: ShareFile) => item.uri === file.uri))];
+    this.store.messageDrafts.set(target, saved);
+    if (peerKey(this.peer) === target) this.attachments = saved.files;
   }
 
   clearConversation(): void {
@@ -83,7 +121,10 @@ export struct MessagesView {
           Text(entry.text).fontSize(16).lineHeight(24).maxLines(20).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary')).copyOption(CopyOptions.LocalDevice).width('100%')
           if (entry.text.length > 160 || entry.text.split('\n').length > 6) {
             Button(this.store.t('阅读全文')).height(36).fontSize(13).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
-              .onClick(() => { this.detailEntry = entry; this.showDetails = true; })
+              .onClick(() => this.openDetails(entry))
+          }
+          if (/^https?:\/\/\S+$/i.test(entry.text.trim())) {
+            Button(this.store.t('打开链接')).height(40).fontSize(13).fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.store.openUrl(entry.text.trim()))
           }
         } else {
           Row({ space: 12 }) {
@@ -99,7 +140,7 @@ export struct MessagesView {
             .fontSize(11).fontColor($r('sys.color.font_secondary')).layoutWeight(1)
           Button(this.store.t('更多')).fontSize(12).height(30).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
             .bindMenu([
-              { value: this.store.t('详情'), action: () => { this.detailEntry = entry; this.showDetails = true; } },
+              { value: this.store.t('详情'), action: () => this.openDetails(entry) },
               { value: entry.text ? this.store.t('复制文字') : this.store.t('打开文件'), action: () => { if (entry.text) this.store.copy(entry.text); else this.store.openFile(entry); } },
               { value: this.store.t('系统分享'), action: () => this.store.shareEntry(entry) },
               { value: this.store.t('再次发送'), action: () => this.store.resend(entry) },
@@ -142,14 +183,21 @@ export struct MessagesView {
           }.width('100%').padding({ top: 8, bottom: 16 })
         }.width('100%').layoutWeight(1).align(Alignment.Bottom)
         Column({ space: 10 }) {
+          if (this.attachments.length > 0) {
+            Button(this.store.tf('{0} 个附件 · 查看与编辑', [String(this.attachments.length)]))
+              .width('100%').height(40).fontColor(this.store.accentText).backgroundColor($r('sys.color.comp_background_tertiary'))
+              .onClick(() => { this.detailsKind = 'attachments'; this.showDetails = true; })
+          }
           TextArea({ text: this.draft, placeholder: this.peer.ip ? this.store.t('写消息，或粘贴链接…') : this.store.t('设备上线后可回复') })
-            .height(80).maxLength(100000).onChange((value: string) => this.draft = value)
+            .height(80).maxLength(100000).enabled(!this.sending).onChange((value: string) => { this.draft = value; this.rememberDraft(); })
           Row({ space: 12 }) {
             Button(this.store.t('添加文件')).height(44).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
-              .enabled(!!this.peer.ip && !this.sending).onClick(() => this.attach())
+              .enabled(!!this.peer.ip && !this.sending && !this.store.busy).bindMenu([
+                { value: this.store.t('文件'), action: () => this.attach('file') }, { value: this.store.t('照片与视频'), action: () => this.attach('photo') }
+              ])
             Blank()
             Button(this.sending ? this.store.t('发送中…') : this.store.t('发送')).height(44).constraintSize({ minWidth: 88 }).backgroundColor(this.store.accentFill)
-              .enabled(!!this.peer.ip && !!this.draft.trim() && !this.sending).onClick(() => this.sendText())
+              .enabled(!!this.peer.ip && (!!this.draft.trim() || this.attachments.length > 0) && !this.sending).onClick(() => this.sendText())
           }.width('100%')
         }.padding(14).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       } else {

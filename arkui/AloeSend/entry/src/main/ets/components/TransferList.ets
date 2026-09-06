@@ -12,9 +12,36 @@ export struct TransferList {
   @State renameSheet: boolean = false;
   @State renameId: string = '';
   @State renameText: string = '';
+  @State batchEdit: boolean = false;
+  @State batchMode: string = 'counter';
+  @State prefix: string = '';
+  @State padZero: boolean = true;
+  @State sortFirst: boolean = false;
 
   @Builder
   renameEditor() {
+    if (this.batchEdit) {
+      Column({ space: 16 }) {
+        Text(this.store.t('批量重命名')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+        Text(this.store.t('只修改选中的文件，保留文件夹层级和扩展名。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
+        Select([{ value: this.store.t('连续编号') }, { value: this.store.t('随机名称') }]).selected(this.batchMode === 'counter' ? 0 : 1)
+          .onSelect((index: number) => this.batchMode = index === 0 ? 'counter' : 'random')
+        if (this.batchMode === 'counter') {
+          TextInput({ text: this.prefix, placeholder: this.store.t('文件名前缀（可留空）') }).maxLength(100).onChange((value: string) => this.prefix = value)
+          Row() {
+            Text(this.store.t('编号补零')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
+            Toggle({ type: ToggleType.Switch, isOn: this.padZero }).selectedColor(this.store.settings.accent).onChange((value: boolean) => this.padZero = value)
+          }.width('100%')
+          Row() {
+            Text(this.store.t('按名称排序后编号')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
+            Toggle({ type: ToggleType.Switch, isOn: this.sortFirst }).selectedColor(this.store.settings.accent).onChange((value: boolean) => this.sortFirst = value)
+          }.width('100%')
+        }
+        Button(this.store.t('应用到所选文件')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
+          if (localSend.batchRenameReceive(this.batchMode, this.prefix, this.padZero, this.sortFirst)) this.renameSheet = false;
+        })
+      }.padding(24).width('100%')
+    } else {
     Column({ space: 18 }) {
       Text(this.store.t('接收时重命名')).fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
       TextInput({ text: this.renameText }).onChange((value: string) => this.renameText = value)
@@ -23,6 +50,7 @@ export struct TransferList {
         if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
       })
     }.width('100%').padding(24)
+    }
   }
 
   statusLabel(status: string): string {
@@ -75,6 +103,11 @@ export struct TransferList {
           }
           if (transfer.error) { Text(this.store.t(transfer.error)).fontColor(this.store.dangerText).fontSize(14).width('100%') }
           if (transfer.id === this.store.pendingReceive) {
+            Row({ space: 8 }) {
+              Button(this.store.t('批量重命名')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
+                .onClick(() => { this.batchEdit = true; this.renameSheet = true; })
+              Button(this.store.t('恢复原名称')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.resetReceiveNames())
+            }.width('100%')
             Row({ space: 10 }) {
               Text(this.store.tf('共 {0} 项 · {1}', [String(transfer.files.length), formatSize(this.total(transfer))])).layoutWeight(1).fontSize(13).fontColor($r('sys.color.font_secondary'))
               Button(this.store.t('全选')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('all'))
@@ -97,7 +130,7 @@ export struct TransferList {
               if (file.status === 'complete') { Text('✓').fontColor(this.store.accentText).fontSize(20) }
               if (transfer.id === this.store.pendingReceive && !file.preview) {
                 Button(this.store.t('改名')).fontSize(12).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
-                  .onClick(() => { this.renameId = file.id; this.renameText = file.name; this.renameSheet = true; })
+                  .onClick(() => { this.batchEdit = false; this.renameId = file.id; this.renameText = file.name; this.renameSheet = true; })
               }
             }.width('100%').padding({ top: 8, bottom: 8 })
           }, (file: TransferFile) => file.id)
@@ -126,6 +159,6 @@ export struct TransferList {
           }
         }.padding(24).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28)
       }, (transfer: TransferView) => JSON.stringify(transfer))
-    }.width('100%').bindSheet($$this.renameSheet, this.renameEditor(), { height: SheetSize.MEDIUM, showClose: true })
+    }.width('100%').bindSheet($$this.renameSheet, this.renameEditor(), { height: this.batchEdit ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true })
   }
 }

@@ -201,6 +201,15 @@ struct Index {
         Button(this.store.t('内容已就绪 · 前往发送')).width('100%').height(48).backgroundColor(this.store.accentFill)
           .onClick(() => { this.store.incomingShare = false; this.route = ''; this.tab = 1; })
       }
+      if (this.store.galleryQueue.length > 0 && !this.store.pendingReceive) {
+        Row({ space: 8 }) {
+          Button(this.store.tf('{0} 项照片和视频 · 保存到相册', [String(this.store.galleryQueue.length)]))
+            .layoutWeight(1).height(48).backgroundColor(this.store.accentFill).enabled(!this.store.savingToGallery)
+            .onClick(() => this.store.saveToGallery(this.store.galleryQueue))
+          Button('×').width(44).height(44).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+            .accessibilityText(this.store.t('稍后再说')).onClick(() => this.store.galleryQueue = [])
+        }.padding({ left: 16, right: 16 }).width('100%')
+      }
       if (this.store.pendingPin) {
         Column({ space: 12 }) {
           Text(this.store.t('请输入对方设备的接收 PIN')).fontSize(18).fontColor($r('sys.color.font_primary'))

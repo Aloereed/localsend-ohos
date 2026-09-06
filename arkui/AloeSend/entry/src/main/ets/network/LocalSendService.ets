@@ -8,6 +8,7 @@ import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { TlsIdentity } from './TlsIdentity';
 import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter } from './Transport';
 import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
+import { batchReceiveNames } from '../model/ReceiveNames';
 
 export interface DeviceInfo {
   alias: string;
@@ -433,6 +434,23 @@ export class LocalSendService {
     if (!this.receiving || this.receiving.accepted) return;
     for (const file of this.receiving.view.files) file.selected = mode === 'all' ? true : mode === 'none' ? false : !file.selected;
     this.store.updateTransfer(this.receiving.view);
+  }
+
+  resetReceiveNames(): void {
+    const session = this.receiving; if (!session || session.accepted) return;
+    const occupied: string[] = [];
+    for (const file of session.view.files) {
+      file.name = uniqueName(safeRelativePath(session.files[file.id].fileName), occupied); occupied.push(file.name);
+    }
+    this.store.updateTransfer(session.view);
+  }
+
+  batchRenameReceive(mode: string, prefix: string, padZero: boolean, sortFirst: boolean): boolean {
+    const session = this.receiving; if (!session || session.accepted) return false;
+    try {
+      session.view.files = batchReceiveNames(session.view.files, mode, prefix, padZero, sortFirst);
+      this.store.updateTransfer(session.view); return true;
+    } catch (e) { this.store.fail('批量重命名失败', e as Error); return false; }
   }
 
   renameReceive(id: string, name: string): boolean {

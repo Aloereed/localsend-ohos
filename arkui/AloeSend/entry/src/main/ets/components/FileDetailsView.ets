@@ -30,9 +30,18 @@ export struct FileDetailsView {
           this.field(this.store.t('时间'), new Date(this.entry.time).toLocaleString())
           if (this.entry.text) { this.field(this.store.t('文字'), this.entry.text) }
           if (this.entry.exportedPath) { this.field(this.store.t('已另存到'), this.entry.exportedPath) }
+          if (this.entry.galleryPath) { this.field(this.store.t('相册副本'), this.entry.galleryPath) }
           if (this.entry.path) { this.field(this.store.t('文件位置'), this.entry.path) }
         }.width('100%').padding({ bottom: 20 })
       }.width('100%').layoutWeight(1)
+      if (this.entry.path && this.store.isMedia(this.entry)) {
+        Button(this.store.t('保存到相册')).width('100%').height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+          .enabled(!this.store.savingToGallery).onClick(() => this.store.saveToGallery([this.entry]))
+      }
+      if (/^https?:\/\/\S+$/i.test(this.entry.text.trim())) {
+        Button(this.store.t('打开链接')).width('100%').height(48).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+          .onClick(() => this.store.openUrl(this.entry.text.trim()))
+      }
       Row({ space: 12 }) {
         Button(this.store.t('分享')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.shareEntry(this.entry))
         if (this.entry.path) {

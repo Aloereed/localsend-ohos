@@ -9,6 +9,7 @@ import { uiText } from './Locale';
 import { readableColor } from './Colors';
 import { LocalInterface } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
+import { photoAccessHelper } from '@kit.MediaLibraryKit';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -17,6 +18,11 @@ export class ShareFile {
   size: number = 0;
   mime: string = 'application/octet-stream';
   text: string = '';
+}
+
+export class MessageDraft {
+  text: string = '';
+  files: ShareFile[] = [];
 }
 
 export class Peer {
@@ -45,6 +51,7 @@ export class HistoryEntry {
   size: number = 0;
   path: string = '';
   exportedPath: string = '';
+  galleryPath: string = '';
   text: string = '';
   status: string = 'complete';
   peerInfo: Peer | undefined = undefined;
@@ -92,6 +99,7 @@ export class AppSettings {
   saveHistory: boolean = true;
   autoFinish: boolean = true;
   openMessagesOnReceive: boolean = false;
+  offerGallerySave: boolean = false;
   animations: boolean = true;
   visible: boolean = true;
   pin: string = '';
@@ -160,6 +168,9 @@ export class AppStore {
   incomingShare: boolean = false;
   systemDark: boolean = false;
   messageTarget: Peer | undefined = undefined;
+  galleryQueue: HistoryEntry[] = [];
+  savingToGallery: boolean = false;
+  messageDrafts: Map<string, MessageDraft> = new Map();
   onTransferCompleted: (transfer: TransferView) => void = () => {};
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
@@ -187,6 +198,7 @@ export class AppStore {
       // silently downgrade an existing installation to clear-text transport.
       if (typeof this.settings.https !== 'boolean') this.settings.https = true;
       if (typeof this.settings.openMessagesOnReceive !== 'boolean') this.settings.openMessagesOnReceive = false;
+      if (typeof this.settings.offerGallerySave !== 'boolean') this.settings.offerGallerySave = false;
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
       this.history = JSON.parse(await this.storage.get('history', '[]') as string) as HistoryEntry[];
       this.persistentHistory = new Set(this.history.map((entry: HistoryEntry) => entry.id));
@@ -277,8 +289,26 @@ export class AppStore {
     finally { this.busy = false; }
   }
 
-  async addUri(uri: string, relativeName: string = ''): Promise<void> {
-    if (this.files.some((item: ShareFile) => item.uri === uri)) return;
+  async selectAttachments(kind: string): Promise<ShareFile[]> {
+    if (!this.context || this.busy) return [];
+    this.busy = true;
+    try {
+      let uris: string[];
+      if (kind === 'photo') {
+        const options = new picker.PhotoSelectOptions(); options.MIMEType = picker.PhotoViewMIMETypes.IMAGE_VIDEO_TYPE; options.maxSelectNumber = 100;
+        uris = (await new picker.PhotoViewPicker(this.context).select(options)).photoUris;
+      } else {
+        const options = new picker.DocumentSelectOptions(); options.maxSelectNumber = 100; options.selectMode = picker.DocumentSelectMode.FILE;
+        uris = await new picker.DocumentViewPicker(this.context).select(options);
+      }
+      const files: ShareFile[] = [];
+      for (const uri of uris) files.push(await this.readShareFile(uri));
+      return files;
+    } catch (e) { this.fail('选择内容失败', e as Error); return []; }
+    finally { this.busy = false; }
+  }
+
+  private async readShareFile(uri: string, relativeName: string = ''): Promise<ShareFile> {
     const file = new ShareFile();
     file.uri = uri;
     file.name = relativeName || new fileUri.FileUri(uri).name;
@@ -286,7 +316,13 @@ export class AppStore {
     try { file.size = (await fs.stat(opened.fd)).size; }
     finally { await fs.close(opened); }
     file.mime = mimeForName(file.name);
-    this.files = [...this.files, file];
+    return file;
+  }
+
+  async addUri(uri: string, relativeName: string = ''): Promise<void> {
+    if (this.files.some((item: ShareFile) => item.uri === uri)) return;
+    const file = await this.readShareFile(uri, relativeName);
+    if (!this.files.some((item: ShareFile) => item.uri === uri)) this.files = [...this.files, file];
   }
 
   async addFolder(uri: string, prefix: string): Promise<void> {
@@ -371,6 +407,9 @@ export class AppStore {
 
   async addHistory(entry: HistoryEntry): Promise<void> {
     this.history = [entry, ...this.history].slice(0, 1000);
+    if (this.settings.offerGallerySave && entry.direction === 'receive' && entry.path && this.isMedia(entry)) {
+      this.galleryQueue = [...this.galleryQueue, entry];
+    }
     if (this.settings.saveHistory) this.persistentHistory.add(entry.id);
     this.persistentHistory = new Set(this.history.filter((item: HistoryEntry) => this.persistentHistory.has(item.id)).map((item: HistoryEntry) => item.id));
     await this.save();
@@ -451,6 +490,42 @@ export class AppStore {
       } finally { await fs.close(output); }
       entry.exportedPath = path; await this.save();
     } catch (e) { this.fail('文件已接收，但另存到所选目录失败', e as Error); }
+  }
+
+  isMedia(entry: HistoryEntry): boolean {
+    const mime = mimeForName(entry.name); return mime.startsWith('image/') || mime.startsWith('video/');
+  }
+
+  async saveToGallery(entries: HistoryEntry[]): Promise<void> {
+    if (!this.context || this.savingToGallery) return;
+    const media = entries.filter((entry: HistoryEntry) => !!entry.path && this.isMedia(entry)).slice(0, 100);
+    if (!media.length) return;
+    this.savingToGallery = true;
+    let helper: photoAccessHelper.PhotoAccessHelper | undefined = undefined;
+    try {
+      helper = photoAccessHelper.getPhotoAccessHelper(this.context);
+      const sources = media.map((entry: HistoryEntry) => entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path));
+      const configs: photoAccessHelper.PhotoCreationConfig[] = media.map((entry: HistoryEntry): photoAccessHelper.PhotoCreationConfig => {
+        const name = entry.name.split('/').pop() || entry.name; const dot = name.lastIndexOf('.');
+        return { title: name.slice(0, dot), fileNameExtension: name.slice(dot + 1),
+          photoType: mimeForName(name).startsWith('video/') ? photoAccessHelper.PhotoType.VIDEO : photoAccessHelper.PhotoType.IMAGE };
+      });
+      const destinations = await helper.showAssetsCreationDialog(sources, configs);
+      let saved = 0;
+      for (let index = 0; index < Math.min(destinations.length, media.length); index++) {
+        if (!destinations[index]) continue;
+        const source = await fs.open(sources[index], fs.OpenMode.READ_ONLY);
+        try {
+          const destination = await fs.open(destinations[index], fs.OpenMode.READ_WRITE);
+          try { await fs.copyFile(source.fd, destination.fd); }
+          finally { await fs.close(destination); }
+        } finally { await fs.close(source); }
+        media[index].galleryPath = destinations[index]; saved++;
+        this.galleryQueue = this.galleryQueue.filter((entry: HistoryEntry) => entry.id !== media[index].id);
+      }
+      if (saved) { await this.save(); this.notice = this.tf('已保存 {0} 项到相册', [String(saved)]); }
+    } catch (e) { this.fail('保存到相册失败，应用内文件仍保留', e as Error); }
+    finally { await helper?.release().catch(() => {}); this.savingToGallery = false; }
   }
 
   async shareEntry(entry: HistoryEntry): Promise<void> {

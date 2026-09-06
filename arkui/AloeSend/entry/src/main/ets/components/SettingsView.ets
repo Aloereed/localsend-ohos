@@ -51,6 +51,7 @@ export struct SettingsView {
           if (key === 'history') this.store.settings.saveHistory = value;
           if (key === 'finish') this.store.settings.autoFinish = value;
           if (key === 'messages') this.store.settings.openMessagesOnReceive = value;
+          if (key === 'gallery') { this.store.settings.offerGallerySave = value; if (!value) this.store.galleryQueue = []; }
           if (key === 'animation') this.store.settings.animations = value;
           if (key === 'visible') this.store.settings.visible = value;
           if (key === 'advanced') this.store.settings.advanced = value;
@@ -134,6 +135,7 @@ export struct SettingsView {
         this.toggle(this.store.t('保留历史'), this.store.t('记录仅保存在当前设备'), this.store.settings.saveHistory, 'history')
         this.toggle(this.store.t('自动完成'), this.store.t('成功传输后结束会话'), this.store.settings.autoFinish, 'finish')
         this.toggle(this.store.t('接收后打开消息'), this.store.t('文件或文字收到后切换到对应会话'), this.store.settings.openMessagesOnReceive, 'messages')
+        this.toggle(this.store.t('接收后提示保存到相册'), this.store.t('图片和视频接收完成后，通过系统确认保存到相册'), this.store.settings.offerGallerySave, 'gallery')
         Column({ space: 12 }) {
           Text(this.store.t('文件保存位置')).fontSize(16).fontColor($r('sys.color.font_primary')).width('100%')
           Text(this.store.settings.destinationMode === 'folder' ? this.store.settings.destination : this.store.t('应用内安全保存，可在接收历史中打开、分享或另存为'))
