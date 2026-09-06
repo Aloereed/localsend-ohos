@@ -6,7 +6,7 @@ const net = require('node:net');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const { load, handles } = require('./host-runtime.cjs');
+const { load, handles, mocks } = require('./host-runtime.cjs');
 const { AppStore, Peer, ShareFile } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
 const { request } = load('network/Transport');
@@ -292,6 +292,22 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       assert.equal(store.transfers.find(item => item.id === session.sessionId).status, 'complete');
       store.onReceiveStarted = () => {};
       await fs.unlink(entry.path);
+    });
+    await check('unavailable public download directory falls back to private reception with an explicit location notice', async () => {
+      const publicFolder = store.settings.destination;
+      const nativeFs = mocks['@kit.CoreFileKit'].fileIo; const access = nativeFs.access;
+      nativeFs.access = async file => { if (file.startsWith(store.downloadDirectory + '/')) throw new Error('Permission denied'); return access(file); };
+      try {
+        const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('fallback.bin', data))).json();
+        const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
+        assert.equal(result.status, 200);
+        const entry = store.history.find(item => item.name === 'fallback.bin');
+        assert.equal(entry.path, `${work}/received/${session.sessionId}/fallback.bin`);
+        assert.deepEqual(await fs.readFile(entry.path), data); assert.equal(entry.exportedPath, '');
+        const view = store.transfers.find(item => item.id === session.sessionId);
+        assert.equal(view.status, 'complete'); assert.ok(view.storageNotice); assert.equal(view.destination, '');
+        assert.equal(store.settings.destination, publicFolder, 'a temporary failure must not overwrite the chosen global destination');
+      } finally { nativeFs.access = access; }
     });
   } finally { await service.stop(); }
   await until(() => handles.size === 0);

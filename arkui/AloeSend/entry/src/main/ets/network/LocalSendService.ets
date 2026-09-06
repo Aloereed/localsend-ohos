@@ -94,6 +94,7 @@ class UploadSink implements BodySink {
     const direct = destination === downloads || destination.startsWith(`${downloads}/`);
     const root = direct ? destination : `${this.service.store.context!.filesDir}/received/${this.session.id}`;
     this.path = `${root}/${safeRelativePath(this.view.name)}`;
+    try {
     if (direct) {
       const original = this.path; let suffix = 1;
       while (await fs.access(this.path) || await fs.access(`${this.path}.part`)) {
@@ -101,8 +102,20 @@ class UploadSink implements BodySink {
         this.path = `${original.slice(0, split)} (${suffix++})${original.slice(split)}`;
       }
     }
-    await ensureDirectory(this.path.slice(0, this.path.lastIndexOf('/')));
-    this.output = await fs.open(`${this.path}.part`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
+      await ensureDirectory(this.path.slice(0, this.path.lastIndexOf('/')));
+      this.output = await fs.open(`${this.path}.part`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
+    } catch (error) {
+      if (!direct) throw error as Error;
+      // A previously granted public folder may be unavailable on this launch.
+      // No bytes have been written yet, so the entire session can use private storage.
+      this.path = `${this.service.store.context!.filesDir}/received/${this.session.id}/${safeRelativePath(this.view.name)}`;
+      await ensureDirectory(this.path.slice(0, this.path.lastIndexOf('/')));
+      this.output = await fs.open(`${this.path}.part`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
+      this.session.view.destination = '';
+      this.session.view.storageNotice = '下载目录暂不可用，已改用应用内保存，可从历史另存为';
+      this.service.store.notice = this.session.view.storageNotice;
+      this.service.store.log(`下载目录写入失败，改用应用内目录：${(error as Error).message}`);
+    }
     if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
     this.view.status = 'transferring'; this.session.view.status = 'transferring';
     this.session.lastActivity = Date.now();
@@ -547,7 +560,7 @@ export class LocalSendService {
   finishReceiveFile(session: ReceiveSession): void {
     session.lastActivity = Date.now();
     if (session.view.files.filter((file: TransferFile) => file.selected).every((file: TransferFile) => file.status === 'complete')) {
-      session.view.status = 'complete'; session.view.finished = Date.now(); this.store.notice = `已收到 ${session.peer.alias} 的文件`;
+      session.view.status = 'complete'; session.view.finished = Date.now(); this.store.notice = session.view.storageNotice || `已收到 ${session.peer.alias} 的文件`;
     }
     this.store.updateTransfer(session.view);
   }

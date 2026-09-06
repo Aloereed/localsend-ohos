@@ -79,6 +79,7 @@ export class NetworkLogEntry {
 
 export class TransferView {
   id: string = '';
+  storageNotice: string = '';
   peer: string = '';
   direction: string = 'send';
   status: string = 'waiting';

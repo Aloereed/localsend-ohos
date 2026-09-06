@@ -129,6 +129,7 @@ export struct TransferList {
             }.width('100%')
           }
           if (this.current(transfer.id).error) { Text(this.store.t(this.current(transfer.id).error)).fontColor(this.store.dangerText).fontSize(14).width('100%') }
+          if (this.current(transfer.id).storageNotice) { Text(this.store.t(this.current(transfer.id).storageNotice)).fontColor(this.store.accentText).fontSize(14).width('100%') }
           if (transfer.id === this.store.pendingReceive) {
             Row({ space: 8 }) {
               Button(this.store.t('批量重命名')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
