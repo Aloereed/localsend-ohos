@@ -183,6 +183,7 @@ export class LocalSendService {
   private running: boolean = false;
   private starting: boolean = false;
   private paused: boolean = false;
+  private lifecycle: Promise<void> = Promise.resolve();
   private pinAttempts: Map<string, PinFailures> = new Map();
 
   constructor(store: AppStore) { this.store = store; }
@@ -193,7 +194,20 @@ export class LocalSendService {
       protocol: (this.running || this.starting ? this.store.listenerHttps : this.store.settings.https) ? 'https' : 'http', download: false, announce: announce };
   }
 
-  async start(): Promise<void> {
+  private scheduleLifecycle(action: () => Promise<void>): Promise<void> {
+    const operation = this.lifecycle.then(action);
+    this.lifecycle = operation.catch(() => {});
+    return operation;
+  }
+
+  start(): Promise<void> { return this.scheduleLifecycle(() => this.startNow()); }
+  stop(): Promise<void> { return this.scheduleLifecycle(() => this.stopNow()); }
+  restart(): Promise<void> { return this.scheduleLifecycle(() => this.restartNow()); }
+  pause(): Promise<void> { return this.scheduleLifecycle(() => this.pauseNow()); }
+  resume(): Promise<void> { return this.scheduleLifecycle(() => this.resumeNow()); }
+  resetIdentity(): Promise<void> { return this.scheduleLifecycle(() => this.resetIdentityNow()); }
+
+  private async startNow(): Promise<void> {
     if (this.store.identityResetting || this.paused || this.running || this.starting || !this.store.ready) return;
     this.starting = true; this.store.serverStatus = '正在启动接收服务';
     this.store.listenerPort = this.store.settings.port; this.store.listenerHttps = this.store.settings.https;
@@ -232,17 +246,17 @@ export class LocalSendService {
         setTimeout(() => { if (this.running) this.discover(false); }, delay));
       this.timer = setInterval(() => { this.checkReceiveIdle(); this.discover(false); }, 15000);
       this.store.log('LocalSend 接收服务启动');
-    } catch (e) { this.store.fail('接收服务启动失败', e as Error); this.store.serverStatus = '启动失败'; await this.stop(); }
+    } catch (e) { this.store.fail('接收服务启动失败', e as Error); await this.stopNow(); this.store.serverStatus = '启动失败'; }
     finally { this.starting = false; }
   }
 
-  async stop(): Promise<void> {
+  private async stopNow(): Promise<void> {
     this.running = false;
     this.store.listenerRunning = false;
     if (this.timer !== -1) { clearInterval(this.timer); this.timer = -1; }
     for (const retry of this.discoveryRetries) clearTimeout(retry);
     this.discoveryRetries = [];
-    if (this.receiving) this.cancel(this.receiving.id);
+    if (this.receiving && (this.receiving.view.status === 'waiting' || this.receiving.view.status === 'transferring')) this.cancel(this.receiving.id);
     for (const channel of this.channels) channel.close(); this.channels = [];
     await this.udp?.close().catch(() => {}); this.udp = undefined;
     await this.tcp?.close().catch(() => {}); this.tcp = undefined;
@@ -250,35 +264,35 @@ export class LocalSendService {
     this.store.serverStatus = '接收服务已停止';
   }
 
-  async restart(): Promise<void> {
+  private async restartNow(): Promise<void> {
     if (this.store.identityResetting) return;
     if (this.starting) return;
     if (this.store.activeTransfers) { this.store.notice = '请等待当前传输结束后重启服务'; return; }
-    this.paused = false; await this.stop(); await this.start();
+    this.paused = false; await this.stopNow(); await this.startNow();
   }
 
-  async pause(): Promise<void> {
+  private async pauseNow(): Promise<void> {
     if (this.store.identityResetting) return;
     if (this.starting) return;
     if (this.store.activeTransfers) { this.store.notice = '请等待当前传输结束后停止服务'; return; }
-    this.paused = true; await this.stop();
+    this.paused = true; await this.stopNow();
   }
 
-  async resume(): Promise<void> {
+  private async resumeNow(): Promise<void> {
     if (this.store.identityResetting) return;
-    this.paused = false; await this.start();
+    this.paused = false; await this.startNow();
   }
 
-  async resetIdentity(): Promise<void> {
+  private async resetIdentityNow(): Promise<void> {
     if (this.store.identityResetting || this.starting || this.store.activeTransfers || this.store.webUrl) {
       this.store.notice = '请先结束传输并停止浏览器分享'; return;
     }
     const resume = !this.paused;
     this.store.identityResetting = true;
     this.paused = true;
-    try { await this.stop(); await this.identity.reset(this.store); this.store.notice = '本机证书已重新生成'; }
+    try { await this.stopNow(); await this.identity.reset(this.store); this.store.notice = '本机证书已重新生成'; }
     catch (error) { this.store.fail('重置证书失败', error as Error); }
-    finally { this.store.identityResetting = false; if (resume) { this.paused = false; await this.start(); } }
+    finally { this.store.identityResetting = false; if (resume) { this.paused = false; await this.startNow(); } }
   }
 
   certificate(): string { return this.identity.certificate; }

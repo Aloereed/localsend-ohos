@@ -57,6 +57,25 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       store.transfers = []; store.settings.port = port; store.settings.https = true; store.settings.multicast = group;
       assert.equal(store.networkPending, false);
     });
+    await check('overlapping restarts and pause release the listener before a subsequent resume', async () => {
+      const previous = service.tls;
+      const close = previous.close.bind(previous);
+      let closes = 0;
+      previous.close = async () => { closes++; await new Promise(resolve => setTimeout(resolve, 30)); await close(); };
+      await Promise.all([service.restart(), service.restart(), service.pause()]);
+      assert.equal(closes, 1, 'the previous TLS server is only closed once');
+      assert.equal(store.listenerRunning, false);
+      assert.equal(service.paused, true);
+      const probe = net.createServer();
+      await new Promise((resolve, reject) => { probe.once('error', reject); probe.listen(port, '0.0.0.0', resolve); });
+      await new Promise(resolve => probe.close(resolve));
+      await service.resume();
+      assert.equal((await call(port, '/api/localsend/v2/info', undefined, 'GET')).status, 200);
+      await Promise.all([service.stop(), service.start(), service.stop()]);
+      assert.equal(store.listenerRunning, false);
+      await service.resume();
+      assert.equal((await call(port, '/api/localsend/v2/info', undefined, 'GET')).status, 200);
+    });
     await check('native transport pins certificate and rejects a changed identity', async () => {
       const peer = new Peer(); peer.ip = '127.0.0.1'; peer.port = port; peer.protocol = 'https'; peer.fingerprint = store.settings.fingerprint;
       assert.equal((await request(peer, 'GET', '/api/localsend/v2/info')).status, 200);
@@ -308,6 +327,12 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         assert.equal(view.status, 'complete'); assert.ok(view.storageNotice); assert.equal(view.destination, '');
         assert.equal(store.settings.destination, publicFolder, 'a temporary failure must not overwrite the chosen global destination');
       } finally { nativeFs.access = access; }
+    });
+    await check('stopping the listener preserves completed receive results', async () => {
+      const completedId = service.receiving.id;
+      assert.equal(store.transfers.find(item => item.id === completedId).status, 'complete');
+      await service.pause();
+      assert.equal(store.transfers.find(item => item.id === completedId).status, 'complete');
     });
   } finally { await service.stop(); }
   await until(() => handles.size === 0);
