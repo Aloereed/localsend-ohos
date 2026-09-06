@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000040 | [M40-startup-recovery](artifacts/AloeSend-2000040-M40-startup-recovery-unsigned.hap) | 932e5df3 | 24E68752AED05ACEAF20739C65D3DAB2368D9710F476C70B1484D3A52D9EBE3A |
 | 2000039 | [M39-share-startup](artifacts/AloeSend-2000039-M39-share-startup-unsigned.hap) | eab0e500 | 821B4D9AEAE1A8A3BFDAC445F80C305738B689411453875E3B05B5D8936BB632 |
 | 2000038 | [M38-service-order](artifacts/AloeSend-2000038-M38-service-order-unsigned.hap) | 6ce618f8 | 43FA23818078A77A50B8832BB2676784C06AA9CE1FA30B83BC8AF8E8FB11F9DC |
 | 2000037 | [M37-in-app-guide](artifacts/AloeSend-2000037-M37-in-app-guide-unsigned.hap) | ede4003f | 1858C80CF567B42CFB96D277EFFBCCD39720EF034F541856C4B0C5A504704F5E |
