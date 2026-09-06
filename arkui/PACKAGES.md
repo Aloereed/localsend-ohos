@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000026 | [M26-first-launch](artifacts/AloeSend-2000026-M26-first-launch-unsigned.hap) | c36f5d0c | CFC00668FF76883B80AF9FFD9EA711962CAA598F7E348268E50681BFD92D79ED |
 | 2000025 | [M25-file-location](artifacts/AloeSend-2000025-M25-file-location-unsigned.hap) | 2fef9cb4 | 699BFF996F9A525EFBF7E9BE76442FB95509BCDFD627B46C516EBD31A8811D4D |
 | 2000024 | [M24-appearance-options](artifacts/AloeSend-2000024-M24-appearance-options-unsigned.hap) | 4ac49f57 | 0EAD0825F8293330B60CD4B45F42D1DED80CB589E8B8AB02121301AB689B5472 |
 | 2000023 | [M23-completion-polish](artifacts/AloeSend-2000023-M23-completion-polish-unsigned.hap) | 248b1895 | E118F9754D09B7BFB64AEC76CD12A456F3DF333D092CD46264297D0839AECB23 |

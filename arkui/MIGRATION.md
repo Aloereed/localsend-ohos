@@ -24,7 +24,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence as of M25:
+implementation evidence as of M26:
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
@@ -35,7 +35,7 @@ implementation evidence as of M25:
 | Messages and history | MessagesView, LibraryView, FileDetailsView | Search, conversation isolation, open/export/share, metadata, favorite conversation targets and public folder reveal implemented; system interactions need device confirmation. |
 | Browser sharing | WebShareView, WebShareService, WebPage | Real HTTP consent, upload/download, PIN, cancellation and resource tests pass. |
 | Settings and appearance | SettingsView, Locale, AppStore | Chinese/English/system, colors, theme, animations, reduced effects, OLED background, receive and network controls implemented; original extra theme presets and full translation coverage not claimed. |
-| Help, privacy, credits, diagnostics | Index information routes and SettingsView | Native routes implemented; first-launch privacy flow and developer-only screens need final parity review. |
+| Help, privacy, credits, diagnostics | Index information routes, PrivacyView and SettingsView | Native routes and first-launch privacy flow implemented; developer-only screens need final parity review. |
 | Legacy UI | Shared native flows | No duplicate legacy navigation shell; equivalent actions are consolidated. Final interaction audit pending. |
 | Android/desktop-only actions | Platform scope | APK installed-app picker, desktop tray, autostart and shell integration are not HarmonyOS equivalents. |
 | Upstream Rust rewrite | Preserved upstream reference | LocalSend interoperability is implemented; Rust-only WebRTC/pairing parity is not claimed. |
