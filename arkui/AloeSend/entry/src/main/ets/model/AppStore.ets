@@ -36,6 +36,27 @@ export class HistoryEntry {
   status: string = 'complete';
 }
 
+export class TransferFile {
+  id: string = '';
+  name: string = '';
+  size: number = 0;
+  transferred: number = 0;
+  status: string = 'waiting';
+  selected: boolean = true;
+}
+
+export class TransferView {
+  id: string = '';
+  peer: string = '';
+  direction: string = 'send';
+  status: string = 'waiting';
+  error: string = '';
+  files: TransferFile[] = [];
+  started: number = Date.now();
+  finished: number = 0;
+  encrypted: boolean = true;
+}
+
 export class AppSettings {
   alias: string = '我的鸿蒙设备';
   fingerprint: string = util.generateRandomUUID();
@@ -54,6 +75,7 @@ export class AppSettings {
   destination: string = '';
   sendMode: string = 'single';
   advanced: boolean = false;
+  https: boolean = true;
   discoveryTimeout: number = 1500;
 }
 
@@ -92,6 +114,10 @@ export class AppStore {
   ready: boolean = false;
   serverStatus: string = '未启动';
   localIps: string[] = [];
+  transfers: TransferView[] = [];
+  pendingReceive: string = '';
+  pendingPin: string = '';
+  webUrl: string = '';
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
 
@@ -102,6 +128,9 @@ export class AppStore {
       this.storage = await preferences.getPreferences(context, 'aloesend-native-v1');
       const saved = await this.storage.get('settings', '') as string;
       if (saved) this.settings = JSON.parse(saved) as AppSettings;
+      // Older native milestones did not persist this field. Missing must never
+      // silently downgrade an existing installation to clear-text transport.
+      if (typeof this.settings.https !== 'boolean') this.settings.https = true;
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
       this.history = JSON.parse(await this.storage.get('history', '[]') as string) as HistoryEntry[];
       this.applyTheme();
@@ -112,6 +141,11 @@ export class AppStore {
 
   log(message: string): void {
     this.logs = [`${new Date().toLocaleTimeString()}  ${message}`, ...this.logs].slice(0, 300);
+  }
+
+  updateTransfer(transfer: TransferView): void {
+    const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
+    this.transfers = [snapshot, ...this.transfers.filter((item: TransferView) => item.id !== transfer.id)].slice(0, 30);
   }
 
   fail(title: string, error: Error): void {

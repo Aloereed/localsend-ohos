@@ -3,6 +3,8 @@ import { AppStore, appStore, Peer } from '../model/AppStore';
 import { SettingsView } from '../components/SettingsView';
 import { SendView } from '../components/SendView';
 import { LibraryView } from '../components/LibraryView';
+import { TransferList } from '../components/TransferList';
+import { localSend } from '../network/LocalSendService';
 
 @Entry
 @Component
@@ -10,9 +12,11 @@ struct Index {
   @State store: AppStore = appStore;
   @State tab: number = 0;
   @State route: string = '';
+  @State pinText: string = '';
 
   async aboutToAppear(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
+    await localSend.start();
   }
 
   onBackPress(): boolean {
@@ -22,6 +26,7 @@ struct Index {
   }
 
   title(): string {
+    if (this.route === 'transfers') return '传输任务';
     if (this.route === 'history') return '接收历史';
     if (this.route === 'diagnostics') return '连接诊断';
     if (this.route === 'help') return '使用帮助';
@@ -67,15 +72,18 @@ struct Index {
       Button('接收设置').layoutWeight(1).height(48).backgroundColor($r('sys.color.comp_background_primary')).fontColor(this.store.settings.accent)
         .onClick(() => this.tab = 3)
     }.width('100%').margin({ bottom: 24 })
+    Button('查看传输任务').backgroundColor(this.store.settings.accent).onClick(() => this.route = 'transfers').margin({ bottom: 20 })
     this.info('同一网络，自由分享', '保持双方的 LocalSend 打开，连接同一 Wi-Fi。收到请求时，先查看内容，再决定是否接收。')
     this.info('文件留在你手中', '接收后可在历史中打开或另存为。文字和链接在消息页集中查看。')
   }
 
   @Builder
   details() {
-    if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
+    if (this.route === 'transfers') { TransferList({ store: this.store }) }
+    else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
     else if (this.route === 'diagnostics') {
       this.info('接收服务', this.store.serverStatus)
+      Button('重启接收服务').backgroundColor(this.store.settings.accent).onClick(() => localSend.restart())
       this.info('本机地址', this.store.localIps.length ? this.store.localIps.join('\n') : '尚未读取到网络地址')
       this.info('连接参数', `端口 ${this.store.settings.port}\n组播 ${this.store.settings.multicast}\n协议 LocalSend 2.1`)
       Button('复制诊断信息').backgroundColor(this.store.settings.accent).onClick(() => this.store.copy(this.store.logs.join('\n')))
@@ -120,7 +128,24 @@ struct Index {
           Button('×').backgroundColor(Color.Transparent).fontColor($r('sys.color.font_primary')).onClick(() => { this.store.error = ''; this.store.notice = ''; })
         }.padding({ left: 20, right: 12, top: 8, bottom: 8 }).width('100%').backgroundColor($r('sys.color.comp_background_tertiary'))
       }
-      if (this.route) {
+      if (this.store.pendingPin) {
+        Column({ space: 12 }) {
+          Text('请输入对方设备的接收 PIN').fontSize(18).fontColor($r('sys.color.font_primary'))
+          TextInput({ text: this.pinText, placeholder: 'PIN' }).type(InputType.Number).maxLength(12).onChange((value: string) => this.pinText = value)
+          Row({ space: 12 }) {
+            Button('取消').onClick(() => localSend.submitPin(''))
+            Button('确认').backgroundColor(this.store.settings.accent).onClick(() => { localSend.submitPin(this.pinText); this.pinText = ''; })
+          }
+        }.padding(24).width('100%')
+      }
+      if (this.store.pendingReceive) {
+        Scroll() {
+          Column() {
+            this.heading('收到分享请求', '查看内容，再决定是否接收')
+            TransferList({ store: this.store, pendingOnly: true })
+          }.padding(24).constraintSize({ maxWidth: 720 }).width('100%')
+        }.layoutWeight(1).width('100%')
+      } else if (this.route) {
         Row() {
           Button('‹ 返回').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => this.route = '')
           Text(this.title()).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
@@ -135,9 +160,9 @@ struct Index {
             Scroll() {
               Column() {
                 this.heading('发送', '跨越设备，传递心意')
-                SendView({ store: this.store, onSend: (peer: Peer) => { this.store.notice = '传输服务尚未接入'; },
-                  onDiscover: () => { this.store.notice = '发现服务尚未接入'; },
-                  onAddress: (address: string) => { this.store.notice = '发现服务尚未接入'; }, onWebShare: () => this.route = 'web' })
+                SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
+                  onDiscover: () => { localSend.discover(); },
+                  onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web' })
               }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%')
             }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('发送', '↑', 1))
