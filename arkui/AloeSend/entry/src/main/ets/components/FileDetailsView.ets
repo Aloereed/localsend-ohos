@@ -35,8 +35,14 @@ export struct FileDetailsView {
         }.width('100%').padding({ bottom: 20 })
       }.width('100%').layoutWeight(1)
       if (this.entry.path) {
-        Button(this.store.t('打开')).width('100%').height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
-          .onClick(() => this.store.openFile(this.entry))
+        Row({ space: 12 }) {
+          Button(this.store.t('打开')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
+            .onClick(() => this.store.openFile(this.entry))
+          if (this.store.folderUri(this.entry)) {
+            Button(this.store.t('所在文件夹')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
+              .onClick(() => this.store.revealFile(this.entry))
+          }
+        }.width('100%')
       }
       if (this.entry.path && this.store.isMedia(this.entry)) {
         Button(this.store.t('保存到相册')).width('100%').height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)

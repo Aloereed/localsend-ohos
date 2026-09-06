@@ -1,6 +1,8 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "所在文件夹": "Show folder",
+  "无法打开所在文件夹，可复制文件位置": "Could not open the folder. You can copy the file location.",
   "轻量效果": "Reduce visual effects",
   "关闭背景模糊，使用实色表面": "Turn off background blur and use solid surfaces",
   "OLED 纯黑背景": "OLED black background",

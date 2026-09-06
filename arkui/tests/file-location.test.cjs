@@ -1,0 +1,23 @@
+const assert = require('node:assert/strict');
+const { load } = require('./host-runtime.cjs');
+const { publicParentUri } = load('platform/FileLocation');
+const { AppStore, HistoryEntry } = load('model/AppStore');
+const raw = '/storage/Users/currentUser/Download/com.aloereed.aloesend/旅行 #1/file.txt';
+const expected = 'file://docs/storage/Users/currentUser/Download/com.aloereed.aloesend/' + encodeURIComponent('旅行 #1');
+assert.equal(publicParentUri(raw), expected);
+assert.equal(publicParentUri(expected + '/file.txt'), expected, 'already encoded URI must not be encoded twice');
+assert.equal(publicParentUri('/data/storage/el2/base/files/received/file.txt'), '');
+assert.equal(publicParentUri('file://com.aloereed.aloesend/data/storage/file.txt'), '');
+assert.equal(publicParentUri('file://media/Photo/1'), '');
+const entry = new HistoryEntry(); entry.path = '/data/storage/el2/base/files/received/file.txt'; entry.exportedPath = raw;
+const store = new AppStore();
+let want;
+store.context = { startAbility: async value => { want = value; } };
+(async () => {
+  assert.equal(store.folderUri(entry), expected);
+  await store.revealFile(entry);
+  assert.equal(want.bundleName, 'com.huawei.hmos.filemanager'); assert.equal(want.parameters.fileUri, expected);
+  entry.exportedPath = ''; want = undefined;
+  await store.revealFile(entry); assert.equal(want, undefined, 'private files should offer export instead of a non-browsable folder');
+  console.log('PASS public folder reveal, encoded names, exported copies and private-path exclusion');
+})().catch(error => { console.error(error); process.exitCode = 1; });

@@ -11,6 +11,7 @@ import { LocalInterface } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { ensureDirectory } from '../platform/Directories';
+import { publicParentUri } from '../platform/FileLocation';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -482,6 +483,17 @@ export class AppStore {
     try {
       await this.context?.startAbility({ action: 'ohos.want.action.viewData', uri: entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), type: mimeForName(entry.name), flags: 1 });
     } catch (e) { this.fail('打开文件失败，可尝试另存为', e as Error); }
+  }
+
+  folderUri(entry: HistoryEntry): string {
+    return publicParentUri(entry.exportedPath) || publicParentUri(entry.path);
+  }
+
+  async revealFile(entry: HistoryEntry): Promise<void> {
+    const uri = this.folderUri(entry); if (!uri || !this.context) return;
+    try {
+      await this.context.startAbility({ bundleName: 'com.huawei.hmos.filemanager', abilityName: 'MainAbility', parameters: { fileUri: uri } });
+    } catch (e) { this.fail('无法打开所在文件夹，可复制文件位置', e as Error); }
   }
 
   async chooseDestination(): Promise<void> {
