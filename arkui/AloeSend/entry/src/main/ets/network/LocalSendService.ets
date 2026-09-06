@@ -2,7 +2,7 @@ import { socket, connection } from '@kit.NetworkKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
-import { AppStore, appStore, Peer, ShareFile, HistoryEntry, TransferView, TransferFile } from '../model/AppStore';
+import { AppStore, appStore, Peer, ShareFile, HistoryEntry, TransferView, TransferFile, samePeer } from '../model/AppStore';
 import { HttpHead, queryValue, safeRelativePath, uniqueName } from './Protocol';
 import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { TlsIdentity } from './TlsIdentity';
@@ -157,17 +157,19 @@ export class LocalSendService {
 
   info(announce: boolean = false): DeviceInfo {
     return { alias: this.store.settings.alias, version: '2.1', deviceModel: this.store.settings.deviceModel, deviceType: this.store.settings.deviceType,
-      fingerprint: this.store.settings.fingerprint, port: this.store.settings.port,
-      protocol: this.store.settings.https ? 'https' : 'http', download: false, announce: announce };
+      fingerprint: this.store.settings.fingerprint, port: this.running || this.starting ? this.store.listenerPort : this.store.settings.port,
+      protocol: (this.running || this.starting ? this.store.listenerHttps : this.store.settings.https) ? 'https' : 'http', download: false, announce: announce };
   }
 
   async start(): Promise<void> {
     if (this.running || this.starting || !this.store.ready) return;
     this.starting = true; this.store.serverStatus = '正在启动接收服务';
+    this.store.listenerPort = this.store.settings.port; this.store.listenerHttps = this.store.settings.https;
+    this.store.listenerMulticast = this.store.settings.multicast;
     try {
-      if (this.store.settings.https) await this.identity.load(this.store);
-      const address: socket.NetAddress = { address: '0.0.0.0', port: this.store.settings.port, family: 1 };
-      if (this.store.settings.https) {
+      if (this.store.listenerHttps) await this.identity.load(this.store);
+      const address: socket.NetAddress = { address: '0.0.0.0', port: this.store.listenerPort, family: 1 };
+      if (this.store.listenerHttps) {
         this.tls = socket.constructTLSSocketServerInstance();
         this.tls.on('connect', (client: socket.TLSSocketConnection) => {
           const channel = this.newChannel(); channel.attachTls(client);
@@ -181,7 +183,8 @@ export class LocalSendService {
         await this.tcp.listen(address);
       }
       this.running = true;
-      this.store.serverStatus = this.store.settings.https ? '已就绪 · 加密传输' : '已就绪 · 未加密';
+      this.store.listenerRunning = true;
+      this.store.serverStatus = this.store.listenerHttps ? '已就绪 · 加密传输' : '已就绪 · 未加密';
       await this.readAddresses().catch((e: Error) => this.store.log(`读取本机地址失败，可尝试手动连接：${e.message}`));
       try {
         this.udp = socket.constructMulticastSocketInstance();
@@ -189,7 +192,7 @@ export class LocalSendService {
         await this.udp.setExtraOptions({ reuseAddress: true });
         this.udp.on('message', (message: socket.SocketMessageInfo) => this.discovered(message));
         this.udp.on('error', (error) => this.store.log(`组播错误 ${error.code}`));
-        await this.udp.addMembership({ address: this.store.settings.multicast, port: this.store.settings.port, family: 1 });
+        await this.udp.addMembership({ address: this.store.listenerMulticast, port: this.store.listenerPort, family: 1 });
         await this.udp.setMulticastTTL(1);
         await this.announce();
       } catch (e) { this.store.log(`组播不可用，可通过地址连接：${(e as Error).message}`); }
@@ -201,6 +204,7 @@ export class LocalSendService {
 
   async stop(): Promise<void> {
     this.running = false;
+    this.store.listenerRunning = false;
     if (this.timer !== -1) { clearInterval(this.timer); this.timer = -1; }
     if (this.receiving) this.cancel(this.receiving.id);
     for (const channel of this.channels) channel.close(); this.channels = [];
@@ -210,7 +214,11 @@ export class LocalSendService {
     this.store.serverStatus = '接收服务已停止';
   }
 
-  async restart(): Promise<void> { await this.stop(); await this.start(); }
+  async restart(): Promise<void> {
+    if (this.starting) return;
+    if (this.store.activeTransfers) { this.store.notice = '请等待当前传输结束后重启服务'; return; }
+    await this.stop(); await this.start();
+  }
 
   private newChannel(): NativeConnection {
     this.channels = this.channels.filter((channel: NativeConnection) => !channel.closed);
@@ -241,7 +249,7 @@ export class LocalSendService {
   async announce(): Promise<void> {
     if (!this.store.settings.visible || !this.running) return;
     if (this.store.settings.networkFilter !== 'none' && !this.store.localIps.length) return;
-    await this.udp?.send({ data: JSON.stringify(this.info(true)), address: { address: this.store.settings.multicast, port: this.store.settings.port, family: 1 } });
+    await this.udp?.send({ data: JSON.stringify(this.info(true)), address: { address: this.store.listenerMulticast, port: this.store.listenerPort, family: 1 } });
   }
 
   async discover(): Promise<void> {
@@ -273,9 +281,16 @@ export class LocalSendService {
     peer.deviceModel = info.deviceModel || ''; peer.deviceType = info.deviceType || 'desktop'; return peer;
   }
 
-  private upsertPeer(peer: Peer): void {
+  private upsertPeer(peer: Peer, verified: boolean = false): void {
     if (peer.fingerprint === this.store.settings.fingerprint) return;
-    this.store.peers = [peer, ...this.store.peers.filter((item: Peer) => item.ip !== peer.ip || item.port !== peer.port)].slice(0, 100);
+    this.store.peers = [peer, ...this.store.peers.filter((item: Peer) => !samePeer(item, peer) && (item.ip !== peer.ip || item.port !== peer.port))].slice(0, 100);
+    if (verified && this.store.favorites.some((item: Peer) => samePeer(item, peer) && (item.ip !== peer.ip || item.port !== peer.port || item.protocol !== peer.protocol))) {
+      this.store.favorites = this.store.favorites.map((item: Peer) => {
+        if (!samePeer(item, peer)) return item;
+        const updated = JSON.parse(JSON.stringify(peer)) as Peer; updated.alias = item.alias; return updated;
+      });
+      this.store.save();
+    }
   }
 
   private async register(peer: Peer): Promise<void> {
@@ -284,7 +299,7 @@ export class LocalSendService {
       const info = JSON.parse(result.body) as DeviceInfo;
       const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
       if (result.fingerprint) known.fingerprint = result.fingerprint;
-      this.upsertPeer(known);
+      this.upsertPeer(known, !!result.fingerprint);
     }
   }
 
@@ -295,7 +310,7 @@ export class LocalSendService {
     const info = JSON.parse(reply.body) as DeviceInfo;
     const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
     if (reply.fingerprint) known.fingerprint = reply.fingerprint;
-    this.upsertPeer(known);
+    this.upsertPeer(known, !!reply.fingerprint);
     if (this.store.settings.visible) await this.register(known);
   }
 

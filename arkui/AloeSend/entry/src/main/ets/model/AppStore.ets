@@ -31,6 +31,11 @@ export class Peer {
   lastSeen: number = Date.now();
 }
 
+export function samePeer(a: Peer, b: Peer): boolean {
+  if (a.fingerprint && b.fingerprint) return a.fingerprint === b.fingerprint;
+  return !!a.ip && a.ip === b.ip && a.port === b.port;
+}
+
 export class HistoryEntry {
   id: string = util.generateRandomUUID();
   name: string = '';
@@ -138,6 +143,10 @@ export class AppStore {
   busy: boolean = false;
   ready: boolean = false;
   serverStatus: string = '未启动';
+  listenerRunning: boolean = false;
+  listenerPort: number = 53317;
+  listenerHttps: boolean = true;
+  listenerMulticast: string = '224.0.0.167';
   localIps: string[] = [];
   interfaces: LocalInterface[] = [];
   transfers: TransferView[] = [];
@@ -333,10 +342,18 @@ export class AppStore {
     });
   }
 
-  isFavorite(peer: Peer): boolean { return this.favorites.some((item: Peer) => item.ip === peer.ip && item.port === peer.port); }
+  get networkPending(): boolean {
+    return this.listenerRunning && (this.settings.port !== this.listenerPort || this.settings.https !== this.listenerHttps || this.settings.multicast !== this.listenerMulticast);
+  }
+
+  get activeTransfers(): boolean {
+    return this.batchRemaining > 0 || this.transfers.some((item: TransferView) => item.status === 'waiting' || item.status === 'transferring');
+  }
+
+  isFavorite(peer: Peer): boolean { return this.favorites.some((item: Peer) => samePeer(item, peer)); }
 
   toggleFavorite(peer: Peer): void {
-    this.favorites = this.isFavorite(peer) ? this.favorites.filter((item: Peer) => item.ip !== peer.ip || item.port !== peer.port) : [...this.favorites, peer];
+    this.favorites = this.isFavorite(peer) ? this.favorites.filter((item: Peer) => !samePeer(item, peer)) : [...this.favorites, peer];
     this.save();
   }
 

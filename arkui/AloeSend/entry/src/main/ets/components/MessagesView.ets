@@ -1,4 +1,4 @@
-import { AppStore, HistoryEntry, Peer, ShareFile, formatSize } from '../model/AppStore';
+import { AppStore, HistoryEntry, Peer, ShareFile, formatSize, samePeer } from '../model/AppStore';
 import { Conversation, conversationList, inConversation } from '../model/Conversations';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
@@ -28,7 +28,7 @@ export struct MessagesView {
   detailsSheet() { FileDetailsView({ store: this.store, entry: this.detailEntry }) }
 
   open(peer: Peer): void {
-    this.peer = this.store.peers.find((item: Peer) => peer.fingerprint ? item.fingerprint === peer.fingerprint : item.alias === peer.alias) || peer;
+    this.peer = this.store.peers.find((item: Peer) => samePeer(item, peer)) || peer;
     this.query = ''; this.draft = ''; this.detailOpen = true;
   }
 
@@ -146,8 +146,10 @@ export struct MessagesView {
             if (conversationList(this.store.history).length === 0) {
               EmptyState({ icon: 'message', title: this.store.t('还没有会话'), description: this.store.t('选择下方设备发起会话，或等待另一台设备给你发来消息。'), accent: this.store.accentText })
             }
-            ForEach(conversationList(this.store.history).filter((group: Conversation) =>
-              `${group.peer.alias} ${group.last.text} ${group.last.name}`.toLowerCase().includes(this.query.toLowerCase())), (group: Conversation) => {
+            if (this.query && conversationList(this.store.history, this.query).length === 0) {
+              EmptyState({ icon: 'search', title: this.store.t('没有匹配的会话'), description: this.store.t('换个关键词，搜索设备、文字或文件名。'), accent: this.store.accentText })
+            }
+            ForEach(conversationList(this.store.history, this.query), (group: Conversation) => {
               Row({ space: 14 }) {
                 AppIcon({ name: group.peer.deviceType === 'mobile' ? 'mobile' : 'desktop', iconSize: 28, tint: this.store.accentText })
                 Column({ space: 7 }) {

@@ -45,6 +45,18 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       assert.equal(result.json().fingerprint, cert.fingerprint256.replaceAll(':', '').toLowerCase());
       assert.equal(cert.verify(cert.publicKey), true);
     });
+    await check('pending settings keep advertised transport consistent with the running listener', async () => {
+      const group = store.settings.multicast;
+      store.settings.port = await freePort(); store.settings.https = false; store.settings.multicast = '224.0.0.168';
+      assert.equal(store.networkPending, true);
+      const active = (await call(port, '/api/localsend/v2/info', undefined, 'GET')).json();
+      assert.equal(active.port, port); assert.equal(active.protocol, 'https');
+      assert.equal(store.listenerMulticast, group);
+      store.transfers = [{ id: 'guard', status: 'waiting' }];
+      await service.restart(); assert.equal(store.listenerPort, port); assert.equal(store.listenerRunning, true);
+      store.transfers = []; store.settings.port = port; store.settings.https = true; store.settings.multicast = group;
+      assert.equal(store.networkPending, false);
+    });
     await check('native transport pins certificate and rejects a changed identity', async () => {
       const peer = new Peer(); peer.ip = '127.0.0.1'; peer.port = port; peer.protocol = 'https'; peer.fingerprint = store.settings.fingerprint;
       assert.equal((await request(peer, 'GET', '/api/localsend/v2/info')).status, 200);

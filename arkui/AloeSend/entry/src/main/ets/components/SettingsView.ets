@@ -92,7 +92,7 @@ export struct SettingsView {
         }.width('100%')
         Button(this.store.t('保存名称')).type(ButtonType.Capsule).backgroundColor(this.store.accentFill).onClick(() => {
           this.store.settings.alias = this.alias.trim() || this.store.t('我的鸿蒙设备');
-          this.store.save(); this.store.notice = this.store.t('设备名称已保存');
+          this.store.save(); localSend.announce(); this.store.notice = this.store.t('设备名称已保存');
         })
       }.padding(20).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       this.title(this.store.t('外观'))
@@ -159,7 +159,7 @@ export struct SettingsView {
       }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       this.title(this.store.t('网络'))
       Column() {
-        this.link(this.store.t('连接诊断'), this.store.serverStatus, 'diagnostics')
+        this.link(this.store.t('连接诊断'), this.store.t(this.store.serverStatus), 'diagnostics')
         this.link(this.store.t('网络接口'), this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选'), 'network')
         this.toggle(this.store.t('高级设置'), this.store.t('端口与组播地址'), this.store.settings.advanced, 'advanced')
         if (this.store.settings.advanced) {
@@ -173,7 +173,7 @@ export struct SettingsView {
             TextInput({ text: this.group, placeholder: this.store.t('组播地址') }).onChange((value: string) => this.group = value)
             Button(this.store.t('保存网络设置')).backgroundColor(this.store.accentFill).onClick(() => this.saveNetwork())
             Button(this.store.t('重启接收服务')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
-              .enabled(!this.store.transfers.some((item) => item.status === 'transferring' || item.status === 'waiting'))
+              .enabled(!this.store.activeTransfers)
               .onClick(() => localSend.restart())
             Row() {
               Text(this.store.t('设备类型')).layoutWeight(1).fontColor($r('sys.color.font_primary'))

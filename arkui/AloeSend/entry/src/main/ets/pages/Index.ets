@@ -96,7 +96,7 @@ struct Index {
         Text(this.store.settings.visible ? this.store.t(this.store.serverStatus) : this.store.t('当前已隐藏，可通过地址连接')).fontSize(13).fontColor($r('sys.color.font_secondary'))
       }.padding({ left: 14, right: 14, top: 8, bottom: 8 }).backgroundColor($r('sys.color.comp_background_tertiary')).borderRadius(18)
       ForEach(this.store.localIps, (ip: string) => {
-        Text(`${ip}:${this.store.settings.port}`).fontSize(13).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
+        Text(`${ip}:${this.store.listenerPort}`).fontSize(13).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
       })
     }.width('100%').padding(32).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(28).margin({ bottom: 24 })
     Row({ space: 12 }) {
@@ -125,11 +125,11 @@ struct Index {
     else if (this.route === 'transfers') { TransferList({ store: this.store }) }
     else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
     else if (this.route === 'diagnostics') {
-      this.info(this.store.t('接收服务'), this.store.serverStatus)
+      this.info(this.store.t('接收服务'), this.store.t(this.store.serverStatus))
       this.info(this.store.t('本机证书指纹'), this.store.settings.fingerprint)
-      Button(this.store.t('重启接收服务')).backgroundColor(this.store.accentFill).onClick(() => localSend.restart())
+      Button(this.store.t('重启接收服务')).backgroundColor(this.store.accentFill).enabled(!this.store.activeTransfers).onClick(() => localSend.restart())
       this.info(this.store.t('本机地址'), this.store.localIps.length ? this.store.localIps.join('\n') : this.store.t('尚未读取到网络地址'))
-      this.info(this.store.t('连接参数'), this.store.tf('端口 {0}\n组播 {1}\n协议 LocalSend 2.1', [String(this.store.settings.port), this.store.settings.multicast]))
+      this.info(this.store.t('当前监听'), this.store.tf('端口 {0}\n组播 {1}\n协议 LocalSend 2.1', [String(this.store.listenerPort), this.store.listenerMulticast]))
       Button(this.store.t('复制诊断信息')).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.logs.join('\n')))
       ForEach(this.store.logs, (line: string) => {
         Text(line).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%').padding(10).copyOption(CopyOptions.LocalDevice)
@@ -177,6 +177,15 @@ struct Index {
 
   build() {
     Column() {
+      if (this.store.networkPending && !this.store.pendingReceive) {
+        Row({ space: 12 }) {
+          Column({ space: 4 }) {
+            Text(this.store.t('网络设置待生效')).fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+            Text(this.store.t('当前连接继续使用原设置。空闲时重启即可应用新设置。')).fontSize(12).fontColor($r('sys.color.font_secondary'))
+          }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+          Button(this.store.t('重新启动')).fontSize(13).backgroundColor(this.store.accentFill).enabled(!this.store.activeTransfers).onClick(() => localSend.restart())
+        }.padding(16).width('100%').backgroundColor($r('sys.color.comp_background_tertiary'))
+      }
       if (this.store.error || this.store.notice) {
         Row({ space: 12 }) {
           Text(this.store.t(this.store.error || this.store.notice)).fontSize(13).layoutWeight(1).fontColor($r('sys.color.font_primary'))

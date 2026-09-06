@@ -314,7 +314,14 @@ const english: Record<string, string> = {
   "等待设备响应超时": "Timed out waiting for the device",
   "文件接收中断": "File transfer interrupted",
   "已发送到 {0}": "Sent to {0}",
-  "已收到 {0} 的文件": "Received files from {0}"
+  "已收到 {0} 的文件": "Received files from {0}",
+  "请等待当前传输结束后重启服务": "Wait for the current transfers to finish before restarting",
+  "网络设置待生效": "Network changes pending",
+  "当前连接继续使用原设置。空闲时重启即可应用新设置。": "Current connections keep their existing settings. Restart when idle to apply changes.",
+  "重新启动": "Restart",
+  "当前监听": "Currently listening",
+  "没有匹配的会话": "No matching conversations",
+  "换个关键词，搜索设备、文字或文件名。": "Try another device name, message or file name."
 };
 
 export function resolvedLanguage(language: string): string {
