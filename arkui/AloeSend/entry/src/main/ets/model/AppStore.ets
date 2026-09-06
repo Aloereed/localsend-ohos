@@ -1,6 +1,7 @@
 import { preferences } from '@kit.ArkData';
 import { common, ConfigurationConstant, abilityAccessCtrl } from '@kit.AbilityKit';
-import { picker, fileIo as fs, fileUri } from '@kit.CoreFileKit';
+import { picker, fileIo as fs, fileUri, fileShare } from '@kit.CoreFileKit';
+import { systemShare } from '@kit.ShareKit';
 import { pasteboard } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
@@ -80,6 +81,9 @@ export class AppSettings {
   port: number = 53317;
   multicast: string = '224.0.0.167';
   destination: string = '';
+  destinationMode: string = 'private';
+  deviceModel: string = 'HarmonyOS';
+  deviceType: string = 'mobile';
   sendMode: string = 'single';
   advanced: boolean = false;
   https: boolean = true;
@@ -130,6 +134,7 @@ export class AppStore {
   webFiles: ShareFile[] = [];
   batchRemaining: number = 0;
   incomingShare: boolean = false;
+  onTransferCompleted: () => void = () => {};
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
   private initialization: Promise<void> | undefined = undefined;
@@ -146,6 +151,9 @@ export class AppStore {
       this.storage = await preferences.getPreferences(context, 'aloesend-native-v1');
       const saved = await this.storage.get('settings', '') as string;
       if (saved) this.settings = JSON.parse(saved) as AppSettings;
+      if (!this.settings.destinationMode) this.settings.destinationMode = 'private';
+      if (!this.settings.deviceModel) this.settings.deviceModel = 'HarmonyOS';
+      if (!this.settings.deviceType) this.settings.deviceType = 'mobile';
       // Older native milestones did not persist this field. Missing must never
       // silently downgrade an existing installation to clear-text transport.
       if (typeof this.settings.https !== 'boolean') this.settings.https = true;
@@ -162,10 +170,12 @@ export class AppStore {
   }
 
   updateTransfer(transfer: TransferView): void {
+    const previous = this.transfers.find((item: TransferView) => item.id === transfer.id);
     const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
     this.transfers = [snapshot, ...this.transfers.filter((item: TransferView) => item.id !== transfer.id)].slice(0, 30);
     if (this.context) backgroundKeeper.sync(this.transfers.some((item: TransferView) => item.status === 'transferring'), this.context,
       (message: string) => this.log(message));
+    if (transfer.status === 'complete' && previous?.status !== 'complete') this.onTransferCompleted();
   }
 
   fail(title: string, error: Error): void {
@@ -192,6 +202,9 @@ export class AppStore {
 
   async selectFiles(kind: string): Promise<void> {
     if (!this.context) return;
+    if (kind === 'folder' && !canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
+      this.notice = '此设备不支持选择整个文件夹，可多选文件，或选择压缩包发送'; kind = 'file';
+    }
     this.busy = true;
     try {
       let uris: string[] = [];
@@ -203,7 +216,7 @@ export class AppStore {
         uris = result.photoUris;
       } else {
         const options = new picker.DocumentSelectOptions();
-        options.maxSelectNumber = 100;
+        options.maxSelectNumber = kind === 'folder' ? 1 : 100;
         options.selectMode = kind === 'folder' ? picker.DocumentSelectMode.FOLDER : picker.DocumentSelectMode.FILE;
         uris = await new picker.DocumentViewPicker(this.context).select(options);
       }
@@ -309,7 +322,8 @@ export class AppStore {
     if (!this.context || !entry.path) return;
     try {
       const options = new picker.DocumentSaveOptions();
-      options.newFileNames = [entry.name];
+      options.newFileNames = [entry.name.split('/').pop() || entry.name];
+      if (this.settings.destination) options.defaultFilePathUri = this.settings.destination;
       const destinations = await new picker.DocumentViewPicker(this.context).save(options);
       if (!destinations.length) return;
       const source = await fs.open(entry.path, fs.OpenMode.READ_ONLY);
@@ -325,8 +339,64 @@ export class AppStore {
   async openFile(entry: HistoryEntry): Promise<void> {
     if (!entry.path) return;
     try {
-      await this.context?.startAbility({ action: 'ohos.want.action.viewData', uri: fileUri.getUriFromPath(entry.path), type: mimeForName(entry.name), flags: 1 });
+      await this.context?.startAbility({ action: 'ohos.want.action.viewData', uri: entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), type: mimeForName(entry.name), flags: 1 });
     } catch (e) { this.fail('打开文件失败，可尝试另存为', e as Error); }
+  }
+
+  async chooseDestination(): Promise<void> {
+    if (!this.context) return;
+    try {
+      let uris: string[];
+      if (canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
+        const options = new picker.DocumentSelectOptions(); options.maxSelectNumber = 1; options.selectMode = picker.DocumentSelectMode.FOLDER;
+        uris = await new picker.DocumentViewPicker(this.context).select(options);
+      } else {
+        const options = new picker.DocumentSaveOptions(); options.pickerMode = picker.DocumentPickerMode.DOWNLOAD;
+        uris = await new picker.DocumentViewPicker(this.context).save(options);
+      }
+      if (!uris.length) return;
+      const policy: fileShare.PolicyInfo[] = [{ uri: uris[0], operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }];
+      await fileShare.persistPermission(policy);
+      await fileShare.activatePermission(policy);
+      this.settings.destination = uris[0]; this.settings.destinationMode = 'folder'; await this.save();
+      this.notice = '接收后会自动保存到此目录，并保留应用内副本';
+    } catch (e) { this.fail('设置目录失败，仍可在历史中另存为', e as Error); }
+  }
+
+  async saveReceivedCopy(entry: HistoryEntry): Promise<void> {
+    if (this.settings.destinationMode !== 'folder' || !this.settings.destination || !entry.path) return;
+    try {
+      await fileShare.activatePermission([{ uri: this.settings.destination, operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
+      // A unique per-transfer directory prevents overwriting unrelated user files.
+      const directory = `${this.settings.destination}/AloeSend-${entry.id}`;
+      await fs.mkdir(directory, true);
+      const name = entry.name.split('/').pop() || 'file';
+      const output = await fs.open(`${directory}/${name}`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
+      try {
+        const input = await fs.open(entry.path, fs.OpenMode.READ_ONLY);
+        try { await fs.copyFile(input.fd, output.fd); }
+        finally { await fs.close(input); }
+      } finally { await fs.close(output); }
+    } catch (e) { this.fail('文件已接收，但另存到所选目录失败', e as Error); }
+  }
+
+  async shareEntry(entry: HistoryEntry): Promise<void> {
+    if (!this.context) return;
+    try {
+      const record: systemShare.SharedRecord = entry.text ? { utd: 'general.plain-text', content: entry.text } :
+        { utd: 'general.file', uri: entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), title: entry.name };
+      const controller = new systemShare.ShareController(new systemShare.SharedData(record));
+      await controller.show(this.context, { previewMode: systemShare.SharePreviewMode.DETAIL });
+    } catch (e) { this.fail('打开系统分享失败', e as Error); }
+  }
+
+  async resend(entry: HistoryEntry): Promise<void> {
+    try {
+      if (entry.text) this.addText(entry.text);
+      else if (entry.path) await this.addUri(entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), entry.name);
+      else { this.notice = '请重新选择原文件'; return; }
+      this.incomingShare = true;
+    } catch (e) { this.fail('原文件已不可用', e as Error); }
   }
 }
 

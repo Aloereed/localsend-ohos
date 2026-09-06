@@ -20,6 +20,7 @@
       },
       { "name": "ohos.permission.INTERNET" },
       { "name": "ohos.permission.KEEP_BACKGROUND_RUNNING" },
+      { "name": "ohos.permission.FILE_ACCESS_PERSIST" },
       { "name": "ohos.permission.GET_NETWORK_INFO" }
     ],
     "abilities": [

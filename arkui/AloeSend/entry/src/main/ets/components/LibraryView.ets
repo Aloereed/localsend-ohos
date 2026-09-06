@@ -1,10 +1,28 @@
 import { AppStore, HistoryEntry, formatSize } from '../model/AppStore';
+import { EmptyState } from './EmptyState';
+import { AppIcon } from './AppIcon';
+import { LengthMetrics } from '@kit.ArkUI';
 
 @Component
 export struct LibraryView {
   @ObjectLink store: AppStore;
   @Prop messagesOnly: boolean = true;
   @State query: string = '';
+  @State preview: HistoryEntry = new HistoryEntry();
+  @State showPreview: boolean = false;
+
+  @Builder
+  previewSheet() {
+    Column({ space: 18 }) {
+      Text(this.preview.name).fontSize(20).fontWeight(FontWeight.Medium).maxLines(2).fontColor($r('sys.color.font_primary'))
+      Image(this.preview.path.startsWith('file://') ? this.preview.path : `file://${this.preview.path}`)
+        .width('100%').layoutWeight(1).objectFit(ImageFit.Contain)
+      Row({ space: 12 }) {
+        Button('分享').layoutWeight(1).onClick(() => this.store.shareEntry(this.preview)).backgroundColor(this.store.settings.accent)
+        Button('另存为').layoutWeight(1).onClick(() => this.store.exportFile(this.preview)).backgroundColor(this.store.settings.accent)
+      }.width('100%')
+    }.padding(24).width('100%').height('100%')
+  }
 
   entries(): HistoryEntry[] {
     return this.store.history.filter((entry: HistoryEntry) =>
@@ -16,15 +34,13 @@ export struct LibraryView {
       Search({ value: this.query, placeholder: this.messagesOnly ? '搜索文字、链接、设备' : '搜索文件或设备' })
         .onChange((value: string) => this.query = value)
       if (this.entries().length === 0) {
-        Column({ space: 12 }) {
-          Text(this.query ? '没有匹配的记录' : this.messagesOnly ? '还没有消息' : '还没有传输记录')
-            .fontSize(21).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
-          Text('文字和文件的旅程，留在你的设备里。').fontSize(14).fontColor($r('sys.color.font_secondary'))
-        }.padding({ top: 56, bottom: 56 }).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+        EmptyState({ icon: this.messagesOnly ? 'message' : 'history', title: this.query ? '没有匹配的记录' : this.messagesOnly ? '还没有消息' : '还没有传输记录',
+          description: this.query ? '试试文件名、文字内容或设备名称。' : '收到的文字、链接和文件会整理在这里，仅保存在你的设备中。', accent: this.store.settings.accent })
       }
       ForEach(this.entries(), (entry: HistoryEntry) => {
         Column({ space: 12 }) {
           Row() {
+            AppIcon({ name: entry.direction === 'receive' ? 'receive' : 'send', iconSize: 18, tint: this.store.settings.accent })
             Text(entry.peer || '本机').fontWeight(FontWeight.Medium).fontSize(15).layoutWeight(1).fontColor($r('sys.color.font_primary'))
             Text(entry.direction === 'receive' ? '接收' : '发送').fontSize(12).fontColor(this.store.settings.accent)
           }.width('100%')
@@ -32,15 +48,20 @@ export struct LibraryView {
             .width('100%').fontColor($r('sys.color.font_primary'))
           Text(`${new Date(entry.time).toLocaleString()} · ${formatSize(entry.size)}`)
             .fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
-          Row({ space: 12 }) {
+          Flex({ wrap: FlexWrap.Wrap, space: { main: LengthMetrics.vp(8), cross: LengthMetrics.vp(10) } }) {
             if (entry.text) {
               Button('复制').onClick(() => this.store.copy(entry.text)).fontColor(this.store.settings.accent).backgroundColor($r('sys.color.comp_background_tertiary'))
-              Button('再次发送').onClick(() => this.store.addText(entry.text)).fontColor(this.store.settings.accent).backgroundColor($r('sys.color.comp_background_tertiary'))
             } else if (entry.path) {
-              Button('打开').onClick(() => this.store.openFile(entry)).fontColor(this.store.settings.accent).backgroundColor($r('sys.color.comp_background_tertiary'))
+              Button('打开').onClick(() => {
+                if (/\.(png|jpe?g|gif|webp|heic)$/i.test(entry.name)) { this.preview = entry; this.showPreview = true; }
+                else this.store.openFile(entry);
+              }).fontColor(this.store.settings.accent).backgroundColor($r('sys.color.comp_background_tertiary'))
               Button('另存为').onClick(() => this.store.exportFile(entry)).fontColor(this.store.settings.accent).backgroundColor($r('sys.color.comp_background_tertiary'))
             }
-            Blank()
+            Button('再次发送').onClick(() => this.store.resend(entry)).fontColor(this.store.settings.accent).backgroundColor($r('sys.color.comp_background_tertiary'))
+            if (entry.text || entry.path) {
+              Button('分享').onClick(() => this.store.shareEntry(entry)).fontColor(this.store.settings.accent).backgroundColor($r('sys.color.comp_background_tertiary'))
+            }
             Button('删除').onClick(() => {
               AlertDialog.show({ title: '删除这条记录？', message: '不会删除已经保存的文件。',
                 primaryButton: { value: '取消', action: () => {} },
@@ -56,6 +77,6 @@ export struct LibraryView {
             secondaryButton: { value: '清空', action: () => this.store.clearHistory(this.messagesOnly) } });
         })
       }
-    }.width('100%')
+    }.width('100%').bindSheet($$this.showPreview, this.previewSheet(), { height: SheetSize.LARGE, showClose: true })
   }
 }

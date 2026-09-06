@@ -111,6 +111,7 @@ class UploadSink implements BodySink {
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
     entry.size = this.received; entry.path = this.path;
     await this.service.store.addHistory(entry);
+    await this.service.store.saveReceivedCopy(entry);
     this.service.finishReceiveFile(this.session);
     await this.channel.respond(200);
   }
@@ -146,7 +147,7 @@ export class LocalSendService {
   constructor(store: AppStore) { this.store = store; }
 
   info(announce: boolean = false): DeviceInfo {
-    return { alias: this.store.settings.alias, version: '2.1', deviceModel: 'HarmonyOS', deviceType: 'mobile',
+    return { alias: this.store.settings.alias, version: '2.1', deviceModel: this.store.settings.deviceModel, deviceType: this.store.settings.deviceType,
       fingerprint: this.store.settings.fingerprint, port: this.store.settings.port,
       protocol: this.store.settings.https ? 'https' : 'http', download: false, announce: announce };
   }

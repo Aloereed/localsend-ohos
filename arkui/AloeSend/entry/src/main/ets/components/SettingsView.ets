@@ -1,4 +1,5 @@
 import { AppStore } from '../model/AppStore';
+import { localSend } from '../network/LocalSendService';
 
 @Component
 export struct SettingsView {
@@ -48,7 +49,10 @@ export struct SettingsView {
           if (key === 'animation') this.store.settings.animations = value;
           if (key === 'visible') this.store.settings.visible = value;
           if (key === 'advanced') this.store.settings.advanced = value;
+          if (key === 'https') this.store.settings.https = value;
           this.store.save();
+          if (key === 'visible') localSend.announce();
+          if (key === 'https') this.store.notice = '加密设置已保存，请在没有传输时重启服务';
         }).accessibilityText(title)
     }.padding(18).width('100%')
   }
@@ -105,6 +109,19 @@ export struct SettingsView {
         this.toggle('仅收藏设备自动接收', '其他设备仍需手动确认', this.store.settings.favoriteQuickSave, 'favorites')
         this.toggle('保留历史', '记录仅保存在当前设备', this.store.settings.saveHistory, 'history')
         this.toggle('自动完成', '成功传输后结束会话', this.store.settings.autoFinish, 'finish')
+        Column({ space: 12 }) {
+          Text('文件保存位置').fontSize(16).fontColor($r('sys.color.font_primary')).width('100%')
+          Text(this.store.settings.destinationMode === 'folder' ? this.store.settings.destination : '应用内安全保存，可在接收历史中打开、分享或另存为')
+            .fontSize(13).lineHeight(20).fontColor($r('sys.color.font_secondary')).width('100%').maxLines(3)
+          Row({ space: 10 }) {
+            Button('选择保存目录').backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.settings.accent).onClick(() => this.store.chooseDestination())
+            if (this.store.settings.destinationMode === 'folder') {
+              Button('恢复默认').backgroundColor(Color.Transparent).fontColor(this.store.settings.accent).onClick(() => {
+                this.store.settings.destinationMode = 'private'; this.store.settings.destination = ''; this.store.save();
+              })
+            }
+          }.width('100%')
+        }.padding(18)
         this.link('接收历史', '', 'history')
         Column({ space: 10 }) {
           Text('接收 PIN').fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
@@ -120,10 +137,20 @@ export struct SettingsView {
         this.link('连接诊断', this.store.serverStatus, 'diagnostics')
         this.toggle('高级设置', '端口与组播地址', this.store.settings.advanced, 'advanced')
         if (this.store.settings.advanced) {
+          this.toggle('HTTPS 加密传输', '建议保持开启；修改后需重启接收服务', this.store.settings.https, 'https')
           Column({ space: 12 }) {
             TextInput({ text: this.port, placeholder: '端口 53317' }).type(InputType.Number).onChange((value: string) => this.port = value)
             TextInput({ text: this.group, placeholder: '组播地址' }).onChange((value: string) => this.group = value)
             Button('保存网络设置').backgroundColor(this.store.settings.accent).onClick(() => this.saveNetwork())
+            Button('重启接收服务').backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.settings.accent)
+              .enabled(!this.store.transfers.some((item) => item.status === 'transferring' || item.status === 'waiting'))
+              .onClick(() => localSend.restart())
+            Row() {
+              Text('设备类型').layoutWeight(1).fontColor($r('sys.color.font_primary'))
+              Select([{ value: '手机 / 平板' }, { value: '电脑' }, { value: '无界面设备' }])
+                .selected(this.store.settings.deviceType === 'desktop' ? 1 : this.store.settings.deviceType === 'headless' ? 2 : 0)
+                .onSelect((index: number) => { this.store.settings.deviceType = ['mobile', 'desktop', 'headless'][index]; this.store.save(); localSend.announce(); })
+            }.width('100%')
           }.padding(18)
         }
       }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)

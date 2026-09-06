@@ -1,4 +1,6 @@
 import { AppStore, ShareFile, Peer, formatSize } from '../model/AppStore';
+import { AppIcon } from './AppIcon';
+import { EmptyState } from './EmptyState';
 
 @Component
 export struct SendView {
@@ -60,14 +62,14 @@ export struct SendView {
   @Builder
   action(label: string, symbol: string, kind: string) {
     Column({ space: 8 }) {
-      Text(symbol).fontSize(25).fontColor(this.store.settings.accent)
+      AppIcon({ name: kind, iconSize: 28, tint: this.store.settings.accent })
       Text(label).fontSize(13).fontColor($r('sys.color.font_primary'))
-    }.layoutWeight(1).padding({ top: 20, bottom: 20 }).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(20)
+    }.layoutWeight(1).constraintSize({ minHeight: 96 }).padding({ top: 20, bottom: 20 }).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       .onClick(() => {
         if (kind === 'text') this.textSheet = true;
         else if (kind === 'clipboard') this.store.paste();
         else this.store.selectFiles(kind);
-      }).accessibilityText(`选择${label}`)
+      }).enabled(!this.store.busy).accessibilityText(`选择${label}`).accessibilityLevel('yes')
   }
 
   @Builder
@@ -109,15 +111,15 @@ export struct SendView {
   @Builder
   peerCard(peer: Peer) {
     Row({ space: 14 }) {
-      Text(peer.deviceType === 'mobile' ? '▯' : '▣').fontSize(30).fontColor(this.store.settings.accent).width(44)
+      Stack() { AppIcon({ name: peer.deviceType === 'mobile' ? 'mobile' : 'desktop', iconSize: 27, tint: this.store.settings.accent }) }
+        .width(48).height(56).borderRadius(17).backgroundColor($r('sys.color.comp_background_tertiary')).onClick(() => this.onDetails(peer))
       Column({ space: 5 }) {
-        Text(peer.alias || peer.ip).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+        Text(peer.alias || peer.ip).fontSize(17).fontWeight(FontWeight.Medium).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
         Text(`${peer.ip}:${peer.port}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
+        Text(`${peer.protocol === 'https' ? '加密连接' : '未加密'}${this.store.isFavorite(peer) ? ' · 已收藏' : ''}`).fontSize(11).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onDetails(peer))
-      Button(this.store.isFavorite(peer) ? '★' : '☆').fontColor(this.store.settings.accent)
-        .backgroundColor(Color.Transparent).onClick(() => this.store.toggleFavorite(peer)).accessibilityText('收藏设备')
       Button(this.store.settings.sendMode === 'multiple' ? (this.targets.includes(`${peer.ip}:${peer.port}`) ? '已选' : '选择') : '发送')
-        .backgroundColor(this.store.settings.accent).onClick(() => this.beginSend(peer))
+        .height(44).constraintSize({ minWidth: 64 }).backgroundColor(this.store.settings.accent).onClick(() => this.beginSend(peer))
     }.padding(18).width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(22)
   }
 
@@ -142,7 +144,11 @@ export struct SendView {
       }.width('100%').margin({ top: 10 })
       ForEach(this.store.files, (file: ShareFile) => {
         Row({ space: 12 }) {
-          Text(file.text ? 'Aa' : file.mime.startsWith('image/') ? '▧' : '▤').fontSize(25).fontColor(this.store.settings.accent).width(34)
+          if (file.mime.startsWith('image/') && file.uri) {
+            Image(file.uri).width(48).height(48).objectFit(ImageFit.Cover).borderRadius(12)
+          } else {
+            AppIcon({ name: file.text ? 'text' : 'file', iconSize: 28, tint: this.store.settings.accent })
+          }
           Column({ space: 5 }) {
             Text(file.name).fontSize(15).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
             Text(`${formatSize(file.size)} · ${file.text ? '文字' : file.mime}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
@@ -163,10 +169,7 @@ export struct SendView {
           .onSelect((index: number) => { this.store.settings.sendMode = index === 1 ? 'multiple' : 'single'; this.store.save(); })
       }.width('100%')
       if (this.store.peers.length === 0) {
-        Column({ space: 12 }) {
-          Text('等待发现附近设备').fontSize(17).fontColor($r('sys.color.font_primary'))
-          Text('保持对方的 LocalSend 打开，并连接同一网络。').fontSize(13).fontColor($r('sys.color.font_secondary')).textAlign(TextAlign.Center)
-        }.width('100%').padding(28).backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
+        EmptyState({ icon: 'search', title: '寻找另一台设备', description: '在对方设备打开 LocalSend，并连接同一网络。也可以通过 IP 地址直接添加。', accent: this.store.settings.accent })
       }
       ForEach(this.store.peers, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}`)
       if (this.store.favorites.length > 0) {

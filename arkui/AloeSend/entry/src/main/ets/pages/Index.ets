@@ -7,6 +7,7 @@ import { TransferList } from '../components/TransferList';
 import { localSend } from '../network/LocalSendService';
 import { WebShareView } from '../components/WebShareView';
 import { PeerDetailView } from '../components/PeerDetailView';
+import { AppIcon } from '../components/AppIcon';
 
 @Entry
 @Component
@@ -16,9 +17,17 @@ struct Index {
   @State route: string = '';
   @State pinText: string = '';
   @State selectedPeer: Peer = new Peer();
+  @State windowWidth: number = 400;
 
   async aboutToAppear(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
+    this.store.onTransferCompleted = () => {
+      if (!this.store.settings.autoFinish) return;
+      setTimeout(() => {
+        if (this.route === 'transfers' && this.store.batchRemaining === 0 &&
+          !this.store.transfers.some((item) => item.status === 'waiting' || item.status === 'transferring')) this.route = '';
+      }, 1200);
+    };
     await localSend.start();
   }
 
@@ -62,10 +71,13 @@ struct Index {
   receive() {
     this.heading('接收', '靠近一点，分享多一点')
     Column({ space: 16 }) {
-      Text('A').fontSize(38).fontWeight(FontWeight.Bold).fontColor('#FFFFFF')
-        .width(88).height(88).textAlign(TextAlign.Center).backgroundColor(this.store.settings.accent).borderRadius(28)
-      Text(this.store.settings.alias).fontSize(24).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
-      Text(this.store.serverStatus).fontSize(14).fontColor($r('sys.color.font_secondary'))
+      Stack() { AppIcon({ name: 'receive', iconSize: 40, tint: Color.White }) }
+        .width(88).height(88).backgroundColor(this.store.settings.accent).borderRadius(30).margin({ top: 8, bottom: 8 })
+      Text(this.store.settings.alias).fontSize(26).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
+      Row({ space: 7 }) {
+        Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.settings.accent : '#B88632')
+        Text(this.store.settings.visible ? this.store.serverStatus : '当前已隐藏，可通过地址连接').fontSize(13).fontColor($r('sys.color.font_secondary'))
+      }.padding({ left: 14, right: 14, top: 8, bottom: 8 }).backgroundColor($r('sys.color.comp_background_tertiary')).borderRadius(18)
       ForEach(this.store.localIps, (ip: string) => {
         Text(`${ip}:${this.store.settings.port}`).fontSize(13).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
       })
@@ -121,9 +133,12 @@ struct Index {
   @Builder
   tabItem(title: string, mark: string, index: number) {
     Column({ space: 4 }) {
-      Text(mark).fontSize(23).fontColor(this.tab === index ? this.store.settings.accent : $r('sys.color.font_secondary'))
-      Text(title).fontSize(11).fontColor(this.tab === index ? this.store.settings.accent : $r('sys.color.font_secondary'))
-    }.width('100%').height(56).justifyContent(FlexAlign.Center)
+      Stack() { AppIcon({ name: ['receive', 'send', 'message', 'settings'][index], iconSize: 23,
+        tint: this.tab === index ? this.store.settings.accent : $r('sys.color.font_secondary') }) }
+        .width(58).height(32).borderRadius(18).backgroundColor(this.tab === index ? $r('sys.color.comp_background_tertiary') : Color.Transparent)
+      Text(title).fontSize(12).fontWeight(this.tab === index ? FontWeight.Medium : FontWeight.Regular)
+        .fontColor(this.tab === index ? this.store.settings.accent : $r('sys.color.font_secondary'))
+    }.width('100%').height(this.windowWidth >= 840 ? 80 : 64).justifyContent(FlexAlign.Center).accessibilityText(title)
   }
 
   build() {
@@ -139,7 +154,7 @@ struct Index {
           .backgroundColor(this.store.settings.accent).onClick(() => this.route = 'web')
       }
       if (this.store.incomingShare) {
-        Button('查看系统分享的内容').width('100%').height(48).backgroundColor(this.store.settings.accent)
+        Button('内容已就绪 · 前往发送').width('100%').height(48).backgroundColor(this.store.settings.accent)
           .onClick(() => { this.store.incomingShare = false; this.route = ''; this.tab = 1; })
       }
       if (this.store.pendingPin) {
@@ -166,7 +181,7 @@ struct Index {
         }.width('100%').padding(12)
         Scroll() { Column() { this.details() }.padding(24).constraintSize({ maxWidth: 720 }).width('100%') }.layoutWeight(1).width('100%').align(Alignment.Top)
       } else {
-        Tabs({ barPosition: BarPosition.End, index: this.tab }) {
+        Tabs({ barPosition: this.windowWidth >= 840 ? BarPosition.Start : BarPosition.End, index: this.tab }) {
           TabContent() {
             Scroll() { Column() { this.receive() }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('接收', '↓', 0))
@@ -186,8 +201,10 @@ struct Index {
           TabContent() {
             Scroll() { Column() { this.heading('设置', '按你的习惯，恰到好处'); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('设置', '⚙', 3))
-        }.barHeight(68).animationDuration(this.store.settings.animations ? 240 : 0).onChange((index: number) => this.tab = index).layoutWeight(1)
+        }.vertical(this.windowWidth >= 840).barWidth(this.windowWidth >= 840 ? 96 : '100%').barHeight(this.windowWidth >= 840 ? '100%' : 76)
+          .animationDuration(this.store.settings.animations ? 240 : 0).onChange((index: number) => this.tab = index).layoutWeight(1)
       }
     }.backgroundColor($r('sys.color.background_primary')).width('100%').height('100%')
+      .onAreaChange((oldArea: Area, newArea: Area) => this.windowWidth = Number(newArea.width))
   }
 }
