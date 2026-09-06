@@ -1,6 +1,14 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "启动接收服务": "Start receiving service",
+  "停止服务": "Stop service",
+  "请等待当前传输结束后停止服务": "Wait for the current transfer to finish before stopping the service",
+  "接收服务已暂停，请在设置中启动": "Receiving is paused. Start the service in Settings.",
+  "接收文件将保存到所选目录": "Received files will be saved to the selected folder",
+  "选择此文件夹": "Choose this folder",
+  "没有子文件夹": "No subfolders",
+  "上一级": "Parent folder",
   "允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。": "After download access is granted, files are saved to Download/com.aloereed.aloesend. Without access, files stay in the app and can be exported from history.",
   "下载目录": "Download folder",
   "启动时通过系统 DOWNLOAD 对话框申请本应用下载目录的访问权限，用于保存收到的文件。": "At startup, the system DOWNLOAD dialog requests access to this app's download folder to save received files.",

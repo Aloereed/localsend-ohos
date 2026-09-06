@@ -3,6 +3,7 @@ import { systemShare } from '@kit.ShareKit';
 import { fileIo as fs, fileUri } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { AppStore } from '../model/AppStore';
+import { ensureDirectory } from './Directories';
 
 export async function receiveSystemShare(want: Want, store: AppStore): Promise<void> {
   if (want.action !== 'ohos.want.action.sendData' && want.action !== 'ohos.want.action.viewData') return;
@@ -28,7 +29,7 @@ async function importSharedFile(uri: string, store: AppStore): Promise<void> {
   if (!store.context) return;
   const name = new fileUri.FileUri(uri).name.replace(/[\\/:*?"<>|]/g, '_') || 'shared-file';
   const folder = `${store.context.cacheDir}/shared-${util.generateRandomUUID()}`;
-  await fs.mkdir(folder, true);
+  await ensureDirectory(folder);
   const path = `${folder}/${name}`;
   const source = await fs.open(uri, fs.OpenMode.READ_ONLY);
   try {

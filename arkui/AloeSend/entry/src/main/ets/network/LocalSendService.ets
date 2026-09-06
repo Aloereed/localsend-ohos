@@ -10,6 +10,7 @@ import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter } 
 import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
 import { batchReceiveNames } from '../model/ReceiveNames';
 import { SecureServer, SecureConnection } from './SecureServer';
+import { ensureDirectory } from '../platform/Directories';
 
 export interface DeviceInfo {
   alias: string;
@@ -98,7 +99,7 @@ class UploadSink implements BodySink {
         this.path = `${original.slice(0, split)} (${suffix++})${original.slice(split)}`;
       }
     }
-    await fs.mkdir(this.path.slice(0, this.path.lastIndexOf('/')), true);
+    await ensureDirectory(this.path.slice(0, this.path.lastIndexOf('/')));
     this.output = await fs.open(`${this.path}.part`, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
     if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
     this.view.status = 'transferring'; this.session.view.status = 'transferring';
@@ -164,6 +165,7 @@ export class LocalSendService {
   private discoveryRetries: number[] = [];
   private running: boolean = false;
   private starting: boolean = false;
+  private paused: boolean = false;
   private pinAttempts: Map<string, PinFailures> = new Map();
 
   constructor(store: AppStore) { this.store = store; }
@@ -175,7 +177,7 @@ export class LocalSendService {
   }
 
   async start(): Promise<void> {
-    if (this.running || this.starting || !this.store.ready) return;
+    if (this.paused || this.running || this.starting || !this.store.ready) return;
     this.starting = true; this.store.serverStatus = '正在启动接收服务';
     this.store.listenerPort = this.store.settings.port; this.store.listenerHttps = this.store.settings.https;
     this.store.listenerMulticast = this.store.settings.multicast;
@@ -234,7 +236,17 @@ export class LocalSendService {
   async restart(): Promise<void> {
     if (this.starting) return;
     if (this.store.activeTransfers) { this.store.notice = '请等待当前传输结束后重启服务'; return; }
-    await this.stop(); await this.start();
+    this.paused = false; await this.stop(); await this.start();
+  }
+
+  async pause(): Promise<void> {
+    if (this.starting) return;
+    if (this.store.activeTransfers) { this.store.notice = '请等待当前传输结束后停止服务'; return; }
+    this.paused = true; await this.stop();
+  }
+
+  async resume(): Promise<void> {
+    this.paused = false; await this.start();
   }
 
   private newChannel(): NativeConnection {
@@ -270,6 +282,10 @@ export class LocalSendService {
   }
 
   async discover(notify: boolean = true): Promise<void> {
+    if (this.paused) {
+      if (notify) this.store.notice = '接收服务已暂停，请在设置中启动';
+      return;
+    }
     if (!this.running) await this.start();
     await this.readAddresses().catch(() => {});
     await this.announce().catch((e: Error) => {

@@ -179,6 +179,16 @@ export struct SettingsView {
       }.width('100%').backgroundColor($r('sys.color.comp_background_primary')).borderRadius(24)
       this.title(this.store.t('网络'))
       Column() {
+        Column({ space: 12 }) {
+          Text(this.store.t(this.store.serverStatus)).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
+          Row({ space: 12 }) {
+            Button(this.store.t(this.store.listenerRunning ? '重启接收服务' : '启动接收服务')).layoutWeight(1).height(46)
+              .backgroundColor(this.store.accentFill).enabled(!this.store.activeTransfers && !this.store.serverStatus.startsWith('正在启动'))
+              .onClick(() => { if (this.store.listenerRunning) localSend.restart(); else localSend.resume(); })
+            Button(this.store.t('停止服务')).height(46).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
+              .enabled(this.store.listenerRunning && !this.store.activeTransfers).onClick(() => localSend.pause())
+          }.width('100%')
+        }.padding(18).width('100%')
         this.link(this.store.t('连接诊断'), this.store.t(this.store.serverStatus), 'diagnostics')
         this.link(this.store.t('网络接口'), this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选'), 'network')
         this.toggle(this.store.t('高级设置'), this.store.t('端口与组播地址'), 'advanced')
@@ -192,9 +202,6 @@ export struct SettingsView {
             TextInput({ text: this.port, placeholder: this.store.t('端口 53317') }).type(InputType.Number).onChange((value: string) => this.port = value)
             TextInput({ text: this.group, placeholder: this.store.t('组播地址') }).onChange((value: string) => this.group = value)
             Button(this.store.t('保存网络设置')).backgroundColor(this.store.accentFill).onClick(() => this.saveNetwork())
-            Button(this.store.t('重启接收服务')).backgroundColor($r('sys.color.comp_background_tertiary')).fontColor(this.store.accentText)
-              .enabled(!this.store.activeTransfers)
-              .onClick(() => localSend.restart())
             Row() {
               Text(this.store.t('设备类型')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
               Select([{ value: this.store.t('手机 / 平板') }, { value: this.store.t('电脑') }, { value: this.store.t('无界面设备') }])

@@ -12,6 +12,7 @@ import { MessagesView } from '../components/MessagesView';
 import { NetworkView } from '../components/NetworkView';
 import { util } from '@kit.ArkTS';
 import { ReceiveRequestView } from '../components/ReceiveRequestView';
+import { DownloadDirectoryPicker } from '../components/DownloadDirectoryPicker';
 
 @Entry
 @Component
@@ -25,10 +26,17 @@ struct Index {
   @State messageDetail: boolean = false;
   @State legalText: string = '';
   @State creditsText: string = '';
+  @State directoryVisible: boolean = false;
+  @State directoryInitial: string = '';
+  private directoryResolver: ((path: string) => void) | undefined = undefined;
 
   async aboutToAppear(): Promise<void> {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
     this.store.onReceiveStarted = () => { this.route = 'transfers'; };
+    this.store.onPickDownloadDirectory = (path: string) => new Promise<string>((resolve) => {
+      this.directoryResolver?.(''); this.directoryResolver = resolve;
+      this.directoryInitial = path; this.directoryVisible = true;
+    });
     this.store.onTransferCompleted = (transfer: TransferView) => {
       if (transfer.direction === 'receive' && transfer.peerInfo && this.store.settings.openMessagesOnReceive) {
         this.store.messageTarget = transfer.peerInfo; this.tab = 2; this.route = '';
@@ -47,10 +55,21 @@ struct Index {
   }
 
   onBackPress(): boolean {
+    if (this.directoryVisible) { this.closeDirectory(''); return true; }
     if (this.route) { this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : ''; return true; }
     if (this.tab === 2 && this.messageDetail) { this.messageDetail = false; return true; }
     if (this.tab !== 0) { this.tab = 0; return true; }
     return false;
+  }
+
+  closeDirectory(path: string): void {
+    const resolve = this.directoryResolver; this.directoryResolver = undefined;
+    this.directoryVisible = false; resolve?.(path);
+  }
+
+  @Builder
+  directorySheet() {
+    DownloadDirectoryPicker({ store: this.store, initialPath: this.directoryInitial, onChoose: (path: string) => this.closeDirectory(path) })
   }
 
   title(): string {
@@ -263,5 +282,6 @@ struct Index {
       }
     }.backgroundColor($r('sys.color.background_primary')).width('100%').height('100%')
       .onAreaChange((oldArea: Area, newArea: Area) => this.windowWidth = Number(newArea.width))
+      .bindSheet($$this.directoryVisible, this.directorySheet(), { height: SheetSize.LARGE, showClose: true, onDisappear: () => this.closeDirectory('') })
   }
 }

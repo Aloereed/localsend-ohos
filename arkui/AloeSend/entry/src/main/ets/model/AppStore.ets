@@ -10,6 +10,7 @@ import { readableColor } from './Colors';
 import { LocalInterface } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
+import { ensureDirectory } from '../platform/Directories';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -190,6 +191,8 @@ export class AppStore {
   messageDrafts: Map<string, MessageDraft> = new Map();
   onTransferCompleted: (transfer: TransferView) => void = () => {};
   onReceiveStarted: (transfer: TransferView) => void = () => {};
+  onPickDownloadDirectory: (path: string) => Promise<string> = async () => '';
+  downloadAccess: boolean = false;
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
   private persistentHistory: Set<string> = new Set();
@@ -250,7 +253,7 @@ export class AppStore {
     const previous = this.transfers.find((item: TransferView) => item.id === transfer.id);
     if (!transfer.activeStarted && transfer.status === 'transferring') transfer.activeStarted = Date.now();
     const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
-    this.transfers = [snapshot, ...this.transfers.filter((item: TransferView) => item.id !== transfer.id)].slice(0, 30);
+    this.transfers = previous ? this.transfers.map((item: TransferView) => item.id === transfer.id ? snapshot : item) : [snapshot, ...this.transfers].slice(0, 30);
     if (this.context) backgroundKeeper.sync(this.transfers.some((item: TransferView) => item.status === 'transferring'), this.context,
       (message: string) => this.log(message));
     if (transfer.status === 'complete' && previous?.status !== 'complete') this.onTransferCompleted(transfer);
@@ -474,7 +477,7 @@ export class AppStore {
     try {
       const destination = await this.pickDestination(); if (!destination) return;
       this.settings.destination = destination; this.settings.destinationMode = 'folder'; await this.save();
-      this.notice = '接收后会自动保存到此目录，并保留应用内副本';
+      this.notice = '接收文件将保存到所选目录';
     } catch (e) { this.fail('设置目录失败，仍可在历史中另存为', e as Error); }
   }
 
@@ -486,17 +489,20 @@ export class AppStore {
       const options = new picker.DocumentSaveOptions(); options.pickerMode = picker.DocumentPickerMode.DOWNLOAD;
       const result = await new picker.DocumentViewPicker(this.context).save(options);
       if (!result.length) {
+        this.downloadAccess = false;
         if (this.settings.destinationMode === 'download') { this.settings.destinationMode = 'private'; this.settings.destination = ''; await this.save(); }
         return;
       }
-      await fs.mkdir(this.downloadDirectory, true);
+      await ensureDirectory(this.downloadDirectory);
       const probePath = `${this.downloadDirectory}/.access-${util.generateRandomUUID()}`;
       const probe = await fs.open(probePath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
       await fs.close(probe); await fs.unlink(probePath);
+      this.downloadAccess = true;
       if (this.settings.destinationMode !== 'folder') {
         this.settings.destinationMode = 'download'; this.settings.destination = this.downloadDirectory; await this.save();
       }
     } catch (error) {
+      this.downloadAccess = false;
       if (this.settings.destinationMode === 'download') { this.settings.destinationMode = 'private'; this.settings.destination = ''; await this.save(); }
       this.fail('下载目录授权未完成，文件仍保存在应用内', error as Error);
     }
@@ -504,17 +510,10 @@ export class AppStore {
 
   async pickDestination(): Promise<string> {
     if (!this.context) return '';
-    let uris: string[];
-    if (canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
-      const options = new picker.DocumentSelectOptions(); options.maxSelectNumber = 1; options.selectMode = picker.DocumentSelectMode.FOLDER;
-      uris = await new picker.DocumentViewPicker(this.context).select(options);
-    } else {
-      const options = new picker.DocumentSaveOptions(); options.pickerMode = picker.DocumentPickerMode.DOWNLOAD;
-      uris = await new picker.DocumentViewPicker(this.context).save(options);
-    }
-    if (!uris.length) return '';
-    const policy: fileShare.PolicyInfo[] = [{ uri: uris[0], operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }];
-    await fileShare.persistPermission(policy); await fileShare.activatePermission(policy); return uris[0];
+    if (!this.downloadAccess) await this.ensureDownloadAccess();
+    if (!this.downloadAccess) return '';
+    const current = this.settings.destination;
+    return this.onPickDownloadDirectory(current === this.downloadDirectory || current.startsWith(`${this.downloadDirectory}/`) ? current : this.downloadDirectory);
   }
 
   async saveReceivedCopy(entry: HistoryEntry, sessionDestination: string | undefined = undefined, sessionId: string = ''): Promise<void> {
@@ -531,7 +530,7 @@ export class AppStore {
         const dot = original.lastIndexOf('.'); const split = dot > original.lastIndexOf('/') ? dot : original.length;
         path = `${original.slice(0, split)} (${suffix++})${original.slice(split)}`;
       }
-      await fs.mkdir(path.slice(0, path.lastIndexOf('/')), true);
+      await ensureDirectory(path.slice(0, path.lastIndexOf('/')));
       const output = await fs.open(path, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
       try {
         const input = await fs.open(entry.path, fs.OpenMode.READ_ONLY);

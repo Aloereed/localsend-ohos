@@ -20,10 +20,17 @@ async function advance(ms) {
   }
   now = end;
 }
-const { AppStore } = load('model/AppStore');
+const { AppStore, TransferView } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
 (async () => {
   const store = new AppStore();
+  const first = new TransferView(); first.id = 'one';
+  const second = new TransferView(); second.id = 'two';
+  store.updateTransfer(first); store.updateTransfer(second);
+  first.status = 'transferring'; store.updateTransfer(first);
+  assert.deepEqual(Array.from(store.transfers, item => item.id), ['two', 'one']);
+  store.transfers = [];
+  console.log('PASS progress updates preserve transfer order');
   store.notice = 'first'; await advance(3000);
   store.notice = 'second'; await advance(500); assert.equal(store.notice, 'second');
   await advance(3000); assert.equal(store.notice, '');
@@ -46,7 +53,10 @@ const { LocalSendService } = load('network/LocalSendService');
   await advance(5200); assert.equal(announcements, 4);
   await advance(9000); assert.equal(announcements, 5); assert.equal(scans, 5);
   assert.equal(store.notice, ''); assert.equal(store.error, '');
-  await service.stop(); await advance(30000); assert.equal(announcements, 5);
+  await service.pause(); await service.discover(false); await service.start();
+  await advance(30000); assert.equal(announcements, 5); assert.equal(store.listenerRunning, false);
+  await service.resume(); assert.equal(store.listenerRunning, true); assert.equal(announcements, 6);
+  await service.stop();
   assert.equal(pending.size, 0);
-  console.log('PASS automatic discovery burst, recurring address refresh, silent operation and stop cleanup');
+  console.log('PASS automatic discovery burst, recurring address refresh, silent operation, manual pause persistence and resume cleanup');
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -34,7 +34,10 @@ const nativeFs = {
       await handles.get(destination).write(buffer, 0, bytesRead, position); position += bytesRead;
     }
   },
-  mkdir: (file, recursion) => fsp.mkdir(file, { recursive: !!recursion }),
+  mkdir: async (file, recursion) => {
+    if (fs.existsSync(file)) throw Object.assign(new Error('File Exists'), { code: 13900015 });
+    return fsp.mkdir(file, { recursive: !!recursion });
+  },
   rename: (a, b) => fsp.rename(a, b),
   unlink: file => fsp.unlink(file),
   listFile: file => fsp.readdir(file),
