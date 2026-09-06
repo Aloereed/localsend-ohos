@@ -16,6 +16,24 @@ export class Conversation {
   count: number = 0;
 }
 
+export class ConversationUpdates {
+  private key: string = '';
+  private known: Set<string> = new Set();
+
+  reset(history: HistoryEntry[], peer: Peer): void {
+    this.key = peerKey(peer);
+    this.known = new Set(history.filter((entry: HistoryEntry) => inConversation(entry, peer)).map((entry: HistoryEntry) => entry.id));
+  }
+
+  observe(history: HistoryEntry[], peer: Peer): number {
+    if (this.key !== peerKey(peer)) { this.reset(history, peer); return 0; }
+    const entries = history.filter((entry: HistoryEntry) => inConversation(entry, peer));
+    const count = entries.filter((entry: HistoryEntry) => entry.direction === 'receive' && !this.known.has(entry.id)).length;
+    this.known = new Set(entries.map((entry: HistoryEntry) => entry.id));
+    return count;
+  }
+}
+
 export function peerKey(peer: Peer): string {
   return peer.fingerprint ? `identity:${peer.fingerprint}` : peer.ip ? `address:${peer.ip}:${peer.port}` : `alias:${peer.alias}`;
 }

@@ -1,6 +1,7 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "{0} 条新消息 · 查看": "{0} new messages · View",
   "下载目录暂不可用，已改用应用内保存，可从历史另存为": "The download folder is unavailable. Receiving switched to app storage. You can export files from history.",
   "发送方长时间未继续传输，请让对方重试": "The sender stopped responding. Ask them to try again.",
   "已确认，等待发送方传输…": "Accepted. Waiting for the sender…",

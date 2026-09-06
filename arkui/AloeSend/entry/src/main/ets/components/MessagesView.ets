@@ -1,5 +1,5 @@
 import { AppStore, HistoryEntry, Peer, ShareFile, MessageDraft, formatSize, samePeer } from '../model/AppStore';
-import { Conversation, conversationList, conversationTargets, inConversation, peerKey } from '../model/Conversations';
+import { Conversation, ConversationUpdates, conversationList, conversationTargets, inConversation, peerKey } from '../model/Conversations';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 import { EmptyState } from './EmptyState';
@@ -19,13 +19,33 @@ export struct MessagesView {
   @State visibleCount: number = 40;
   @State attachments: ShareFile[] = [];
   @State detailsKind: string = 'file';
+  @State newMessages: number = 0;
+  private updates: ConversationUpdates = new ConversationUpdates();
+  private observedHistory: HistoryEntry[] = [];
+  private atEnd: boolean = true;
+  private appeared: boolean = false;
+  private scrollTimer: number = -1;
   private messageScroller: Scroller = new Scroller();
   onTransfers: () => void = () => {};
 
-  aboutToAppear(): void { this.consumeTarget(); }
+  aboutToAppear(): void { this.appeared = true; this.consumeTarget(); }
+  aboutToDisappear(): void {
+    this.appeared = false;
+    if (this.scrollTimer !== -1) clearTimeout(this.scrollTimer);
+    this.scrollTimer = -1;
+  }
   consumeTarget(): void {
+    if (!this.appeared) return;
     const target = this.store.messageTarget;
-    if (target) { this.store.messageTarget = undefined; this.open(target); }
+    if (target) { this.store.messageTarget = undefined; this.open(target); return; }
+    if (this.detailOpen && this.observedHistory !== this.store.history) {
+      this.observedHistory = this.store.history;
+      const incoming = this.updates.observe(this.store.history, this.peer);
+      if (incoming > 0) {
+        if (this.atEnd && !this.query && !this.showDetails) this.scrollToLatest();
+        else this.newMessages += incoming;
+      }
+    }
   }
 
   @Builder
@@ -65,11 +85,17 @@ export struct MessagesView {
     this.peer = this.store.peers.find((item: Peer) => samePeer(item, peer)) || peer;
     const saved = this.store.messageDrafts.get(peerKey(this.peer));
     this.query = ''; this.draft = saved?.text || ''; this.attachments = saved?.files || []; this.visibleCount = 40; this.detailOpen = true;
+    this.updates.reset(this.store.history, this.peer); this.observedHistory = this.store.history;
     this.scrollToLatest();
   }
 
   scrollToLatest(): void {
-    setTimeout(() => { if (this.detailOpen) this.messageScroller.scrollEdge(Edge.Bottom, { velocity: 0 }); }, 100);
+    this.atEnd = true; this.newMessages = 0;
+    if (this.scrollTimer !== -1) clearTimeout(this.scrollTimer);
+    this.scrollTimer = setTimeout(() => {
+      this.scrollTimer = -1;
+      if (this.appeared && this.detailOpen) this.messageScroller.scrollEdge(Edge.Bottom, { velocity: 0 });
+    }, 100);
   }
 
   entries(): HistoryEntry[] {
@@ -181,7 +207,15 @@ export struct MessagesView {
             }
             ForEach(this.entries().slice(-this.visibleCount), (entry: HistoryEntry) => { this.bubble(entry) }, (entry: HistoryEntry) => entry.id)
           }.width('100%').padding({ top: 8, bottom: 16 })
-        }.width('100%').layoutWeight(1).align(Alignment.Bottom)
+        }.width('100%').layoutWeight(1).align(Alignment.Bottom).onScroll(() => {
+          this.atEnd = this.messageScroller.isAtEnd();
+          if (this.atEnd && !this.query) this.newMessages = 0;
+        })
+        if (this.newMessages > 0) {
+          Button(this.store.tf('{0} 条新消息 · 查看', [String(this.newMessages)])).width('100%').height(44)
+            .fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+            .onClick(() => { this.query = ''; this.scrollToLatest(); })
+        }
         Column({ space: 10 }) {
           if (this.attachments.length > 0) {
             Button(this.store.tf('{0} 个附件 · 查看与编辑', [String(this.attachments.length)]))

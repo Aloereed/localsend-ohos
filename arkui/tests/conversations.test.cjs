@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const { load } = require('./host-runtime.cjs');
 const { HistoryEntry, Peer, AppStore } = load('model/AppStore');
-const { conversationList, conversationTargets, inConversation } = load('model/Conversations');
+const { ConversationUpdates, conversationList, conversationTargets, inConversation } = load('model/Conversations');
 const oldPeer = new Peer(); oldPeer.alias = 'Laptop'; oldPeer.ip = '192.168.1.2'; oldPeer.fingerprint = 'identity-a';
 const movedPeer = new Peer(); movedPeer.alias = 'Renamed laptop'; movedPeer.ip = '192.168.1.99'; movedPeer.fingerprint = 'identity-a';
 const stranger = new Peer(); stranger.alias = 'Laptop'; stranger.ip = '192.168.1.3'; stranger.fingerprint = 'identity-b';
@@ -25,3 +25,11 @@ assert.deepEqual(targets, [movedPeer, replacement, stranger], 'nearby address wi
 assert.deepEqual(conversationTargets([movedPeer], [oldPeer, stranger], '192.168.1.3'), [stranger]);
 assert.deepEqual(conversationTargets([movedPeer], [oldPeer], 'renamed'), [movedPeer]);
 console.log('PASS conversations follow identity across address/name changes, separate same-name devices, sort newest first, and retain legacy history');
+const updates = new ConversationUpdates(); updates.reset([a], oldPeer);
+assert.equal(updates.observe([a, b, c], movedPeer), 1, 'only new messages in this identity count');
+const exported = { ...b, exportedPath: 'new location' };
+assert.equal(updates.observe([a, exported, c], movedPeer), 0, 'metadata refresh is not a new message');
+const sent = entry(movedPeer, 4, 'my reply'); sent.direction = 'send';
+assert.equal(updates.observe([a, exported, c, sent], movedPeer), 0);
+assert.equal(updates.observe([a, exported, c, sent], stranger), 0, 'changing conversation resets the baseline');
+console.log('PASS new-message tracking excludes old history, other devices, own replies and metadata updates');

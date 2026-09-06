@@ -1,8 +1,8 @@
 {
   "string": [
     {
-      "name": "build_version",
-      "value": "2.0.0-native.35 (2000035)"
+      "value": "2.0.0-native.36 (2000036)",
+      "name": "build_version"
     }
   ]
 }
