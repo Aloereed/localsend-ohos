@@ -1,8 +1,10 @@
-# 当前交接 · M98
+# 当前交接 · M99
 
-最新包：[AloeSend-2000098-M98-conversation-endpoint-unsigned.hap](artifacts/AloeSend-2000098-M98-conversation-endpoint-unsigned.hap)。版本 2.0.98，包含 M1–M98 累计实现，无需逐个安装。源码提交 `7d29ef8b08a39a7a5efed67fd6de44e0d0e9aee3`，分支 `arkui`。
+最新包：[AloeSend-2000099-M99-network-hints-unsigned.hap](artifacts/AloeSend-2000099-M99-network-hints-unsigned.hap)。版本 2.0.99，包含 M1–M99 累计实现，无需逐个安装。源码提交 `63891c2c561897619e707e8973366645f86820b7`，分支 `arkui`。
 
-SHA-256：`4134ED40F62A4A5ECD65427C95C39DC12E714212E222FF01617411D3AD7871BA`。
+SHA-256：`A3FFCDB17643DFF9E76688CBB064AABA2C951956A15C52F0750201A0620C2A29`。
+
+M99：自定义端口和组播地址增加 Flutter 发现影响说明，提供这两个表单字段的默认值恢复；动态模板累计 8 项。53 语言对照、同步与编译通过，99 个包校验通过。未访问设备。
 
 M98：打开中的会话按稳定身份更新发现地址，发送前再次解析；草稿键保持不变。换址、离线上线、IP 复用与发现缺席测试及编译通过，98 个包校验通过。未访问设备。
 
