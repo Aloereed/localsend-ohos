@@ -1,4 +1,10 @@
-# M129 阶段验收 · 2026-09-07
+# M130 阶段验收 · 2026-09-08
+
+C++ TCP/TLS/UDP 网络层已接入全部应用 socket I/O，主机适配层禁止 ArkTS socket 构造。60 个测试文件及鸿蒙编译通过；独立 HTTP/HTTPS 对端、原会话恢复、证书指纹、取消和阻塞写检查通过。HTTP、HTTPS 各 3 GiB 慢写盘传输校验一致、应用队列约 64 KiB。
+
+2.0.130 release APP 采用 Flutter 发布签名，APP 与独立 HAP 签名验证通过，源码 `28d1d307`。权限继续保留 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，不含 READ_PASTEBOARD / FILE_ACCESS_PERSIST。未访问设备；局域网组播发现和无 INTERNET 权限运行尚未真机验证。
+
+## M129 历史验收
 
 用户确认原生版需要 INTERNET，已恢复。2.0.129 正式签名包构建及 APP/HAP 签名检查通过；实际模块声明 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，不含两项待审权限。debug=false、版本及包名校验通过，源码 `0ef0766c`。未访问设备。
 

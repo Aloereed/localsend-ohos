@@ -1,4 +1,12 @@
-# 当前交接 · M129
+# 当前交接 · M130
+
+最新发布包：[2.0.130 signed release APP](artifacts/release/AloeSend-2000130-release-20260908-000306-signed.app)，源码 `28d1d3079dabfc41d81dc582ba50a15a1213e786`，构建前工作区干净，沿用 Flutter 发布签名。SHA-256：`23AD28806E081EE04576578C138A3924B1E0DB397015991C72605480F7A5FD73`。
+
+C++ 网络迁移完成：TCP/TLS 发送、HTTP/HTTPS 接收、浏览器 HTTP/HTTPS 分享和 UDP 发现 I/O 都走原生库；ArkTS 保留界面、协议状态和网卡信息查询。60 个主机测试文件通过；HTTP、HTTPS 各 3 GiB 慢写盘测试哈希一致，队列峰值分别 65,536 / 65,750 字节，文件句柄归零。组播回环在本机和独立 Node 对照均不可用，实际局域网发现仍待设备检查。未访问设备。
+
+APP 和独立 HAP 签名验证通过；最终权限为 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，不含两个待审权限。没有以 C++ 主机测试推断鸿蒙可以删除 INTERNET。调试包 SHA-256 `EBC778D47B303FDC77D9C6B4EE21005E6066FDF03E2D745C010182B3F5DB2F4C`。细节见 [M130](milestones/M130-native-network.md)。
+
+# M129 历史交接
 
 最新发布包：[2.0.129 signed release APP](artifacts/release/AloeSend-2000129-release-20260907-233453-signed.app)，源码 `0ef0766c97ad1d0ea2621a8492fb474372d01360`，构建前工作区干净，沿用 Flutter 发布签名。SHA-256：`42D0540C9183BA8BAF827E396B2C798232DFBFE1CBDE7626B81F97EC8B585435`。
 

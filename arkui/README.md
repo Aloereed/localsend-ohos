@@ -1,6 +1,6 @@
 # AloeSend 原生 ArkUI
 
-上一正式发布包：[2.0.129 signed release APP](artifacts/release/AloeSend-2000129-release-20260907-233453-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过，恢复 INTERNET，继续不声明 READ_PASTEBOARD 和 FILE_ACCESS_PERSIST。
+正式发布包：[2.0.130 signed release APP](artifacts/release/AloeSend-2000130-release-20260908-000306-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。C++ 网络层迁移完成，暂时保留 INTERNET。
 
 发布 APP：运行 `./arkui/build-release.ps1`，沿用 `app/ohos/build-profile.Release.json5` 的签名身份、发布 profile 和兼容 SDK，保留原生模块配置。证书路径失效时只接受同目录中与发布 profile 证书匹配的完整证书链。签名信息临时使用，构建结束恢复日常配置；密码不写入脚本和产物清单。已签名 release APP 归档到 `arkui/artifacts/release/`，同时校验 APP 及独立模块 HAP 签名。
 
