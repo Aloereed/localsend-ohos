@@ -12,17 +12,26 @@ export struct DownloadDirectoryPicker {
   @State loading: boolean = false;
   @State error: string = '';
   @State limit: number = 50;
+  @State query: string = '';
   onChoose: (path: string) => void = () => {};
   private generation: number = 0;
 
-  aboutToAppear(): void { this.load(this.initialPath || this.store.downloadDirectory); }
+  aboutToAppear(): void {
+    const root = this.store.downloadDirectory;
+    this.load(insideDownloadFolder(root, this.initialPath) ? this.initialPath : root);
+  }
   aboutToDisappear(): void { this.generation++; }
+
+  matchingFolders(): string[] {
+    const query = this.query.trim().toLocaleLowerCase();
+    return query ? this.folders.filter((name: string) => name.toLocaleLowerCase().includes(query)) : this.folders;
+  }
 
   async load(path: string): Promise<void> {
     const root = this.store.downloadDirectory;
     if (!insideDownloadFolder(root, path)) return;
     const generation = ++this.generation;
-    this.path = path; this.loading = true; this.error = ''; this.folders = []; this.limit = 50;
+    this.path = path; this.loading = true; this.error = ''; this.folders = []; this.limit = 50; this.query = '';
     try {
       const folders = await downloadSubfolders(root, path);
       if (generation === this.generation) this.folders = folders;
@@ -39,6 +48,10 @@ export struct DownloadDirectoryPicker {
         Button(this.store.t('上一级')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
           .onClick(() => this.load(this.path.slice(0, this.path.lastIndexOf('/'))))
       }
+      Search({ value: this.query, placeholder: this.store.t('搜索当前目录的文件夹') })
+        .width('100%').enabled(!this.loading && !this.error)
+        .onChange((value: string) => { this.query = value; this.limit = 50; })
+        .accessibilityText(this.store.t('搜索当前目录的文件夹'))
       Scroll() {
         Column({ space: 10 }) {
           if (this.loading) { LoadingProgress().width(36).height(36) }
@@ -46,10 +59,10 @@ export struct DownloadDirectoryPicker {
             Text(this.store.t(this.error)).fontColor(this.store.dangerText).fontSize(14)
             Button(this.store.t('重新读取')).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.load(this.path))
           }
-          if (!this.loading && !this.error && this.folders.length === 0) {
-            Text(this.store.t('没有子文件夹')).fontColor($r('sys.color.font_secondary')).fontSize(15).padding(24)
+          if (!this.loading && !this.error && this.matchingFolders().length === 0) {
+            Text(this.store.t(this.query.trim() ? '没有匹配的文件夹' : '没有子文件夹')).fontColor($r('sys.color.font_secondary')).fontSize(15).padding(24)
           }
-          ForEach(this.folders.slice(0, this.limit), (name: string) => {
+          ForEach(this.matchingFolders().slice(0, this.limit), (name: string) => {
             Row({ space: 14 }) {
               AppIcon({ name: 'folder', iconSize: 26, tint: this.store.accentText })
               Text(name).fontSize(16).maxLines(2).fontColor($r('sys.color.font_primary')).layoutWeight(1)
@@ -57,7 +70,7 @@ export struct DownloadDirectoryPicker {
             }.width('100%').padding(18).backgroundColor(this.store.controlSurface).borderRadius(18)
               .onClick(() => this.load(`${this.path}/${name}`)).accessibilityText(name)
           }, (name: string) => `${this.path}/${name}`)
-          if (this.folders.length > this.limit) {
+          if (this.matchingFolders().length > this.limit) {
             Button(this.store.t('显示更多')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.limit += 50)
           }
         }.width('100%')
