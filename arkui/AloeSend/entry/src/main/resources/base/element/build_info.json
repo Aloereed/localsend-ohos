@@ -1,8 +1,8 @@
 {
   "string": [
     {
-      "name": "build_version",
-      "value": "2.0.48"
+      "value": "2.0.49",
+      "name": "build_version"
     }
   ]
 }

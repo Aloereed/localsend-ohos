@@ -16,6 +16,8 @@ import { DownloadDirectoryPicker } from '../components/DownloadDirectoryPicker';
 import { PrivacyView } from '../components/PrivacyView';
 import { DiagnosticsView } from '../components/DiagnosticsView';
 import { FloatingNavigation } from '../components/FloatingNavigation';
+import { deviceInfo } from '@kit.BasicServicesKit';
+import { HdsTabs, HdsTabsController, SystemMaterialParams } from '@kit.UIDesignKit';
 
 @Entry
 @Component
@@ -33,14 +35,19 @@ struct Index {
   @State directoryInitial: string = '';
   @State directoryPurpose: string = 'save';
   @State acceptingPrivacy: boolean = false;
+  @State systemFloatingTabs: boolean = false;
   private directoryResolver: ((path: string) => void) | undefined = undefined;
   private tabsController: TabsController = new TabsController();
+  private systemTabsController: HdsTabsController | undefined = undefined;
 
   async aboutToAppear(): Promise<void> {
     await this.initializePage();
   }
 
   async initializePage(): Promise<void> {
+    if (deviceInfo.sdkApiVersion >= 23 && canIUse('SystemCapability.UIDesign.HDSComponent.Core')) {
+      this.systemTabsController = new HdsTabsController(); this.systemFloatingTabs = true;
+    }
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
     if (!this.store.ready) return;
     this.store.onReceiveStarted = () => { this.route = 'transfers'; };
@@ -90,6 +97,18 @@ struct Index {
   closeDirectory(path: string): void {
     const resolve = this.directoryResolver; this.directoryResolver = undefined;
     this.directoryVisible = false; resolve?.(path);
+  }
+
+  selectTab(index: number): void {
+    this.tab = index;
+    if (this.systemFloatingTabs) this.systemTabsController?.changeIndex(index);
+    else this.tabsController.changeIndex(index);
+  }
+
+  systemMaterial(): SystemMaterialParams {
+    // MaterialType.ADAPTIVE (100), MaterialLevel.ADAPTIVE (10). Keep the new
+    // hdsMaterial runtime module out of API 22 startup; HdsTabs itself is API 20.
+    return { materialType: this.store.settings.reduceEffects ? 0 : 100, materialLevel: 10 };
   }
 
   @Builder
@@ -232,7 +251,31 @@ struct Index {
         tint: this.tab === index ? this.store.accentText : $r('sys.color.font_secondary') })
       Text(this.store.t(title)).fontSize(12).fontWeight(this.tab === index ? FontWeight.Medium : FontWeight.Regular)
         .fontColor(this.tab === index ? this.store.accentText : $r('sys.color.font_secondary'))
-    }.width('100%').height(this.windowWidth >= 840 ? 88 : 64).justifyContent(FlexAlign.Center).accessibilityText(this.store.t(title))
+    }.width('100%').height(64).justifyContent(FlexAlign.Center).accessibilityText(this.store.t(title))
+      .accessibilitySelected(this.tab === index).onClick(() => this.selectTab(index))
+  }
+
+  @Builder
+  tabPages() {
+    TabContent() {
+      Scroll() { Column() { this.receive() }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
+    }.tabBar(this.tabItem('接收', '↓', 0))
+    TabContent() {
+      Scroll() {
+        Column() {
+          this.heading('发送', '选择内容，再选择设备')
+          SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
+            onDiscover: () => { localSend.discover(); },
+            onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; }, onSendMany: (peers: Peer[]) => { localSend.sendMany(peers); this.route = 'transfers'; } })
+        }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%')
+      }.width('100%').height('100%').align(Alignment.Top)
+    }.tabBar(this.tabItem('发送', '↑', 1))
+    TabContent() {
+      MessagesView({ store: this.store, detailOpen: $messageDetail, onTransfers: () => this.route = 'transfers' }).padding({ bottom: this.messageDetail ? 0 : 104 })
+    }.tabBar(this.tabItem('消息', '≋', 2))
+    TabContent() {
+      Scroll() { Column() { this.heading('设置', ''); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
+    }.tabBar(this.tabItem('设置', '⚙', 3))
   }
 
   build() {
@@ -304,31 +347,23 @@ struct Index {
         Scroll() { Column() { this.details() }.padding(24).constraintSize({ maxWidth: 720 }).width('100%') }.layoutWeight(1).width('100%').align(Alignment.Top)
       } else {
         Stack({ alignContent: Alignment.Bottom }) {
+        if (this.systemFloatingTabs) {
+          HdsTabs({ barPosition: BarPosition.End, index: this.tab, controller: this.systemTabsController }) {
+            this.tabPages()
+          }.barOverlap(true).vertical(false).barMode(BarMode.Fixed)
+            .barFloatingStyle({ barWidth: { smallWidth: '92%', mediumWidth: 420, largeWidth: 520 },
+              barSideMargin: 16, barBottomMargin: 16, systemMaterialEffect: this.systemMaterial(), thermoCtrl: true })
+            .barHeight(this.tab === 2 && this.messageDetail ? 0 : 74).width('100%').height('100%')
+            .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index)
+        } else {
         Tabs({ barPosition: BarPosition.End, index: this.tab, controller: this.tabsController }) {
-          TabContent() {
-            Scroll() { Column() { this.receive() }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
-          }.tabBar(this.tabItem('接收', '↓', 0))
-          TabContent() {
-            Scroll() {
-              Column() {
-                this.heading('发送', '选择内容，再选择设备')
-                SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
-                  onDiscover: () => { localSend.discover(); },
-                  onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; }, onSendMany: (peers: Peer[]) => { localSend.sendMany(peers); this.route = 'transfers'; } })
-              }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%')
-            }.width('100%').height('100%').align(Alignment.Top)
-          }.tabBar(this.tabItem('发送', '↑', 1))
-          TabContent() {
-            MessagesView({ store: this.store, detailOpen: $messageDetail, onTransfers: () => this.route = 'transfers' }).padding({ bottom: this.messageDetail ? 0 : 104 })
-          }.tabBar(this.tabItem('消息', '≋', 2))
-          TabContent() {
-            Scroll() { Column() { this.heading('设置', ''); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
-          }.tabBar(this.tabItem('设置', '⚙', 3))
+          this.tabPages()
         }.barHeight(0).width('100%').height('100%')
           .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index)
         if (this.tab !== 2 || !this.messageDetail) {
-          FloatingNavigation({ store: this.store, selected: this.tab, onSelect: (index: number) => { this.tab = index; this.tabsController.changeIndex(index); } })
+          FloatingNavigation({ store: this.store, selected: this.tab, onSelect: (index: number) => this.selectTab(index) })
             .width('92%').constraintSize({ maxWidth: 520 }).margin({ bottom: 16 })
+        }
         }
         }.layoutWeight(1).width('100%')
       }
