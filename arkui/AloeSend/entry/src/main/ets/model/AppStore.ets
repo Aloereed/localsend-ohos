@@ -406,13 +406,12 @@ export class AppStore {
     this.refreshSystemTheme();
   }
 
-  async selectFiles(kind: string): Promise<void> {
-    if (!this.context || this.busy) return;
+  async selectFiles(kind: string): Promise<boolean> {
+    if (!this.context || this.busy) return false;
     this.busy = true;
     try {
       if (kind === 'folder' && !canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
-        await this.selectDownloadFolder();
-        return;
+        return await this.selectDownloadFolder();
       }
       let uris: string[] = [];
       if (kind === 'photo') {
@@ -431,20 +430,22 @@ export class AppStore {
           // when launching the picker. An unsupported operation gets the same
           // Download picker as a device without that capability.
           if (kind !== 'folder' || (error as BusinessError).code !== 801) throw error as Error;
-          await this.selectDownloadFolder(); return;
+          return await this.selectDownloadFolder();
         }
       }
+      const additions: ShareFile[] = [];
       for (const uri of uris) {
-        if (kind === 'folder') await this.addFolder(uri, '');
-        else await this.addUri(uri);
+        if (kind === 'folder') additions.push(...await this.folderSelection(uri, ''));
+        else additions.push(await this.readShareFile(uri));
       }
-    } catch (e) { this.fail('选择内容失败', e as Error); }
+      return this.appendSelection(additions);
+    } catch (e) { this.fail('选择内容失败', e as Error); return false; }
     finally { this.busy = false; }
   }
 
-  private async selectDownloadFolder(): Promise<void> {
+  private async selectDownloadFolder(): Promise<boolean> {
     const path = await this.pickDownloadFolder('send');
-    if (!path) return;
+    if (!path) return false;
     const selected = await downloadFolderFiles(this.downloadDirectory, path);
     const additions: ShareFile[] = [];
     for (const file of selected) {
@@ -452,8 +453,18 @@ export class AppStore {
     }
     // Publish only after all files can be read; a failed directory must not
     // leave a partially added tree in the user's send selection.
-    this.files = [...this.files, ...additions];
     if (!selected.length) this.notice = '这个文件夹没有可发送的文件';
+    return this.appendSelection(additions);
+  }
+
+  private appendSelection(files: ShareFile[]): boolean {
+    const uris = new Set<string>(this.files.map((file: ShareFile) => file.uri));
+    const additions = files.filter((file: ShareFile) => {
+      if (uris.has(file.uri)) return false;
+      uris.add(file.uri); return true;
+    });
+    if (!additions.length) return false;
+    this.files = [...this.files, ...additions]; return true;
   }
 
   async selectAttachments(kind: string): Promise<ShareFile[]> {
@@ -493,14 +504,20 @@ export class AppStore {
   }
 
   async addFolder(uri: string, prefix: string): Promise<void> {
+    this.appendSelection(await this.folderSelection(uri, prefix));
+  }
+
+  private async folderSelection(uri: string, prefix: string): Promise<ShareFile[]> {
     const rootName = prefix || new fileUri.FileUri(uri).name;
     const names = await fs.listFile(uri);
+    const files: ShareFile[] = [];
     for (const name of names) {
       const childUri = `${uri}/${name}`;
       const stat = await fs.stat(childUri);
-      if (stat.isDirectory()) await this.addFolder(childUri, `${rootName}/${name}`);
-      else await this.addUri(childUri, `${rootName}/${name}`);
+      if (stat.isDirectory()) files.push(...await this.folderSelection(childUri, `${rootName}/${name}`));
+      else files.push(await this.readShareFile(childUri, `${rootName}/${name}`));
     }
+    return files;
   }
 
   addText(text: string): void {
@@ -524,16 +541,16 @@ export class AppStore {
     });
   }
 
-  async paste(): Promise<void> {
+  async paste(): Promise<boolean> {
     try {
-      if (!this.context) return;
+      if (!this.context) return false;
       const result = await abilityAccessCtrl.createAtManager().requestPermissionsFromUser(this.context, ['ohos.permission.READ_PASTEBOARD']);
-      if (result.authResults.some((value: number) => value !== 0)) { this.notice = '未授予剪贴板读取权限'; return; }
+      if (result.authResults.some((value: number) => value !== 0)) { this.notice = '未授予剪贴板读取权限'; return false; }
       const data = await pasteboard.getSystemPasteboard().getData();
       const text = data.getPrimaryText();
-      if (text) this.addText(text);
-      else this.notice = '剪贴板中没有可发送的文字';
-    } catch (e) { this.fail('读取剪贴板失败', e as Error); }
+      if (text.trim()) { this.addText(text); return true; }
+      this.notice = '剪贴板中没有可发送的文字'; return false;
+    } catch (e) { this.fail('读取剪贴板失败', e as Error); return false; }
   }
 
   async copy(text: string): Promise<void> {

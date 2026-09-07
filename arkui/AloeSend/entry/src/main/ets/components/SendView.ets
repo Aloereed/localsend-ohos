@@ -47,9 +47,9 @@ export struct SendView {
   async chooseForPeer(kind: string): Promise<void> {
     if (kind === 'text') { this.textId = ''; this.text = ''; this.sheetKind = 'text'; return; }
     this.sheetVisible = false;
-    await this.store.selectFiles(kind);
-    if (this.store.files.length && this.pendingPeer) this.onSend(this.pendingPeer);
-    this.pendingPeer = undefined;
+    const peer = this.pendingPeer; this.pendingPeer = undefined;
+    const selected = kind === 'clipboard' ? await this.store.paste() : await this.store.selectFiles(kind);
+    if (selected && peer) this.onSend(peer);
   }
 
   sendSelected(): void {
@@ -67,7 +67,9 @@ export struct SendView {
       Text(this.store.t('选择后直接发送到这台设备。')).fontSize(14).fontColor($r('sys.color.font_secondary'))
       Button(this.store.t('文件')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('file'))
       Button(this.store.t('照片与视频')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('photo'))
+      Button(this.store.t('文件夹')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('folder'))
       Button(this.store.t('文字或链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('text'))
+      Button(this.store.t('剪贴板')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('clipboard'))
     }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
@@ -214,6 +216,6 @@ export struct SendView {
           .enabled(this.targets.length > 0 && this.store.files.length > 0).onClick(() => this.sendSelected())
       }
     }.width('100%')
-      .bindSheet($$this.sheetVisible, this.sheetContent(), { height: this.sheetKind === 'text' ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true })
+      .bindSheet($$this.sheetVisible, this.sheetContent(), { height: this.sheetKind === 'text' || this.sheetKind === 'choose' ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true })
   }
 }
