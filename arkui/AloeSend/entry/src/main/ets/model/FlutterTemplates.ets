@@ -42,6 +42,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "az": {
@@ -84,6 +94,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -128,6 +148,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "bn": {
@@ -170,6 +200,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -214,6 +254,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "cs": {
@@ -256,6 +306,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -300,6 +360,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "de": {
@@ -342,6 +412,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -386,6 +466,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "en": {
@@ -428,6 +518,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -472,6 +572,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "es-ES": {
@@ -514,6 +624,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -558,6 +678,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "eu": {
@@ -600,6 +730,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -644,6 +784,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "fi": {
@@ -686,6 +836,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -730,6 +890,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "fr": {
@@ -772,6 +942,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -816,6 +996,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "gu": {
@@ -858,6 +1048,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -902,6 +1102,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "hi": {
@@ -944,6 +1154,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -988,6 +1208,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "id": {
@@ -1030,6 +1260,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1074,6 +1314,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "ja": {
@@ -1116,6 +1366,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1160,6 +1420,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "ko": {
@@ -1202,6 +1472,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1246,6 +1526,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "mn": {
@@ -1288,6 +1578,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1332,6 +1632,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "ne": {
@@ -1374,6 +1684,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1418,6 +1738,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "pl": {
@@ -1460,6 +1790,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1504,6 +1844,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "pt-PT": {
@@ -1546,6 +1896,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1590,6 +1950,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "ru": {
@@ -1632,6 +2002,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1676,6 +2056,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "sk": {
@@ -1718,6 +2108,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1762,6 +2162,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "sr": {
@@ -1804,6 +2214,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1848,6 +2268,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "sv": {
@@ -1890,6 +2320,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -1934,6 +2374,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "th": {
@@ -1976,6 +2426,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -2020,6 +2480,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "uk": {
@@ -2062,6 +2532,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -2106,6 +2586,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "vi": {
@@ -2148,6 +2638,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   },
@@ -2192,6 +2692,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 个文件"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "共提供 \u0001n\u0002 项"
+      }
     }
   },
   "zh-HK": {
@@ -2235,6 +2745,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 file(s)"
       }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
+      }
     }
   },
   "zh-TW": {
@@ -2277,6 +2797,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 file(s)"
+      }
+    },
+    "receivePage.filesCard.offered": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 offered"
       }
     }
   }

@@ -27,7 +27,7 @@ const subtitle = catalog.locales.en['receivePage.subTitle'];
 for (const [locale, templates] of Object.entries(catalog.locales)) {
   for (const n of ['0', '1', '2', '11']) {
     assert.equal(flutterText('webSharePage.openLink', locale, { n }), renderTemplate(templates['webSharePage.openLink'], { n }));
-    for (const key of ['webSharePage.pendingRequests', 'webSharePage.filesCount']) {
+    for (const key of ['webSharePage.pendingRequests', 'webSharePage.filesCount', 'receivePage.filesCard.offered']) {
       assert.equal(flutterText(key, locale, { n }), renderTemplate(templates[key], { n }), `${locale}:${key}:${n}`);
     }
     const store = new AppStore(); store.settings.language = locale;

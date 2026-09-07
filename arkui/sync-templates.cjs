@@ -3,7 +3,7 @@ const path = require('node:path');
 const { readTemplates } = require('./flutter-templates.cjs');
 const catalog = readTemplates();
 const keys = ['receivePage.filesCard.selected', 'webSharePage.openLink',
-  'webSharePage.pendingRequests', 'webSharePage.filesCount'];
+  'webSharePage.pendingRequests', 'webSharePage.filesCount', 'receivePage.filesCard.offered'];
 const values = {};
 for (const [locale, templates] of Object.entries(catalog.locales)) {
   values[locale === 'zh-CN' ? 'zh' : locale] = {};

@@ -3,6 +3,7 @@ import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { AppIcon } from './AppIcon';
 import { transferTotal, transferredBytes, remainingSeconds, filePercent } from '../model/TransferMetrics';
+import { flutterCount } from '../model/DynamicLocale';
 
 @Component
 export struct TransferList {
@@ -152,11 +153,16 @@ export struct TransferList {
                 .onClick(() => { this.batchEdit = true; this.renameSheet = true; })
               Button(this.store.t('恢复选择和名称')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.resetReceiveNames())
             }.width('100%')
-            Row({ space: 10 }) {
-              Text(this.store.tf('共 {0} 项 · {1}', [String(this.current(transfer.id).files.length), formatSize(this.total(this.current(transfer.id)))])).layoutWeight(1).fontSize(13).fontColor($r('sys.color.font_secondary'))
-              Button(this.store.t('全选')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('all'))
-              Button(this.store.t('反选')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('invert'))
-            }.width('100%')
+            Column({ space: 6 }) {
+              Text(flutterCount('receivePage.filesCard.offered', this.store.settings.language, String(this.current(transfer.id).files.length)))
+                .fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
+              Text(this.store.tf('已选 {0} 项 · {1}', [String(this.current(transfer.id).files.filter((file: TransferFile) => file.selected && file.status !== 'skipped').length), formatSize(this.total(this.current(transfer.id)))]))
+                .fontSize(15).fontWeight(FontWeight.Medium).fontColor(this.store.accentText).width('100%')
+              Flex({ wrap: FlexWrap.Wrap }) {
+                Button(this.store.t('全选')).height(44).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('all'))
+                Button(this.store.t('反选')).height(44).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.selectAllReceive('invert'))
+              }.width('100%')
+            }.width('100%').alignItems(HorizontalAlign.Start)
           }
           ForEach(this.current(transfer.id).files.slice(0, this.fileLimit), (file: TransferFile) => {
             Row({ space: 10 }) {
