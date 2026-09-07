@@ -71,6 +71,7 @@ export async function importFlutterData(context: common.UIAbilityContext, target
       if (typeof old.alias !== 'string' || typeof old.ip !== 'string' || !Number.isInteger(old.port) || old.port < 1 || old.port > 65535) throw new Error('Invalid favorite');
       const snapshot: FlutterPeer = { alias: old.alias, fingerprint: old.fingerprint, ip: old.ip, port: old.port };
       const peer = peerFrom(snapshot, https);
+      peer.customAlias = old.customAlias === true;
       if (!favorites.some((item: Peer) => samePeer(item, peer))) { favorites.push(peer); report.favorites++; }
     } catch (_) { report.skipped.push(`favorites[${i}]`); }
   }

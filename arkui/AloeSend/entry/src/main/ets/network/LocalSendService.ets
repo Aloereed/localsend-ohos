@@ -390,12 +390,17 @@ export class LocalSendService {
   private upsertPeer(peer: Peer, verified: boolean = false): void {
     if (peer.fingerprint === this.store.settings.fingerprint) return;
     this.store.peers = [peer, ...this.store.peers.filter((item: Peer) => !samePeer(item, peer) && (item.ip !== peer.ip || item.port !== peer.port))].slice(0, 100);
-    if (verified && this.store.favorites.some((item: Peer) => samePeer(item, peer) && (item.ip !== peer.ip || item.port !== peer.port || item.protocol !== peer.protocol))) {
+    let favoritesChanged = false;
+    if (verified) {
       this.store.favorites = this.store.favorites.map((item: Peer) => {
-        if (!samePeer(item, peer)) return item;
-        const updated = JSON.parse(JSON.stringify(peer)) as Peer; updated.alias = item.alias; return updated;
+        if (!samePeer(item, peer) || (item.protocol === 'https' && peer.protocol !== 'https')) return item;
+        const alias = item.customAlias !== false ? item.alias : peer.alias;
+        if (item.ip === peer.ip && item.port === peer.port && item.protocol === peer.protocol && item.alias === alias) return item;
+        const updated = JSON.parse(JSON.stringify(peer)) as Peer;
+        updated.alias = alias; updated.customAlias = item.customAlias !== false;
+        favoritesChanged = true; return updated;
       });
-      this.store.save();
+      if (favoritesChanged) this.store.save();
     }
   }
 
@@ -405,7 +410,7 @@ export class LocalSendService {
       const info = JSON.parse(result.body) as DeviceInfo;
       const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
       if (result.fingerprint) known.fingerprint = result.fingerprint;
-      this.upsertPeer(known, !!result.fingerprint);
+      this.upsertPeer(known, !!result.fingerprint || known.protocol === 'http');
     }
   }
 
@@ -416,7 +421,7 @@ export class LocalSendService {
     const info = JSON.parse(reply.body) as DeviceInfo;
     const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
     if (reply.fingerprint) known.fingerprint = reply.fingerprint;
-    this.upsertPeer(known, !!reply.fingerprint);
+    this.upsertPeer(known, !!reply.fingerprint || known.protocol === 'http');
     if (this.store.settings.visible) await this.register(known);
   }
 

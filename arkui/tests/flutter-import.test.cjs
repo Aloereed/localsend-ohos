@@ -26,7 +26,7 @@ const context = { filesDir: work, getApplicationContext() { return this; }, setC
   const time = '2025-12-10T03:04:05.000Z';
   const peer = { conversationId: 'fingerprint:peer1', fingerprint: 'peer1', alias: '朋友', ip: '192.168.1.8', port: 53317, deviceType: 'desktop' };
   const legacy = {
-    'flutter.ls_favorites': encode([{ ...peer, id: 'favorite1' }, { ...peer, id: 'duplicate' }, '{broken']),
+    'flutter.ls_favorites': encode([{ ...peer, id: 'favorite1', customAlias: true }, { ...peer, id: 'duplicate' }, '{broken']),
     'flutter.ls_receive_history': encode([
       { id: 'text1', fileName: '你好 🌿', isMessage: true, fileType: 'text', fileSize: 11, senderAlias: '朋友', timestamp: time },
       { id: 'file1', fileName: '旅行.png', path: '/storage/Users/currentUser/Download/com.aloereed.aloesend/旅行.png', savedToGallery: true, fileType: 'image', fileSize: 1024, senderAlias: '朋友', timestamp: time }
@@ -49,6 +49,7 @@ const context = { filesDir: work, getApplicationContext() { return this; }, setC
   assert.equal(JSON.parse(rolledBack.history).length, 1); assert.equal(rolledBack.flutter_import_v1, '');
   await failed.init(context); assert.equal(failed.ready, true);
   assert.equal(failed.favorites.length, 1); assert.equal(failed.favorites[0].protocol, 'http');
+  assert.equal(failed.favorites[0].customAlias, true, 'Flutter custom remarks survive migration');
   assert.equal(failed.history.length, 1104, 'receive compatibility rows must not duplicate richer messages');
   const photo = failed.history.find(item => item.name === '旅行.png');
   assert.equal(photo.galleryPath, photo.path); assert.equal(photo.exportedPath, photo.path);

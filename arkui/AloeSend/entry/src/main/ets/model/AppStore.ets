@@ -32,6 +32,7 @@ export class MessageDraft {
 export class Peer {
   version: string = '2.1';
   alias: string = '';
+  customAlias: boolean = false;
   ip: string = '';
   port: number = 53317;
   protocol: string = 'http';
@@ -269,6 +270,10 @@ export class AppStore {
         this.log(`Flutter 导入：收藏 ${imported.favorites}，历史 ${imported.history}，消息 ${imported.messages}，未识别 ${imported.skipped.length}`);
       }
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
+      // Earlier native versions did not distinguish saved remarks from device names.
+      for (const favorite of this.favorites) {
+        if (typeof favorite.customAlias !== 'boolean') favorite.customAlias = true;
+      }
       this.history = JSON.parse(await this.storage.get('history', '[]') as string) as HistoryEntry[];
       let interrupted = false;
       for (const entry of this.history) {
@@ -579,6 +584,7 @@ export class AppStore {
     }
     const updated = JSON.parse(JSON.stringify(this.favorites[index])) as Peer;
     updated.alias = alias.trim() || updated.alias;
+    updated.customAlias = updated.customAlias || updated.alias !== this.favorites[index].alias;
     updated.ip = ip; updated.port = port;
     // Keep the saved identity and protocol when editing an offline endpoint.
     this.favorites = this.favorites.map((item: Peer, itemIndex: number) => itemIndex === index ? updated : item);
