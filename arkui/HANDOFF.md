@@ -1,8 +1,10 @@
-# 当前交接 · M96
+# 当前交接 · M97
 
-最新包：[AloeSend-2000096-M96-selection-callbacks-unsigned.hap](artifacts/AloeSend-2000096-M96-selection-callbacks-unsigned.hap)。版本 2.0.96，包含 M1–M96 累计实现，无需逐个安装。源码提交 `3b1160eb6b789df8ca0c2015fba880ad8be06f1a`，分支 `arkui`。
+最新包：[AloeSend-2000097-M97-message-result-unsigned.hap](artifacts/AloeSend-2000097-M97-message-result-unsigned.hap)。版本 2.0.97，包含 M1–M97 累计实现，无需逐个安装。源码提交 `f53d732fdd0b04016adfe1ddd48adc9c7d8e5a77`，分支 `arkui`。
 
-SHA-256：`6F8DF088E49F2232A63DF056E332F21FEE5C330F9A308ED574A89A69E71F99E1`。
+SHA-256：`FAE6FA37153CB6DDA4CFAAFFCFE165E449D597AA49781A42043312C86EE2B40B`。
+
+M97：消息草稿清理绑定本次返回的任务 ID，未启动时不会误认同附件旧成功任务。消息状态与选择清理回归、编译通过，97 个包校验通过。未访问设备，相关界面交互仍待验收。
 
 M96：编辑/打开回调查询当前选择项，避免行复用捕获旧文字。修改前累计 50 个主机测试通过，本轮组件变更最终编译通过，96 个包校验通过。未访问设备，长文字重复编辑实机交互待验收。
 

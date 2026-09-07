@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000097 | [M97-message-result](artifacts/AloeSend-2000097-M97-message-result-unsigned.hap) | f53d732f | FAE6FA37153CB6DDA4CFAAFFCFE165E449D597AA49781A42043312C86EE2B40B |
 | 2000096 | [M96-selection-callbacks](artifacts/AloeSend-2000096-M96-selection-callbacks-unsigned.hap) | 3b1160eb | 6F8DF088E49F2232A63DF056E332F21FEE5C330F9A308ED574A89A69E71F99E1 |
 | 2000095 | [M95-send-rename](artifacts/AloeSend-2000095-M95-send-rename-unsigned.hap) | 63c3015c | 4BB9EA71EFDF4C59DFF928F7F0F0F3C390A3342B5A5F6BFCA76ED4D0C97C209A |
 | 2000094 | [M94-receive-rename](artifacts/AloeSend-2000094-M94-receive-rename-unsigned.hap) | fd0486ed | C4A341ED29652DCD75DE8028FFD313560FA9010EF0C6AEEC4D5511A0007F27E5 |
