@@ -30,19 +30,21 @@ export async function downloadSubfolders(root: string, path: string): Promise<st
   return folders.sort();
 }
 
-async function collect(path: string, prefix: string, files: DownloadFile[]): Promise<void> {
+async function collect(path: string, prefix: string, files: DownloadFile[], checkpoint: () => void): Promise<void> {
+  checkpoint();
   for (const name of await fs.listFile(path)) {
+    checkpoint();
     if (name === '.' || name === '..' || name.includes('/') || name.includes('\\')) continue;
     const child = `${path}/${name}`; const stat = await fs.lstat(child);
     if (stat.isSymbolicLink()) continue;
-    if (stat.isDirectory()) await collect(child, `${prefix}/${name}`, files);
+    if (stat.isDirectory()) await collect(child, `${prefix}/${name}`, files, checkpoint);
     else if (stat.isFile()) files.push({ path: child, name: `${prefix}/${name}` });
   }
 }
 
-export async function downloadFolderFiles(root: string, path: string): Promise<DownloadFile[]> {
+export async function downloadFolderFiles(root: string, path: string, checkpoint: () => void = () => {}): Promise<DownloadFile[]> {
   await checkDownloadFolder(root, path);
   const files: DownloadFile[] = [];
-  await collect(path, path.slice(path.lastIndexOf('/') + 1), files);
+  await collect(path, path.slice(path.lastIndexOf('/') + 1), files, checkpoint);
   return files;
 }

@@ -308,6 +308,15 @@ struct Index {
       PrivacyView({ store: this.store, firstLaunch: true, accepting: this.acceptingPrivacy, onAccept: () => this.acceptPrivacy() })
     } else {
     Column() {
+      if (this.store.selecting) {
+        Row({ space: 12 }) {
+          LoadingProgress().width(24).height(24)
+          Text(this.store.selectionCancelled ? this.store.t('正在停止读取…') : this.store.tf('正在读取内容 · {0} 个文件', [String(this.store.selectionReadCount)]))
+            .fontSize(14).fontColor($r('sys.color.font_primary')).layoutWeight(1)
+          Button(this.store.t('取消')).height(44).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+            .enabled(!this.store.selectionCancelled).onClick(() => this.store.cancelSelection())
+        }.width('100%').padding(12).backgroundColor(this.store.controlSurface)
+      }
       if (this.store.networkPending && !this.store.pendingReceive) {
         Row({ space: 12 }) {
           Column({ space: 4 }) {

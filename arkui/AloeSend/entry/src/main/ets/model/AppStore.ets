@@ -199,6 +199,10 @@ export class AppStore {
     this.noticeTimer = value ? setTimeout(() => { this.noticeText = ''; this.noticeTimer = -1; }, 3500) : -1;
   }
   busy: boolean = false;
+  selecting: boolean = false;
+  selectionCancelled: boolean = false;
+  selectionReadCount: number = 0;
+  private selectionCount: number = 0;
   ready: boolean = false;
   privacyAccepted: boolean = false;
   identityResetting: boolean = false;
@@ -410,7 +414,7 @@ export class AppStore {
 
   async selectFiles(kind: string): Promise<boolean> {
     if (!this.context || this.busy) return false;
-    this.busy = true;
+    this.beginSelection();
     try {
       if (kind === 'folder' && !canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
         return await this.selectDownloadFolder();
@@ -437,21 +441,45 @@ export class AppStore {
       }
       const additions: ShareFile[] = [];
       for (const uri of uris) {
-        if (kind === 'folder') additions.push(...await this.folderSelection(uri, ''));
-        else additions.push(await this.readShareFile(uri));
+        this.checkSelection();
+        if (kind === 'folder') additions.push(...await this.folderSelection(uri, '', [], () => this.checkSelection(), () => this.recordSelectedFile()));
+        else { additions.push(await this.readShareFile(uri)); this.recordSelectedFile(); }
       }
+      this.checkSelection();
       return this.appendSelection(additions);
-    } catch (e) { this.fail('选择内容失败', e as Error); return false; }
-    finally { this.busy = false; }
+    } catch (e) { if (!this.selectionCancelled) this.fail('选择内容失败', e as Error); return false; }
+    finally { this.endSelection(); }
+  }
+
+  private beginSelection(): void {
+    this.busy = true; this.selecting = true; this.selectionCancelled = false;
+    this.selectionCount = 0; this.selectionReadCount = 0;
+  }
+
+  cancelSelection(): void { if (this.selecting) this.selectionCancelled = true; }
+
+  private checkSelection(): void { if (this.selectionCancelled) throw new Error('Selection cancelled'); }
+
+  private recordSelectedFile(): void {
+    this.checkSelection(); this.selectionCount++;
+    if (this.selectionCount === 1 || this.selectionCount % 25 === 0) this.selectionReadCount = this.selectionCount;
+  }
+
+  private endSelection(): void {
+    this.selectionReadCount = this.selectionCount; this.selecting = false; this.busy = false;
+    if (this.selectionCancelled) this.notice = this.t('已取消读取，原清单保留');
   }
 
   private async selectDownloadFolder(): Promise<boolean> {
     const path = await this.pickDownloadFolder('send');
+    this.checkSelection();
     if (!path) return false;
-    const selected = await downloadFolderFiles(this.downloadDirectory, path);
+    const selected = await downloadFolderFiles(this.downloadDirectory, path, () => this.checkSelection());
     const additions: ShareFile[] = [];
     for (const file of selected) {
+      this.checkSelection();
       if (!this.files.some((item: ShareFile) => item.uri === file.path)) additions.push(await this.readShareFile(file.path, file.name));
+      this.recordSelectedFile();
     }
     // Publish only after all files can be read; a failed directory must not
     // leave a partially added tree in the user's send selection.
@@ -471,7 +499,7 @@ export class AppStore {
 
   async selectAttachments(kind: string): Promise<ShareFile[]> {
     if (!this.context || this.busy) return [];
-    this.busy = true;
+    this.beginSelection();
     try {
       let uris: string[];
       if (kind === 'photo') {
@@ -482,10 +510,11 @@ export class AppStore {
         uris = await new picker.DocumentViewPicker(this.context).select(options);
       }
       const files: ShareFile[] = [];
-      for (const uri of uris) files.push(await this.readShareFile(uri));
+      for (const uri of uris) { this.checkSelection(); files.push(await this.readShareFile(uri)); this.recordSelectedFile(); }
+      this.checkSelection();
       return files;
-    } catch (e) { this.fail('选择内容失败', e as Error); return []; }
-    finally { this.busy = false; }
+    } catch (e) { if (!this.selectionCancelled) this.fail('选择内容失败', e as Error); return []; }
+    finally { this.endSelection(); }
   }
 
   private async readShareFile(uri: string, relativeName: string = ''): Promise<ShareFile> {
@@ -509,7 +538,8 @@ export class AppStore {
     this.appendSelection(await this.folderSelection(uri, prefix));
   }
 
-  private async folderSelection(uri: string, prefix: string, ancestors: string[] = []): Promise<ShareFile[]> {
+  private async folderSelection(uri: string, prefix: string, ancestors: string[] = [], checkpoint: () => void = () => {}, onFile: () => void = () => {}): Promise<ShareFile[]> {
+    checkpoint();
     const identity = await directoryIdentity(uri);
     if (ancestors.includes(identity)) return [];
     const branch = [...ancestors, identity];
@@ -517,10 +547,11 @@ export class AppStore {
     const names = await fs.listFile(uri);
     const files: ShareFile[] = [];
     for (const name of names) {
+      checkpoint();
       const childUri = `${uri}/${name}`;
       const stat = await fs.stat(childUri);
-      if (stat.isDirectory()) files.push(...await this.folderSelection(childUri, `${rootName}/${name}`, branch));
-      else files.push(await this.readShareFile(childUri, `${rootName}/${name}`));
+      if (stat.isDirectory()) files.push(...await this.folderSelection(childUri, `${rootName}/${name}`, branch, checkpoint, onFile));
+      else { files.push(await this.readShareFile(childUri, `${rootName}/${name}`)); onFile(); }
     }
     return files;
   }

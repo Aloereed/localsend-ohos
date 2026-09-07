@@ -157,7 +157,7 @@ export struct SendView {
         this.action('剪贴板', '▣', 'clipboard')
         }
       }.width('100%').scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off)
-      if (this.store.busy) { LoadingProgress().width(32).height(32) }
+      if (this.store.busy && !this.store.selecting) { LoadingProgress().width(32).height(32) }
       if (this.store.files.length > 0) { Row() {
         Text(this.store.tf('已选 {0} 项', [String(this.store.files.length)])).fontSize(17).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))
         Text(formatSize(this.store.files.reduce((sum: number, file: ShareFile) => sum + file.size, 0))).fontSize(13).fontColor($r('sys.color.font_secondary'))
