@@ -1,10 +1,12 @@
-# 当前交接 · M119
+# 当前交接 · M120
 
 阶段验收与明确未完成项见 [验收记录](ACCEPTANCE.md)。下一项源码差异是单文件重试会话语义；隐私检查及语言同步已重新核对，不能将当前版本描述为全面对齐完成。
 
-最新包：[AloeSend-2000119-M119-english-locale-map-unsigned.hap](artifacts/AloeSend-2000119-M119-english-locale-map-unsigned.hap)。版本 2.0.119，包含 M1–M119 累计实现，无需逐个安装。源码提交 `a341ed4168ed479256070045d99077530b05fa3e`，分支 `arkui`。
+最新包：[AloeSend-2000120-M120-retry-progress-unsigned.hap](artifacts/AloeSend-2000120-M120-retry-progress-unsigned.hap)。版本 2.0.120，包含 M1–M120 累计实现，无需逐个安装。源码提交 `d530b4e438e2b95be46d43cada6074c500e47105`，分支 `arkui`。
 
-SHA-256：`6593C779C4F8B53E9A0178B058624724A838D087E7D93E12C145555B27FC9834`。
+SHA-256：`868AD415AF6018207C3B26AED77E23F794D9E95FE8D0746DC3B0266A56855084`。
+
+M120：本次尝试字节数用于重试速度，保留历史时间；v1/v2 × HTTP/HTTPS 四组合双端恢复及取消通过。56 个测试、构建及 120 个包校验通过。未访问设备。
 
 M119：英文模式补用 Flutter 映射，98 个标签逐项对照所有非简体中文语言。56 个测试、构建及 119 个包校验通过。专用文案多语言仍未完全覆盖，未访问设备。
 
@@ -152,6 +154,7 @@ Windows LocalSend 重启后，零进度现象恢复。这是用户提供的实�
 - HDS API 23 系统材质已接入；不要沿用此前“只能模糊、必须 API 26”的过时结论。实际视觉效果仍需设备检查。
 
 详细里程碑、范围和材质依据见 [PACKAGES.md](PACKAGES.md)、[MIGRATION.md](MIGRATION.md)、[DESIGN.md](DESIGN.md)。
+
 
 
 
