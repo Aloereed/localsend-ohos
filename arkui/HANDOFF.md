@@ -1,8 +1,10 @@
-# 当前交接 · M90
+# 当前交接 · M91
 
-最新包：[AloeSend-2000090-M90-diagnostic-context-unsigned.hap](artifacts/AloeSend-2000090-M90-diagnostic-context-unsigned.hap)。版本 2.0.90，包含 M1–M90 累计实现，无需逐个安装。源码提交 `89bddd68ca3c6bc1d8b9fa238682ffb709d45f26`，分支 `arkui`。
+最新包：[AloeSend-2000091-M91-file-details-unsigned.hap](artifacts/AloeSend-2000091-M91-file-details-unsigned.hap)。版本 2.0.91，包含 M1–M91 累计实现，无需逐个安装。源码提交 `7296d1227638ccaacf67c23211c98c1e81e1681a`，分支 `arkui`。
 
-SHA-256：`E51AB892C5E266D41DBD2A9AC5C8DCC83DFDAF45F5D589591E1B4C53FDEF5F29`。
+SHA-256：`C71B13BDD3300FAFB4670187A1852B00B287598BD06B86D09B8AE5002873C4C3`。
+
+M91：图片详情接入可读副本回退、异步过期结果保护及解码失败图标；详情操作放入滚动区域。历史路径测试和最终编译通过，91 个包校验通过。未访问设备，图片显示和短屏交互仍待实机验收。
 
 M90：诊断报告增加构建版本、系统 API、机型、采集时间及任务数量。49 个主机测试通过；当前源码重跑 3 GiB HTTPS 慢写盘测试成功，首次暂停一秒并追加 1,538 次 10 毫秒暂停，队列峰值 65,749 字节，SHA-256 一致、文件句柄归零，耗时 58.1 秒。仅主机验证，未访问设备，不能代替 Windows LocalSend 到鸿蒙实机复测。
 

@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000091 | [M91-file-details](artifacts/AloeSend-2000091-M91-file-details-unsigned.hap) | 7296d122 | C71B13BDD3300FAFB4670187A1852B00B287598BD06B86D09B8AE5002873C4C3 |
 | 2000090 | [M90-diagnostic-context](artifacts/AloeSend-2000090-M90-diagnostic-context-unsigned.hap) | 89bddd68 | E51AB892C5E266D41DBD2A9AC5C8DCC83DFDAF45F5D589591E1B4C53FDEF5F29 |
 | 2000089 | [M89-selection-finish](artifacts/AloeSend-2000089-M89-selection-finish-unsigned.hap) | 1dadf886 | 9BF8849BBAB88A510888D92D73CC280BEF4D93DF041302538791578A406D3FF4 |
 | 2000088 | [M88-action-locales](artifacts/AloeSend-2000088-M88-action-locales-unsigned.hap) | 142847ea | 52EB1ACF532A4BF51FFD1F5D875326B2FF74AEF8DEBD90551C2BDD13A96A3B6A |
