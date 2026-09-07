@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000124 | [M124-flutter-settings](artifacts/AloeSend-2000124-M124-flutter-settings-unsigned.hap) | a44f22fe | 6F744603CFFE47DCD201E10F305AADBB4C8F3C70DBCBEA05C0F9AA5039AEC226 |
 | 2000123 | [M123-immersive-cancel](artifacts/AloeSend-2000123-M123-immersive-cancel-unsigned.hap) | 5b65a6bf | D8379DB0230436ED57250C81791E2F4A2AFAE67A3228CEE666F0A6F2A5DC3C17 |
 | 2000122 | [M122-transfer-error-locales](artifacts/AloeSend-2000122-M122-transfer-error-locales-unsigned.hap) | 7db7138f | EB403B97ABBDD865A1A3918336C06FACBC802B5174341C81A1F36D0FA613B072 |
 | 2000121 | [M121-browser-locales](artifacts/AloeSend-2000121-M121-browser-locales-unsigned.hap) | 2ece2d63 | 9842A4E0B57EAF2006D681A65837EA6875BFA54457566E4DC8369B1B1568E94C |

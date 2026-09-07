@@ -1,4 +1,12 @@
-# 当前交接 · M123
+# 当前交接 · M124
+
+最新包：[AloeSend-2000124-M124-flutter-settings-unsigned.hap](artifacts/AloeSend-2000124-M124-flutter-settings-unsigned.hap)，版本 2.0.124 / 2000124，产品源码提交 `a44f22fe`，分支 `arkui`。包含此前累计实现。
+
+SHA-256：`6F744603CFFE47DCD201E10F305AADBB4C8F3C70DBCBEA05C0F9AA5039AEC226`。
+
+M124：Flutter 设置独立迁移，支持已完成历史迁移的旧原生安装；已有原生值优先，设置 → 帮助与支持 → 从 Flutter 导入设置提供明确覆盖入口。映射范围、无对应项和目录权限说明见 M124 里程碑。59 个主机测试、构建通过；未访问设备，真实覆盖安装及系统目录权限仍待验收。
+
+## M123 交接记录
 
 最新包：[AloeSend-2000123-M123-immersive-cancel-unsigned.hap](artifacts/AloeSend-2000123-M123-immersive-cancel-unsigned.hap)，版本 2.0.123 / 2000123，产品源码提交 `5b65a6bf`，分支 `arkui`。包含 M1–M123 累计实现。
 
