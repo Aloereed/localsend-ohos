@@ -9,7 +9,17 @@
 - [沉浸光感开启要求](https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/arkts-immersive-light-sense-enable)
 - [材质面积、嵌套与动态内容的功耗指导](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-immersive-light-sense-constraints)
 
-完整的新沉浸光感属性需要 target API 26。当前构建 SDK 为 API 24，用户设备 API 23，因此本轮使用已支持的系统背景模糊与原生组件，不将兼容材质声称为 API 26 的完整折射/形变效果，也不提高最低安装要求。
+当前构建 SDK 为 API 24，最低兼容 API 22。M49 已接入 API 23 起提供的 HDS Tabs 浮动底栏与系统材质；这与较新通用 ArkUI 沉浸光感属性的 API 26 要求不同。运行时同时检查系统版本与 HDS 能力，较旧系统保留自定义浮动模糊底栏，不提高最低安装要求。
+
+## M43–M49 浮动导航
+
+- 原版 PNG Logo 保持不变；删除其周围形成方形底色的装饰，圆形外容器裁切。
+- 手机底栏脱离页面底边，距左右和底部留出空隙；内容预留底部空间，避免最后一项被遮挡。
+- API 23+ 使用 `HdsTabs.barFloatingStyle` 与系统自适应材质，尊重系统支持程度与功耗调节，避免在系统材质上再叠加不透明背景。
+- API 22 使用圆角、渐变、模糊和轻阴影的浮动底栏；轻量效果模式关闭模糊。
+- 仍需用户在设备上检查材质实际观感，不将编译通过称为已经验证折射、形变或触感。
+
+官方依据：[HDS 系统材质](https://developer.huawei.com/consumer/cn/doc/doccenter-capabilities/api/ui-design-hdsmaterial)。
 
 ## M22 设计落地
 

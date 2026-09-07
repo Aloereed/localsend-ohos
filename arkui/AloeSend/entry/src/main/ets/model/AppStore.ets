@@ -2,7 +2,7 @@ import { preferences } from '@kit.ArkData';
 import { common, ConfigurationConstant, abilityAccessCtrl } from '@kit.AbilityKit';
 import { picker, fileIo as fs, fileUri, fileShare } from '@kit.CoreFileKit';
 import { systemShare } from '@kit.ShareKit';
-import { pasteboard, deviceInfo } from '@kit.BasicServicesKit';
+import { pasteboard, deviceInfo, BusinessError } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText } from './Locale';
@@ -369,15 +369,7 @@ export class AppStore {
     this.busy = true;
     try {
       if (kind === 'folder' && !canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
-        const path = await this.pickDownloadFolder('send');
-        if (!path) return;
-        const selected = await downloadFolderFiles(this.downloadDirectory, path);
-        const additions: ShareFile[] = [];
-        for (const file of selected) {
-          if (!this.files.some((item: ShareFile) => item.uri === file.path)) additions.push(await this.readShareFile(file.path, file.name));
-        }
-        this.files = [...this.files, ...additions];
-        if (!selected.length) this.notice = '这个文件夹没有可发送的文件';
+        await this.selectDownloadFolder();
         return;
       }
       let uris: string[] = [];
@@ -391,7 +383,14 @@ export class AppStore {
         const options = new picker.DocumentSelectOptions();
         options.maxSelectNumber = kind === 'folder' ? 1 : 100;
         options.selectMode = kind === 'folder' ? picker.DocumentSelectMode.FOLDER : picker.DocumentSelectMode.FILE;
-        uris = await new picker.DocumentViewPicker(this.context).select(options);
+        try { uris = await new picker.DocumentViewPicker(this.context).select(options); }
+        catch (error) {
+          // Some system versions advertise the capability but reject FOLDER
+          // when launching the picker. An unsupported operation gets the same
+          // Download picker as a device without that capability.
+          if (kind !== 'folder' || (error as BusinessError).code !== 801) throw error as Error;
+          await this.selectDownloadFolder(); return;
+        }
       }
       for (const uri of uris) {
         if (kind === 'folder') await this.addFolder(uri, '');
@@ -399,6 +398,20 @@ export class AppStore {
       }
     } catch (e) { this.fail('选择内容失败', e as Error); }
     finally { this.busy = false; }
+  }
+
+  private async selectDownloadFolder(): Promise<void> {
+    const path = await this.pickDownloadFolder('send');
+    if (!path) return;
+    const selected = await downloadFolderFiles(this.downloadDirectory, path);
+    const additions: ShareFile[] = [];
+    for (const file of selected) {
+      if (!this.files.some((item: ShareFile) => item.uri === file.path)) additions.push(await this.readShareFile(file.path, file.name));
+    }
+    // Publish only after all files can be read; a failed directory must not
+    // leave a partially added tree in the user's send selection.
+    this.files = [...this.files, ...additions];
+    if (!selected.length) this.notice = '这个文件夹没有可发送的文件';
   }
 
   async selectAttachments(kind: string): Promise<ShareFile[]> {
