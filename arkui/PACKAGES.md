@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000086 | [M86-history-actions](artifacts/AloeSend-2000086-M86-history-actions-unsigned.hap) | 214d59d4 | CDA5269A105114C333FBFA42B0B4D6F8FC556E2A8613AEE31AE49A46F25018DB |
 | 2000085 | [M85-history-path](artifacts/AloeSend-2000085-M85-history-path-unsigned.hap) | 9e28213d | E08556D6894BFC0F92151A0392DF7DD6EED929874E79F40BDBCBF9D3213A3E07 |
 | 2000084 | [M84-share-list](artifacts/AloeSend-2000084-M84-share-list-unsigned.hap) | e6e98d5d | D858C1AB1E6553388F44224DCC43AB2EB91541A646E7DB0B4C66A5898B1DB0F7 |
 | 2000083 | [M83-declined-state](artifacts/AloeSend-2000083-M83-declined-state-unsigned.hap) | a29f2ed3 | C181D858F5FE84ADB9E12B51B7D1DA1833A99FA52E0DACFC4F5454275523A546 |

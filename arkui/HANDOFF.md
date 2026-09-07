@@ -1,8 +1,10 @@
-# 当前交接 · M85
+# 当前交接 · M86
 
-最新包：[AloeSend-2000085-M85-history-path-unsigned.hap](artifacts/AloeSend-2000085-M85-history-path-unsigned.hap)。版本 2.0.85，包含 M1–M85 累计实现，无需逐个安装。源码提交 `9e28213d5f4ad04d47bbdadea0599b50abc5c6db`，分支 `arkui`。
+最新包：[AloeSend-2000086-M86-history-actions-unsigned.hap](artifacts/AloeSend-2000086-M86-history-actions-unsigned.hap)。版本 2.0.86，包含 M1–M86 累计实现，无需逐个安装。源码提交 `214d59d4222bd0e269defb3bfefe774784a85d7a`，分支 `arkui`。
 
-SHA-256：`E08556D6894BFC0F92151A0392DF7DD6EED929874E79F40BDBCBF9D3213A3E07`。
+SHA-256：`CDA5269A105114C333FBFA42B0B4D6F8FC556E2A8613AEE31AE49A46F25018DB`。
+
+M86：历史副本回退用于重新发送与系统分享，补齐仅副本记录的界面入口及路径更新刷新。48 个主机测试和最终构建通过，86 个包校验通过。相册保存回退仍待处理，未访问设备。
 
 M85：历史打开和另存为支持可读副本回退，在保存选择器之前验证源文件。真实文件内容与句柄测试及编译通过；85 个包校验通过。未访问设备，其他历史文件动作仍在审查。
 
