@@ -1,6 +1,9 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "再次发送可用文件": "Resend available files",
+  "删除这一批记录": "Delete this batch of records",
+  "删除这一批记录？": "Delete this batch of records?",
   "部分完成": "Partially completed",
   "{0} 个文件 · {1}": "{0} files · {1}",
   "已完成 {0}/{1} 项": "Completed {0}/{1}",

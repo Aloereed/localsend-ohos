@@ -621,7 +621,13 @@ export class AppStore {
   }
 
   removeHistory(id: string): void {
-    this.history = this.history.filter((item: HistoryEntry) => item.id !== id);
+    this.removeHistories([id]);
+  }
+
+  removeHistories(ids: string[]): void {
+    const removed = new Set(ids);
+    this.history = this.history.filter((item: HistoryEntry) => !removed.has(item.id));
+    for (const id of ids) this.persistentHistory.delete(id);
     this.save();
   }
 
@@ -808,12 +814,29 @@ export class AppStore {
   }
 
   async resend(entry: HistoryEntry): Promise<void> {
+    await this.resendEntries([entry]);
+  }
+
+  async resendEntries(entries: HistoryEntry[]): Promise<boolean> {
+    if (!entries.length || this.busy) return false;
+    this.busy = true;
     try {
-      if (entry.text) this.addText(entry.text);
-      else if (entry.path) await this.addUri(entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), entry.name);
-      else { this.notice = '请重新选择原文件'; return; }
-      this.incomingShare = true;
-    } catch (e) { this.fail('原文件已不可用', e as Error); }
+      const additions: ShareFile[] = []; const uris: Set<string> = new Set();
+      for (const entry of entries) {
+        if (entry.text) {
+          const file = new ShareFile(); file.name = entry.name || entry.text.slice(0, 70); file.text = entry.text;
+          file.mime = 'text/plain'; file.size = new util.TextEncoder().encodeInto(entry.text).length; additions.push(file);
+        } else if (entry.path) {
+          const uri = entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path);
+          if (!uris.has(uri)) { additions.push(await this.readShareFile(uri, entry.name)); uris.add(uri); }
+        } else { this.notice = '请重新选择原文件'; return false; }
+      }
+      // Read every source before publishing. Existing selection and drafts
+      // remain intact if any file was removed or its permission expired.
+      this.files = [...this.files, ...additions.filter((file: ShareFile) => !!file.text || !this.files.some((selected: ShareFile) => selected.uri === file.uri))];
+      this.incomingShare = true; return true;
+    } catch (e) { this.fail('原文件已不可用', e as Error); return false; }
+    finally { this.busy = false; }
   }
 
   async openUrl(url: string): Promise<void> {

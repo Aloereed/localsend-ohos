@@ -75,7 +75,11 @@ export struct MessagesView {
       }.padding(24).height('100%').width('100%')
     } else if (this.detailsKind === 'batch') {
       Column({ space: 16 }) {
-        Text(this.store.t('这批文件')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
+        Row() {
+          Text(this.store.t('这批文件')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
+          Button(this.store.t('管理')).height(40).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+            .bindMenu(this.batchActions()).enabled(this.selectedBatch().entries.length > 0 && !this.store.busy)
+        }.width('100%')
         Text(this.store.tf('已完成 {0}/{1} 项', [String(this.selectedBatch().completed), String(this.selectedBatch().entries.length)]))
           .fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
         Scroll() {
@@ -108,6 +112,23 @@ export struct MessagesView {
   batches(): MessageBatch[] { return messageBatches(this.entries(), this.query); }
   selectedBatch(): MessageBatch { return messageBatches(this.entries()).find((batch: MessageBatch) => batch.key === this.selectedBatchKey) || new MessageBatch(); }
   openBatch(batch: MessageBatch): void { this.selectedBatchKey = batch.key; this.batchLimit = 50; this.detailsKind = 'batch'; this.showDetails = true; }
+
+  batchActions(): MenuElement[] {
+    const actions: MenuElement[] = [];
+    const entries = this.selectedBatch().entries;
+    const available = entries.filter((entry: HistoryEntry) => !!entry.text || !!entry.path);
+    if (available.length) actions.push({ value: this.store.t(available.length === entries.length ? '再次发送' : '再次发送可用文件'), action: async () => {
+      if (await this.store.resendEntries(available)) this.showDetails = false;
+    } });
+    actions.push({ value: this.store.t('删除这一批记录'), action: () => {
+      this.getUIContext().showAlertDialog({ title: this.store.t('删除这一批记录？'), message: this.store.t('不会删除已经保存的文件。'),
+        primaryButton: { value: this.store.t('取消'), action: () => {} },
+        secondaryButton: { value: this.store.t('删除'), action: () => {
+          this.store.removeHistories(entries.map((entry: HistoryEntry) => entry.id)); this.showDetails = false;
+        } } });
+    } });
+    return actions;
+  }
 
   rememberDraft(): void {
     const value = new MessageDraft(); value.text = this.draft; value.files = this.attachments;
