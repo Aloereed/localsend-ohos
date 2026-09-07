@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000070 | [M70-folder-cycles](artifacts/AloeSend-2000070-M70-folder-cycles-unsigned.hap) | 21485c7a | 1DAE14A278E3015236B3E7BAFEC68F1D50E0DDB3745286564249D6411B749C0C |
 | 2000069 | [M69-literal-formatting](artifacts/AloeSend-2000069-M69-literal-formatting-unsigned.hap) | aa2d7db9 | 8A3CD9EFDFEB4B7EAC65B2B574AA8FBBCE1BF8478F4F4B3E4AEA7D5DDA5D4C18 |
 | 2000068 | [M68-send-targets](artifacts/AloeSend-2000068-M68-send-targets-unsigned.hap) | be757e03 | 4AC565880516CBF93013F9319D8C08B22ECEAA1EB39B07D204DDACB2F87AE975 |
 | 2000067 | [M67-scrollable-sheets](artifacts/AloeSend-2000067-M67-scrollable-sheets-unsigned.hap) | 2d02f3d3 | 00905841F6C2FC3ED670872118E2821609DD1C9E713AE458BC33CE537EFB0815 |
