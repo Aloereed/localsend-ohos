@@ -15,8 +15,10 @@ Do not sign or install packages without a new request. Never include signing cre
 
 ## Architecture
 
-ArkUI frontend and ArkTS application state/platform services. Evaluate native protocol
-implementation versus Rust reuse against actual toolchain and interoperability evidence.
+ArkUI frontend and ArkTS application state/platform services. TCP/TLS client and server
+I/O plus UDP discovery use C++ sockets and mbedTLS as of M130; ArkTS retains LocalSend
+protocol state and OS interface enumeration. INTERNET remains pending a separate device
+permission experiment. Host tests forbid ArkTS socket construction.
 Keep networking separated from views so backend changes do not require UI rewrites.
 Use the existing bundle name; milestone version codes increase so newest can be installed
 first. Downgrade may require uninstalling and would remove app data; preserve exported data.
@@ -25,7 +27,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence through M129 (device checks are handed back to the user and do not authorize device access):
+implementation evidence through M130 (device checks are handed back to the user and do not authorize device access):
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |

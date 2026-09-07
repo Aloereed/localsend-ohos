@@ -32,20 +32,22 @@ struct Server {
         mbedtls_ssl_config_free(&config); mbedtls_x509_crt_free(&certificate);
         mbedtls_pk_free(&key); mbedtls_ctr_drbg_free(&random); mbedtls_entropy_free(&entropy);
     }
-    void init(const std::string& cert, const std::string& pemKey) {
+    void init(const std::string& cert, const std::string& pemKey, bool client = false) {
         check(psa_crypto_init());
-        const char personal[] = "AloeSend TLS server";
+        const std::string personal = client ? "AloeSend TLS client" : "AloeSend TLS server";
         check(mbedtls_ctr_drbg_seed(&random, mbedtls_entropy_func, &entropy,
-              reinterpret_cast<const unsigned char*>(personal), sizeof(personal) - 1));
-        check(mbedtls_x509_crt_parse(&certificate, reinterpret_cast<const unsigned char*>(cert.c_str()), cert.size() + 1));
-        check(mbedtls_pk_parse_key(&key, reinterpret_cast<const unsigned char*>(pemKey.c_str()), pemKey.size() + 1,
-              nullptr, 0, mbedtls_ctr_drbg_random, &random));
-        check(mbedtls_ssl_config_defaults(&config, MBEDTLS_SSL_IS_SERVER, MBEDTLS_SSL_TRANSPORT_STREAM, MBEDTLS_SSL_PRESET_DEFAULT));
+              reinterpret_cast<const unsigned char*>(personal.data()), personal.size()));
+        if (!client) {
+            check(mbedtls_x509_crt_parse(&certificate, reinterpret_cast<const unsigned char*>(cert.c_str()), cert.size() + 1));
+            check(mbedtls_pk_parse_key(&key, reinterpret_cast<const unsigned char*>(pemKey.c_str()), pemKey.size() + 1,
+                  nullptr, 0, mbedtls_ctr_drbg_random, &random));
+        }
+        check(mbedtls_ssl_config_defaults(&config, client ? MBEDTLS_SSL_IS_CLIENT : MBEDTLS_SSL_IS_SERVER, MBEDTLS_SSL_TRANSPORT_STREAM, MBEDTLS_SSL_PRESET_DEFAULT));
         mbedtls_ssl_conf_rng(&config, mbedtls_ctr_drbg_random, &random);
         // LocalSend authenticates known peers using certificate fingerprints.
         // Client certificates are not required by its transfer protocol.
         mbedtls_ssl_conf_authmode(&config, MBEDTLS_SSL_VERIFY_NONE);
-        check(mbedtls_ssl_conf_own_cert(&config, &certificate, &key));
+        if (!client) check(mbedtls_ssl_conf_own_cert(&config, &certificate, &key));
     }
 };
 struct Session {

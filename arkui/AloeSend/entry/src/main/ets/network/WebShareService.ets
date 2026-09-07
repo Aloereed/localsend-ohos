@@ -1,3 +1,4 @@
+import { PullServer, PullSocket } from './PullSocket';
 import { socket } from '@kit.NetworkKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
@@ -13,7 +14,7 @@ import { SecureServer, SecureConnection } from './SecureServer';
 export class WebShareService {
   private store: AppStore;
   private protocol: LocalSendService;
-  private tcp: socket.TCPSocketServer | undefined = undefined;
+  private tcp: PullServer | undefined = undefined;
   private tls: SecureServer | undefined = undefined;
   private channels: NativeConnection[] = [];
   private token: string = '';
@@ -56,9 +57,8 @@ export class WebShareService {
         await this.tls.listen(address, identity.certificate, identity.privateKey,
           (client: SecureConnection) => this.channel().attachTls(client), (error: Error) => this.store.log(error.message));
       } else {
-        this.tcp = socket.constructTCPSocketServerInstance();
-        await this.tcp.listen(address);
-        this.tcp.on('connect', (client: socket.TCPSocketConnection) => this.channel().attachTcp(client));
+        this.tcp = new PullServer();
+        await this.tcp.listen(address, (client: PullSocket) => this.channel().attachTcp(client));
       }
       const host = this.store.localIps[0];
       if (!host) throw new Error('请先连接可用的局域网');

@@ -1,4 +1,4 @@
-export interface TlsResult { plain: ArrayBuffer; wire: ArrayBuffer; closed: boolean; }
+export interface TlsResult { plain: ArrayBuffer; wire: ArrayBuffer; closed: boolean; ready: boolean; }
 export const createServer: (certificate: string, key: string) => number;
 export const createSession: (server: number) => number;
 export const feed: (session: number, bytes: ArrayBuffer) => TlsResult;
@@ -13,3 +13,10 @@ export const tcpSend: (connection: number, bytes: ArrayBuffer) => Promise<void>;
 export const tcpClose: (connection: number) => void;
 export const tcpStop: (server: number) => void;
 export const fileIdentity: (fd: number) => string;
+export const createClient: () => number;
+export const peerCertificate: (session: number) => ArrayBuffer;
+export const tcpConnect: (address: string, port: number, callback: (event: TcpEvent) => void) => number;
+export interface UdpEvent { kind: string; ip: string; port: number; data: ArrayBuffer; }
+export const udpListen: (address: string, port: number, group: string, callback: (event: UdpEvent) => void) => number;
+export const udpSend: (endpoint: number, address: string, port: number, bytes: ArrayBuffer) => void;
+export const udpClose: (endpoint: number) => void;

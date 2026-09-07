@@ -34,15 +34,11 @@ async function until(predicate) { const start = Date.now(); while (!(await predi
   const protocol = new LocalSendService(store); const web = new WebShareService(store, protocol);
   try {
     await check('stop during browser startup waits for binding and startup blocks identity/settings replacement', async () => {
-      const sockets = mocks['@kit.NetworkKit'].socket;
-      const construct = sockets.constructTCPSocketServerInstance;
+      const { PullServer } = load('network/PullSocket');
+      const listen = PullServer.prototype.listen;
       let release; let entered = false;
       const gate = new Promise(resolve => { release = resolve; });
-      sockets.constructTCPSocketServerInstance = () => {
-        const server = construct(); const listen = server.listen.bind(server);
-        server.listen = async address => { entered = true; await gate; await listen(address); };
-        return server;
-      };
+      PullServer.prototype.listen = async function (...args) { entered = true; await gate; return listen.apply(this, args); };
       const starting = web.start(false);
       try {
         assert.equal(store.webStarting, true);
@@ -58,7 +54,7 @@ async function until(predicate) { const start = Date.now(); while (!(await predi
         const probe = net.createServer();
         await new Promise((resolve, reject) => { probe.once('error', reject); probe.listen(port, '0.0.0.0', resolve); });
         await new Promise(resolve => probe.close(resolve));
-      } finally { release(); await starting; sockets.constructTCPSocketServerInstance = construct; await web.stop(); }
+      } finally { release(); await starting; PullServer.prototype.listen = listen; await web.stop(); }
     });
     await check('failed browser startup clears busy state and allows another attempt', async () => {
       store.localIps = []; await web.start(false);

@@ -1,11 +1,13 @@
 # AloeSend 原生 ArkUI
 
-正式发布包：[2.0.129 signed release APP](artifacts/release/AloeSend-2000129-release-20260907-233453-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过，恢复 INTERNET，继续不声明 READ_PASTEBOARD 和 FILE_ACCESS_PERSIST。
+上一正式发布包：[2.0.129 signed release APP](artifacts/release/AloeSend-2000129-release-20260907-233453-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过，恢复 INTERNET，继续不声明 READ_PASTEBOARD 和 FILE_ACCESS_PERSIST。
 
 发布 APP：运行 `./arkui/build-release.ps1`，沿用 `app/ohos/build-profile.Release.json5` 的签名身份、发布 profile 和兼容 SDK，保留原生模块配置。证书路径失效时只接受同目录中与发布 profile 证书匹配的完整证书链。签名信息临时使用，构建结束恢复日常配置；密码不写入脚本和产物清单。已签名 release APP 归档到 `arkui/artifacts/release/`，同时校验 APP 及独立模块 HAP 签名。
 
-当前建议检查 **M129 / 2.0.129 / 2000129**：
-[未签名 debug 包](artifacts/AloeSend-2000129-M129-restore-network-permission-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M130 / 2.0.130 / 2000130**：
+[未签名 debug 包](artifacts/AloeSend-2000130-M130-native-network-unsigned.hap)。包含所有此前里程碑。
+
+M130 将 TCP/TLS 客户端、HTTP 接收与浏览器服务、UDP 设备发现迁至 C++；HTTPS 接收继续复用原有 C++/mbedTLS。ArkTS 保留协议状态、界面与网卡信息查询，不再创建系统 socket。60 个主机测试通过；HTTP、HTTPS 各 3 GiB 慢写盘回归哈希一致、接收队列约 64 KiB。INTERNET 暂时保留，是否能删除必须另做鸿蒙设备验证。
 
 M129 根据用户最新确认恢复原生版所需的 INTERNET 权限。READ_PASTEBOARD 和 FILE_ACCESS_PERSIST 继续不声明。release 脚本要求网络权限存在，并检查两个待审权限不存在。
 
@@ -14,7 +16,7 @@ M127 上架版本移除 READ_PASTEBOARD 和 FILE_ACCESS_PERSIST 声明。粘贴�
 M126 补齐底部系统栏布局与窗口背景，窗口及前台生命周期针对性测试、编译通过；实际手势区域观感待部署确认。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
-最新验证与待检查范围见 [交接记录](HANDOFF.md)。M124 全部 59 个主机测试文件及编译通过。M121 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
+最新验证与待检查范围见 [交接记录](HANDOFF.md)。M130 全部 60 个主机测试文件及编译通过，HTTP、HTTPS 各 3 GiB 慢写盘回归通过。组播回环在本主机及独立 Node 对照中均不可用，局域网设备发现待真机确认。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
 
 - **M124**：Flutter 设置独立迁移，已有原生值优先；设置 → 帮助与支持 → 从 Flutter 导入设置，可明确覆盖旧选项。含格式验证、失败回滚与启动幂等测试。
 
