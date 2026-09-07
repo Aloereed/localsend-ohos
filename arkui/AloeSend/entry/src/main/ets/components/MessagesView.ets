@@ -1,5 +1,5 @@
 import { AppStore, HistoryEntry, Peer, ShareFile, MessageDraft, formatSize, samePeer, historyStatus } from '../model/AppStore';
-import { Conversation, ConversationUpdates, MessageBatch, messageBatches, batchStatus, conversationList, conversationTargets, inConversation, peerKey } from '../model/Conversations';
+import { Conversation, ConversationUpdates, MessageBatch, messageBatches, batchStatus, conversationList, conversationTargets, currentConversationPeer, inConversation, peerKey } from '../model/Conversations';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 import { EmptyState } from './EmptyState';
@@ -40,6 +40,10 @@ export struct MessagesView {
     if (!this.appeared) return;
     const target = this.store.messageTarget;
     if (target) { this.store.messageTarget = undefined; this.open(target); return; }
+    if (this.detailOpen) {
+      const current = currentConversationPeer(this.peer, this.store.peers);
+      if (current !== this.peer) this.peer = current;
+    }
     if (this.detailOpen && this.observedHistory !== this.store.history) {
       this.observedHistory = this.store.history;
       const incoming = this.updates.observe(this.store.history, this.peer);
@@ -195,6 +199,7 @@ export struct MessagesView {
   }
 
   async sendText(): Promise<void> {
+    this.peer = currentConversationPeer(this.peer, this.store.peers);
     if ((!this.draft.trim() && !this.attachments.length) || this.sending || !this.peer.ip) return;
     const files = this.attachments.slice(); const targetKey = peerKey(this.peer);
     if (this.draft.trim()) {

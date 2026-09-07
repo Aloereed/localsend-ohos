@@ -52,6 +52,11 @@ export function conversationTargets(nearby: Peer[], favorites: Peer[], query: st
   return targets.filter((peer: Peer) => `${peer.alias} ${peer.ip}`.toLowerCase().includes(search));
 }
 
+export function currentConversationPeer(peer: Peer, nearby: Peer[]): Peer {
+  // Keep the conversation/draft key stable while refreshing its live endpoint.
+  return nearby.find((candidate: Peer) => !!candidate.ip && peerKey(candidate) === peerKey(peer)) || peer;
+}
+
 export class Conversation {
   key: string = '';
   peer: Peer = new Peer();
