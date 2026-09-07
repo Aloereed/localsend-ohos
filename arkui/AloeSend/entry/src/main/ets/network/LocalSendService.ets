@@ -823,13 +823,25 @@ export class LocalSendService {
               } finally { await fs.close(source); }
             }, cancellation);
           cancellation.check();
+          if (upload.status === 500) {
+            // A receiver's per-file failure does not invalidate the accepted
+            // batch. Continue other files unless its cancel callback says stop.
+            view.status = 'error'; view.error = `文件发送失败 ${upload.status}`;
+            this.store.updateTransfer(transfer);
+            await this.store.updateOutgoingHistory(transfer, files);
+            continue;
+          }
           if (upload.status !== 200) throw new Error(`文件发送失败 ${upload.status}`);
           view.status = 'complete'; view.transferred = file.size; this.store.updateTransfer(transfer);
           await this.store.updateOutgoingHistory(transfer, files);
         }
       }
       cancellation.check();
-      transfer.status = 'complete'; transfer.finished = Date.now(); this.store.notice = `已发送到 ${peer.alias}`;
+      const failed = transfer.files.find((file: TransferFile) => file.status === 'error');
+      transfer.status = failed ? 'error' : 'complete'; transfer.error = failed ? failed.error : '';
+      transfer.finished = Date.now();
+      if (failed) this.store.log(`发送：${transfer.error}`);
+      else this.store.notice = `已发送到 ${peer.alias}`;
     } catch (e) {
       const remote = this.sendSessions.get(transfer.id);
       if (remote && !cancellation.cancelled) this.notifyCancel(remote.peer, remote.remoteId, remote.legacy);
