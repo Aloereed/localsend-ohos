@@ -1,4 +1,8 @@
-# M127 阶段验收 · 2026-09-07
+# M128 阶段验收 · 2026-09-07
+
+按用户要求移除 INTERNET，2.0.128 签名 APP 构建及签名检查通过，实际包内仅有 GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING。未访问设备，未验证权限删除后的设备端传输功能；没有以主机测试声称该行为已验证。源码 `25e3258a`。
+
+## M127 历史验收
 
 不含两个待审权限的正式 APP 已生成，版本 2.0.127 / 2000127，源码 `a7b7ccf6`。最终内嵌模块只声明 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，debug=false；APP 和独立模块 HAP 发布签名验证通过。剪贴板改系统 PasteButton 临时授权，保存不调用持久权限接口。59 个主机测试通过。没有访问设备或上传商店，系统安全按钮及保存授权仍需实际交互验收。
 

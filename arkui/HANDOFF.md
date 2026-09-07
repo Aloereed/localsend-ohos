@@ -1,4 +1,10 @@
-# 当前交接 · M127
+# 当前交接 · M128
+
+最终发布包：[2.0.128 signed release APP](artifacts/release/AloeSend-2000128-release-20260907-232654-signed.app)，源码 `25e3258a23e29c40e8abd5d75779e23089330b01`，构建前工作区干净，沿用 Flutter 发布签名。SHA-256：`D3900AF4674CEB25174A31307AC7177F01F31540F216E1B438DFDA7843F5B31E`。
+
+按用户明确要求删除 INTERNET。最终内嵌模块仅声明 GET_NETWORK_INFO 和 KEEP_BACKGROUND_RUNNING，debug=false，版本 2.0.128 / 2000128；APP 与独立 HAP 签名校验通过。未访问设备，未验证删除权限后的设备端联网行为。此前对局域网权限的说明已告知用户，用户仍明确要求删除；不要擅自恢复权限。
+
+## M127 历史交接
 
 最终上架包：[2.0.127 signed release APP](artifacts/release/AloeSend-2000127-release-20260907-232231-signed.app)。源码 `a7b7ccf6fd89a53a73b2de74e89d75abd6983251`，构建前工作区干净，沿用 Flutter 发布身份。SHA-256：`EF1824470108070AF458B8E6F48BDB18F2F10FA9ED85086F1AFFB8D80FDF9AE4`。
 
