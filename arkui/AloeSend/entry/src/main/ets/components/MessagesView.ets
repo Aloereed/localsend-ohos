@@ -86,7 +86,7 @@ export struct MessagesView {
           Column() {
             ForEach(this.selectedBatch().entries.slice(0, this.batchLimit), (entry: HistoryEntry) => {
               this.batchFile(entry, true)
-            }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.path}`)
+            }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.path}:${entry.exportedPath}`)
             if (this.selectedBatch().entries.length > this.batchLimit) {
               Button(this.store.t('显示更多')).fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.batchLimit += 50)
             }
@@ -116,7 +116,7 @@ export struct MessagesView {
   batchActions(): MenuElement[] {
     const actions: MenuElement[] = [];
     const entries = this.selectedBatch().entries;
-    const available = entries.filter((entry: HistoryEntry) => !!entry.text || !!entry.path);
+    const available = entries.filter((entry: HistoryEntry) => !!entry.text || !!entry.path || !!entry.exportedPath);
     if (available.length) actions.push({ value: this.store.t(available.length === entries.length ? '再次发送' : '再次发送可用文件'), action: async () => {
       if (await this.store.resendEntries(available)) this.showDetails = false;
     } });
@@ -181,7 +181,7 @@ export struct MessagesView {
           .fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
         Text(`${this.store.t(batchStatus(batch))} · ${this.store.tf('已完成 {0}/{1} 项', [String(batch.completed), String(batch.entries.length)])}`)
           .fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
-        ForEach(batch.entries.slice(0, 3), (entry: HistoryEntry) => { this.batchFile(entry, false) }, (entry: HistoryEntry) => `${entry.id}:${entry.status}`)
+        ForEach(batch.entries.slice(0, 3), (entry: HistoryEntry) => { this.batchFile(entry, false) }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.path}:${entry.exportedPath}`)
         Button(this.store.tf('查看全部 {0} 项', [String(batch.entries.length)])).width('100%').height(40)
           .fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.openBatch(batch))
         if (batch.entries.some((entry: HistoryEntry) => entry.status === 'waiting' || entry.status === 'transferring')) {
@@ -231,7 +231,7 @@ export struct MessagesView {
 
   messageActions(entry: HistoryEntry): MenuElement[] {
     const actions: MenuElement[] = [{ value: this.store.t('详情'), action: () => this.openDetails(entry) }];
-    if (entry.text || entry.path) {
+    if (entry.text || entry.path || entry.exportedPath) {
       actions.push({ value: this.store.t(entry.text ? '复制文字' : '打开文件'), action: () => {
         if (entry.text) this.store.copy(entry.text); else this.store.openFile(entry);
       } });
@@ -263,7 +263,7 @@ export struct MessagesView {
               Text(entry.name).fontSize(15).maxLines(3).fontColor($r('sys.color.font_primary'))
               Text(formatSize(entry.size)).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-          }.width('100%').onClick(() => { if (entry.path) this.store.openFile(entry); else this.openDetails(entry); })
+          }.width('100%').onClick(() => { if (entry.path || entry.exportedPath) this.store.openFile(entry); else this.openDetails(entry); })
         }
         Row() {
           Text(`${new Date(entry.time).toLocaleTimeString()} · ${this.store.t(historyStatus(entry))}`)
@@ -313,7 +313,7 @@ export struct MessagesView {
             ForEach(this.batches().slice(-this.visibleCount), (batch: MessageBatch) => {
               if (batch.entries.length > 1) { this.batchBubble(batch) }
               else { this.bubble(batch.entries[0]) }
-            }, (batch: MessageBatch) => `${batch.key}:${batch.entries.length}:${batch.completed}:${batchStatus(batch)}:${batch.entries.slice(0, 3).map((entry: HistoryEntry) => `${entry.id}:${entry.name}:${entry.status}:${entry.error || ''}:${entry.path}`).join('|')}`)
+            }, (batch: MessageBatch) => `${batch.key}:${batch.entries.length}:${batch.completed}:${batchStatus(batch)}:${batch.entries.slice(0, 3).map((entry: HistoryEntry) => `${entry.id}:${entry.name}:${entry.status}:${entry.error || ''}:${entry.path}:${entry.exportedPath}`).join('|')}`)
           }.width('100%').padding({ top: 8, bottom: 16 })
         }.width('100%').layoutWeight(1).align(Alignment.Bottom).onScroll(() => {
           this.atEnd = this.messageScroller.isAtEnd();

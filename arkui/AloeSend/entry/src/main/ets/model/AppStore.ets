@@ -930,11 +930,12 @@ export class AppStore {
   }
 
   async shareEntry(entry: HistoryEntry): Promise<void> {
-    if (!this.context || (!entry.text && !entry.path)) return;
+    if (!this.context || (!entry.text && !entry.path && !entry.exportedPath)) return;
     try {
+      const path = entry.text ? '' : await this.readableFilePath(entry);
       const record: systemShare.SharedRecord = entry.text ? { utd: 'general.plain-text', content: entry.text } :
         { utd: mimeForName(entry.name).startsWith('image/') ? 'general.image' : mimeForName(entry.name).startsWith('video/') ? 'general.video' : 'general.file',
-          uri: entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), title: entry.name };
+          uri: path.startsWith('file://') ? path : fileUri.getUriFromPath(path), title: entry.name };
       const controller = new systemShare.ShareController(new systemShare.SharedData(record));
       await controller.show(this.context, { previewMode: systemShare.SharePreviewMode.DETAIL });
     } catch (e) { this.fail('打开系统分享失败', e as Error); }
@@ -953,8 +954,9 @@ export class AppStore {
         if (entry.text) {
           const file = new ShareFile(); file.name = entry.name || entry.text.slice(0, 70); file.text = entry.text;
           file.mime = 'text/plain'; file.size = new util.TextEncoder().encodeInto(entry.text).length; additions.push(file);
-        } else if (entry.path) {
-          const uri = entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path);
+        } else if (entry.path || entry.exportedPath) {
+          const path = await this.readableFilePath(entry);
+          const uri = path.startsWith('file://') ? path : fileUri.getUriFromPath(path);
           if (!uris.has(uri)) { additions.push(await this.readShareFile(uri, entry.name)); uris.add(uri); }
         } else { this.notice = '请重新选择原文件'; return false; }
       }

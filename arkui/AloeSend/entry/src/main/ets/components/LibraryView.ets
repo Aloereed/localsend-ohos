@@ -47,14 +47,14 @@ export struct LibraryView {
               .fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
             if (entry.text) {
               Button(this.store.t('复制')).onClick(() => this.store.copy(entry.text)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
-            } else if (entry.path) {
+            } else if (entry.path || entry.exportedPath) {
               Button(this.store.t('打开')).onClick(() => {
                 if (/\.(png|jpe?g|gif|webp|heic)$/i.test(entry.name)) { this.preview = entry; this.showPreview = true; }
                 else this.store.openFile(entry);
               }).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
               Button(this.store.t('另存为')).onClick(() => this.store.exportFile(entry)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
             }
-            if (entry.text || entry.path) {
+            if (entry.text || entry.path || entry.exportedPath) {
               Button(this.store.t('再次发送')).onClick(() => this.store.resend(entry)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
               Button(this.store.t('分享')).onClick(() => this.store.shareEntry(entry)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
             }
@@ -65,7 +65,7 @@ export struct LibraryView {
             }).fontColor(this.store.dangerText).backgroundColor(this.store.controlSurface)
           }.width('100%')
         }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-      }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.error || ''}`)
+      }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.error || ''}:${entry.path}:${entry.exportedPath}`)
       if (this.entries().length > this.visibleCount) {
         Button(this.store.tf('继续查看 · 还有 {0} 项', [String(this.entries().length - this.visibleCount)]))
           .width('100%').height(48).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText).onClick(() => this.visibleCount += 30)

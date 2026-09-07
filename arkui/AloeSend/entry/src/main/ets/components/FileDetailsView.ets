@@ -55,7 +55,7 @@ export struct FileDetailsView {
           if (this.current().path) { this.field('文件位置') }
         }.width('100%').padding({ bottom: 20 })
       }.width('100%').layoutWeight(1)
-      if (this.current().path) {
+      if (this.current().path || this.current().exportedPath) {
         Row({ space: 12 }) {
           Button(this.store.t('打开')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
             .onClick(() => this.store.openFile(this.current()))
@@ -73,9 +73,9 @@ export struct FileDetailsView {
         Button(this.store.t('打开链接')).width('100%').height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
           .onClick(() => this.store.openUrl(this.current().text.trim()))
       }
-      if (this.current().text || this.current().path) { Row({ space: 12 }) {
+      if (this.current().text || this.current().path || this.current().exportedPath) { Row({ space: 12 }) {
         Button(this.store.t('分享')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.shareEntry(this.current()))
-        if (this.current().path) {
+        if (this.current().path || this.current().exportedPath) {
           Button(this.store.t('另存为')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.store.exportFile(this.current()))
         }
       }.width('100%') }
