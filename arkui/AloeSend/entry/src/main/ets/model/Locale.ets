@@ -507,7 +507,7 @@ export function uiText(text: string, language: string): string {
   for (const key of ['已发送到 {0}', '已收到 {0} 的文件']) {
     const pieces = key.split('{0}');
     if (text.startsWith(pieces[0]) && text.endsWith(pieces[1])) {
-      return (translated?.[key] || english[key]).replace('{0}', text.slice(pieces[0].length, text.length - pieces[1].length));
+      return (translated?.[key] || english[key]).replace('{0}', () => text.slice(pieces[0].length, text.length - pieces[1].length));
     }
   }
   return text;

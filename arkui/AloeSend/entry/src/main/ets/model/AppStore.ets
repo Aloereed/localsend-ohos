@@ -364,9 +364,10 @@ export class AppStore {
     } catch (_) { /* Keep the last known system accent if unavailable. */ }
   }
   tf(text: string, values: string[]): string {
-    let translated = this.t(text);
-    for (let index = 0; index < values.length; index++) translated = translated.replace(`{${index}}`, values[index]);
-    return translated;
+    return this.t(text).replace(/\{(\d+)\}/g, (placeholder: string, index: string) => {
+      const position = Number(index);
+      return position < values.length ? values[position] : placeholder;
+    });
   }
 
   updateTransfer(transfer: TransferView): void {
