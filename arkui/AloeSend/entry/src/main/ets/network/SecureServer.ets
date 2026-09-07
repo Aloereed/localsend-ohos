@@ -100,18 +100,20 @@ export class SecureConnection {
 }
 
 export class SecureServer {
+  private stopping: boolean = false;
   private tcp: PullServer | undefined = undefined;
   private id: number = -1;
   private clients: Set<SecureConnection> = new Set();
 
   async listen(address: socket.NetAddress, certificate: string, key: string,
     connected: (client: SecureConnection) => void, failed: (error: Error) => void): Promise<void> {
+    this.stopping = false;
     this.id = tls.createServer(certificate, key);
     try {
       this.tcp = new PullServer();
       await this.tcp.listen(address, (tcp: PullSocket) => {
         try {
-          if (this.clients.size >= 32) { tcp.close().catch(() => {}); return; }
+          if (this.stopping || this.clients.size >= 32) { tcp.close().catch(() => {}); return; }
           const client = new SecureConnection(tcp, this.id); this.clients.add(client);
           client.onDispose = () => this.clients.delete(client); connected(client);
         } catch (error) { tcp.close().catch(() => {}); failed(error as Error); }
@@ -120,6 +122,7 @@ export class SecureServer {
   }
 
   async close(): Promise<void> {
+    this.stopping = true;
     await Promise.all(Array.from(this.clients).map((client: SecureConnection) => client.close()));
     await this.tcp?.close().catch(() => {}); this.tcp = undefined;
     if (this.id !== -1) { tls.closeServer(this.id); this.id = -1; }

@@ -21,7 +21,13 @@ const { LocalSendService } = load('network/LocalSendService');
       await new Promise((resolve, reject) => { client.once('secureConnect', resolve); client.once('error', reject); });
     }
     assert.equal(server.clients.size, 6);
-    const started = Date.now(); await server.close(); const elapsed = Date.now() - started;
+    const started = Date.now(); const stopped = server.close();
+    const late = tls.connect({ host: '127.0.0.1', port, rejectUnauthorized: false }); clients.push(late);
+    await new Promise((resolve, reject) => {
+      late.once('secureConnect', () => reject(new Error('a stopping TLS server must not accept another handshake')));
+      late.once('error', resolve); late.once('close', resolve);
+    });
+    await stopped; const elapsed = Date.now() - started;
     assert.equal(server.clients.size, 0, 'all TLS sessions must be disposed');
     assert.ok(elapsed < 2500, `six uncooperative peers must share the close deadline; observed ${elapsed} ms`);
     await service.stop(); await service.start(); assert.equal(store.listenerRunning, true, 'listener can rebind immediately');

@@ -1,12 +1,14 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M102 / 2.0.102 / 2000102**：
-[未签名 debug 包](artifacts/AloeSend-2000102-M102-tls-stop-bound-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M103 / 2.0.103 / 2000103**：
+[未签名 debug 包](artifacts/AloeSend-2000103-M103-tls-stop-admission-unsigned.hap)。包含所有此前里程碑。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
 最新验证与待检查范围见 [交接记录](HANDOFF.md)。M101 全部 51 个主机测试文件及编译通过，新增 HTTPS 提前拒绝回归。M90 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
 
 ## 最新修复
+
+- **M103**：TLS 关闭过程中拒绝新握手，确保原连接收尾后不会留下新会话。M102 的 3 GiB 慢写盘复测通过。
 
 - **M102**：底层 TLS 服务并行关闭连接，避免多个对端不主动结束时逐个累加等待。
 
