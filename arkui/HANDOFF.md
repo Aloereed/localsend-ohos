@@ -1,10 +1,12 @@
-# 当前交接 · M112
+# 当前交接 · M113
 
 阶段验收与明确未完成项见 [验收记录](ACCEPTANCE.md)。下一项源码差异是单文件重试会话语义；隐私检查及语言同步已重新核对，不能将当前版本描述为全面对齐完成。
 
-最新包：[AloeSend-2000112-M112-settings-upgrade-unsigned.hap](artifacts/AloeSend-2000112-M112-settings-upgrade-unsigned.hap)。版本 2.0.112，包含 M1–M112 累计实现，无需逐个安装。源码提交 `eafd93295c49af012d54ad87293d01eeefdd9b03`，分支 `arkui`。
+最新包：[AloeSend-2000113-M113-file-error-continue-unsigned.hap](artifacts/AloeSend-2000113-M113-file-error-continue-unsigned.hap)。版本 2.0.113，包含 M1–M113 累计实现，无需逐个安装。源码提交 `dca910c29f8a496c34083b7db6ab94b2689345ce`，分支 `arkui`。
 
-SHA-256：`2CF6CA513FE0A8236DD6276CC13FED9BC30B62A97FC6E106B5A4F2CFEE969203`。
+SHA-256：`940E089C7572721DB2CFD0A5825947D4B85E5B9FEBEF997AC8278D2A3108F08A`。
+
+M113：接收端返回单文件 HTTP 500 后继续后续文件，最终批次保留错误，逐文件历史正确。55 个主机测试、构建和 113 个包校验通过。同会话重试仍未完成，未访问设备。
 
 M112：旧配置缺失字段补默认值，保留明确关闭项、身份和旧主题颜色。55 个主机测试、最终编译和 112 个包校验通过。未访问设备。
 
@@ -138,6 +140,7 @@ Windows LocalSend 重启后，零进度现象恢复。这是用户提供的实�
 - HDS API 23 系统材质已接入；不要沿用此前“只能模糊、必须 API 26”的过时结论。实际视觉效果仍需设备检查。
 
 详细里程碑、范围和材质依据见 [PACKAGES.md](PACKAGES.md)、[MIGRATION.md](MIGRATION.md)、[DESIGN.md](DESIGN.md)。
+
 
 
 
