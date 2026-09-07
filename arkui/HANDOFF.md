@@ -1,4 +1,16 @@
-# 当前交接 · M130
+# 当前交接 · M131
+
+最新发布包：[2.0.131 signed release APP](artifacts/release/AloeSend-2000131-release-20260908-001733-signed.app)，源码 `4afc50b247501c1f324c48cdaa6df289b7800d60`，构建前工作区干净。沿用 Flutter 发布签名，APP 与独立 HAP 签名验证通过。SHA-256：`63146A53855AA9BE7D3F956E6D877C9FD460B4039FDD19BB445C97C274A3938B`。
+
+用户最新明确要求移除 INTERNET，已执行且发布脚本会拒绝包含 INTERNET 的包。最终仅声明 GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，不含 READ_PASTEBOARD / FILE_ACCESS_PERSIST。不要因为历史 M129/M130 的保留说明再次加回。未验证鸿蒙无 INTERNET 权限时的设备发现与传输行为。
+
+包含 M130 完整 C++ 网络迁移，以及 M131 旧版本导入文案、语言菜单“繁體中文”、999 文件/附件选择、图库 500+499 分批选择。图库单次 500 是系统上限，选满后在应用提示中选择继续添加。取消下一批保留上一批，取消本次读取保留原发送清单。
+
+底栏根据当前窗口宽度重新传入 HDS 三个档位的明确栏宽和居中间距，兼容底栏共用计算，容器限制绘制范围。六个针对性主机测试和鸿蒙编译通过；主机几何测试跨越大窗口到窄屏。系统玻璃背景实际渲染、手机窄屏表现和无 INTERNET 权限的网络行为仍待用户设备确认，未访问设备。
+
+调试包 `artifacts/AloeSend-2000131-M131-selection-layout-unsigned.hap`，SHA-256 `2246EAD4562753A1B3645EBE7C1E65ABC841F1780B09B655DD6131E6C88D182C`。详情见 [M131](milestones/M131-selection-layout.md)。
+
+# M130 历史交接
 
 最新发布包：[2.0.130 signed release APP](artifacts/release/AloeSend-2000130-release-20260908-000306-signed.app)，源码 `28d1d3079dabfc41d81dc582ba50a15a1213e786`，构建前工作区干净，沿用 Flutter 发布签名。SHA-256：`23AD28806E081EE04576578C138A3924B1E0DB397015991C72605480F7A5FD73`。
 

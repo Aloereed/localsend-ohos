@@ -1,4 +1,12 @@
-# M130 阶段验收 · 2026-09-08
+# M131 阶段验收 · 2026-09-08
+
+2.0.131 正式发布包已生成，源码 `4afc50b2`，构建前工作区干净。沿用 Flutter release 身份；APP 与独立模块 HAP 签名检查通过，实际包内只有 GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，无 INTERNET、READ_PASTEBOARD、FILE_ACCESS_PERSIST。
+
+六个针对性主机测试及编译通过：旧设置导入文案/继承、语言资源同步、999 文件与附件、图库 500+499 分批及取消/去重/原子性、窗口底栏几何、隐私与系统栏生命周期。M130 C++ 网络代码未改，既有 60 文件回归和 HTTP/HTTPS 各 3 GiB 慢写盘证据见下文。
+
+未访问设备，未将主机回归作为无 INTERNET 权限传输的验证。图库实际两轮系统弹窗、手机和自由窗口缩放时的系统玻璃渲染还需用户部署检查。
+
+## M130 历史验收
 
 C++ TCP/TLS/UDP 网络层已接入全部应用 socket I/O，主机适配层禁止 ArkTS socket 构造。60 个测试文件及鸿蒙编译通过；独立 HTTP/HTTPS 对端、原会话恢复、证书指纹、取消和阻塞写检查通过。HTTP、HTTPS 各 3 GiB 慢写盘传输校验一致、应用队列约 64 KiB。
 
