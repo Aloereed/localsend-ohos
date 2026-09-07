@@ -1,8 +1,10 @@
-# 当前交接 · M72
+# 当前交接 · M73
 
-最新包：[AloeSend-2000072-M72-storage-errors-unsigned.hap](artifacts/AloeSend-2000072-M72-storage-errors-unsigned.hap)。版本 2.0.72，包含 M1–M72 累计实现，无需逐个安装。源码提交 `0d7160443863000a63493255fbd113049958ba41`，分支 `arkui`。
+最新包：[AloeSend-2000073-M73-dynamic-locales-unsigned.hap](artifacts/AloeSend-2000073-M73-dynamic-locales-unsigned.hap)。版本 2.0.73，包含 M1–M73 累计实现，无需逐个安装。源码提交 `32927ad569e099b00d9cb5b041d9b571b4606bea`，分支 `arkui`。
 
-SHA-256：`1BEB408A4E0F4D6A9BB88E27E8446A2D939BFB79947533E2DD5B6B7266ADE449`。
+SHA-256：`E24BB9B50230BE72825B51FAFB35B956A236E3A5606797DCF2EBACA0896BC8E4`。
+
+M73：动态提取器覆盖 53 个语言版本的 29 个模板；选择数量和浏览器链接说明已接入。42 个主机测试文件通过，ArkTS 参数字典调整后语言测试及编译复测通过。其余动态文案和原生新增说明的语言覆盖仍需继续，不能视为全部语言对齐。包清单已验证 73 个累计产物。
 
 用户于 2026-09-07 上午离开设备并明确禁止访问。之后的工作仅使用源码、主机测试和命令行未签名构建；不得查询、连接或部署到设备。新的六小时工作窗口约到 15:30 CST，目标完成后可提前结束。
 
