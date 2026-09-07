@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000118 | [M118-retry-cancellation](artifacts/AloeSend-2000118-M118-retry-cancellation-unsigned.hap) | ae509cb2 | 56DCA6030D623F3F892BB1A4A1BC7338F42DD640B3C16631E9F041E6D5D73E47 |
 | 2000117 | [M117-file-failure-isolation](artifacts/AloeSend-2000117-M117-file-failure-isolation-unsigned.hap) | 68c0c231 | 84B9CC42FF22A930441B841B1D0E4EA2E48D9AE6CF263F6C8F77AB7933B24C65 |
 | 2000116 | [M116-expired-session-retry](artifacts/AloeSend-2000116-M116-expired-session-retry-unsigned.hap) | 53ebc71d | FFA2AA62BD19E9B4B34F42AD52BF67C5C50EB1094FCA0C67DBBD437899EA2EA4 |
 | 2000115 | [M115-send-session-retry](artifacts/AloeSend-2000115-M115-send-session-retry-unsigned.hap) | 96f700ee | EF80BBC297E49555C8501D7ABCEEF9C2B4D60035D5F118B90F4CF2EF43381156 |
