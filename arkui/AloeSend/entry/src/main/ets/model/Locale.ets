@@ -2,6 +2,9 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "剪贴板是空的": "The clipboard is empty",
+  "剪贴板中没有可发送的文字": "There is no text to send on the clipboard",
+  "未授予剪贴板读取权限": "Clipboard access was not granted",
   "从 Flutter 导入设置": "Import Flutter settings",
   "将用旧版保存的设置覆盖本端对应选项，包括名称、主题、接收和网络设置。收藏、历史、消息和本机证书保持不变。": "Replace corresponding options with your saved Flutter settings, including your name, theme, receiving and network preferences. Favorites, history, messages and this device's certificate are kept.",
   "首次升级自动继承；已有本端设置会保留，可在此重新导入。": "Settings are inherited on first upgrade. Existing native settings are kept; you can import again here.",

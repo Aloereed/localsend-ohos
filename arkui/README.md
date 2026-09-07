@@ -1,7 +1,7 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M124 / 2.0.124 / 2000124**：
-[未签名 debug 包](artifacts/AloeSend-2000124-M124-flutter-settings-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M125 / 2.0.125 / 2000125**：
+[未签名 debug 包](artifacts/AloeSend-2000125-M125-empty-clipboard-unsigned.hap)。包含所有此前里程碑。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
 最新验证与待检查范围见 [交接记录](HANDOFF.md)。M124 全部 59 个主机测试文件及编译通过。M121 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。

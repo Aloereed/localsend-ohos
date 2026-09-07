@@ -709,13 +709,26 @@ export class AppStore {
   }
 
   async paste(): Promise<boolean> {
+    this.error = '';
     try {
       if (!this.context) return false;
+      const board = pasteboard.getSystemPasteboard();
+      if (!await board.hasData()) { this.notice = '剪贴板是空的'; return false; }
       const result = await abilityAccessCtrl.createAtManager().requestPermissionsFromUser(this.context, ['ohos.permission.READ_PASTEBOARD']);
       if (result.authResults.some((value: number) => value !== 0)) { this.notice = '未授予剪贴板读取权限'; return false; }
-      const data = await pasteboard.getSystemPasteboard().getData();
+      let data: pasteboard.PasteData;
+      try { data = await board.getData(); }
+      catch (error) {
+        // The clipboard can be cleared while the permission dialog is open.
+        // Recheck state instead of interpreting an undocumented error code.
+        if ((error as BusinessError).code === 201) { this.notice = '未授予剪贴板读取权限'; return false; }
+        let empty = false;
+        try { empty = !await board.hasData(); } catch (_) { /* Retain the original read error. */ }
+        if (empty) { this.notice = '剪贴板是空的'; return false; }
+        throw error as Error;
+      }
       const text = data.getPrimaryText();
-      if (text.trim()) { this.addText(text); return true; }
+      if (typeof text === 'string' && text.trim()) { this.addText(text); return true; }
       this.notice = '剪贴板中没有可发送的文字'; return false;
     } catch (e) { this.fail('读取剪贴板失败', e as Error); return false; }
   }

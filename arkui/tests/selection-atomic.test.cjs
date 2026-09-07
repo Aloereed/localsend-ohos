@@ -36,9 +36,23 @@ const { AppStore } = load('model/AppStore');
   store.busy = true; assert.equal(await store.selectFiles('file'), false); store.busy = false;
   mocks['@kit.AbilityKit'].abilityAccessCtrl = { createAtManager: () => ({ requestPermissionsFromUser: async () => ({ authResults: [denied ? -1 : 0] }) }) };
   let clipboard = '  ';
-  mocks['@kit.BasicServicesKit'].pasteboard.getSystemPasteboard = () => ({ getData: async () => ({ getPrimaryText: () => clipboard }) });
+  let hasData = false, reads = 0, readError = false, clearOnRead = false;
+  mocks['@kit.BasicServicesKit'].pasteboard.getSystemPasteboard = () => ({
+    hasData: async () => hasData,
+    getData: async () => { reads++; if (clearOnRead) hasData = false; if (readError) throw new Error('read failed'); return { getPrimaryText: () => clipboard }; }
+  });
   const beforePaste = store.files;
+  store.error = 'previous error';
   assert.equal(await store.paste(), false); assert.equal(store.files, beforePaste);
+  assert.equal(reads, 0); assert.equal(store.error, ''); assert.equal(store.notice, '剪贴板是空的');
+  hasData = true; readError = true; clearOnRead = true;
+  assert.equal(await store.paste(), false); assert.equal(store.error, ''); assert.equal(store.notice, '剪贴板是空的');
+  hasData = true; clearOnRead = false;
+  assert.equal(await store.paste(), false); assert.match(store.error, /读取剪贴板失败/);
+  readError = false;
+  assert.equal(await store.paste(), false); assert.equal(store.files, beforePaste);
+  assert.equal(store.error, ''); assert.equal(store.notice, '剪贴板中没有可发送的文字');
+  clipboard = undefined; assert.equal(await store.paste(), false); assert.equal(store.error, '');
   clipboard = 'clipboard text'; denied = true;
   assert.equal(await store.paste(), false); assert.equal(store.files, beforePaste);
   denied = false; assert.equal(await store.paste(), true); assert.equal(store.files.at(-1).text, clipboard);
