@@ -15,6 +15,7 @@ import { ReceiveRequestView } from '../components/ReceiveRequestView';
 import { DownloadDirectoryPicker } from '../components/DownloadDirectoryPicker';
 import { PrivacyView } from '../components/PrivacyView';
 import { DiagnosticsView } from '../components/DiagnosticsView';
+import { FloatingNavigation } from '../components/FloatingNavigation';
 
 @Entry
 @Component
@@ -32,6 +33,7 @@ struct Index {
   @State directoryInitial: string = '';
   @State acceptingPrivacy: boolean = false;
   private directoryResolver: ((path: string) => void) | undefined = undefined;
+  private tabsController: TabsController = new TabsController();
 
   async aboutToAppear(): Promise<void> {
     await this.initializePage();
@@ -136,10 +138,8 @@ struct Index {
       Stack() {
         Circle().width(192).height(192).fill(Color.Transparent).stroke(this.store.hairlineColor).strokeWidth(1)
         Circle().width(158).height(158).fill(this.store.glassColor)
-          .shadow({ radius: this.store.settings.reduceEffects ? 0 : 26, color: this.store.dark ? '#28000000' : '#18314665', offsetY: 10 })
         Image($r('app.media.aloesend_logo')).width(112).height(112).objectFit(ImageFit.Contain).accessibilityLevel('no')
-      }.width(208).height(208).margin({ top: 4, bottom: 6 })
-        .radialGradient({ center: ['50%', '50%'], radius: 104, colors: [[this.store.ambientColor, 0], [Color.Transparent, 1]] })
+      }.width(208).height(208).borderRadius(104).clip(true).margin({ top: 4, bottom: 6 })
       Text(this.store.settings.alias).fontSize(28).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
       Row({ space: 7 }) {
         Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.settings.accent : '#B88632')
@@ -302,9 +302,10 @@ struct Index {
           .backgroundColor(this.store.glassColor).backgroundBlurStyle(this.store.settings.reduceEffects ? BlurStyle.NONE : BlurStyle.COMPONENT_THIN)
         Scroll() { Column() { this.details() }.padding(24).constraintSize({ maxWidth: 720 }).width('100%') }.layoutWeight(1).width('100%').align(Alignment.Top)
       } else {
-        Tabs({ barPosition: this.windowWidth >= 840 ? BarPosition.Start : BarPosition.End, index: this.tab }) {
+        Stack({ alignContent: Alignment.Bottom }) {
+        Tabs({ barPosition: BarPosition.End, index: this.tab, controller: this.tabsController }) {
           TabContent() {
-            Scroll() { Column() { this.receive() }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
+            Scroll() { Column() { this.receive() }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('接收', '↓', 0))
           TabContent() {
             Scroll() {
@@ -313,18 +314,22 @@ struct Index {
                 SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
                   onDiscover: () => { localSend.discover(); },
                   onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; }, onSendMany: (peers: Peer[]) => { localSend.sendMany(peers); this.route = 'transfers'; } })
-              }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%')
+              }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%')
             }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('发送', '↑', 1))
           TabContent() {
-            MessagesView({ store: this.store, detailOpen: $messageDetail, onTransfers: () => this.route = 'transfers' })
+            MessagesView({ store: this.store, detailOpen: $messageDetail, onTransfers: () => this.route = 'transfers' }).padding({ bottom: this.messageDetail ? 0 : 104 })
           }.tabBar(this.tabItem('消息', '≋', 2))
           TabContent() {
-            Scroll() { Column() { this.heading('设置', ''); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 28 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
+            Scroll() { Column() { this.heading('设置', ''); SettingsView({ store: this.store, onNavigate: (route: string) => this.route = route }) }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%') }.width('100%').height('100%').align(Alignment.Top)
           }.tabBar(this.tabItem('设置', '⚙', 3))
-        }.vertical(this.windowWidth >= 840).barWidth(this.windowWidth >= 840 ? 96 : '100%').barHeight(this.windowWidth >= 840 ? '100%' : 76)
-          .barBackgroundColor(this.store.glassColor).barBackgroundBlurStyle(this.store.settings.reduceEffects ? BlurStyle.NONE : BlurStyle.COMPONENT_THIN)
-          .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index).layoutWeight(1)
+        }.barHeight(0).width('100%').height('100%')
+          .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index)
+        if (this.tab !== 2 || !this.messageDetail) {
+          FloatingNavigation({ store: this.store, selected: this.tab, onSelect: (index: number) => { this.tab = index; this.tabsController.changeIndex(index); } })
+            .width('92%').constraintSize({ maxWidth: 520 }).margin({ bottom: 16 })
+        }
+        }.layoutWeight(1).width('100%')
       }
     }.width('100%').height('100%')
     }

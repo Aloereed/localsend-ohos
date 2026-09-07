@@ -18,11 +18,11 @@ if ($VersionCode -eq 0) {
 }
 if ($VersionCode -lt 2000001) { throw 'Native milestone versionCode must be at least 2000001' }
 $appText = $appText -replace '"versionCode"\s*:\s*\d+', ('"versionCode": ' + $VersionCode)
-$versionName = '2.0.0-native.' + ($VersionCode - 2000000)
+$versionName = '2.0.' + ($VersionCode - 2000000)
 $appText = $appText -replace '"versionName"\s*:\s*"[^"]*"', ('"versionName": "' + $versionName + '"')
 [IO.File]::WriteAllText($appPath, $appText, [Text.UTF8Encoding]::new($false))
 $buildResourcePath = Join-Path $projectRoot 'entry\src\main\resources\base\element\build_info.json'
-@{ string = @(@{ name = 'build_version'; value = "$versionName ($VersionCode)" }) } | ConvertTo-Json -Depth 3 | Set-Content -LiteralPath $buildResourcePath -Encoding utf8
+@{ string = @(@{ name = 'build_version'; value = $versionName }) } | ConvertTo-Json -Depth 3 | Set-Content -LiteralPath $buildResourcePath -Encoding utf8
 Push-Location $projectRoot
 try {
     & ohpm install --all
