@@ -37,6 +37,7 @@ export struct PeerDetailView {
 
   @Builder
   contentPicker() {
+    Scroll() {
     Column({ space: 16 }) {
       Text(this.store.t(this.textMode ? '发送文字或链接' : '先选择要分享的内容')).fontSize(23).fontWeight(FontWeight.Medium)
       if (this.textMode) {
@@ -52,6 +53,7 @@ export struct PeerDetailView {
         Button(this.store.t('剪贴板')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('clipboard'))
       }
     }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
+    }.width('100%').height('100%').align(Alignment.Top)
   }
 
   build() {
@@ -96,6 +98,6 @@ export struct PeerDetailView {
           localSend.probe(this.peer).then(() => this.store.notice = this.store.t('连接正常')).catch((e: Error) => this.store.fail(this.store.t('连接失败'), e));
         })
       }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(24)
-    }.width('100%').bindSheet($$this.choosing, this.contentPicker(), { height: SheetSize.FIT_CONTENT, showClose: true })
+    }.width('100%').bindSheet($$this.choosing, this.contentPicker(), { height: SheetSize.LARGE, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY })
   }
 }

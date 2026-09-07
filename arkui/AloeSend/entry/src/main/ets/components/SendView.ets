@@ -28,10 +28,14 @@ export struct SendView {
 
   @Builder
   sheetContent() {
+    Scroll() {
+      Column() {
     if (this.sheetKind === 'text') { this.textEditor() }
     else if (this.sheetKind === 'address') { this.addressEditor() }
     else if (this.sheetKind === 'rename') { this.renameEditor() }
     else { this.chooseEditor() }
+      }.width('100%')
+    }.width('100%').height('100%').align(Alignment.Top).direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
   beginSend(peer: Peer): void {
@@ -216,6 +220,6 @@ export struct SendView {
           .enabled(this.targets.length > 0 && this.store.files.length > 0).onClick(() => this.sendSelected())
       }
     }.width('100%')
-      .bindSheet($$this.sheetVisible, this.sheetContent(), { height: this.sheetKind === 'text' || this.sheetKind === 'choose' ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true })
+      .bindSheet($$this.sheetVisible, this.sheetContent(), { height: this.sheetKind === 'text' || this.sheetKind === 'choose' ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY })
   }
 }

@@ -248,6 +248,6 @@ export struct SettingsView {
         this.link('关于 AloeSend', '原生鸿蒙', 'about')
         this.link('支持开源项目', '', 'donate')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-    }.width('100%').bindSheet($$this.languageVisible, this.languageSheet(), { height: SheetSize.LARGE, showClose: true })
+    }.width('100%').bindSheet($$this.languageVisible, this.languageSheet(), { height: SheetSize.LARGE, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY })
   }
 }

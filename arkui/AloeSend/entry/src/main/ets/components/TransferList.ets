@@ -28,6 +28,8 @@ export struct TransferList {
 
   @Builder
   renameEditor() {
+    Scroll() {
+      Column() {
     if (this.batchEdit) {
       Column({ space: 16 }) {
         Text(this.store.t('批量重命名')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
@@ -60,6 +62,8 @@ export struct TransferList {
       })
     }.width('100%').padding(24).direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     }
+      }.width('100%')
+    }.width('100%').height('100%').align(Alignment.Top).direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
   statusLabel(status: string): string {
@@ -200,6 +204,6 @@ export struct TransferList {
           }
         }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(28)
       }, (transfer: TransferView) => transfer.id)
-    }.width('100%').bindSheet($$this.renameSheet, this.renameEditor(), { height: this.batchEdit ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true })
+    }.width('100%').bindSheet($$this.renameSheet, this.renameEditor(), { height: this.batchEdit ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY })
   }
 }
