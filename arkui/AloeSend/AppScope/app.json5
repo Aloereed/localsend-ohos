@@ -2,8 +2,8 @@
   "app": {
     "bundleName": "com.aloereed.aloesend",
     "vendor": "AloeSend",
-    "versionCode": 2000080,
-    "versionName": "2.0.80",
+    "versionCode": 2000081,
+    "versionName": "2.0.81",
     "icon": "$media:layered_image",
     "label": "$string:app_name"
   }

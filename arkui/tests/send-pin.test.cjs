@@ -36,6 +36,11 @@ async function until(predicate) {
     service.submitPin(''); await cancelled;
     assert.equal(store.transfers[0].status, 'cancelled'); assert.equal(store.pendingPin, '');
     assert.equal(pins.length, 4, 'cancel must not submit an empty PIN to the peer');
+    const backCancelled = service.send(peer, [file]); await until(() => store.pendingPin);
+    service.cancel(store.pendingPin); await backCancelled;
+    assert.equal(store.transfers[0].status, 'cancelled'); assert.equal(store.pendingPin, '');
+    assert.equal(store.pendingPinInvalid, false); assert.equal(service.sending.size, 0);
+    assert.equal(pins.length, 5, 'transfer cancellation while prompting must not submit another request');
     console.log('PASS alphanumeric/Unicode PIN, incorrect retry feedback and prompt cancellation reset');
   } finally { service.cancelAll(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

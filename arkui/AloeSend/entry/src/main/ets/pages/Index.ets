@@ -57,7 +57,7 @@ struct Index {
     });
     this.store.onTransferCompleted = (transfer: TransferView) => {
       if (transfer.direction === 'receive' && transfer.peerInfo && this.store.settings.openMessagesOnReceive) {
-        this.store.messageTarget = transfer.peerInfo; this.tab = 2; this.route = '';
+        this.store.messageTarget = transfer.peerInfo; this.selectTab(2); this.route = '';
       }
       if (!this.store.settings.autoFinish) return;
       setTimeout(() => {
@@ -88,9 +88,10 @@ struct Index {
 
   onBackPress(): boolean {
     if (this.directoryVisible) { this.closeDirectory(''); return true; }
+    if (this.store.pendingPin) { localSend.cancel(this.store.pendingPin); return true; }
     if (this.route) { this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : ''; return true; }
     if (this.tab === 2 && this.messageDetail) { this.messageDetail = false; return true; }
-    if (this.tab !== 0) { this.tab = 0; return true; }
+    if (this.tab !== 0) { this.selectTab(0); return true; }
     return false;
   }
 
@@ -188,7 +189,7 @@ struct Index {
       Text(this.store.t(title)).fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
       AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') })
     }.width('100%').padding({ left: 22, right: 20, top: 20, bottom: 20 })
-      .onClick(() => { if (route === 'settings') this.tab = 3; else this.route = route; })
+      .onClick(() => { if (route === 'settings') this.selectTab(3); else this.route = route; })
       .accessibilityText(this.store.t(title))
   }
 
@@ -201,7 +202,7 @@ struct Index {
       }.padding({ left: 8, right: 8 })
     }.constraintSize({ minWidth: 48, minHeight: 48 }).backgroundColor(Color.Transparent)
       .accessibilityText(this.store.t('返回'))
-      .onClick(() => this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : '')
+      .onClick(() => this.onBackPress())
   }
 
   @Builder
@@ -218,7 +219,7 @@ struct Index {
     else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer,
       onUpdate: (peer: Peer) => this.selectedPeer = peer,
       onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; },
-      onMessage: () => { this.store.messageTarget = this.selectedPeer; this.route = ''; this.tab = 2; } }) }
+      onMessage: () => { this.store.messageTarget = this.selectedPeer; this.route = ''; this.selectTab(2); } }) }
     else if (this.route === 'transfers') { TransferList({ store: this.store }) }
     else if (this.route === 'history') { LibraryView({ store: this.store, messagesOnly: false }) }
     else if (this.route === 'diagnostics') {
@@ -332,7 +333,7 @@ struct Index {
       }
       if (this.store.incomingShare) {
         Button(this.store.t('内容已就绪 · 前往发送')).width('100%').height(48).backgroundColor(this.store.accentFill)
-          .onClick(() => { this.store.incomingShare = false; this.route = ''; this.tab = 1; })
+          .onClick(() => { this.store.incomingShare = false; this.route = ''; this.selectTab(1); })
       }
       if (this.store.galleryQueue.length > 0 && !this.store.pendingReceive) {
         Row({ space: 8 }) {
