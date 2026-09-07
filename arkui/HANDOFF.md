@@ -1,8 +1,10 @@
-# 当前交接 · M109
+# 当前交接 · M110
 
-最新包：[AloeSend-2000109-M109-save-feedback-unsigned.hap](artifacts/AloeSend-2000109-M109-save-feedback-unsigned.hap)。版本 2.0.109，包含 M1–M109 累计实现，无需逐个安装。源码提交 `b72ef693ee6c4cdeec35c16778081e769f6e1325`，分支 `arkui`。
+最新包：[AloeSend-2000110-M110-network-validation-unsigned.hap](artifacts/AloeSend-2000110-M110-network-validation-unsigned.hap)。版本 2.0.110，包含 M1–M110 累计实现，无需逐个安装。源码提交 `6d22b952062fb93331098dc725376009590953d9`，分支 `arkui`。
 
-SHA-256：`44996740BA6A20207166932DECDB0B5B464A0BB6195E6E2C8A0930EE8A7B6CE7`。
+SHA-256：`5D63A717BC95D5D5C61B479448F6CF853E56E712AB57B521845F1B236F03B25F`。
+
+M110：组播地址严格语法及范围校验、端口/超时整数校验，纠正有效输入清除旧错误。地址测试、最终编译与 110 个包校验通过，未访问设备。
 
 M109：保存返回明确结果，名称/PIN/网络/加密设置只在成功后提示已保存。53 个主机测试、编译及 109 个包校验通过。未访问设备，输入保留便于失败后重试。
 
