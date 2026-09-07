@@ -156,6 +156,68 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       await until(async () => { try { await fs.access(path.join(work, 'received', session.sessionId, 'cancel.bin.part')); return false; } catch (_) { return true; } });
       await assert.rejects(fs.access(path.join(work, 'received', session.sessionId, 'cancel.bin.part')));
     });
+    await check('interrupted receive releases its session before slow disk cleanup and invalidates every old token', async () => {
+      const payload = offer('interrupted.bin', data);
+      payload.files.f2 = { ...payload.files.f1, id: 'f2', fileName: 'queued.bin' };
+      const session = (await call(port, '/api/localsend/v2/prepare-upload', payload)).json();
+      const client = tls.connect({ host: '127.0.0.1', port, rejectUnauthorized: false });
+      client.on('error', () => {}); await new Promise(r => client.once('secureConnect', r));
+      client.write(`POST /api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1} HTTP/1.1\r\nHost: localhost\r\nContent-Length: ${data.length}\r\n\r\n`);
+      client.write(data.subarray(0, 1000));
+      await until(() => store.transfers[0].files[0].transferred === 1000);
+      const disk = mocks['@kit.CoreFileKit'].fileIo, originalClose = disk.close;
+      const oldHandles = new Set(handles.keys()); let release, cleanupStarted = false;
+      const held = new Promise(resolve => { release = resolve; });
+      disk.close = async file => {
+        if (oldHandles.has(typeof file === 'number' ? file : file.fd)) { cleanupStarted = true; await held; }
+        return originalClose(file);
+      };
+      try {
+        client.destroy(); await until(() => cleanupStarted);
+        const ended = store.transfers.find(item => item.id === session.sessionId);
+        assert.equal(ended.status, 'error', 'terminal state is published before close finishes');
+        assert.ok(ended.finished); assert.equal(ended.files[1].status, 'error');
+        assert.equal(store.activeTransfers, false);
+        const next = await call(port, '/api/localsend/v2/prepare-upload', offer('immediate-retry.bin', data));
+        assert.equal(next.status, 200, 'new receive does not wait for old cleanup');
+        assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f2&token=${session.files.f2}`, data)).status, 403);
+        service.cancel(next.json().sessionId);
+      } finally { release(); disk.close = originalClose; client.destroy(); }
+      await until(() => handles.size === 0);
+      await until(async () => !(await mocks['@kit.CoreFileKit'].fileIo.access(path.join(work, 'received', session.sessionId, 'interrupted.bin.part'))));
+    });
+    await check('local receive cancellation reaches the sender over HTTP and HTTPS and stops the pending batch', async () => {
+      const cert = await fs.readFile(path.join(work, 'identity-cert.pem'));
+      const key = await fs.readFile(path.join(work, 'identity-key.pem'));
+      for (const protocol of ['http', 'https']) {
+        let notified = '', requests = 0; const sockets = new Set();
+        const handler = (req, res) => { requests++; notified = req.url; req.resume(); res.writeHead(200, { 'content-length': 2 }); res.end('{}'); };
+        const remote = protocol === 'https' ? https.createServer({ cert, key }, handler) : http.createServer(handler);
+        remote.on('connection', socket => { sockets.add(socket); socket.on('close', () => sockets.delete(socket)); });
+        await new Promise(resolve => remote.listen(0, '127.0.0.1', resolve));
+        let client;
+        try {
+          const payload = offer('receiver-stops.bin', data);
+          payload.info = { ...peerInfo, port: remote.address().port, protocol,
+            fingerprint: protocol === 'https' ? new crypto.X509Certificate(cert).fingerprint256.replaceAll(':', '').toLowerCase() : 'test-peer' };
+          payload.files.f2 = { ...payload.files.f1, id: 'f2', fileName: 'not-started.bin' };
+          const session = (await call(port, '/api/localsend/v2/prepare-upload', payload)).json();
+          client = tls.connect({ host: '127.0.0.1', port, rejectUnauthorized: false });
+          client.on('error', () => {}); await new Promise(resolve => client.once('secureConnect', resolve));
+          client.write(`POST /api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1} HTTP/1.1\r\nHost: localhost\r\nContent-Length: ${data.length}\r\n\r\n`);
+          client.write(data.subarray(0, 1000));
+          await until(() => store.transfers[0].files[0].transferred === 1000);
+          service.cancel(session.sessionId); service.cancel(session.sessionId);
+          assert.equal(store.transfers[0].status, 'cancelled');
+          assert.equal(store.transfers[0].files[1].status, 'cancelled');
+          await until(() => notified, 1500);
+          assert.equal(notified, `/api/localsend/v2/cancel?sessionId=${session.sessionId}`);
+          assert.equal(requests, 1, 'duplicate cancel does not notify twice');
+          await until(() => store.logs.some(line => line.includes('对方已确认终止传输')));
+          await until(() => handles.size === 0);
+        } finally { client?.destroy(); for (const socket of sockets) socket.destroy(); await new Promise(resolve => remote.close(resolve)); }
+      }
+    });
     await check('explicit decline and selective consent', async () => {
       store.settings.quickSave = false;
       let response = call(port, '/api/localsend/v2/prepare-upload', offer('decline.bin', data));

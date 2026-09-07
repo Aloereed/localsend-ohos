@@ -10,9 +10,7 @@ export class SecureConnection {
   private tcp: socket.TCPSocketConnection;
   private id: number;
   private closed: boolean = false;
-  private incoming: Promise<void> = Promise.resolve();
   private outgoing: Promise<void> = Promise.resolve();
-  private queued: number = 0;
   private handshakeTimer: number = -1;
   onDispose: () => void = () => {};
 
@@ -21,20 +19,21 @@ export class SecureConnection {
     this.handshakeTimer = setTimeout(() => this.fail(new Error('TLS 握手超时')), 30000);
     tcp.on('message', (info: socket.SocketMessageInfo) => {
       if (this.closed) return;
-      this.queued += info.message.byteLength;
-      if (this.queued > 2097152) { this.fail(new Error('TLS 输入队列已满')); return; }
-      this.incoming = this.incoming.then(async () => {
-        try {
-          if (this.closed) return;
-          const result = tls.feed(this.id, info.message);
-          await this.flush(result.wire);
+      try {
+        // Socket callbacks may be delivered in a burst on ArkTS. Deferring every
+        // record behind a Promise accumulated encrypted input even though feed
+        // is synchronous. Consume it here and leave disk buffering to HTTP.
+        // Split coalesced OS packets to respect the native engine's input bound.
+        for (let offset = 0; offset < info.message.byteLength && !this.closed; offset += 65536) {
+          const result = tls.feed(this.id, info.message.slice(offset, offset + 65536));
+          if (result.wire.byteLength) this.flush(result.wire).catch((error: Error) => this.fail(error));
           if (result.plain.byteLength && !this.closed) {
             clearTimeout(this.handshakeTimer); this.handshakeTimer = -1;
             this.onMessage({ message: result.plain, remoteInfo: info.remoteInfo });
           }
-          if (result.closed) await this.close();
-        } finally { this.queued -= info.message.byteLength; }
-      }).catch((error: Error) => this.fail(error));
+          if (result.closed) this.close().catch(() => {});
+        }
+      } catch (error) { this.fail(error as Error); }
     });
     tcp.on('close', () => this.dispose());
     tcp.on('error', (error) => this.fail(new Error(`TLS TCP ${error.code}`)));

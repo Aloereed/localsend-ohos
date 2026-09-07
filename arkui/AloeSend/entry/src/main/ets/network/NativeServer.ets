@@ -15,6 +15,7 @@ export class NativeConnection {
   ip: string = '';
   encrypted: boolean = false;
   closed: boolean = false;
+  failureReason: string = '';
   private tcp: socket.TCPSocketConnection | undefined = undefined;
   private tls: SecureConnection | undefined = undefined;
   private headBytes: Uint8Array = new Uint8Array(0);
@@ -136,6 +137,7 @@ export class NativeConnection {
 
   private disconnected(): void {
     const wasClosed = this.closed;
+    if (!this.failureReason && !this.completed) this.failureReason = '发送方已断开连接';
     if (!this.closed && !this.completed) this.sink?.abort().catch(() => {});
     this.closed = true;
     if (!wasClosed) this.onClosed();
@@ -144,6 +146,7 @@ export class NativeConnection {
 
   private fail(error: Error): void {
     if (this.closed) return;
+    this.failureReason = error.message;
     this.onError(error.message);
     this.sink?.abort().catch(() => {});
     if (this.responded) { this.close(); return; }
