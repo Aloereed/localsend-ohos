@@ -1,8 +1,10 @@
-# 当前交接 · M100
+# 当前交接 · M101
 
-最新包：[AloeSend-2000100-M100-rename-session-unsigned.hap](artifacts/AloeSend-2000100-M100-rename-session-unsigned.hap)。版本 2.0.100，包含 M1–M100 累计实现，无需逐个安装。源码提交 `977c8153e6a6ccfb6e48968718371bc0a200cdac`，分支 `arkui`。
+最新包：[AloeSend-2000101-M101-tls-response-close-unsigned.hap](artifacts/AloeSend-2000101-M101-tls-response-close-unsigned.hap)。版本 2.0.101，包含 M1–M101 累计实现，无需逐个安装。源码提交 `1ae7da0c0e05e5a787b03f66b260bb7e07f9c4e0`，分支 `arkui`。
 
-SHA-256：`8F0B2B42AD5AF0266E40C32E92103682C5EA82ADE61F1E36B18A5BBD0306B36F`。
+SHA-256：`E1337EA9089BC83A834F2C288F4632EC727968831B259E4A2E839FF7CC4E539B`。
+
+M101：定位 M100 的提前拒绝 HTTPS 重置，旧实现独立测试复现；关闭通知后有时限地排空在途密文，20 次 4 MiB 提前拒绝均收到完整 403。累计 51 个主机测试、编译及 101 个包校验通过。未访问设备，实机仍待验收。
 
 M100：改名弹层绑定接收会话，服务拒绝过期会话操作，原请求结束关闭弹层。服务复跑与编译通过，100 个包校验通过。首次服务测试在新增用例之前出现 HTTPS ECONNRESET，日志 test-rename-session-first.log；复跑未复现，错误响应/关闭顺序仍待定位。未访问设备。
 
