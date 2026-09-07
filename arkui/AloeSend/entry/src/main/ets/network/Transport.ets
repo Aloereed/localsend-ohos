@@ -21,6 +21,8 @@ export class HttpReply {
   fingerprint: string = '';
 }
 
+export class PeerIdentityError extends Error {}
+
 export type ChunkWriter = (bytes: Uint8Array) => Promise<void>;
 export type BodyProducer = (write: ChunkWriter) => Promise<void>;
 
@@ -109,7 +111,7 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
         let raw = cert.data;
         if (raw.length && raw[0] === 45) raw = new util.Base64Helper().decodeSync(decodeText(raw).replace(/-----[^-]+-----/g, '').replace(/\s/g, ''));
         fingerprint = await sha256(raw);
-        if (peer.fingerprint && fingerprint !== peer.fingerprint.toLowerCase().replace(/:/g, '')) throw new Error('设备证书指纹已改变，请确认设备身份后重新添加');
+        if (peer.fingerprint && fingerprint !== peer.fingerprint.toLowerCase().replace(/:/g, '')) throw new PeerIdentityError('设备证书指纹已改变，请确认设备身份后重新添加');
       }
       token.check();
       const write: ChunkWriter = async (bytes: Uint8Array): Promise<void> => {

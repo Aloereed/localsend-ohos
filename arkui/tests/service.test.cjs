@@ -186,6 +186,35 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         'sender cancellation must invalidate a retained failed session');
       assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data)).status, 403);
     });
+    await check('file retry waits for cleanup and cancellation cannot resurrect the failed session', async () => {
+      for (const cancelDuringCleanup of [false, true]) {
+        const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('cleanup-retry.bin', data))).json();
+        const route = `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`;
+        const disk = mocks['@kit.CoreFileKit'].fileIo, write = disk.write, close = disk.close;
+        let entered = false, release, fail = true;
+        const held = new Promise(resolve => { release = resolve; });
+        disk.write = async (fd, bytes) => { if (fail) { fail = false; throw new Error('simulated disk failure'); } return write(fd, bytes); };
+        disk.close = async file => { entered = true; await held; return close(file); };
+        const uploading = call(port, route, data); uploading.catch(() => {});
+        try {
+          await until(() => entered);
+          assert.equal((await call(port, route, data)).status, 400, 'same file stays locked while cleanup is pending');
+          if (cancelDuringCleanup) {
+            assert.equal((await call(port, `/api/localsend/v2/cancel?sessionId=${session.sessionId}`, '')).status, 200);
+          }
+          release(); await uploading.catch(error => { if (!cancelDuringCleanup) throw error; });
+          disk.write = write; disk.close = close;
+          if (cancelDuringCleanup) {
+            assert.equal((await call(port, route, data)).status, 403);
+            assert.equal(store.transfers.find(item => item.id === session.sessionId).status, 'cancelled');
+          } else {
+            assert.equal((await call(port, route, data)).status, 200);
+            assert.equal(store.transfers.find(item => item.id === session.sessionId).status, 'complete');
+          }
+        } finally { release(); disk.write = write; disk.close = close; await uploading.catch(() => {}); }
+        await until(() => handles.size === 0);
+      }
+    });
     await check('restart invalidates retained failed receive tokens', async () => {
       const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('restart-failed.bin', data, { hash: '0'.repeat(64) }))).json();
       const upload = `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`;
@@ -229,7 +258,7 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         client.destroy(); await until(() => cleanupStarted);
         const ended = store.transfers.find(item => item.id === session.sessionId);
         assert.equal(ended.status, 'error', 'terminal state is published before close finishes');
-        assert.ok(ended.finished); assert.equal(ended.files[1].status, 'error');
+        assert.ok(ended.finished); assert.equal(ended.files[1].status, 'waiting');
         assert.equal(store.activeTransfers, false);
         const next = await call(port, '/api/localsend/v2/prepare-upload', offer('immediate-retry.bin', data));
         assert.equal(next.status, 200, 'new receive does not wait for old cleanup');

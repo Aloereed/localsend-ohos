@@ -50,6 +50,18 @@ async function create(name, encrypted) {
         assert.deepEqual(await fs.readFile(item.path), bytes);
       }
       assert.equal(handles.size, 0);
+      const missing = path.join(work, 'restored-source-' + encrypted);
+      const retryFiles = files.map(file => Object.assign(new ShareFile(), file));
+      retryFiles[0].uri = missing;
+      const sourceFailure = await sender.service.send(peer, retryFiles);
+      assert.deepEqual(sender.store.transfers[0].files.map(file => file.status), ['error', 'complete']);
+      await fs.writeFile(missing, bytes);
+      await sender.service.retry(sourceFailure, 'first');
+      assert.equal(sender.store.transfers[0].id, sourceFailure);
+      assert.equal(sender.store.transfers[0].status, 'complete');
+      assert.equal(receiver.store.transfers[0].status, 'complete');
+      assert.equal(offers, 2, 'source read failure retains the second accepted session');
+      assert.equal(handles.size, 0);
       console.log(`PASS ${encrypted ? 'HTTPS' : 'HTTP'} native peers recover disk failure in original session with exact files and consent once`);
     } finally { disk.write = write; await sender.service.stop(); await receiver.service.stop(); }
   }

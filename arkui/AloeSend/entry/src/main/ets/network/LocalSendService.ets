@@ -6,7 +6,7 @@ import { AppStore, appStore, Peer, ShareFile, HistoryEntry, TransferView, Transf
 import { HttpHead, queryValue, safeRelativePath, uniqueName } from './Protocol';
 import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { TlsIdentity } from './TlsIdentity';
-import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter, HttpReply } from './Transport';
+import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter, HttpReply, PeerIdentityError } from './Transport';
 import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
 import { storageError } from '../platform/StorageError';
 import { batchReceiveNames, receiveName } from '../model/ReceiveNames';
@@ -52,6 +52,7 @@ class ReceiveSession {
   expired: boolean = false;
   lastActivity: number = Date.now();
   uploads: NativeConnection[] = [];
+  cleaning: Set<string> = new Set();
   stopNotification: Promise<void> = Promise.resolve();
 }
 
@@ -185,11 +186,19 @@ class UploadSink implements BodySink {
     // Release the session before asynchronous disk cleanup. A blocked write
     // must not keep the receive entry point busy or leave other files running.
     if (!this.session.cancelled) this.view.error = this.channel.failureReason || '文件接收中断';
-    const recoverable = this.channel.failureStatus === 500 && !this.session.cancelled;
+    const recoverable = (this.channel.failureStatus === 500 || this.channel.transportInterrupted) && !this.session.cancelled;
+    if (recoverable) {
+      this.session.cleaning.add(this.view.id); this.view.status = 'error';
+      if (!this.session.view.files.some((file: TransferFile) => file.status === 'transferring')) {
+        this.session.view.status = 'error'; this.session.view.error = this.view.error; this.session.view.finished = Date.now();
+      }
+      this.service.store.updateTransfer(this.session.view);
+    }
     if (!recoverable) this.service.failReceive(this.session, this.channel.failureReason || '文件接收中断', this.channel);
     await this.pendingWrite.catch(() => {});
     if (this.output) { await fs.close(this.output).catch(() => {}); this.output = undefined; }
     if (this.path) await fs.unlink(`${this.path}.part`).catch(() => {});
+    this.session.cleaning.delete(this.view.id);
     if (recoverable) await this.service.failReceiveFile(this.session, this.view, this.channel);
   }
 }
@@ -634,7 +643,7 @@ export class LocalSendService {
       await channel.respond(403); return new JsonSink(async () => {});
     }
     const info = session.files[fileId]; const view = session.view.files.find((file: TransferFile) => file.id === fileId);
-    if (!info || !view || !['waiting', 'error'].includes(view.status) || (!head.chunked && head.contentLength !== info.size)) {
+    if (!info || !view || session.cleaning.has(fileId) || !['waiting', 'error'].includes(view.status) || (!head.chunked && head.contentLength !== info.size)) {
       await channel.respond(400); return new JsonSink(async () => {});
     }
     const sink = new UploadSink(this, session, info, view, channel);
@@ -670,7 +679,7 @@ export class LocalSendService {
     if (session.cancelled) return;
     file.status = 'error'; file.path = '';
     session.lastActivity = Date.now();
-    if (!session.uploads.some((upload: NativeConnection) => upload !== channel && !upload.closed)) {
+    if (!session.view.files.some((item: TransferFile) => item.status === 'transferring')) {
       session.view.status = 'error'; session.view.error = file.error; session.view.finished = Date.now();
     }
     this.store.updateTransfer(session.view);
@@ -857,6 +866,7 @@ export class LocalSendService {
           view.status = 'transferring'; view.error = ''; view.transferred = 0; this.store.updateTransfer(transfer);
           await this.store.updateOutgoingHistory(transfer, files);
           cancellation.check();
+          try {
           let lastUpdate = 0;
           const uploadPath = legacy ? `/api/localsend/v1/send?fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}` :
             `/api/localsend/v2/upload?sessionId=${encodeURIComponent(prepared.sessionId)}&fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}`;
@@ -890,6 +900,13 @@ export class LocalSendService {
           }
           view.status = 'complete'; view.transferred = file.size; this.store.updateTransfer(transfer);
           await this.store.updateOutgoingHistory(transfer, files);
+          } catch (error) {
+            cancellation.check();
+            if (error instanceof PeerIdentityError || context.remoteExpired) throw error as Error;
+            view.status = 'error'; view.error = (error as Error).message;
+            this.store.updateTransfer(transfer);
+            await this.store.updateOutgoingHistory(transfer, files);
+          }
         }
       }
       cancellation.check();
