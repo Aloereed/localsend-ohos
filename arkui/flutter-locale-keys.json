@@ -96,5 +96,11 @@
   "按名称排序后编号": "dialogs.quickActions.sortBeforeCount",
   "等待确认": "messageTab.pendingIncoming",
   "传输完成": "messageTab.completed",
-  "使用本机自签名证书，浏览器会要求确认。": "webSharePage.encryptionHint"
+  "使用本机自签名证书，浏览器会要求确认。": "webSharePage.encryptionHint",
+  "尚未选择文件": "dialogs.noFiles.title",
+  "等待设备确认…": "web.waiting",
+  "PIN 不正确": "web.invalidPin",
+  "设备拒绝了接收": "web.rejected",
+  "发送完成": "messageTab.completed",
+  "正在发送": "messageTab.sending"
 }

@@ -314,7 +314,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "قم بالفرز أبجديًا مسبقًا",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "يستخدم تطبيق AloeSend شهادة موقع ذاتية التوقيع. يجب عليك قبولها في المتصفح."
+    "使用本机自签名证书，浏览器会要求确认。": "يستخدم تطبيق AloeSend شهادة موقع ذاتية التوقيع. يجب عليك قبولها في المتصفح.",
+    "尚未选择文件": "لم يتم اختيار اي ملف",
+    "等待设备确认…": "بإنتظار الرد…",
+    "PIN 不正确": "رمز PIN غير صالح",
+    "设备拒绝了接收": "مرفوضة",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "az": {
     "选择此文件夹": "Use This Folder",
@@ -414,7 +420,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sort alphabetically beforehand (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser.",
+    "尚未选择文件": "No files selected",
+    "等待设备确认…": "Waiting for response…",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Rejected",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "bg": {
     "选择此文件夹": "Use This Folder",
@@ -514,7 +526,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Сортирай по азбучен ред предварително (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend използва самоподписан сертификат. Трябва да го приемете във вашия браузър."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend използва самоподписан сертификат. Трябва да го приемете във вашия браузър.",
+    "尚未选择文件": "Няма избрани файлове",
+    "等待设备确认…": "В очакване на отговор…",
+    "PIN 不正确": "Невалиден ПИН код",
+    "设备拒绝了接收": "Отхвърлено",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "bn": {
     "选择此文件夹": "Use This Folder",
@@ -614,7 +632,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "আগে থেকে বর্ণানুক্রমিকভাবে সাজান",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend একটি সেল্ফ-সাইন্ড সার্টিফিকেট ব্যবহার করে। আপনাকে ব্রাউজারে এটি একসেপ্ট করতে হবে।"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend একটি সেল্ফ-সাইন্ড সার্টিফিকেট ব্যবহার করে। আপনাকে ব্রাউজারে এটি একসেপ্ট করতে হবে।",
+    "尚未选择文件": "কোনো ফাইল সিলেক্ট করা হয়নি",
+    "等待设备确认…": "রেস্পন্সের অপেক্ষায় ...",
+    "PIN 不正确": "পিনটি সঠিক নয়",
+    "设备拒绝了接收": "রিজেক্টেড",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ca": {
     "选择此文件夹": "Use This Folder",
@@ -714,7 +738,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Ordenar prèviament alfabèticament",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilitza un certificat auto-signat. Cal que l'accepteu al navegador."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilitza un certificat auto-signat. Cal que l'accepteu al navegador.",
+    "尚未选择文件": "Fitxer no seleccionat",
+    "等待设备确认…": "Esperant una resposta...",
+    "PIN 不正确": "PIN invàlid",
+    "设备拒绝了接收": "Rebutjat",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "cs": {
     "选择此文件夹": "Use This Folder",
@@ -814,7 +844,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Nejprve seřadit abecedně",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči.",
+    "尚未选择文件": "Žádný soubor nevybrán",
+    "等待设备确认…": "Čekání na odpověď...",
+    "PIN 不正确": "Neplatný PIN",
+    "设备拒绝了接收": "Odmítnuto",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "da": {
     "选择此文件夹": "Use This Folder",
@@ -914,7 +950,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sorter alfabetisk på forhånd",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend benytter et selvsigneret certifikat. Det skal accepteres i browseren."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend benytter et selvsigneret certifikat. Det skal accepteres i browseren.",
+    "尚未选择文件": "Ingen fil valgt",
+    "等待设备确认…": "Venter på svar...",
+    "PIN 不正确": "Ugyldig PIN-kode",
+    "设备拒绝了接收": "Afvist",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "de": {
     "选择此文件夹": "Use This Folder",
@@ -1014,7 +1056,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Vorher alphabetisch sortieren",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend verwendet ein selbstsigniertes Zertifikat. Du musst es im Browser akzeptieren."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend verwendet ein selbstsigniertes Zertifikat. Du musst es im Browser akzeptieren.",
+    "尚未选择文件": "Keine Datei ausgewählt",
+    "等待设备确认…": "Warte auf Antwort…",
+    "PIN 不正确": "Ungültige PIN",
+    "设备拒绝了接收": "Abgelehnt",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "el": {
     "选择此文件夹": "Use This Folder",
@@ -1114,7 +1162,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Ταξινόμηση αλφαβητικά εκ των προτέρων",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "Το AloeSend χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή."
+    "使用本机自签名证书，浏览器会要求确认。": "Το AloeSend χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή.",
+    "尚未选择文件": "Κανένα αρχείο δεν επιλέχθηκε",
+    "等待设备确认…": "Αναμονή για απάντηση…",
+    "PIN 不正确": "Μη έγκυρο PIN",
+    "设备拒绝了接收": "Απορρίφθηκε",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "en": {
     "选择此文件夹": "Use This Folder",
@@ -1214,7 +1268,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sort alphabetically beforehand (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser.",
+    "尚未选择文件": "No files selected",
+    "等待设备确认…": "Waiting for response…",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Rejected",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "en-IN": {
     "选择此文件夹": "Use This Folder",
@@ -1314,7 +1374,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sort alphabetically beforehand",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser.",
+    "尚未选择文件": "No file selected",
+    "等待设备确认…": "Waiting for response…",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Rejected",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "es-ES": {
     "选择此文件夹": "Use This Folder",
@@ -1414,7 +1480,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Ordenar alfabéticamente antes",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador.",
+    "尚未选择文件": "Ningún archivo seleccionado",
+    "等待设备确认…": "Esperando respuesta…",
+    "PIN 不正确": "PIN Inválido",
+    "设备拒绝了接收": "Rechazado",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "et": {
     "选择此文件夹": "Use This Folder",
@@ -1514,7 +1586,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Enne loendamist järjesta tähestiku järjekorras (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend kasutab enda poolt allkirjastatud sertifikaate. Ühenduse toimimiseks palun nõustu nendega veebibrauseris."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend kasutab enda poolt allkirjastatud sertifikaate. Ühenduse toimimiseks palun nõustu nendega veebibrauseris.",
+    "尚未选择文件": "Ühtegi faili pole valitud",
+    "等待设备确认…": "Ootame vastust…",
+    "PIN 不正确": "Vigane PIN-kood",
+    "设备拒绝了接收": "Keelatud",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "eu": {
     "选择此文件夹": "Use This Folder",
@@ -1614,7 +1692,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Aldez aurretik alfabetikoki ordenatu",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu",
+    "尚未选择文件": "Ez da fitxategirik aukeratu",
+    "等待设备确认…": "Erantzunaren zai...",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Bertan behera utzita",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "fa": {
     "选择此文件夹": "Use This Folder",
@@ -1714,7 +1798,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "از قبل بر اساس حروف الفبا مرتب کنید",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "لوکال‌سند از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید."
+    "使用本机自签名证书，浏览器会要求确认。": "لوکال‌سند از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید.",
+    "尚未选择文件": "فایلی انتخاب نشده",
+    "等待设备确认…": "در انتظار پاسخ...",
+    "PIN 不正确": "پین اشتباه است",
+    "设备拒绝了接收": "پذیرفته نشد",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "fi": {
     "选择此文件夹": "Use This Folder",
@@ -1814,7 +1904,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Lajittele aakkosjärjestykseen ennen laskentaa",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi.",
+    "尚未选择文件": "Ei tiedostoa valittuna",
+    "等待设备确认…": "Odotetaan vastausta...",
+    "PIN 不正确": "Virheellinen PIN-koodi",
+    "设备拒绝了接收": "Hylätty",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "fil-PH": {
     "选择此文件夹": "Use This Folder",
@@ -1914,7 +2010,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Pagsunud-sunurin ayon sa alpabeto",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "Ang AloeSend ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser."
+    "使用本机自签名证书，浏览器会要求确认。": "Ang AloeSend ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser.",
+    "尚未选择文件": "Walang file na pinli",
+    "等待设备确认…": "Naghihintay ng response...",
+    "PIN 不正确": "Ang PIN ay invalid",
+    "设备拒绝了接收": "Hindi Tinanggap",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "fr": {
     "选择此文件夹": "Use This Folder",
@@ -2014,7 +2116,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Trier préalablement par ordre alphabétique",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilise un certificat auto-signé. Vous devez l'accepter dans le navigateur."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilise un certificat auto-signé. Vous devez l'accepter dans le navigateur.",
+    "尚未选择文件": "Aucun fichier sélectionné",
+    "等待设备确认…": "En attente d'une réponse …",
+    "PIN 不正确": "Code PIN invalide",
+    "设备拒绝了接收": "Rejeté",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "gl": {
     "选择此文件夹": "Use This Folder",
@@ -2114,7 +2222,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sort alphabetically beforehand (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser.",
+    "尚未选择文件": "No files selected",
+    "等待设备确认…": "Waiting for response…",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Rejected",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "gu": {
     "选择此文件夹": "Use This Folder",
@@ -2214,7 +2328,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "ગણતરી પહેલાં આલ્ફાબેટિક ક્રમમાં ગોઠવો",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "લોકલસેન્ડ એ સ્વ-સાઇન્ડ સર્ટિફિકેટનો ઉપયોગ કરે છે. તમારે તેને તમારા બ્રાઉઝરમાં સ્વીકારવું પડશે."
+    "使用本机自签名证书，浏览器会要求确认。": "લોકલસેન્ડ એ સ્વ-સાઇન્ડ સર્ટિફિકેટનો ઉપયોગ કરે છે. તમારે તેને તમારા બ્રાઉઝરમાં સ્વીકારવું પડશે.",
+    "尚未选择文件": "કોઈ ફાઇલ પસંદ કરેલી નથી",
+    "等待设备确认…": "પ્રતિસાદની રાહ જોવામાં આવી રહી છે...",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "નકારી કાઢ્યું",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "he": {
     "选择此文件夹": "Use This Folder",
@@ -2314,7 +2434,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "מיין תחילה בסדר אלפביתי",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן.",
+    "尚未选择文件": "לא נבחר אף קובץ",
+    "等待设备确认…": "ממתין לתגובה…",
+    "PIN 不正确": "סיסמה לא חוקית",
+    "设备拒绝了接收": "נדחה",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "hi": {
     "选择此文件夹": "Use This Folder",
@@ -2414,7 +2540,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "पहले वर्णानुक्रम में क्रमबद्ध करें",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्व-हस्ताक्षरित प्रमाणपत्र का उपयोग करता है। आपको इसे अपने ब्राउज़र में स्वीकार करना होगा।"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्व-हस्ताक्षरित प्रमाणपत्र का उपयोग करता है। आपको इसे अपने ब्राउज़र में स्वीकार करना होगा।",
+    "尚未选择文件": "कोई फ़ाइल चयनित नहीं",
+    "等待设备确认…": "प्रतिक्रिया का इंतजार कर रहे हैं...",
+    "PIN 不正确": "अमान्य PIN",
+    "设备拒绝了接收": "अस्वीकृत",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "hu": {
     "选择此文件夹": "Use This Folder",
@@ -2514,7 +2646,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Előzetesen rendezze ábécé sorrendbe",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "A AloeSend a saját aláírt tanúsítványt használja. A böngészőben kell elfogadnod."
+    "使用本机自签名证书，浏览器会要求确认。": "A AloeSend a saját aláírt tanúsítványt használja. A böngészőben kell elfogadnod.",
+    "尚未选择文件": "Nincs fájl kiválasztva",
+    "等待设备确认…": "Válaszra várva…",
+    "PIN 不正确": "Érvénytelen a PIN",
+    "设备拒绝了接收": "Elutasítva",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "id": {
     "选择此文件夹": "Use This Folder",
@@ -2614,7 +2752,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Urutkan berdasarkan abjad sebelumnya",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban.",
+    "尚未选择文件": "Tidak ada berkas yang dipilih",
+    "等待设备确认…": "Menunggu tanggapan…",
+    "PIN 不正确": "PIN Salah",
+    "设备拒绝了接收": "Ditolak",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "it": {
     "选择此文件夹": "Use This Folder",
@@ -2714,7 +2858,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Preordina alfabeticamente (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilizza un certificato autofirmato. Devi accettarlo nel browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilizza un certificato autofirmato. Devi accettarlo nel browser.",
+    "尚未选择文件": "Nessun file selezionato",
+    "等待设备确认…": "In attesa di risposta…",
+    "PIN 不正确": "PIN non valido",
+    "设备拒绝了接收": "Rifiutato",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ja": {
     "选择此文件夹": "Use This Folder",
@@ -2814,7 +2964,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "事前にアルファベット順で並べる",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSendは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSendは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。",
+    "尚未选择文件": "ファイルが選択されていません",
+    "等待设备确认…": "返答を待っています...",
+    "PIN 不正确": "PINコードが無効です",
+    "设备拒绝了接收": "拒否済み",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "km": {
     "选择此文件夹": "Use This Folder",
@@ -2914,7 +3070,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "តម្រៀបតាមអក្ខរក្រមជាមុន",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend ប្រើវិញ្ញាបនបត្រដែលចុះហត្ថលេខាដោយខ្លួនឯង។ អ្នកត្រូវទទួលយកវានៅក្នុងកម្មវិធី​ browser ។"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend ប្រើវិញ្ញាបនបត្រដែលចុះហត្ថលេខាដោយខ្លួនឯង។ អ្នកត្រូវទទួលយកវានៅក្នុងកម្មវិធី​ browser ។",
+    "尚未选择文件": "គ្មានឯកសារត្រូវបានជ្រើសរើសទេ។",
+    "等待设备确认…": "កំពុងរង់ចាំការឆ្លើយតប...",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "បានបដិសេធ",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ko": {
     "选择此文件夹": "Use This Folder",
@@ -3014,7 +3176,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "미리 알파벳순으로 정렬",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend는 자체 서명된 인증서를 사용합니다. 브라우저에서 이를 허용해야 합니다."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend는 자체 서명된 인증서를 사용합니다. 브라우저에서 이를 허용해야 합니다.",
+    "尚未选择文件": "선택된 파일 없음",
+    "等待设备确认…": "응답 대기 중…",
+    "PIN 不正确": "PIN 번호가 올바르지 않습니다",
+    "设备拒绝了接收": "거부됨",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ml": {
     "选择此文件夹": "Use This Folder",
@@ -3114,7 +3282,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sort alphabetically beforehand (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser.",
+    "尚未选择文件": "No files selected",
+    "等待设备确认…": "Waiting for response…",
+    "PIN 不正确": "PIN തെറ്റാണു",
+    "设备拒绝了接收": "തള്ളിക്കളയപെട്ടു",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "mn": {
     "选择此文件夹": "Use This Folder",
@@ -3214,7 +3388,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sort alphabetically beforehand (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend нь өөрийн гарын үсэг ашигладаг тул үүнийг browser дээрээ хүлээн зөвшөөрнө үү."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend нь өөрийн гарын үсэг ашигладаг тул үүнийг browser дээрээ хүлээн зөвшөөрнө үү.",
+    "尚未选择文件": "No files selected",
+    "等待设备确认…": "Хариу хүлээж байна…",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Rejected",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ms": {
     "选择此文件夹": "Use This Folder",
@@ -3314,7 +3494,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Susun mengikut abjad terlebih dahulu",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser.",
+    "尚未选择文件": "Tiada fail dipilih",
+    "等待设备确认…": "Menunggu respons...",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Ditolak",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ne": {
     "选择此文件夹": "Use This Folder",
@@ -3414,7 +3600,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "पहिले वर्णमाला क्रमबद्ध गर्नुहोस्",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।",
+    "尚未选择文件": "कुनै फाइल चयन गरिएको छैन",
+    "等待设备确认…": "प्रतिक्रियाको प्रतीक्षा गर्दै…",
+    "PIN 不正确": "अमान्य पिन",
+    "设备拒绝了接收": "अस्वीकृत",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "nl": {
     "选择此文件夹": "Use This Folder",
@@ -3514,7 +3706,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Vooraf alfabetisch sorteren (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend maakt gebruik van een zelfondertekend certificaat. Je moet dit accepteren in je browser."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend maakt gebruik van een zelfondertekend certificaat. Je moet dit accepteren in je browser.",
+    "尚未选择文件": "Geen bestanden geselecteerd",
+    "等待设备确认…": "Wachten op antwoord…",
+    "PIN 不正确": "Ongeldige code",
+    "设备拒绝了接收": "Geweigerd",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "pl": {
     "选择此文件夹": "Use This Folder",
@@ -3614,7 +3812,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Wcześniej posortuj alfabetycznie",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend używa samopodpisanego certyfikatu. Musisz go zaakceptować w przeglądarce."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend używa samopodpisanego certyfikatu. Musisz go zaakceptować w przeglądarce.",
+    "尚未选择文件": "Nie wybrano pliku",
+    "等待设备确认…": "Czekanie na odpowiedź…",
+    "PIN 不正确": "Nieprawidłowy kod PIN",
+    "设备拒绝了接收": "Odrzucone",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "pt-BR": {
     "选择此文件夹": "Use This Folder",
@@ -3714,7 +3918,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Ordenar alfabeticamente antes",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza um certificado autoassinado. Você precisa aceitá-lo no navegador."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza um certificado autoassinado. Você precisa aceitá-lo no navegador.",
+    "尚未选择文件": "Nenhum arquivo selecionado",
+    "等待设备确认…": "Aguardando resposta…",
+    "PIN 不正确": "PIN inválido",
+    "设备拒绝了接收": "Conexão Rejeitada",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "pt-PT": {
     "选择此文件夹": "Use This Folder",
@@ -3814,7 +4024,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Ordenar previamente por ordem alfabética",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "O AloeSend utiliza um certificado assinado automaticamente. Precisa de aceitá-lo no navegador."
+    "使用本机自签名证书，浏览器会要求确认。": "O AloeSend utiliza um certificado assinado automaticamente. Precisa de aceitá-lo no navegador.",
+    "尚未选择文件": "Nenhum ficheiro selecionado",
+    "等待设备确认…": "Aguardar resposta...",
+    "PIN 不正确": "Invalid PIN",
+    "设备拒绝了接收": "Ligação rejeitada",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ro": {
     "选择此文件夹": "Use This Folder",
@@ -3914,7 +4130,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sortează alfabetic înainte",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend folosește un certificat auto-semnat. Trebuie să-l accepți în browserul tău."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend folosește un certificat auto-semnat. Trebuie să-l accepți în browserul tău.",
+    "尚未选择文件": "Niciun fișier selectat",
+    "等待设备确认…": "Așteptare răspuns…",
+    "PIN 不正确": "Codul PIN introdus este greșit",
+    "设备拒绝了接收": "Respins",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ru": {
     "选择此文件夹": "Use This Folder",
@@ -4014,7 +4236,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Отсортировать по алфавиту (А-Я)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend использует самоподписанный сертификат. Вам необходимо принять его в браузере."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend использует самоподписанный сертификат. Вам необходимо принять его в браузере.",
+    "尚未选择文件": "Не выбрано ни одного файла",
+    "等待设备确认…": "Ожидание ответа…",
+    "PIN 不正确": "Неверный PIN-код",
+    "设备拒绝了接收": "Отклонено",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "si": {
     "选择此文件夹": "Use This Folder",
@@ -4114,7 +4342,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "අකාරාදී පිළිවෙලට සකසන්න (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend self-signed certificate එකක් භාවිතා කරයි. ඔබ විසින් එය බ්‍රවුසරය (browser) තුළ දි පිළිගැනීම (accept) අවශ්‍ය වේ."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend self-signed certificate එකක් භාවිතා කරයි. ඔබ විසින් එය බ්‍රවුසරය (browser) තුළ දි පිළිගැනීම (accept) අවශ්‍ය වේ.",
+    "尚未选择文件": "කිසිදු ගොනුවක් තෝරා නැත",
+    "等待设备确认…": "ප්‍රතිචාරයක් බලාපොරොත්තු වෙමින්…",
+    "PIN 不正确": "වැරදි PIN",
+    "设备拒绝了接收": "ප්‍රතික්ෂේප කරන ලදී",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "sk": {
     "选择此文件夹": "Use This Folder",
@@ -4214,7 +4448,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Vopred zoradiť podľa abecedy (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend používa certifikát s vlastným podpisom. Musíte ho prijať vo svojom prehliadači."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend používa certifikát s vlastným podpisom. Musíte ho prijať vo svojom prehliadači.",
+    "尚未选择文件": "Nie sú vybraté žiadne súbory",
+    "等待设备确认…": "Čaká sa na odpoveď…",
+    "PIN 不正确": "Neplatný PIN kód",
+    "设备拒绝了接收": "Odmietnuté",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "sl": {
     "选择此文件夹": "Use This Folder",
@@ -4314,7 +4554,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Predhodno uredi po abecedi (A-Ž)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uporablja samopodpisano potrdilo. Sprejeti ga morate v svojem brskalniku."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend uporablja samopodpisano potrdilo. Sprejeti ga morate v svojem brskalniku.",
+    "尚未选择文件": "Ni izbranih datotek",
+    "等待设备确认…": "Čakanje na odgovor...",
+    "PIN 不正确": "Neveljaven PIN",
+    "设备拒绝了接收": "Zavrnjeno",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "sr": {
     "选择此文件夹": "Use This Folder",
@@ -4414,7 +4660,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sortiraj unapred po abecedi (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend koristi samopotpisani sertifikat. Morate ga prihvatiti u svom pregledaču."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend koristi samopotpisani sertifikat. Morate ga prihvatiti u svom pregledaču.",
+    "尚未选择文件": "Nije izabran nijedan fajl",
+    "等待设备确认…": "Čekanje odgovora…",
+    "PIN 不正确": "Neispravan PIN",
+    "设备拒绝了接收": "Odbijeno",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "sr-Cyrl": {
     "选择此文件夹": "Use This Folder",
@@ -4514,7 +4766,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Сортирај унапред по абецеди (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend користи самопотписани сертификат. Морате га прихватити у свом прегледачу."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend користи самопотписани сертификат. Морате га прихватити у свом прегледачу.",
+    "尚未选择文件": "Није изабран ниједан фајл",
+    "等待设备确认…": "Чекање одговора…",
+    "PIN 不正确": "Неисправан PIN",
+    "设备拒绝了接收": "Одбијено",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "sv": {
     "选择此文件夹": "Use This Folder",
@@ -4614,7 +4872,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sortera alphabetiskt innan",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren.",
+    "尚未选择文件": "Ingen fil vald",
+    "等待设备确认…": "Väntar på svar…",
+    "PIN 不正确": "Ogiltig PIN-kod",
+    "设备拒绝了接收": "Avvisad",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ta": {
     "选择此文件夹": "Use This Folder",
@@ -4714,7 +4978,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "முன்னதாக வரிசைப்படுத்தவும் (A-Z)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend ஒரு சுய கையொப்பம் செய்யப்பட்ட சான்றிதழைப் பயன்படுத்துகிறது. உங்களின் உலாவியில் அதை ஏற்க வேண்டும்."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend ஒரு சுய கையொப்பம் செய்யப்பட்ட சான்றிதழைப் பயன்படுத்துகிறது. உங்களின் உலாவியில் அதை ஏற்க வேண்டும்.",
+    "尚未选择文件": "கோப்புகள் தேர்ந்தெடுக்கப்படவில்லை",
+    "等待设备确认…": "@: sendPage.wainging",
+    "PIN 不正确": "தவறான PIN",
+    "设备拒绝了接收": "நிராகரிக்கப்பட்டது",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "th": {
     "选择此文件夹": "Use This Folder",
@@ -4814,7 +5084,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "เรียงตามตัวอักษรไว้ก่อนหน้า",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend ใช้ใบรับรองอุปกรณ์จากเว็บเบราเซอร์ (self-signed certificate) คุณต้องกดยอมรับใบรับรองนี้ในเบราว์เซอร์บนอุปกรณ์ของคุณ"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend ใช้ใบรับรองอุปกรณ์จากเว็บเบราเซอร์ (self-signed certificate) คุณต้องกดยอมรับใบรับรองนี้ในเบราว์เซอร์บนอุปกรณ์ของคุณ",
+    "尚未选择文件": "ไม่ได้เลือกไฟล์",
+    "等待设备确认…": "กำลังรอการตอบกลับ...",
+    "PIN 不正确": "รหัส PIN ไม่ถูกต้อง",
+    "设备拒绝了接收": "ถูกปฏิเสธ",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "tr": {
     "选择此文件夹": "Use This Folder",
@@ -4914,7 +5190,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Önceden alfabetik olarak sırala",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır.",
+    "尚未选择文件": "Herhangi bir dosya seçilmedi",
+    "等待设备确认…": "Alıcıdan cevap bekleniyor…",
+    "PIN 不正确": "Geçersiz PIN",
+    "设备拒绝了接收": "Reddedildi",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "uk": {
     "选择此文件夹": "Use This Folder",
@@ -5014,7 +5296,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Відсортувати за алфавітом (А-Я)",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері.",
+    "尚未选择文件": "Не вибрано жодного файлу",
+    "等待设备确认…": "Очікування відповіді…",
+    "PIN 不正确": "Неправильний PIN-код",
+    "设备拒绝了接收": "Відхилено",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "ur": {
     "选择此文件夹": "Use This Folder",
@@ -5114,7 +5402,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "پہلے سے حروف تہجی کے مطابق ترتیب دیں۔",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔",
+    "尚未选择文件": "کوئی فائل منتخب نہیں کی گئی",
+    "等待设备确认…": "جواب کا منتظر...",
+    "PIN 不正确": "غلط PIN",
+    "设备拒绝了接收": "منسوخ کردیا",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "vi": {
     "选择此文件夹": "Use This Folder",
@@ -5214,7 +5508,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "Sắp xếp theo bảng chữ cái",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend dùng chứng chỉ tự tạo. Bạn cần chấp thuận trong trình duyệt."
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend dùng chứng chỉ tự tạo. Bạn cần chấp thuận trong trình duyệt.",
+    "尚未选择文件": "Không có tập tin nào được chọn",
+    "等待设备确认…": "Đang chờ phản hồi...",
+    "PIN 不正确": "Sai mã PIN",
+    "设备拒绝了接收": "Đã từ chối",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "zh": {
     "选择此文件夹": "使用此文件夹",
@@ -5314,7 +5614,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "事先以字母顺序排序",
     "等待确认": "等待响应",
     "传输完成": "已完成",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend 使用自签名证书。您需要在浏览器中允许它。"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend 使用自签名证书。您需要在浏览器中允许它。",
+    "尚未选择文件": "未选择文件",
+    "等待设备确认…": "等待响应中……",
+    "PIN 不正确": "PIN 无效",
+    "设备拒绝了接收": "已拒绝",
+    "发送完成": "已完成",
+    "正在发送": "发送中"
   },
   "zh-HK": {
     "选择此文件夹": "Use This Folder",
@@ -5414,7 +5720,13 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "事前跟字母排序",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。",
+    "尚未选择文件": "冇揀選檔案",
+    "等待设备确认…": "等緊回應……",
+    "PIN 不正确": "密碼無效。",
+    "设备拒绝了接收": "已遭對方拒絕",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   },
   "zh-TW": {
     "选择此文件夹": "Use This Folder",
@@ -5514,6 +5826,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "按名称排序后编号": "事先依字母排序",
     "等待确认": "Awaiting response",
     "传输完成": "Completed",
-    "使用本机自签名证书，浏览器会要求确认。": "AloeSend 使用自簽署憑證。您需要在瀏覽器中接受它。"
+    "使用本机自签名证书，浏览器会要求确认。": "AloeSend 使用自簽署憑證。您需要在瀏覽器中接受它。",
+    "尚未选择文件": "未選取檔案",
+    "等待设备确认…": "正在等候回應…",
+    "PIN 不正确": "PIN 碼無效",
+    "设备拒绝了接收": "遭到拒絕",
+    "发送完成": "Completed",
+    "正在发送": "Sending"
   }
 };
