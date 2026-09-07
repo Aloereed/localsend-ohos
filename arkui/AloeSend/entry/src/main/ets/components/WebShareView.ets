@@ -52,7 +52,7 @@ export struct WebShareView {
           Text(this.store.tf('将分享当前清单中的 {0} 项内容', [String(this.store.files.length)])).fontSize(14).fontColor(this.store.accentText)
           Row() {
             Text(this.store.t('HTTPS 加密')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-            Toggle({ type: ToggleType.Switch, isOn: this.encrypted }).selectedColor(this.store.settings.accent).onChange((value: boolean) => this.encrypted = value)
+            Toggle({ type: ToggleType.Switch, isOn: this.encrypted }).selectedColor(this.store.accentFill).onChange((value: boolean) => this.encrypted = value)
           }.width('100%')
           Text(this.encrypted ? this.store.t('使用本机自签名证书，浏览器会要求确认。') : this.store.t('HTTP 浏览器模式不加密，仅在可信网络中使用。LocalSend 设备之间的加密传输不受影响。'))
             .fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary'))
@@ -74,7 +74,7 @@ export struct WebShareView {
           }.width('100%')
           Row() {
             Text(this.store.t('自动允许浏览器下载')).layoutWeight(1).fontSize(14).fontColor($r('sys.color.font_primary'))
-            Toggle({ type: ToggleType.Switch, isOn: this.store.settings.webAutoAccept }).selectedColor(this.store.settings.accent)
+            Toggle({ type: ToggleType.Switch, isOn: this.store.settings.webAutoAccept }).selectedColor(this.store.accentFill)
               .onChange((value: boolean) => { this.store.settings.webAutoAccept = value; this.store.save(); })
           }.width('100%')
           Button(this.store.t('停止分享')).width('100%').height(46).backgroundColor(this.store.controlSurface).fontColor(this.store.dangerText)

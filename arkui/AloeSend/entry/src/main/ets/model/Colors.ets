@@ -27,3 +27,10 @@ export function readableColor(accent: string, background: string): string {
   }
   return target === 255 ? '#FFFFFF' : '#000000';
 }
+
+export function presetAccent(preset: string, custom: string, system: string): string {
+  if (preset === 'system') return /^#[0-9a-f]{6}$/i.test(system) ? system : '#3478F6';
+  if (preset === 'localsend' || preset === 'oled') return '#34C759';
+  if (preset === 'yaru') return '#E95420';
+  return /^#[0-9a-f]{6}$/i.test(custom) ? custom : '#168A75';
+}

@@ -280,7 +280,7 @@ export struct MessagesView {
         }
       }.padding(18).layoutWeight(1).borderRadius(22)
         .backgroundColor(entry.direction === 'send' ? this.store.controlSurface : this.store.surfaceColor)
-        .border({ width: entry.direction === 'send' ? 1 : 0, color: this.store.settings.accent })
+        .border({ width: entry.direction === 'send' ? 1 : 0, color: this.store.accentText })
       if (entry.direction !== 'send') { Blank().width(32) }
     }.width('100%')
   }

@@ -162,7 +162,7 @@ struct Index {
       }.width(208).height(208).borderRadius(104).clip(true).margin({ top: 4, bottom: 6 })
       Text(this.store.settings.alias).fontSize(28).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
       Row({ space: 7 }) {
-        Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.settings.accent : '#B88632')
+        Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.accentText : '#B88632')
         Text(this.store.settings.visible ? this.store.t(this.store.serverStatus) : this.store.t('当前已隐藏，可通过地址连接')).fontSize(13).fontColor($r('sys.color.font_secondary'))
       }.padding({ left: 14, right: 14, top: 8, bottom: 8 }).backgroundColor(this.store.glassColor).borderRadius(20)
       ForEach(this.store.localIps, (ip: string) => {

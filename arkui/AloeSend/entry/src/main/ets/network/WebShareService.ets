@@ -110,7 +110,7 @@ export class WebShareService {
       if (head.method !== 'GET') { await channel.respond(405); return; }
       if (!relative.split('?')[0]) {
         const language = queryValue(head.target, 'lang') || this.store.settings.language;
-        await channel.respond(200, webPage(this.store.settings.alias, this.files, language, this.store.settings.accent), 'text/html; charset=utf-8'); return;
+        await channel.respond(200, webPage(this.store.settings.alias, this.files, language, this.store.accent), 'text/html; charset=utf-8'); return;
       }
       if (relative === 'logo.png' && this.store.context) {
         const bytes = await this.store.context.resourceManager.getRawFileContent('logo.png');

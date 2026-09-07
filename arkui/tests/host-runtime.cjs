@@ -150,7 +150,7 @@ function load(relative) {
   const output = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2021, module: ts.ModuleKind.CommonJS, experimentalDecorators: true } }).outputText;
   const exports = {}; caches.set(file, exports);
   const localRequire = name => name.startsWith('.') ? load(path.resolve(path.dirname(file), name)) : mocks[name] || require(name);
-  vm.runInNewContext(output, { exports, require: localRequire, Observed: value => value, canIUse: name => name === 'SystemCapability.FileManagement.UserFileService.FolderSelection' ? capabilities.folderSelection : true, Uint8Array, ArrayBuffer, Date, Error, Promise, Map, Set, Number, Object, JSON, String, Math, RegExp, parseInt, encodeURIComponent, decodeURIComponent, ...timers, console }, { filename: file });
+  vm.runInNewContext(output, { exports, require: localRequire, $r: name => ({ params: [name] }), Observed: value => value, canIUse: name => name === 'SystemCapability.FileManagement.UserFileService.FolderSelection' ? capabilities.folderSelection : true, Uint8Array, ArrayBuffer, Date, Error, Promise, Map, Set, Number, Object, JSON, String, Math, RegExp, parseInt, encodeURIComponent, decodeURIComponent, ...timers, console }, { filename: file });
   return exports;
 }
 module.exports = { load, handles, mocks, timers, capabilities };

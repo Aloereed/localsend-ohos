@@ -48,7 +48,7 @@ export struct SettingsView {
     if (key === 'gallery') return settings.offerGallerySave;
     if (key === 'animation') return settings.animations;
     if (key === 'effects') return settings.reduceEffects;
-    if (key === 'black') return settings.pureBlack;
+    if (key === 'black') return settings.pureBlack || settings.themePreset === 'oled';
     if (key === 'visible') return settings.visible;
     if (key === 'advanced') return settings.advanced;
     return settings.https;
@@ -61,7 +61,8 @@ export struct SettingsView {
         Text(this.store.t(title)).fontSize(16).fontColor($r('sys.color.font_primary'))
         Text(this.store.t(detail)).fontSize(12).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-      Toggle({ type: ToggleType.Switch, isOn: this.toggleValue(key) }).selectedColor(this.store.settings.accent)
+      Toggle({ type: ToggleType.Switch, isOn: this.toggleValue(key) }).selectedColor(this.store.accentFill)
+        .enabled(key !== 'black' || this.store.settings.themePreset !== 'oled')
         .onChange((value: boolean) => {
           if (value === this.toggleValue(key)) return;
           if (key === 'quickSave') this.store.settings.quickSave = value;
@@ -136,14 +137,20 @@ export struct SettingsView {
             })
         }.padding(18).width('100%')
         Column({ space: 10 }) {
-          Text(this.store.t('主题颜色')).width('100%').fontColor($r('sys.color.font_primary'))
+          Text(this.store.t('主题预设')).width('100%').fontColor($r('sys.color.font_primary'))
+          Select([{ value: this.store.t('系统配色') }, { value: 'AloeSend' }, { value: 'OLED' }, { value: 'Yaru' }, { value: this.store.t('自定义颜色') }])
+            .selected(['system', 'localsend', 'oled', 'yaru', 'custom'].indexOf(this.store.settings.themePreset))
+            .value(this.store.t(this.store.settings.themePreset === 'system' ? '系统配色' : this.store.settings.themePreset === 'localsend' ? 'AloeSend' :
+              this.store.settings.themePreset === 'oled' ? 'OLED' : this.store.settings.themePreset === 'yaru' ? 'Yaru' : '自定义颜色'))
+            .onSelect((index: number) => { this.store.settings.themePreset = ['system', 'localsend', 'oled', 'yaru', 'custom'][index]; this.store.save(); })
+          Text(this.store.t('主题颜色')).width('100%').fontColor($r('sys.color.font_secondary')).fontSize(13)
           Flex({ wrap: FlexWrap.Wrap, space: { main: LengthMetrics.vp(8), cross: LengthMetrics.vp(6) } }) {
             ForEach(['#168A75', '#2473E8', '#7454C9', '#BB5C36', '#BD4F78'], (color: string) => {
               Button() {
                 Circle().width(28).height(28).fill(color)
-                  .stroke(this.store.settings.accent === color ? $r('sys.color.font_primary') : Color.Transparent).strokeWidth(2)
+                  .stroke(this.store.settings.themePreset === 'custom' && this.store.settings.accent === color ? $r('sys.color.font_primary') : Color.Transparent).strokeWidth(2)
               }.width(44).height(44).backgroundColor(Color.Transparent)
-                .onClick(() => { this.store.settings.accent = color; this.store.save(); }).accessibilityText(this.store.tf('主题色 {0}', [color]))
+                .onClick(() => { this.store.settings.themePreset = 'custom'; this.store.settings.accent = color; this.store.save(); }).accessibilityText(this.store.tf('主题色 {0}', [color]))
             })
           }.width('100%')
         }.padding(18).width('100%')

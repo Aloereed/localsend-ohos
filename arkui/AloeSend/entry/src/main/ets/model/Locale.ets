@@ -1,6 +1,9 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "主题预设": "Theme preset",
+  "系统配色": "System colors",
+  "自定义颜色": "Custom color",
   "再次发送可用文件": "Resend available files",
   "删除这一批记录": "Delete this batch of records",
   "删除这一批记录？": "Delete this batch of records?",

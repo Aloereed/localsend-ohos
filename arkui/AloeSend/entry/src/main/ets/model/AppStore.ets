@@ -6,7 +6,7 @@ import { pasteboard, deviceInfo, BusinessError } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText } from './Locale';
-import { readableColor } from './Colors';
+import { readableColor, presetAccent } from './Colors';
 import { LocalInterface } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
@@ -120,6 +120,7 @@ export class AppSettings {
   theme: string = 'system';
   language: string = 'zh';
   accent: string = '#168A75';
+  themePreset: string = 'localsend';
   quickSave: boolean = false;
   favoriteQuickSave: boolean = false;
   saveHistory: boolean = true;
@@ -250,6 +251,7 @@ export class AppStore {
       this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
       const saved = await this.storage.get('settings', '') as string;
       if (saved) this.settings = JSON.parse(saved) as AppSettings;
+      if (!['system', 'localsend', 'oled', 'yaru', 'custom'].includes(this.settings.themePreset)) this.settings.themePreset = 'custom';
       if (!this.settings.destinationMode) this.settings.destinationMode = 'private';
       if (!this.settings.deviceModel) this.settings.deviceModel = 'HarmonyOS';
       if (!this.settings.deviceType) this.settings.deviceType = 'mobile';
@@ -325,20 +327,35 @@ export class AppStore {
   }
 
   t(text: string): string { return uiText(text, this.settings.language); }
+  systemAccent: string = '#3478F6';
+  get accent(): string { return presetAccent(this.settings.themePreset, this.settings.accent, this.systemAccent); }
   get dark(): boolean { return this.settings.theme === 'dark' || (this.settings.theme === 'system' && this.systemDark); }
-  get canvasColor(): string { return this.dark ? this.settings.pureBlack ? '#000000' : '#101318' : '#F3F5F9'; }
-  get surfaceColor(): string { return this.settings.reduceEffects ? this.dark ? '#242931' : '#FFFFFF' : this.dark ? '#F0242931' : '#EFFFFFFF'; }
+  get blackSurface(): boolean { return this.dark && (this.settings.pureBlack || this.settings.themePreset === 'oled'); }
+  get canvasColor(): string {
+    if (this.blackSurface) return '#000000';
+    if (this.settings.themePreset === 'yaru') return this.dark ? '#252525' : '#FFFFFF';
+    return this.dark ? '#101318' : '#F3F5F9';
+  }
+  get surfaceColor(): string {
+    if (this.settings.themePreset === 'oled' && this.dark) return '#000000';
+    if (this.settings.themePreset === 'yaru') return this.dark ? '#2B2B2B' : '#FFFFFF';
+    return this.settings.reduceEffects ? this.dark ? '#242931' : '#FFFFFF' : this.dark ? '#F0242931' : '#EFFFFFFF';
+  }
   get controlSurface(): string { return this.dark ? '#343A43' : '#E9EEF5'; }
   get glassColor(): string { return this.settings.reduceEffects ? this.dark ? '#2A3038' : '#FFFFFF' : this.dark ? '#D02A3038' : '#CFFFFFFF'; }
   get hairlineColor(): string { return this.dark ? '#24FFFFFF' : '#BFFFFFFF'; }
-  get ambientColor(): string { return this.settings.reduceEffects || (this.dark && this.settings.pureBlack) ? this.canvasColor : this.dark ? '#17283B' : '#E2EBF9'; }
-  get accentText(): string { return readableColor(this.settings.accent, this.controlSurface); }
-  get accentFill(): string { return readableColor(this.settings.accent, '#FFFFFF'); }
+  get ambientColor(): string { return this.settings.reduceEffects || this.blackSurface || this.settings.themePreset === 'yaru' ? this.canvasColor : this.dark ? '#17283B' : '#E2EBF9'; }
+  get accentText(): string { return readableColor(this.accent, this.controlSurface); }
+  get accentFill(): string { return readableColor(this.accent, '#FFFFFF'); }
   get dangerText(): string { return readableColor('#C44747', this.controlSurface); }
 
   refreshSystemTheme(): void {
     try { this.systemDark = this.context?.resourceManager.getConfigurationSync().colorMode === 0; }
     catch (_) { /* A host test context may not expose native resource configuration. */ }
+    try {
+      const color = this.context?.resourceManager.getColorSync($r('sys.color.brand'));
+      if (color !== undefined) this.systemAccent = '#' + (color & 0xFFFFFF).toString(16).padStart(6, '0').toUpperCase();
+    } catch (_) { /* Keep the last known system accent if unavailable. */ }
   }
   tf(text: string, values: string[]): string {
     let translated = this.t(text);

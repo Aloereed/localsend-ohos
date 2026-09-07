@@ -39,11 +39,11 @@ export struct TransferList {
           TextInput({ text: this.prefix, placeholder: this.store.t('文件名前缀（可留空）') }).maxLength(100).onChange((value: string) => this.prefix = value)
           Row() {
             Text(this.store.t('编号补零')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-            Toggle({ type: ToggleType.Switch, isOn: this.padZero }).selectedColor(this.store.settings.accent).onChange((value: boolean) => this.padZero = value)
+            Toggle({ type: ToggleType.Switch, isOn: this.padZero }).selectedColor(this.store.accentFill).onChange((value: boolean) => this.padZero = value)
           }.width('100%')
           Row() {
             Text(this.store.t('按名称排序后编号')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-            Toggle({ type: ToggleType.Switch, isOn: this.sortFirst }).selectedColor(this.store.settings.accent).onChange((value: boolean) => this.sortFirst = value)
+            Toggle({ type: ToggleType.Switch, isOn: this.sortFirst }).selectedColor(this.store.accentFill).onChange((value: boolean) => this.sortFirst = value)
           }.width('100%')
         }
         Button(this.store.t('应用到所选文件')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
@@ -119,7 +119,7 @@ export struct TransferList {
               Text(this.rate(this.current(transfer.id))).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.width('100%').alignItems(VerticalAlign.Bottom)
             Progress({ value: this.percent(this.current(transfer.id)), total: 100, type: ProgressType.Linear })
-              .color(this.store.settings.accent).backgroundColor(this.store.controlSurface)
+              .color(this.store.accentText).backgroundColor(this.store.controlSurface)
               .style({ strokeWidth: 6, enableSmoothEffect: this.store.settings.animations }).width('100%')
             if (this.current(transfer.id).direction === 'receive' && this.current(transfer.id).status === 'transferring' && this.done(this.current(transfer.id)) === 0) {
               Text(this.store.t('已确认，等待发送方传输…')).fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
@@ -137,7 +137,7 @@ export struct TransferList {
                 Text(this.store.t('仅影响本次图片和视频，完成后通过系统确认保存')).fontSize(12).fontColor($r('sys.color.font_secondary'))
               }.layoutWeight(1).alignItems(HorizontalAlign.Start)
               Toggle({ type: ToggleType.Switch, isOn: this.current(transfer.id).offerGallerySave })
-                .selectedColor(this.store.settings.accent).onChange((value: boolean) => {
+                .selectedColor(this.store.accentFill).onChange((value: boolean) => {
                   if (value !== this.current(transfer.id).offerGallerySave) localSend.setReceiveGalleryOffer(value);
                 }).accessibilityText(this.store.t('本次接收提示保存到相册'))
             }.width('100%')
@@ -155,7 +155,7 @@ export struct TransferList {
           ForEach(this.current(transfer.id).files.slice(0, this.fileLimit), (file: TransferFile) => {
             Row({ space: 10 }) {
               if (transfer.id === this.store.pendingReceive) {
-                Checkbox().select(this.currentFile(transfer.id, file.id).selected).selectedColor(this.store.settings.accent)
+                Checkbox().select(this.currentFile(transfer.id, file.id).selected).selectedColor(this.store.accentFill)
                   .onChange((selected: boolean) => localSend.selectReceiveFile(file.id, selected))
               }
               Column({ space: 5 }) {
