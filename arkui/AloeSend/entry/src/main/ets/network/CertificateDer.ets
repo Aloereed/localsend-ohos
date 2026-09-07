@@ -43,8 +43,12 @@ function dateDer(date: Date): Uint8Array {
 }
 
 export function makeTbsCertificate(publicKeySpki: Uint8Array, serial: Uint8Array, now: number): Uint8Array {
-  const positiveSerial = new Uint8Array(serial); positiveSerial[0] &= 127;
-  if (positiveSerial.every((value: number) => value === 0)) positiveSerial[positiveSerial.length - 1] = 1;
+  let first = 0;
+  while (first < serial.length && serial[first] === 0) first++;
+  let positiveSerial = first === serial.length ? new Uint8Array([1]) : serial.slice(first);
+  // DER INTEGER is signed and requires minimal encoding: only a high leading
+  // bit needs a zero prefix. Random leading zeros must not become padding.
+  if (positiveSerial[0] >= 128) positiveSerial = joinDer([new Uint8Array([0]), positiveSerial]);
   const name = sequence([der(49, sequence([oid('2.5.4.3'), der(12, asciiDer('LocalSend ArkUI'))]))]);
   const extensions = sequence([
     sequence([oid('2.5.29.19'), der(1, new Uint8Array([255])), der(4, sequence([]))]),

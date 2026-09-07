@@ -9,7 +9,8 @@ const exportsObject = {};
 vm.runInNewContext(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2021, module: ts.ModuleKind.CommonJS } }).outputText, { exports: exportsObject, Uint8Array, Date });
 const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
 for (const now of [Date.now(), Date.UTC(2045, 0, 1)]) {
-  const tbs = exportsObject.makeTbsCertificate(new Uint8Array(publicKey.export({ format: 'der', type: 'spki' })), new Uint8Array(crypto.randomBytes(16)), now);
+for (const serial of [crypto.randomBytes(16), Buffer.from('000000010203', 'hex'), Buffer.from('0080ffff', 'hex'), Buffer.alloc(16), Buffer.from('80ffffff', 'hex'), Buffer.from('7fffffff', 'hex')]) {
+  const tbs = exportsObject.makeTbsCertificate(new Uint8Array(publicKey.export({ format: 'der', type: 'spki' })), new Uint8Array(serial), now);
   const signature = crypto.sign('sha256', tbs, privateKey);
   const raw = exportsObject.assembleCertificate(tbs, new Uint8Array(signature));
   const cert = new crypto.X509Certificate(raw);
@@ -20,4 +21,5 @@ for (const now of [Date.now(), Date.UTC(2045, 0, 1)]) {
   assert.ok(Date.parse(cert.validTo) > now);
   assert.ok(cert.keyUsage.includes('1.3.6.1.5.5.7.3.1'));
   console.log('PASS generated DER certificate: RSA signature, identity, validity and TLS EKU', cert.fingerprint256);
+}
 }
