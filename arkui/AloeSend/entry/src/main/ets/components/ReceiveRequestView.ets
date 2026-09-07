@@ -21,6 +21,10 @@ export struct ReceiveRequestView {
         TransferList({ store: this.store, pendingOnly: true, consentActions: false })
       }.width('100%').layoutWeight(1).padding({ left: 24, right: 24 }).align(Alignment.Top)
       Column({ space: 12 }) {
+        if (this.selected().length === 0) {
+          Text(this.store.t('当前还没有选择要接收的文件。')).fontSize(14)
+            .fontColor($r('sys.color.font_secondary')).width('100%')
+        }
         Text(this.store.tf('已选 {0} 项 · {1}', [String(this.selected().length), formatSize(this.selected().reduce((sum: number, file: TransferFile) => sum + file.size, 0))]))
           .fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
         Row({ space: 12 }) {

@@ -245,6 +245,9 @@ export struct TransferList {
               Button(this.store.t('更改本次目录')).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.chooseReceiveDestination())
             }.width('100%')
             Text(this.store.t('只接收你信任的内容。文件保存在本机，可在历史中另存为。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
+            if (this.consentActions && !this.current(transfer.id).files.some((file: TransferFile) => file.selected)) {
+              Text(this.store.t('当前还没有选择要接收的文件。')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
+            }
             if (this.consentActions) { Row({ space: 12 }) {
               Button(this.store.t('拒绝')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor($r('sys.color.font_primary'))
                 .onClick(() => localSend.acceptReceive(false))

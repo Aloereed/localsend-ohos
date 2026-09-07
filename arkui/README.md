@@ -1,12 +1,14 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M106 / 2.0.106 / 2000106**：
-[未签名 debug 包](artifacts/AloeSend-2000106-M106-folder-keyboard-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M107 / 2.0.107 / 2000107**：
+[未签名 debug 包](artifacts/AloeSend-2000107-M107-selection-empty-unsigned.hap)。包含所有此前里程碑。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
 最新验证与待检查范围见 [交接记录](HANDOFF.md)。M101 全部 51 个主机测试文件及编译通过，新增 HTTPS 提前拒绝回归。M90 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
 
 ## 最新修复
+
+- **M107**：全部取消接收勾选后显示未选文件提示，目录确认按钮接入 Flutter 翻译，静态映射增至 98 项。
 
 - **M106**：目录搜索弹层配置键盘避让，切换目录或搜索条件时回到列表顶部。
 

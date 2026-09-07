@@ -217,6 +217,8 @@ export const flutterLanguages: LanguageOption[] = [
 ];
 export const flutterLabels: Record<string, Record<string, string>> = {
   "ar": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "أضف إلى الاختيار",
     "随机名称": "عشوائي",
@@ -315,6 +317,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "يستخدم تطبيق AloeSend شهادة موقع ذاتية التوقيع. يجب عليك قبولها في المتصفح."
   },
   "az": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Add to selection",
     "随机名称": "Random",
@@ -413,6 +417,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "bg": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Добави към избора",
     "随机名称": "Случаен",
@@ -511,6 +517,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend използва самоподписан сертификат. Трябва да го приемете във вашия браузър."
   },
   "bn": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "সিলেকশনে অ্যাড করুন",
     "随机名称": "র‍্যান্ডম",
@@ -609,6 +617,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend একটি সেল্ফ-সাইন্ড সার্টিফিকেট ব্যবহার করে। আপনাকে ব্রাউজারে এটি একসেপ্ট করতে হবে।"
   },
   "ca": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Afegir a la selecció",
     "随机名称": "Aleatori",
@@ -707,6 +717,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilitza un certificat auto-signat. Cal que l'accepteu al navegador."
   },
   "cs": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Přidat do výběru",
     "随机名称": "Náhodné jméno",
@@ -805,6 +817,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči."
   },
   "da": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Tilføj til pakke",
     "随机名称": "Tilfældig",
@@ -903,6 +917,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend benytter et selvsigneret certifikat. Det skal accepteres i browseren."
   },
   "de": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Zur Auswahl hinzufügen",
     "随机名称": "Zufall",
@@ -1001,6 +1017,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend verwendet ein selbstsigniertes Zertifikat. Du musst es im Browser akzeptieren."
   },
   "el": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Προσθήκη στις επιλογές",
     "随机名称": "Τυχαία",
@@ -1099,6 +1117,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "Το AloeSend χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή."
   },
   "en": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Add to selection",
     "随机名称": "Random",
@@ -1197,6 +1217,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "en-IN": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Add to selection",
     "随机名称": "Random",
@@ -1295,6 +1317,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "es-ES": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Añadir a selección",
     "随机名称": "Aleatorio",
@@ -1393,6 +1417,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador."
   },
   "et": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Lisa valiku hulka",
     "随机名称": "Juhuslikult",
@@ -1491,6 +1517,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend kasutab enda poolt allkirjastatud sertifikaate. Ühenduse toimimiseks palun nõustu nendega veebibrauseris."
   },
   "eu": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Gehitu aukeraketari",
     "随机名称": "Ausazkoa",
@@ -1589,6 +1617,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu"
   },
   "fa": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "افزودن به انتخاب شده‌ها",
     "随机名称": "تصادفی",
@@ -1687,6 +1717,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "لوکال‌سند از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید."
   },
   "fi": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Lisää valintaan",
     "随机名称": "Satunnainen",
@@ -1785,6 +1817,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi."
   },
   "fil-PH": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Idagdag sa selection",
     "随机名称": "Random",
@@ -1883,6 +1917,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "Ang AloeSend ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser."
   },
   "fr": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Ajouter à la sélection",
     "随机名称": "Aléatoire",
@@ -1981,6 +2017,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilise un certificat auto-signé. Vous devez l'accepter dans le navigateur."
   },
   "gl": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Add to selection",
     "随机名称": "Random",
@@ -2079,6 +2117,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "gu": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "પસંદગીમાં ઉમેરો",
     "随机名称": "રેન્ડમ",
@@ -2177,6 +2217,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "લોકલસેન્ડ એ સ્વ-સાઇન્ડ સર્ટિફિકેટનો ઉપયોગ કરે છે. તમારે તેને તમારા બ્રાઉઝરમાં સ્વીકારવું પડશે."
   },
   "he": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "הוסף לבחירה",
     "随机名称": "אקראי",
@@ -2275,6 +2317,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן."
   },
   "hi": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "फाइल जोड़ें",
     "随机名称": "यादृच्छिक",
@@ -2373,6 +2417,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्व-हस्ताक्षरित प्रमाणपत्र का उपयोग करता है। आपको इसे अपने ब्राउज़र में स्वीकार करना होगा।"
   },
   "hu": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Hozzáadás a kijelöléshez",
     "随机名称": "Véletlen",
@@ -2471,6 +2517,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "A AloeSend a saját aláírt tanúsítványt használja. A böngészőben kell elfogadnod."
   },
   "id": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Tambahkan dalam pilihan",
     "随机名称": "Acak",
@@ -2569,6 +2617,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban."
   },
   "it": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Aggiungi alla selezione",
     "随机名称": "Casuale",
@@ -2667,6 +2717,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilizza un certificato autofirmato. Devi accettarlo nel browser."
   },
   "ja": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "選択に追加",
     "随机名称": "ランダム",
@@ -2765,6 +2817,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSendは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。"
   },
   "km": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "បន្ថែមទៅការជ្រើសរើស",
     "随机名称": "ចៃដន្យ",
@@ -2863,6 +2917,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend ប្រើវិញ្ញាបនបត្រដែលចុះហត្ថលេខាដោយខ្លួនឯង។ អ្នកត្រូវទទួលយកវានៅក្នុងកម្មវិធី​ browser ។"
   },
   "ko": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "선택 파일 추가",
     "随机名称": "무작위",
@@ -2961,6 +3017,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend는 자체 서명된 인증서를 사용합니다. 브라우저에서 이를 허용해야 합니다."
   },
   "ml": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Add to selection",
     "随机名称": "Random",
@@ -3059,6 +3117,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "mn": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Add to selection",
     "随机名称": "Random",
@@ -3157,6 +3217,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend нь өөрийн гарын үсэг ашигладаг тул үүнийг browser дээрээ хүлээн зөвшөөрнө үү."
   },
   "ms": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Tambah ke pilihan",
     "随机名称": "Rawak",
@@ -3255,6 +3317,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "ne": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "चयनमा थप्नुहोस्",
     "随机名称": "अनियमित",
@@ -3353,6 +3417,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।"
   },
   "nl": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Toevoegen aan selectie",
     "随机名称": "Willekeurig",
@@ -3451,6 +3517,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend maakt gebruik van een zelfondertekend certificaat. Je moet dit accepteren in je browser."
   },
   "pl": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Dodaj do wyboru",
     "随机名称": "Losowy",
@@ -3549,6 +3617,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend używa samopodpisanego certyfikatu. Musisz go zaakceptować w przeglądarce."
   },
   "pt-BR": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Adicionar à seleção",
     "随机名称": "Aleatório",
@@ -3647,6 +3717,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza um certificado autoassinado. Você precisa aceitá-lo no navegador."
   },
   "pt-PT": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Adicionar à seleção",
     "随机名称": "Aleatório",
@@ -3745,6 +3817,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "O AloeSend utiliza um certificado assinado automaticamente. Precisa de aceitá-lo no navegador."
   },
   "ro": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Adaugă la selecție",
     "随机名称": "Aleatoriu",
@@ -3843,6 +3917,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend folosește un certificat auto-semnat. Trebuie să-l accepți în browserul tău."
   },
   "ru": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Добавить в выборку",
     "随机名称": "Случайно",
@@ -3941,6 +4017,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend использует самоподписанный сертификат. Вам необходимо принять его в браузере."
   },
   "si": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "තේරීමට ඇඩ් කරන්න",
     "随机名称": "අහඹු",
@@ -4039,6 +4117,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend self-signed certificate එකක් භාවිතා කරයි. ඔබ විසින් එය බ්‍රවුසරය (browser) තුළ දි පිළිගැනීම (accept) අවශ්‍ය වේ."
   },
   "sk": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Pridať do výberu",
     "随机名称": "Náhodne",
@@ -4137,6 +4217,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend používa certifikát s vlastným podpisom. Musíte ho prijať vo svojom prehliadači."
   },
   "sl": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Dodaj k izbiri",
     "随机名称": "Naključno",
@@ -4235,6 +4317,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uporablja samopodpisano potrdilo. Sprejeti ga morate v svojem brskalniku."
   },
   "sr": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Dodajte u izbor",
     "随机名称": "Nasumično",
@@ -4333,6 +4417,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend koristi samopotpisani sertifikat. Morate ga prihvatiti u svom pregledaču."
   },
   "sr-Cyrl": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Додајте у избор",
     "随机名称": "Насумично",
@@ -4431,6 +4517,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend користи самопотписани сертификат. Морате га прихватити у свом прегледачу."
   },
   "sv": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Lägg till i val",
     "随机名称": "Slumpmässig",
@@ -4529,6 +4617,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren."
   },
   "ta": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "தேர்வுக்கு சேர்",
     "随机名称": "சீரற்ற",
@@ -4627,6 +4717,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend ஒரு சுய கையொப்பம் செய்யப்பட்ட சான்றிதழைப் பயன்படுத்துகிறது. உங்களின் உலாவியில் அதை ஏற்க வேண்டும்."
   },
   "th": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "เพิ่มไปยังส่วนที่เลือกไว้",
     "随机名称": "สุ่ม",
@@ -4725,6 +4817,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend ใช้ใบรับรองอุปกรณ์จากเว็บเบราเซอร์ (self-signed certificate) คุณต้องกดยอมรับใบรับรองนี้ในเบราว์เซอร์บนอุปกรณ์ของคุณ"
   },
   "tr": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Seçime ekle",
     "随机名称": "Rastgele",
@@ -4823,6 +4917,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır."
   },
   "uk": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Додати у вибірку",
     "随机名称": "Випадково",
@@ -4921,6 +5017,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері."
   },
   "ur": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "انتخاب میں شامل کریں",
     "随机名称": "بے ترتیب",
@@ -5019,6 +5117,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔"
   },
   "vi": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "Thêm vào lựa chọn",
     "随机名称": "Ngẫu nhiên",
@@ -5117,6 +5217,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend dùng chứng chỉ tự tạo. Bạn cần chấp thuận trong trình duyệt."
   },
   "zh": {
+    "选择此文件夹": "使用此文件夹",
+    "当前还没有选择要接收的文件。": "当前还没有选择要接收的文件。",
     "重试": "重试",
     "加入发送清单": "添加文件",
     "随机名称": "随机",
@@ -5215,6 +5317,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend 使用自签名证书。您需要在浏览器中允许它。"
   },
   "zh-HK": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "將檔案加至選擇",
     "随机名称": "隨機",
@@ -5313,6 +5417,8 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。"
   },
   "zh-TW": {
+    "选择此文件夹": "Use This Folder",
+    "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
     "重试": "Retry",
     "加入发送清单": "新增檔案",
     "随机名称": "隨機",

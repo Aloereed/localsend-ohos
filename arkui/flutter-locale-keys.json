@@ -1,4 +1,6 @@
 {
+  "选择此文件夹": "dialogs.chooseFolder.useThisFolder",
+  "当前还没有选择要接收的文件。": "receivePage.filesCard.empty",
   "重试": "progressPage.fileCard.retry",
   "加入发送清单": "dialogs.addFile.title",
   "随机名称": "dialogs.quickActions.random",

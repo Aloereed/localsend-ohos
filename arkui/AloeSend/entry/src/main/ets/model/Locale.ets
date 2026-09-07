@@ -2,6 +2,7 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
   "搜索当前目录的文件夹": "Search folders in this directory",
   "没有匹配的文件夹": "No matching folders",
   "已保存 {0} 项，其余文件未保存到相册": "Saved {0} items; the remaining files were not saved to Gallery",
