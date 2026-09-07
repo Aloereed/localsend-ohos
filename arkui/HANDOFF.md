@@ -1,10 +1,12 @@
-# 当前交接 · M121
+# 当前交接 · M122
 
-阶段验收与明确未完成项见 [验收记录](ACCEPTANCE.md)。下一项源码差异是单文件重试会话语义；隐私检查及语言同步已重新核对，不能将当前版本描述为全面对齐完成。
+阶段验收与明确未完成项见 [验收记录](ACCEPTANCE.md)。M114–M120 已实现并主机验证同会话重试、逐文件失败处理、过期回退和取消。完整多语言与上游新增功能审查仍未全部完成，不能将当前版本描述为全面对齐完成。
 
-最新包：[AloeSend-2000121-M121-browser-locales-unsigned.hap](artifacts/AloeSend-2000121-M121-browser-locales-unsigned.hap)。版本 2.0.121，包含 M1–M121 累计实现，无需逐个安装。源码提交 `2ece2d63ea9bd7e4d9350700986e1b231f88e56a`，分支 `arkui`。
+最新包：[AloeSend-2000122-M122-transfer-error-locales-unsigned.hap](artifacts/AloeSend-2000122-M122-transfer-error-locales-unsigned.hap)。版本 2.0.122，包含 M1–M122 累计实现，无需逐个安装。源码提交 `7db7138f9fbccb20eaff93aaae989e91b30e952a`，分支 `arkui`。
 
-SHA-256：`9842A4E0B57EAF2006D681A65837EA6875BFA54457566E4DC8369B1B1568E94C`。
+SHA-256：`EB403B97ABBDD865A1A3918336C06FACBC802B5174341C81A1F36D0FA613B072`。
+
+M122：传输错误英文及数字 HTTP 状态模板，上传期间禁止语言切换刷新。最终 57 个主机测试、构建及 122 个包校验通过。未访问设备。
 
 M121：浏览器 53 语言选项、RTL、104 个公共映射及安全文本嵌入。57 个测试、构建和 121 个包校验通过；3 GiB 慢写盘复测峰值 65,750 字节、哈希一致、句柄归零，55.4 秒。未访问设备。
 
@@ -156,6 +158,7 @@ Windows LocalSend 重启后，零进度现象恢复。这是用户提供的实�
 - HDS API 23 系统材质已接入；不要沿用此前“只能模糊、必须 API 26”的过时结论。实际视觉效果仍需设备检查。
 
 详细里程碑、范围和材质依据见 [PACKAGES.md](PACKAGES.md)、[MIGRATION.md](MIGRATION.md)、[DESIGN.md](DESIGN.md)。
+
 
 
 
