@@ -126,6 +126,9 @@ class UploadSink implements BodySink {
     }
     if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
     if (this.session.cancelled || this.channel.closed) { await this.session.stopNotification; throw new Error('接收已取消'); }
+    if (this.session.view.status !== 'transferring' || this.session.view.activeBytes < 0) {
+      this.session.view.activeStarted = Date.now(); this.session.view.activeBytes = 0;
+    }
     this.view.status = 'transferring'; this.view.error = ''; this.view.transferred = 0;
     this.session.view.status = 'transferring'; this.session.view.error = ''; this.session.view.finished = 0;
     this.session.lastActivity = Date.now();
@@ -153,6 +156,7 @@ class UploadSink implements BodySink {
     await this.hash?.update({ data: bytes });
     if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
     this.received += bytes.length; this.view.transferred = this.received;
+    this.session.view.activeBytes += bytes.length;
     if (this.received === bytes.length) this.service.store.log(`已收到首段文件数据（${this.channel.encrypted ? 'HTTPS' : 'HTTP'}）`);
     this.session.lastActivity = Date.now();
     if (Date.now() - this.lastUpdate > 100) { this.service.store.updateTransfer(this.session.view); this.lastUpdate = Date.now(); }
@@ -859,6 +863,7 @@ export class LocalSendService {
           if (!view.selected) view.status = 'skipped';
         }
         this.sendSessions.set(transfer.id, new SendSessionRef(peer, prepared.sessionId, legacy));
+        transfer.activeStarted = Date.now(); transfer.activeBytes = 0;
         transfer.status = 'transferring'; this.store.updateTransfer(transfer);
         for (const file of files) {
           cancellation.check(); const view = transfer.files.find((item: TransferFile) => item.id === file.id)!;
@@ -873,7 +878,7 @@ export class LocalSendService {
             `/api/localsend/v2/upload?sessionId=${encodeURIComponent(prepared.sessionId)}&fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}`;
           const upload = await exchange(peer, 'POST', uploadPath, file.size,
             async (write: ChunkWriter): Promise<void> => {
-              if (file.text) { await write(encodeText(file.text)); view.transferred = file.size; return; }
+              if (file.text) { await write(encodeText(file.text)); view.transferred = file.size; transfer.activeBytes += file.size; return; }
               const source = await fs.open(file.uri, fs.OpenMode.READ_ONLY);
               try {
                 let count = 0;
@@ -881,7 +886,7 @@ export class LocalSendService {
                   cancellation.check(); const buffer = new ArrayBuffer(Math.min(65536, file.size - count));
                   const read = await fs.read(source.fd, buffer);
                   if (read <= 0) throw new Error('源文件读取不完整');
-                  await write(new Uint8Array(buffer).slice(0, read)); count += read; view.transferred = count;
+                  await write(new Uint8Array(buffer).slice(0, read)); count += read; view.transferred = count; transfer.activeBytes += read;
                   if (Date.now() - lastUpdate > 100) { this.store.updateTransfer(transfer); lastUpdate = Date.now(); }
                 }
               } finally { await fs.close(source); }

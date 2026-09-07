@@ -1,12 +1,14 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M119 / 2.0.119 / 2000119**：
-[未签名 debug 包](artifacts/AloeSend-2000119-M119-english-locale-map-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M120 / 2.0.120 / 2000120**：
+[未签名 debug 包](artifacts/AloeSend-2000120-M120-retry-progress-unsigned.hap)。包含所有此前里程碑。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
-最新验证与待检查范围见 [交接记录](HANDOFF.md)。M119 全部 56 个主机测试文件及编译通过。M110 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
+最新验证与待检查范围见 [交接记录](HANDOFF.md)。M120 全部 56 个主机测试文件及编译通过。M110 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
 
 ## 最新修复
+
+- **M120**：重试速度仅统计本次尝试；v1/v2 和 HTTP/HTTPS 四组合的双端恢复与取消测试通过。
 
 - **M119**：英文模式正确使用 Flutter 映射，修复关闭等标签回退中文，补齐显示更多英文。
 
@@ -184,6 +186,7 @@ M40 通过全部 22 个宿主测试文件与 ArkUI 编译，包含实际 MbedTLS
 ```
 
 新里程碑使用新的名称和递增版本号调用 `build.ps1`，完成验证并提交后用 `record-milestone.ps1` 记录源码提交。`verify-artifacts.ps1 -WriteCatalog` 刷新倒序清单。不要覆盖已归档版本。
+
 
 
 

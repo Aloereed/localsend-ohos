@@ -111,6 +111,7 @@ export class TransferView {
   files: TransferFile[] = [];
   started: number = Date.now();
   activeStarted: number = 0;
+  activeBytes: number = -1;
   finished: number = 0;
   encrypted: boolean = true;
   peerInfo: Peer | undefined = undefined;

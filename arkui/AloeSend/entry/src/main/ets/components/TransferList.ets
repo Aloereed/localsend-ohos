@@ -2,7 +2,7 @@ import { AppStore, TransferView, TransferFile, HistoryEntry, formatSize } from '
 import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { AppIcon } from './AppIcon';
-import { transferTotal, transferredBytes, remainingSeconds, filePercent } from '../model/TransferMetrics';
+import { transferTotal, transferredBytes, remainingSeconds, filePercent, transferSpeed } from '../model/TransferMetrics';
 import { flutterCount, flutterText } from '../model/DynamicLocale';
 
 @Component
@@ -108,8 +108,7 @@ export struct TransferList {
     this.store.openFile(entry);
   }
   rate(transfer: TransferView): string {
-    const seconds = Math.max(1, ((transfer.finished || Date.now()) - (transfer.activeStarted || transfer.started)) / 1000);
-    const speed = this.done(transfer) / seconds;
+    const speed = transferSpeed(transfer);
     const remaining = remainingSeconds(transfer, speed);
     return `${formatSize(Math.round(speed))}/s${remaining > 0 ? this.store.tf(' · 剩余 {0}', [`${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`]) : ''}`;
   }

@@ -21,23 +21,24 @@ async function create(name, encrypted) {
   return { store, service };
 }
 (async () => {
-  for (const encrypted of [true, false]) {
-    const sender = await create('sender-' + encrypted, encrypted);
-    const receiver = await create('receiver-' + encrypted, encrypted);
+  for (const [encrypted, version] of [[true, '2.1'], [false, '2.1'], [true, '1.0'], [false, '1.0']]) {
+    const scenario = version + '-' + encrypted;
+    const sender = await create('sender-' + scenario, encrypted);
+    const receiver = await create('receiver-' + scenario, encrypted);
     const disk = mocks['@kit.CoreFileKit'].fileIo, write = disk.write;
     try {
       let offers = 0;
       const prepare = receiver.service.prepare.bind(receiver.service);
       receiver.service.prepare = async (...args) => { offers++; return prepare(...args); };
       const bytes = Buffer.alloc(256 * 1024, 0x71);
-      const source = path.join(work, 'source-' + encrypted); await fs.writeFile(source, bytes);
+      const source = path.join(work, 'source-' + scenario); await fs.writeFile(source, bytes);
       const files = ['first', 'second'].map(id => Object.assign(new ShareFile(), { id, name: id + '.bin', uri: source, size: bytes.length }));
       let fail = true;
       disk.write = async (fd, bytes) => {
         if (fail) { fail = false; throw Object.assign(new Error('No space left'), { code: 13900025 }); }
         return write(fd, bytes);
       };
-      const peer = Object.assign(new Peer(), receiver.service.info(), { ip: '127.0.0.1' });
+      const peer = Object.assign(new Peer(), receiver.service.info(), { ip: '127.0.0.1', version });
       const id = await sender.service.send(peer, files);
       assert.deepEqual(sender.store.transfers[0].files.map(file => file.status), ['error', 'complete']);
       assert.deepEqual(receiver.store.transfers[0].files.map(file => file.status), ['error', 'complete']);
@@ -47,6 +48,8 @@ async function create(name, encrypted) {
       assert.equal(receiver.store.transfers[0].id, receiveId);
       assert.equal(sender.store.transfers[0].status, 'complete');
       assert.equal(receiver.store.transfers[0].status, 'complete');
+      assert.equal(sender.store.transfers[0].activeBytes, bytes.length, 'sender retry speed counts only this attempt');
+      assert.equal(receiver.store.transfers[0].activeBytes, bytes.length, 'receiver retry speed counts only this attempt');
       assert.equal(offers, 1, 'retry must not repeat receive confirmation');
       assert.equal(receiver.store.history.length, 2);
       assert.equal(sender.store.history.length, 2);
@@ -55,7 +58,7 @@ async function create(name, encrypted) {
         assert.deepEqual(await fs.readFile(item.path), bytes);
       }
       assert.equal(handles.size, 0);
-      const missing = path.join(work, 'restored-source-' + encrypted);
+      const missing = path.join(work, 'restored-source-' + scenario);
       const retryFiles = files.map(file => Object.assign(new ShareFile(), file));
       retryFiles[0].uri = missing;
       const sourceFailure = await sender.service.send(peer, retryFiles);
@@ -67,7 +70,7 @@ async function create(name, encrypted) {
       assert.equal(receiver.store.transfers[0].status, 'complete');
       assert.equal(offers, 2, 'source read failure retains the second accepted session');
       assert.equal(handles.size, 0);
-      const large = path.join(work, 'cancel-retry-' + encrypted); await fs.writeFile(large, Buffer.alloc(8 * 1024 * 1024, 0x39));
+      const large = path.join(work, 'cancel-retry-' + scenario); await fs.writeFile(large, Buffer.alloc(8 * 1024 * 1024, 0x39));
       const largeFile = Object.assign(new ShareFile(), { name: 'large.bin', uri: large, size: 8 * 1024 * 1024 });
       fail = true; const cancelId = await sender.service.send(peer, [largeFile]);
       const cancelledReceive = receiver.store.transfers[0].id;
@@ -85,3 +88,4 @@ async function create(name, encrypted) {
     } finally { disk.write = write; await sender.service.stop(); await receiver.service.stop(); }
   }
 })().catch(error => { console.error(error); process.exitCode = 1; });
+

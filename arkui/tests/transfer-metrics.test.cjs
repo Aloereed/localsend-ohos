@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const { load } = require('./host-runtime.cjs');
 const { TransferView, TransferFile } = load('model/AppStore');
-const { transferTotal, transferredBytes, remainingSeconds, filePercent } = load('model/TransferMetrics');
+const { transferTotal, transferredBytes, remainingSeconds, filePercent, transferSpeed } = load('model/TransferMetrics');
 const transfer = new TransferView(); transfer.status = 'transferring';
 const accepted = new TransferFile(); accepted.size = 100; accepted.transferred = 40;
 const skipped = new TransferFile(); skipped.size = 900; skipped.status = 'skipped';
@@ -9,6 +9,13 @@ const deselected = new TransferFile(); deselected.size = 500; deselected.selecte
 transfer.files = [accepted, skipped, deselected];
 assert.equal(transferTotal(transfer), 100);
 assert.equal(transferredBytes(transfer), 40);
+transfer.activeStarted = 1000;
+assert.equal(transferSpeed(transfer, 3000), 20, 'legacy/web transfers use their displayed bytes');
+transfer.activeStarted = 2000; transfer.activeBytes = 10;
+assert.equal(transferSpeed(transfer, 3000), 10, 'retry speed excludes bytes delivered by previous attempts');
+transfer.finished = 4000;
+assert.equal(transferSpeed(transfer, 9000), 5, 'finished speed remains stable');
+transfer.finished = 0;
 assert.equal(remainingSeconds(transfer, 20), 3);
 assert.equal(filePercent(accepted), 40);
 const empty = new TransferFile();
