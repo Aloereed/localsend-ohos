@@ -1,8 +1,10 @@
-# 当前交接 · M88
+# 当前交接 · M89
 
-最新包：[AloeSend-2000088-M88-action-locales-unsigned.hap](artifacts/AloeSend-2000088-M88-action-locales-unsigned.hap)。版本 2.0.88，包含 M1–M88 累计实现，无需逐个安装。源码提交 `142847ea0bb12cfe2fcce482ec8f3dbf46f62c5d`，分支 `arkui`。
+最新包：[AloeSend-2000089-M89-selection-finish-unsigned.hap](artifacts/AloeSend-2000089-M89-selection-finish-unsigned.hap)。版本 2.0.89，包含 M1–M89 累计实现，无需逐个安装。源码提交 `1dadf8863594b3a66f1c7cc3ac1b5f73bea6c2e3`，分支 `arkui`。
 
-SHA-256：`52EB1ACF532A4BF51FFD1F5D875326B2FF74AEF8DEBD90551C2BDD13A96A3B6A`。
+SHA-256：`9BF8849BBAB88A510888D92D73CC280BEF4D93DF041302538791578A406D3FF4`。
+
+M89：单台成功任务关闭时移除仍与原发送内容一致的选择；新内容/编辑、多台、失败均保留，每个结果只处理一次。49 个主机测试和构建通过，89 个包校验通过，未访问设备。
 
 M88：六类操作加入 Flutter 静态翻译映射，总数 96 项，语言测试和构建通过；88 个包校验通过。下一项已确认差异是单台成功关闭后的发送清单清理（Flutter send_provider.closeSession），需保护新加入内容并保留多台模式清单。未访问设备。
 

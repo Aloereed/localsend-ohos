@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000089 | [M89-selection-finish](artifacts/AloeSend-2000089-M89-selection-finish-unsigned.hap) | 1dadf886 | 9BF8849BBAB88A510888D92D73CC280BEF4D93DF041302538791578A406D3FF4 |
 | 2000088 | [M88-action-locales](artifacts/AloeSend-2000088-M88-action-locales-unsigned.hap) | 142847ea | 52EB1ACF532A4BF51FFD1F5D875326B2FF74AEF8DEBD90551C2BDD13A96A3B6A |
 | 2000087 | [M87-gallery-recovery](artifacts/AloeSend-2000087-M87-gallery-recovery-unsigned.hap) | 2c576e59 | 5274AE86E6EF86E0C40671AD39F2338C97B5DAFF9D623D30459B72F452191B88 |
 | 2000086 | [M86-history-actions](artifacts/AloeSend-2000086-M86-history-actions-unsigned.hap) | 214d59d4 | CDA5269A105114C333FBFA42B0B4D6F8FC556E2A8613AEE31AE49A46F25018DB |
