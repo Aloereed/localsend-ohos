@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000067 | [M67-scrollable-sheets](artifacts/AloeSend-2000067-M67-scrollable-sheets-unsigned.hap) | 2d02f3d3 | 00905841F6C2FC3ED670872118E2821609DD1C9E713AE458BC33CE537EFB0815 |
 | 2000066 | [M66-receive-reset](artifacts/AloeSend-2000066-M66-receive-reset-unsigned.hap) | 2fd7e579 | 4EC2354B43B704DD6321A813BF962E6893A3E731C35DA21B5306134F1A844BE7 |
 | 2000065 | [M65-common-translations](artifacts/AloeSend-2000065-M65-common-translations-unsigned.hap) | 0e32c586 | A881F3338080E6607CDD36016DCC0E5134FA83A71D53DCC37E3D8DB9A3B2AE1D |
 | 2000064 | [M64-selection-flow](artifacts/AloeSend-2000064-M64-selection-flow-unsigned.hap) | 90cd1a3b | 06FF2BDD839AC6D95DED97A2DC127317B13EB4E2B88CA0A8A8C37C941F8D8D82 |
