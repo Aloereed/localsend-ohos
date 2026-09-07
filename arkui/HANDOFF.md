@@ -1,8 +1,10 @@
-# 当前交接 · M105
+# 当前交接 · M106
 
-最新包：[AloeSend-2000105-M105-folder-search-unsigned.hap](artifacts/AloeSend-2000105-M105-folder-search-unsigned.hap)。版本 2.0.105，包含 M1–M105 累计实现，无需逐个安装。源码提交 `b6012a1ba37c26ee2fa922f833bb4c1db618edaa`，分支 `arkui`。
+最新包：[AloeSend-2000106-M106-folder-keyboard-unsigned.hap](artifacts/AloeSend-2000106-M106-folder-keyboard-unsigned.hap)。版本 2.0.106，包含 M1–M106 累计实现，无需逐个安装。源码提交 `9a0e9335c42fdb8ebb7e77db75a42ab464b5f11f`，分支 `arkui`。
 
-SHA-256：`A371EEC0CCBDE14A5392228B17D0808111DE0FA3A69211A6988F8F8A98311F48`。
+SHA-256：`66F84C9B7E81CB30316E8C966239CC1AFEEF219FDF8715815770F3E3387E4CC5`。
+
+M106：目录弹层键盘避让与搜索/目录切换回顶，编译和 106 个包校验通过。未访问设备，实际键盘交互待验收。
 
 M105：下载目录选择器先搜索后分页，切换目录清空查询，空/越界初始路径回到根目录。目录选择、语言回归及编译通过，105 个包校验通过。未访问设备，搜索交互待实机验收。
 

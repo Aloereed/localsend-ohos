@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000106 | [M106-folder-keyboard](artifacts/AloeSend-2000106-M106-folder-keyboard-unsigned.hap) | 9a0e9335 | 66F84C9B7E81CB30316E8C966239CC1AFEEF219FDF8715815770F3E3387E4CC5 |
 | 2000105 | [M105-folder-search](artifacts/AloeSend-2000105-M105-folder-search-unsigned.hap) | b6012a1b | A371EEC0CCBDE14A5392228B17D0808111DE0FA3A69211A6988F8F8A98311F48 |
 | 2000104 | [M104-settings-layout](artifacts/AloeSend-2000104-M104-settings-layout-unsigned.hap) | 3d6c9026 | D7D5438DE5FF0E8ACC2FE6DA3846D9CF9CE0389EBDFFBAF4CED59BFB06A51BAC |
 | 2000103 | [M103-tls-stop-admission](artifacts/AloeSend-2000103-M103-tls-stop-admission-unsigned.hap) | 2b8118c3 | D651ECEFF1AB7B051E646021042B2894F439CE83EFC0CC8FF20A90F0B6E77085 |
