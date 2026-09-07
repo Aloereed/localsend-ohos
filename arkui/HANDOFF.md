@@ -1,8 +1,10 @@
-# 当前交接 · M79
+# 当前交接 · M80
 
-最新包：[AloeSend-2000079-M79-receive-errors-unsigned.hap](artifacts/AloeSend-2000079-M79-receive-errors-unsigned.hap)。版本 2.0.79，包含 M1–M79 累计实现，无需逐个安装。源码提交 `237e8683858e4b3f95847cce331d5188e1658b9c`，分支 `arkui`。
+最新包：[AloeSend-2000080-M80-pin-input-unsigned.hap](artifacts/AloeSend-2000080-M80-pin-input-unsigned.hap)。版本 2.0.80，包含 M1–M80 累计实现，无需逐个安装。源码提交 `aa361efab7961889039983accd240ddf609b39e9`，分支 `arkui`。
 
-SHA-256：`2475D7DC1C8C34E727ED72FA96E3FE34E75970254C5E0C123B6E925DF9C9D842`。
+SHA-256：`D85E80023610AE63265175DE0162C2A1A32CCAF7C274ACE0D944984EF04DEE70`。
+
+M80：原生设置、发送确认与浏览器上传均支持非数字及长 PIN；发送框加入错误反馈、隐藏/显示和键盘确认，取消清空。真实 HTTP PIN 流程、服务集成和浏览器脚本测试通过，最终构建与 80 个产物校验通过。未访问设备。
 
 M79：接收端记录具体文件失败原因，其他未完成项显示任务停止，已完成文件保持成功和有效路径。真实 TLS 校验失败及双端取消回归、构建通过；79 个包已校验。未访问设备。
 
