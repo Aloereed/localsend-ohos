@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000058 | [M58-theme-presets](artifacts/AloeSend-2000058-M58-theme-presets-unsigned.hap) | 4eef13e2 | 69600A6B710983656824119F1BAC6CA90E07838D6FE3548B0B7203BE01882C97 |
 | 2000057 | [M57-batch-actions](artifacts/AloeSend-2000057-M57-batch-actions-unsigned.hap) | c9fbe901 | 32F4A905FB68637F40793E448D07AFA400AE0AA4350AA4DA90E0941DF32C35CC |
 | 2000056 | [M56-message-batches](artifacts/AloeSend-2000056-M56-message-batches-unsigned.hap) | 2aa2fffd | 79F131C941A030E7322EA197FA35CC04A5D0A7B9ECD3074AC128AAF5D151FA0D |
 | 2000055 | [M55-incoming-history](artifacts/AloeSend-2000055-M55-incoming-history-unsigned.hap) | 583a68bb | 818D421D726AC7F61E710FB5066DC24405F21D02EACDF43263BCED567BBF0D2E |

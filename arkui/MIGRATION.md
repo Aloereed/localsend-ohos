@@ -24,7 +24,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence through M57 (device checks are handed back to the user and do not authorize device access):
+implementation evidence through M58 (device checks are handed back to the user and do not authorize device access):
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ implementation evidence through M57 (device checks are handed back to the user a
 | Progress | TransferList, NativeServer, SecureServer, PullSocket/native TCP | M51: 3 GiB real TLS upload with a one-second disk stall, SHA-256 match and about 64 KiB application queue; M52: blocked-send cancellation and 12 immediate restart cycles. HTTP/HTTPS cancellation and immediate resend pass. Actual HarmonyOS large-file performance remains unverified. |
 | Messages and history | MessagesView, LibraryView, FileDetailsView | M54–M57 retain live/terminal states and partial results, group file batches before search/pagination, count unread batches and support atomic resend/batch deletion. Private history, deletion during transfer and interrupted restart tested. System interactions and actual batch-sheet layout remain user device checks. |
 | Browser sharing | WebShareView, WebShareService, WebPage | Real HTTP consent, upload/download, PIN, cancellation and resource tests pass. Full-screen QR/link presentation implemented; device visual check pending. |
-| Settings and appearance | SettingsView, Locale, AppStore | Chinese/English/system, colors, theme, animations, reduced effects, OLED background, receive and network controls implemented; original extra theme presets and full translation coverage not claimed. |
+| Settings and appearance | SettingsView, Locale, AppStore | M58 system/AloeSend/OLED/Yaru/custom color presets, system-resource refresh, contrast and legacy color preservation tested. Chinese/English/system language, animations, reduced effects, receive and network controls implemented; full Flutter language coverage remains in progress. |
 | Help, privacy, credits, diagnostics | Index information routes, PrivacyView, DiagnosticsView and SettingsView | M43 privacy content generated exactly from Flutter with a synchronization test. Native routes, searchable discovery/HTTP logs, certificate regeneration and preference restoration implemented. Refena tracing is Flutter-runtime-specific. |
 | Upgrade and folder selection | FlutterImport, DownloadFolders, DownloadDirectoryPicker | M45 imports Flutter favorites/history/messages without modifying source data; rollback/retry and 1,100 records tested. M47/M53 custom Download directory picker covers missing capability and runtime unsupported errors. Overwrite upgrade/signature and authorization behavior need user device checks. |
 | Legacy UI | Shared native flows | No duplicate legacy navigation shell; equivalent actions are consolidated. Final interaction audit pending. |
