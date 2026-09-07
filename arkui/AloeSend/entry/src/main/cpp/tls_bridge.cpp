@@ -3,6 +3,7 @@
 #include <map>
 #include <functional>
 void registerPullTcp(napi_env env, napi_value exports);
+void registerFileIdentity(napi_env env, napi_value exports);
 
 namespace {
 std::map<int, std::shared_ptr<aloe::Server>> servers;
@@ -71,6 +72,7 @@ napi_value closeSession(napi_env env, napi_callback_info info) { return invoke(e
 napi_value closeServer(napi_env env, napi_callback_info info) { return invoke(env, info, [&](napi_value* args) { servers.erase(integer(env, args[0])); return number(env, 0); }); }
 napi_value init(napi_env env, napi_value exports) {
     registerPullTcp(env, exports);
+    registerFileIdentity(env, exports);
     const napi_property_descriptor functions[] = {
         {"createServer", nullptr, createServer, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"createSession", nullptr, createSession, nullptr, nullptr, nullptr, napi_default, nullptr},

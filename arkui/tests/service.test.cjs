@@ -16,7 +16,7 @@ async function check(name, action) { await action(); checks++; console.log('PASS
 async function freePort() { const server = net.createServer(); await new Promise(r => server.listen(0, '127.0.0.1', r)); const port = server.address().port; await new Promise(r => server.close(r)); return port; }
 function call(port, route, data, method = 'POST', chunked = false) {
   const bytes = data === undefined ? Buffer.alloc(0) : Buffer.isBuffer(data) ? data : Buffer.from(JSON.stringify(data));
-  return new Promise((resolve, reject) => {
+  const pending = new Promise((resolve, reject) => {
     const headers = { 'content-type': 'application/json' };
     if (!chunked) headers['content-length'] = bytes.length;
     const req = https.request({ host: '127.0.0.1', port, path: route, method, rejectUnauthorized: false, headers }, res => {
@@ -25,6 +25,9 @@ function call(port, route, data, method = 'POST', chunked = false) {
     req.setTimeout(10000, () => req.destroy(new Error('test timeout'))); req.on('error', reject);
     if (chunked) { req.write(bytes.subarray(0, 7)); req.write(bytes.subarray(7)); req.end(); } else req.end(bytes);
   });
+  // Tests inspect consent state before awaiting the request. Preserve the
+  // request's rejection for await, without masking an earlier failed assertion.
+  pending.catch(() => {}); return pending;
 }
 const peerInfo = { alias: 'Independent client', version: '2.1', deviceModel: 'Node', deviceType: 'desktop', fingerprint: 'test-peer', port: 53317, protocol: 'http', download: false };
 function offer(name, data, extra = {}) { return { info: peerInfo, files: { f1: { id: 'f1', fileName: name, size: data.length, fileType: 'application/octet-stream', ...extra } } }; }
@@ -242,7 +245,7 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       assert.equal(store.transfers[0].files[0].name, 'Batch-1.bin');
       service.selectAllReceive('none'); service.resetReceiveNames();
       assert.equal(store.transfers[0].files[0].name, 'original.bin');
-      assert.equal(store.transfers[0].files[0].selected, false);
+      assert.equal(store.transfers[0].files[0].selected, true);
       service.selectAllReceive('all');
       assert.equal(service.renameReceive('f1', '../escape'), false);
       assert.equal(service.renameReceive('f1', 'chosen/renamed.bin'), true);

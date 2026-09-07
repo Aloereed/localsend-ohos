@@ -1,0 +1,24 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const { load, handles } = require('./host-runtime.cjs');
+const { AppStore } = load('model/AppStore');
+const { directoryIdentity } = load('platform/DirectoryIdentity');
+(async () => {
+  const work = path.join(__dirname, '../logs/folder-links-' + Date.now()).replaceAll('\\', '/');
+  await fs.mkdir(work + '/root/child', { recursive: true }); await fs.mkdir(work + '/sibling');
+  await fs.writeFile(work + '/root/child/a.txt', 'a'); await fs.writeFile(work + '/sibling/b.txt', 'b');
+  await fs.symlink(work + '/root', work + '/root/child/back', 'junction');
+  await fs.symlink(work + '/sibling', work + '/root/link', 'junction');
+  assert.equal(await directoryIdentity(work + '/root'), await directoryIdentity(work + '/root/child/back'));
+  assert.notEqual(await directoryIdentity(work + '/root'), await directoryIdentity(work + '/sibling'));
+  assert.equal(handles.size, 0);
+  const store = new AppStore(); await store.init({ filesDir: work, getApplicationContext: () => ({ setColorMode() {} }) });
+  await store.addFolder(work + '/root', '');
+  assert.deepEqual(Array.from(store.files, file => file.name).sort(), ['root/child/a.txt', 'root/link/b.txt']);
+  assert.equal(handles.size, 0, 'directory identity descriptors close after every visit');
+  const before = store.files;
+  await assert.rejects(store.addFolder(work + '/missing', ''));
+  assert.equal(store.files, before); assert.equal(handles.size, 0);
+  console.log('PASS native volume/file identities, actual junction cycle detection, non-cyclic links, hierarchy and zero leaked descriptors');
+})().catch(error => { console.error(error); process.exitCode = 1; });

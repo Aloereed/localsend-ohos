@@ -118,8 +118,11 @@ const cryptoFramework = {
   createSign: () => ({ async init(key) { this.key = key.native; }, async sign(blob) { return { data: new Uint8Array(crypto.sign('sha256', blob.data, this.key)) }; } }),
   createMd: () => { const hash = crypto.createHash('sha256'); return { update: async blob => { hash.update(blob.data); }, digest: async () => ({ data: new Uint8Array(hash.digest()) }) }; },
 };
+const nativeLibrary = require('../logs/native-host/aloetls.node');
+const nativeAdapter = Object.create(nativeLibrary);
+Object.defineProperty(nativeAdapter, 'fileIdentity', { value: fd => nativeLibrary.fileIdentity(handles.get(fd)?.fd ?? -1) });
 const mocks = {
-  'libaloetls.so': require('../logs/native-host/aloetls.node'),
+  'libaloetls.so': nativeAdapter,
   '@kit.NetworkKit': { socket: {
     constructTCPSocketInstance: () => new SocketAdapter(false), constructTLSSocketInstance: () => new SocketAdapter(true),
     constructTCPSocketServerInstance: () => new ServerAdapter(false), constructTLSSocketServerInstance: () => new ServerAdapter(true),

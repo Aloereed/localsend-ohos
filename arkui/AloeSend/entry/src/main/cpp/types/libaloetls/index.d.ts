@@ -12,3 +12,4 @@ export const tcpRead: (connection: number) => void;
 export const tcpSend: (connection: number, bytes: ArrayBuffer) => Promise<void>;
 export const tcpClose: (connection: number) => void;
 export const tcpStop: (server: number) => void;
+export const fileIdentity: (fd: number) => string;

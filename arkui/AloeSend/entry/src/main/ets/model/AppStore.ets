@@ -14,6 +14,7 @@ import { ensureDirectory } from '../platform/Directories';
 import { publicParentUri } from '../platform/FileLocation';
 import { importFlutterData } from '../platform/FlutterImport';
 import { checkDownloadFolder, downloadFolderFiles } from '../platform/DownloadFolders';
+import { directoryIdentity } from '../platform/DirectoryIdentity';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -508,14 +509,17 @@ export class AppStore {
     this.appendSelection(await this.folderSelection(uri, prefix));
   }
 
-  private async folderSelection(uri: string, prefix: string): Promise<ShareFile[]> {
+  private async folderSelection(uri: string, prefix: string, ancestors: string[] = []): Promise<ShareFile[]> {
+    const identity = await directoryIdentity(uri);
+    if (ancestors.includes(identity)) return [];
+    const branch = [...ancestors, identity];
     const rootName = prefix || new fileUri.FileUri(uri).name;
     const names = await fs.listFile(uri);
     const files: ShareFile[] = [];
     for (const name of names) {
       const childUri = `${uri}/${name}`;
       const stat = await fs.stat(childUri);
-      if (stat.isDirectory()) files.push(...await this.folderSelection(childUri, `${rootName}/${name}`));
+      if (stat.isDirectory()) files.push(...await this.folderSelection(childUri, `${rootName}/${name}`, branch));
       else files.push(await this.readShareFile(childUri, `${rootName}/${name}`));
     }
     return files;
