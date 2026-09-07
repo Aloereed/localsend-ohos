@@ -1,4 +1,12 @@
-# 当前交接 · M125
+# 当前交接 · M126
+
+最新包：[AloeSend-2000126-M126-bottom-immersion-unsigned.hap](artifacts/AloeSend-2000126-M126-bottom-immersion-unsigned.hap)，版本 2.0.126 / 2000126，产品源码 `3772c4c5`，分支 `arkui`。
+
+SHA-256：`324937E353BF6D410CFC30E8B4CB9A15F830B818B55E3155CE9DAA87E872D572`。
+
+M126：根页面 matchParent 延伸到底部系统栏，窗口背景同步页面底色，保留内容避让；窗口及前台生命周期 2 个针对性主机测试、编译通过。未访问设备，实际导航区域观感仍需部署确认。此前全部功能累计保留。
+
+## M125 交接记录
 
 最新包：[AloeSend-2000125-M125-empty-clipboard-unsigned.hap](artifacts/AloeSend-2000125-M125-empty-clipboard-unsigned.hap)，版本 2.0.125 / 2000125，产品源码 `a4beff75`，分支 `arkui`。包含此前累计实现。
 

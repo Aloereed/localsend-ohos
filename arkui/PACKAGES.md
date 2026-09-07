@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000126 | [M126-bottom-immersion](artifacts/AloeSend-2000126-M126-bottom-immersion-unsigned.hap) | 3772c4c5 | 324937E353BF6D410CFC30E8B4CB9A15F830B818B55E3155CE9DAA87E872D572 |
 | 2000125 | [M125-empty-clipboard](artifacts/AloeSend-2000125-M125-empty-clipboard-unsigned.hap) | a4beff75 | 851EF5D7C8814B40CE8C4C410C052D82E39DA8CB71F7ABC92C5BC4380C0F9FBE |
 | 2000124 | [M124-flutter-settings](artifacts/AloeSend-2000124-M124-flutter-settings-unsigned.hap) | a44f22fe | 6F744603CFFE47DCD201E10F305AADBB4C8F3C70DBCBEA05C0F9AA5039AEC226 |
 | 2000123 | [M123-immersive-cancel](artifacts/AloeSend-2000123-M123-immersive-cancel-unsigned.hap) | 5b65a6bf | D8379DB0230436ED57250C81791E2F4A2AFAE67A3228CEE666F0A6F2A5DC3C17 |
