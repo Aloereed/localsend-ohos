@@ -65,7 +65,8 @@ class SendSessionRef {
 class RetryContext {
   peer: Peer;
   files: ShareFile[];
-  constructor(peer: Peer, files: ShareFile[]) { this.peer = peer; this.files = files; }
+  keepSelection: boolean;
+  constructor(peer: Peer, files: ShareFile[], keepSelection: boolean) { this.peer = peer; this.files = files; this.keepSelection = keepSelection; }
 }
 
 class PinFailures {
@@ -729,12 +730,12 @@ export class LocalSendService {
 
   submitPin(pin: string): void { this.pinResolver?.(pin); this.pinResolver = undefined; this.store.pendingPin = ''; this.store.pendingPinInvalid = false; }
 
-  async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files): Promise<string> {
+  async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files, keepSelection: boolean = false): Promise<string> {
     if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return ''; }
     if (!selectedFiles.length) { this.store.notice = '请先选择文件或输入文字'; return ''; }
     if (this.sending.size >= 4) { this.store.notice = '已有 4 项发送任务，请等待完成后再发送'; return ''; }
     const files = selectedFiles.slice(); const transfer = new TransferView(); transfer.id = util.generateRandomUUID();
-    this.retryContexts.set(transfer.id, new RetryContext(peer, files));
+    this.retryContexts.set(transfer.id, new RetryContext(peer, files, keepSelection || this.store.settings.sendMode === 'multiple'));
     if (this.retryContexts.size > 40) {
       for (const id of this.retryContexts.keys()) { if (!this.sending.has(id)) { this.retryContexts.delete(id); break; } }
     }
@@ -855,7 +856,7 @@ export class LocalSendService {
     try {
       for (const peer of peers) {
         if (this.batchCancelled) break;
-        await this.send(peer, files); this.store.batchRemaining--;
+        await this.send(peer, files, true); this.store.batchRemaining--;
       }
     } finally { this.store.batchRemaining = 0; }
   }
@@ -863,6 +864,23 @@ export class LocalSendService {
   cancelAll(): void {
     this.batchCancelled = true;
     for (const id of this.sending.keys()) this.cancel(id);
+  }
+
+  finishCompletedSelections(): void {
+    for (const transfer of this.store.transfers.slice()) {
+      if (transfer.direction !== 'send' || transfer.status !== 'complete' || transfer.selectionClosed) continue;
+      const context = this.retryContexts.get(transfer.id);
+      if (!context) continue;
+      if (!context.keepSelection) {
+        const sent = new Map(context.files.map((file: ShareFile): [string, ShareFile] => [file.id, file]));
+        this.store.files = this.store.files.filter((file: ShareFile) => {
+          const original = sent.get(file.id);
+          return !original || file.name !== original.name || file.uri !== original.uri || file.size !== original.size ||
+            file.mime !== original.mime || file.text !== original.text;
+        });
+      }
+      transfer.selectionClosed = true; this.store.updateTransfer(transfer);
+    }
   }
 
   async retry(id: string, fileId: string = ''): Promise<void> {
@@ -877,7 +895,7 @@ export class LocalSendService {
     if (!files.length) return;
     previous.retrying = true; this.store.updateTransfer(previous);
     try {
-      const next = await this.send(context.peer, files);
+      const next = await this.send(context.peer, files, context.keepSelection);
       if (next) {
         for (const file of previous.files) { if (incomplete.includes(file.id)) file.retryTransferId = next; }
         if (previous.files.every((file: TransferFile) => file.status === 'complete' || file.status === 'skipped' || !!file.retryTransferId)) {

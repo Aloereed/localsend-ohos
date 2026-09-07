@@ -97,6 +97,7 @@ export class NetworkLogEntry {
 }
 
 export class TransferView {
+  selectionClosed: boolean = false;
   retrying: boolean = false;
   retryTransferId: string = '';
   offerGallerySave: boolean = false;

@@ -57,12 +57,15 @@ struct Index {
     });
     this.store.onTransferCompleted = (transfer: TransferView) => {
       if (transfer.direction === 'receive' && transfer.peerInfo && this.store.settings.openMessagesOnReceive) {
+        if (this.route === 'transfers') localSend.finishCompletedSelections();
         this.store.messageTarget = transfer.peerInfo; this.selectTab(2); this.route = '';
       }
       if (!this.store.settings.autoFinish) return;
       setTimeout(() => {
         if (this.route === 'transfers' && this.store.batchRemaining === 0 &&
-          !this.store.transfers.some((item) => item.status === 'waiting' || item.status === 'transferring')) this.route = '';
+          !this.store.transfers.some((item) => item.status === 'waiting' || item.status === 'transferring')) {
+          localSend.finishCompletedSelections(); this.route = '';
+        }
       }, 1200);
     };
     if (this.store.privacyAccepted) await this.startServices();
@@ -89,7 +92,10 @@ struct Index {
   onBackPress(): boolean {
     if (this.directoryVisible) { this.closeDirectory(''); return true; }
     if (this.store.pendingPin) { localSend.cancel(this.store.pendingPin); return true; }
-    if (this.route) { this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : ''; return true; }
+    if (this.route) {
+      if (this.route === 'transfers') localSend.finishCompletedSelections();
+      this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : ''; return true;
+    }
     if (this.tab === 2 && this.messageDetail) { this.messageDetail = false; return true; }
     if (this.tab !== 0) { this.selectTab(0); return true; }
     return false;
