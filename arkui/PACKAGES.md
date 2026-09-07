@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000100 | [M100-rename-session](artifacts/AloeSend-2000100-M100-rename-session-unsigned.hap) | 977c8153 | 8F0B2B42AD5AF0266E40C32E92103682C5EA82ADE61F1E36B18A5BBD0306B36F |
 | 2000099 | [M99-network-hints](artifacts/AloeSend-2000099-M99-network-hints-unsigned.hap) | 63891c2c | A3FFCDB17643DFF9E76688CBB064AABA2C951956A15C52F0750201A0620C2A29 |
 | 2000098 | [M98-conversation-endpoint](artifacts/AloeSend-2000098-M98-conversation-endpoint-unsigned.hap) | 7d29ef8b | 4134ED40F62A4A5ECD65427C95C39DC12E714212E222FF01617411D3AD7871BA |
 | 2000097 | [M97-message-result](artifacts/AloeSend-2000097-M97-message-result-unsigned.hap) | f53d732f | FAE6FA37153CB6DDA4CFAAFFCFE165E449D597AA49781A42043312C86EE2B40B |
