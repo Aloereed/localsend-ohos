@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000108 | [M108-persistence-order](artifacts/AloeSend-2000108-M108-persistence-order-unsigned.hap) | 4cfc65bd | 61A454882057077211482C9F8249D036D105339D106146C324BB1822E1114A97 |
 | 2000107 | [M107-selection-empty](artifacts/AloeSend-2000107-M107-selection-empty-unsigned.hap) | bb631fa5 | 5C388AAFB20EFFDF1C4553E69F8B9C5A55AEB2A21929239FCB5A8F7FF20F6156 |
 | 2000106 | [M106-folder-keyboard](artifacts/AloeSend-2000106-M106-folder-keyboard-unsigned.hap) | 9a0e9335 | 66F84C9B7E81CB30316E8C966239CC1AFEEF219FDF8715815770F3E3387E4CC5 |
 | 2000105 | [M105-folder-search](artifacts/AloeSend-2000105-M105-folder-search-unsigned.hap) | b6012a1b | A371EEC0CCBDE14A5392228B17D0808111DE0FA3A69211A6988F8F8A98311F48 |

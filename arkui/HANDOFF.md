@@ -1,8 +1,10 @@
-# 当前交接 · M107
+# 当前交接 · M108
 
-最新包：[AloeSend-2000107-M107-selection-empty-unsigned.hap](artifacts/AloeSend-2000107-M107-selection-empty-unsigned.hap)。版本 2.0.107，包含 M1–M107 累计实现，无需逐个安装。源码提交 `bb631fa592e6ca22219cce52603b2b6dd277955e`，分支 `arkui`。
+最新包：[AloeSend-2000108-M108-persistence-order-unsigned.hap](artifacts/AloeSend-2000108-M108-persistence-order-unsigned.hap)。版本 2.0.108，包含 M1–M108 累计实现，无需逐个安装。源码提交 `4cfc65bd6a8d505ffb87f74ce60985a205e642d3`，分支 `arkui`。
 
-SHA-256：`5C388AAFB20EFFDF1C4553E69F8B9C5A55AEB2A21929239FCB5A8F7FF20F6156`。
+SHA-256：`61A454882057077211482C9F8249D036D105339D106146C324BB1822E1114A97`。
+
+M108：保存与恢复设置串行执行，每轮保存取一致的当前快照，失败后队列继续，恢复执行前重查活动。累计 53 个主机测试、额外活动重查测试及编译通过，108 个包校验通过。未访问设备。
 
 M107：全部取消接收选择后显示空选择提示，目录确认接入 Flutter 翻译，静态映射 98 项。语言测试及编译通过，107 个包校验通过。未访问设备，视觉验收仍待完成。
 
