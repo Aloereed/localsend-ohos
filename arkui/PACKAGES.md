@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000132 | [M132-networkkit-rollback](artifacts/AloeSend-2000132-M132-networkkit-rollback-unsigned.hap) | eb7ca128 | F03F4E7A1DFDB59E8FEA649E0A9D4687C32217693CD2B658B909FEC96E1C76EB |
 | 2000131 | [M131-selection-layout](artifacts/AloeSend-2000131-M131-selection-layout-unsigned.hap) | 4afc50b2 | 2246EAD4562753A1B3645EBE7C1E65ABC841F1780B09B655DD6131E6C88D182C |
 | 2000130 | [M130-native-network](artifacts/AloeSend-2000130-M130-native-network-unsigned.hap) | 28d1d307 | EBC778D47B303FDC77D9C6B4EE21005E6066FDF03E2D745C010182B3F5DB2F4C |
 | 2000129 | [M129-restore-network-permission](artifacts/AloeSend-2000129-M129-restore-network-permission-unsigned.hap) | 0ef0766c | F9A51B7ECE7B822C5A72DF38D71975F56DE35B19C5A81E647767B0C9849FA207 |

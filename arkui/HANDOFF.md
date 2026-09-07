@@ -1,4 +1,14 @@
-# 当前交接 · M131
+# 当前交接 · M132
+
+最新正式包：[2.0.132 signed release APP](artifacts/release/AloeSend-2000132-release-20260908-002452-signed.app)，源码 `eb7ca12873fa4a4c2f23c0cf0f07bff0d986b093`，构建前工作区干净。沿用 Flutter 发布签名，APP 与独立模块 HAP 签名验证通过。SHA-256：`B555F397CE20261FED05121D8041CC4A26B6153F3B8350D85FA2EE947D3361EC`。
+
+按用户要求先备份 `codex/backup-arkui-cpp-20260908`（`9b0a7a48`），再撤回 M130 新增 C++ 迁移。cpp 和 ets/network 已恢复至 `bfb9b164`：NetworkKit 发送、HTTP 接收和 UDP 发现，保留此前已有 C++ HTTPS 接收背压。文案、999 项选择和底栏布局与备份分支一致。
+
+用户此次明确要求恢复 INTERNET，取代 M131 的移除要求。最终包仅声明 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING；仍无 READ_PASTEBOARD / FILE_ACCESS_PERSIST。
+
+60 个主机测试、鸿蒙编译和签名校验通过。未访问设备。实际 NetworkKit 传输和底栏缩放效果待用户部署检查。调试归档 `artifacts/AloeSend-2000132-M132-networkkit-rollback-unsigned.hap`，SHA-256 `F03F4E7A1DFDB59E8FEA649E0A9D4687C32217693CD2B658B909FEC96E1C76EB`。细节见 [M132](milestones/M132-networkkit-rollback.md)。
+
+# M131 历史交接
 
 最新发布包：[2.0.131 signed release APP](artifacts/release/AloeSend-2000131-release-20260908-001733-signed.app)，源码 `4afc50b247501c1f324c48cdaa6df289b7800d60`，构建前工作区干净。沿用 Flutter 发布签名，APP 与独立 HAP 签名验证通过。SHA-256：`63146A53855AA9BE7D3F956E6D877C9FD460B4039FDD19BB445C97C274A3938B`。
 

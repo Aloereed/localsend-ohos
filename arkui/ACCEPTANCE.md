@@ -1,4 +1,10 @@
-# M131 阶段验收 · 2026-09-08
+# M132 阶段验收 · 2026-09-08
+
+备份分支 codex/backup-arkui-cpp-20260908 指向 9b0a7a48。M130 新增网络迁移已撤回，恢复 NetworkKit 及 INTERNET；保留之前的 C++ HTTPS 接收和 M131 界面功能。网络目录与迁移前一致，界面目录与备份一致。
+
+60 个主机测试及鸿蒙编译通过。2.0.132 正式包沿用 Flutter 发布身份，源码 eb7ca128；APP 与独立 HAP 签名验证通过，构建前源码干净。实际权限只有 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING。未访问设备，真机传输和窗口缩放待用户检查。
+
+## M131 历史验收
 
 2.0.131 正式发布包已生成，源码 `4afc50b2`，构建前工作区干净。沿用 Flutter release 身份；APP 与独立模块 HAP 签名检查通过，实际包内只有 GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，无 INTERNET、READ_PASTEBOARD、FILE_ACCESS_PERSIST。
 
