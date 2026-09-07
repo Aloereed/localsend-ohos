@@ -1,8 +1,10 @@
-# 当前交接 · M97
+# 当前交接 · M98
 
-最新包：[AloeSend-2000097-M97-message-result-unsigned.hap](artifacts/AloeSend-2000097-M97-message-result-unsigned.hap)。版本 2.0.97，包含 M1–M97 累计实现，无需逐个安装。源码提交 `f53d732fdd0b04016adfe1ddd48adc9c7d8e5a77`，分支 `arkui`。
+最新包：[AloeSend-2000098-M98-conversation-endpoint-unsigned.hap](artifacts/AloeSend-2000098-M98-conversation-endpoint-unsigned.hap)。版本 2.0.98，包含 M1–M98 累计实现，无需逐个安装。源码提交 `7d29ef8b08a39a7a5efed67fd6de44e0d0e9aee3`，分支 `arkui`。
 
-SHA-256：`FAE6FA37153CB6DDA4CFAAFFCFE165E449D597AA49781A42043312C86EE2B40B`。
+SHA-256：`4134ED40F62A4A5ECD65427C95C39DC12E714212E222FF01617411D3AD7871BA`。
+
+M98：打开中的会话按稳定身份更新发现地址，发送前再次解析；草稿键保持不变。换址、离线上线、IP 复用与发现缺席测试及编译通过，98 个包校验通过。未访问设备。
 
 M97：消息草稿清理绑定本次返回的任务 ID，未启动时不会误认同附件旧成功任务。消息状态与选择清理回归、编译通过，97 个包校验通过。未访问设备，相关界面交互仍待验收。
 
