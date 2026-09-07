@@ -9,7 +9,7 @@ import { TlsIdentity } from './TlsIdentity';
 import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter } from './Transport';
 import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
 import { storageError } from '../platform/StorageError';
-import { batchReceiveNames } from '../model/ReceiveNames';
+import { batchReceiveNames, receiveName } from '../model/ReceiveNames';
 import { SecureServer, SecureConnection } from './SecureServer';
 import { ensureDirectory } from '../platform/Directories';
 
@@ -493,7 +493,7 @@ export class LocalSendService {
     for (const id of ids) {
       const file = payload.files[id];
       if (!file || typeof file.fileName !== 'string' || !Number.isSafeInteger(file.size) || file.size < 0 || file.id !== id) throw new Error('文件信息无效');
-      const view = new TransferFile(); view.id = id;
+      const view = new TransferFile(); view.id = id; view.originalName = file.fileName;
       view.name = uniqueName(safeRelativePath(file.fileName), session.view.files.map((item: TransferFile) => item.name)); view.size = file.size;
       if (file.preview && file.fileType === 'text/plain') { view.name = file.fileName.slice(0, 100); view.preview = file.preview.slice(0, 100000); }
       session.view.files.push(view);
@@ -609,7 +609,7 @@ export class LocalSendService {
     const file = this.receiving.view.files.find((item: TransferFile) => item.id === id);
     if (!file) return false;
     try {
-      const safe = safeRelativePath(name.trim());
+      const safe = receiveName(name, this.receiving.files[id].fileName);
       file.name = uniqueName(safe, this.receiving.view.files.filter((item: TransferFile) => item.id !== id).map((item: TransferFile) => item.name));
       this.store.updateTransfer(this.receiving.view); return true;
     } catch (e) { this.store.fail('文件名无效', e as Error); return false; }

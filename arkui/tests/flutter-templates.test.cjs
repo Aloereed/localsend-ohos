@@ -41,6 +41,10 @@ assert.equal(renderTemplate(subtitle, { n: 2 }), 'wants to send you 2 files');
 assert.throws(() => renderTemplate(subtitle, {}), /Missing parameter/);
 assert.throws(() => renderTemplate(subtitle, { n: 'invalid' }), /Invalid plural/);
 const name = '$& $` $\' {0} ${n} 🌿';
+for (const [locale, templates] of Object.entries(catalog.locales)) {
+  const key = 'dialogs.fileNameInput.original';
+  assert.equal(flutterText(key, locale, { original: name }), renderTemplate(templates[key], { original: name }));
+}
 assert.equal(renderTemplate(catalog.locales.en['progressPage.header.receivingFrom'], { device: name }), `Receiving files from ${name}.`);
 assert.equal(expressionAt("'a; b'; next()", 0), "'a; b'");
 assert.throws(() => expressionAt("'unfinished'", 0), /Unterminated/);

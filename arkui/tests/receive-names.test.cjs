@@ -1,7 +1,15 @@
 const assert = require('node:assert/strict');
 const { load } = require('./host-runtime.cjs');
 const { TransferFile } = load('model/AppStore');
-const { batchReceiveNames } = load('model/ReceiveNames');
+const { batchReceiveNames, receiveName } = load('model/ReceiveNames');
+assert.equal(receiveName(' holiday ', 'image.jpg'), 'holiday.jpg');
+assert.equal(receiveName('v2.0/holiday', 'trip/image.jpg'), 'v2.0/holiday.jpg');
+assert.equal(receiveName('holiday.png', 'image.jpg'), 'holiday.png');
+assert.equal(receiveName('archive', 'backup.tar.gz'), 'archive.gz');
+assert.equal(receiveName('name', '.hidden'), 'name');
+assert.equal(receiveName('.hidden', 'image.jpg'), '.hidden');
+assert.throws(() => receiveName('../escape', 'image.jpg'));
+assert.throws(() => receiveName('  ', 'image.jpg'));
 const files = Array.from({ length: 12 }, (_, i) => {
   const file = new TransferFile(); file.id = String(i); file.name = `trip/${String(12 - i).padStart(2, '0')}.jpg`; return file;
 });

@@ -77,6 +77,7 @@ export function historyStatus(entry: HistoryEntry): string {
 }
 
 export class TransferFile {
+  originalName: string = '';
   error: string = '';
   retryTransferId: string = '';
   id: string = '';

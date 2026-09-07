@@ -52,6 +52,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "أصلي: \u0001original\u0002"
+      }
     }
   },
   "az": {
@@ -104,6 +114,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
       }
     }
   },
@@ -158,6 +178,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Оригинално: \u0001original\u0002"
+      }
     }
   },
   "bn": {
@@ -210,6 +240,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "অরিজিনাল: \u0001original\u0002"
       }
     }
   },
@@ -264,6 +304,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
+      }
     }
   },
   "cs": {
@@ -316,6 +366,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Původní: \u0001original\u0002"
       }
     }
   },
@@ -370,6 +430,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
+      }
     }
   },
   "de": {
@@ -422,6 +492,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
       }
     }
   },
@@ -476,6 +556,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Πρωτότυπο: \u0001original\u0002"
+      }
     }
   },
   "en": {
@@ -528,6 +618,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
       }
     }
   },
@@ -582,6 +682,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
+      }
     }
   },
   "es-ES": {
@@ -634,6 +744,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
       }
     }
   },
@@ -688,6 +808,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Algne: \u0001original\u0002"
+      }
     }
   },
   "eu": {
@@ -740,6 +870,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Jatorrizkoa: \u0001original\u0002"
       }
     }
   },
@@ -794,6 +934,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "اصلی: \u0001original\u0002"
+      }
     }
   },
   "fi": {
@@ -846,6 +996,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Alkuperäinen: \u0001original\u0002"
       }
     }
   },
@@ -900,6 +1060,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Orihinal: \u0001original\u0002"
+      }
     }
   },
   "fr": {
@@ -952,6 +1122,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original : \u0001original\u0002"
       }
     }
   },
@@ -1006,6 +1186,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
+      }
     }
   },
   "gu": {
@@ -1058,6 +1248,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "મૂળ: \u0001original\u0002"
       }
     }
   },
@@ -1112,6 +1312,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "מקורי: \u0001original\u0002"
+      }
     }
   },
   "hi": {
@@ -1164,6 +1374,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "मूल: \u0001original\u0002"
       }
     }
   },
@@ -1218,6 +1438,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Eredeti: \u0001original\u0002"
+      }
     }
   },
   "id": {
@@ -1270,6 +1500,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Asli: \u0001original\u0002"
       }
     }
   },
@@ -1324,6 +1564,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Originale: \u0001original\u0002"
+      }
     }
   },
   "ja": {
@@ -1376,6 +1626,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "元の名前: \u0001original\u0002"
       }
     }
   },
@@ -1430,6 +1690,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ច្បាប់ដើម: \u0001original\u0002"
+      }
     }
   },
   "ko": {
@@ -1482,6 +1752,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "기존 이름: \u0001original\u0002"
       }
     }
   },
@@ -1536,6 +1816,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
+      }
     }
   },
   "mn": {
@@ -1588,6 +1878,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
       }
     }
   },
@@ -1642,6 +1942,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Asal: \u0001original\u0002"
+      }
     }
   },
   "ne": {
@@ -1694,6 +2004,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "मूल: \u0001original\u0002"
       }
     }
   },
@@ -1748,6 +2068,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Origineel: \u0001original\u0002"
+      }
     }
   },
   "pl": {
@@ -1800,6 +2130,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Oryginalny: \u0001original\u0002"
       }
     }
   },
@@ -1854,6 +2194,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
+      }
     }
   },
   "pt-PT": {
@@ -1906,6 +2256,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
       }
     }
   },
@@ -1960,6 +2320,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Original: \u0001original\u0002"
+      }
     }
   },
   "ru": {
@@ -2012,6 +2382,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Оригинальное имя файла: \u0001original\u0002"
       }
     }
   },
@@ -2066,6 +2446,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "මුල්: \u0001original\u0002"
+      }
     }
   },
   "sk": {
@@ -2118,6 +2508,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Originál: \u0001original\u0002"
       }
     }
   },
@@ -2172,6 +2572,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Izvirno: \u0001original\u0002"
+      }
     }
   },
   "sr": {
@@ -2224,6 +2634,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Originalni naziv fajla: \u0001original\u0002"
       }
     }
   },
@@ -2278,6 +2698,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Оригинални назив фајла: \u0001original\u0002"
+      }
     }
   },
   "sv": {
@@ -2330,6 +2760,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Orginal: \u0001original\u0002"
       }
     }
   },
@@ -2384,6 +2824,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "மூல: \u0001original\u0002"
+      }
     }
   },
   "th": {
@@ -2436,6 +2886,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ชื่อไฟล์เดิม: \u0001original\u0002"
       }
     }
   },
@@ -2490,6 +2950,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Orijinal: \u0001original\u0002"
+      }
     }
   },
   "uk": {
@@ -2542,6 +3012,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Оригінальне ім'я файлу: \u0001original\u0002"
       }
     }
   },
@@ -2596,6 +3076,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "اصل: \u0001original\u0002"
+      }
     }
   },
   "vi": {
@@ -2648,6 +3138,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Ban đầu: \u0001original\u0002"
       }
     }
   },
@@ -2702,6 +3202,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "共提供 \u0001n\u0002 项"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "原名：\u0001original\u0002"
+      }
     }
   },
   "zh-HK": {
@@ -2755,6 +3265,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "\u0001n\u0002 offered"
       }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "原名：\u0001original\u0002"
+      }
     }
   },
   "zh-TW": {
@@ -2807,6 +3327,16 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "\u0001n\u0002 offered"
+      }
+    },
+    "dialogs.fileNameInput.original": {
+      "parameters": [
+        "original"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "原始檔案名稱：\u0001original\u0002"
       }
     }
   }

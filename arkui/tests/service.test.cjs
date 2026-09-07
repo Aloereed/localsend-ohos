@@ -285,6 +285,9 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       assert.equal(store.transfers[0].files[0].selected, true);
       service.selectAllReceive('all');
       assert.equal(service.renameReceive('f1', '../escape'), false);
+      assert.equal(store.transfers[0].files[0].originalName, 'original.bin');
+      assert.equal(service.renameReceive('f1', 'extension-restored'), true);
+      assert.equal(store.transfers[0].files[0].name, 'extension-restored.bin');
       assert.equal(service.renameReceive('f1', 'chosen/renamed.bin'), true);
       service.selectAllReceive('none'); assert.equal(store.transfers[0].files[0].selected, false);
       service.selectAllReceive('invert'); assert.equal(store.transfers[0].files[0].selected, true);

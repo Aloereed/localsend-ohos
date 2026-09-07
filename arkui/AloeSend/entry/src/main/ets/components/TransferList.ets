@@ -3,7 +3,7 @@ import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { AppIcon } from './AppIcon';
 import { transferTotal, transferredBytes, remainingSeconds, filePercent } from '../model/TransferMetrics';
-import { flutterCount } from '../model/DynamicLocale';
+import { flutterCount, flutterText } from '../model/DynamicLocale';
 
 @Component
 export struct TransferList {
@@ -19,6 +19,16 @@ export struct TransferList {
   @State prefix: string = '';
   @State padZero: boolean = false;
   @State sortFirst: boolean = false;
+
+  originalLabel(): string {
+    const values: Record<string, string> = {};
+    values['original'] = this.currentFile(this.store.pendingReceive, this.renameId).originalName;
+    return flutterText('dialogs.fileNameInput.original', this.store.settings.language, values);
+  }
+
+  saveName(): void {
+    if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
+  }
 
   current(id: string): TransferView {
     return this.store.transfers.find((transfer: TransferView) => transfer.id === id) || new TransferView();
@@ -57,10 +67,12 @@ export struct TransferList {
     } else {
     Column({ space: 18 }) {
       Text(this.store.t('接收时重命名')).fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
+      Text(this.originalLabel()).fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%').copyOption(CopyOptions.LocalDevice)
       TextInput({ text: this.renameText }).onChange((value: string) => this.renameText = value)
+        .defaultFocus(true).enterKeyType(EnterKeyType.Done).onSubmit(() => this.saveName())
       Text(this.store.t('仅影响本次接收的文件名称。')).fontSize(13).fontColor($r('sys.color.font_secondary'))
       Button(this.store.t('保存名称')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
-        if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
+        this.saveName();
       })
     }.width('100%').padding(24).direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     }
