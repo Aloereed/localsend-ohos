@@ -62,6 +62,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "أصلي: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ربما لا يتم الكشف عنك من قبل الأجهزة الأخرى لأنك تستخدم منفذ مخصص. (الافتراضي: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ربما لا يتم الكشف عنك من قبل الأجهزة الأخرى لأنك تستخدم عنوان بث متعدد مخصص. (الافتراضي: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "az": {
@@ -124,6 +144,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Original: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom port. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom multicast address. (default: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -188,6 +228,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Оригинално: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Възможно е да не бъдете открити от други устройства, защото използвате персонализиран порт. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Възможно е да не бъдете открити от други устройства, защото използвате персонализиран адрес за множествено предаване. (default: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "bn": {
@@ -250,6 +310,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "অরিজিনাল: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "আপনি একটি কাস্টম পোর্ট ব্যবহার করছেন, তাই অন্য ডিভাইস থেকে এই ডিভাইসকে খুঁজে নাও পাওয়া যেতে পারে। (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "আপনি একটি কাস্টম মাল্টিকাস্ট অ্যাড্রেস ব্যবহার করছেন যেই কারণে আপনি অন্য ডিভাইস দ্বারা স্ক্যান নাও হতে পারেন। (default: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -314,6 +394,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Original: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Podria no ser detectat per altres dispositius perquè està utilitzant un port personalitzat. (per defecte: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Podria no ser detectat per altres dispositius perquè està utilitzant una adreça multicast personalitzada. (per defecte: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "cs": {
@@ -376,6 +476,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Původní: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Je možné, že vás ostatní zařízení nezjistí, protože používáte vlastní port. (výchozí: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Je možné, že vás ostatní zařízení nezjistí, protože používáte vlastní adresu vícesměrového vysílání. (výchozí: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -440,6 +560,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Original: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Hvis du bruger en brugerdefineret port, vil du muligvis ikke blive genkendt af andre enheder. (Standard: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Du bliver muligvis ikke genkendt af andre enheder, fordi du bruger en brugerdefineret multicast-adresse. (Standard: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "de": {
@@ -502,6 +642,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Original: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Möglicherweise wirst du von anderen Geräten nicht erkannt, weil du einen benutzerdefinierten Port verwendest. (Standard: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Möglicherweise wirst du von anderen Geräten nicht erkannt, weil du eine benutzerdefinierte Multicast-Adresse verwendest. (Standard: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -566,6 +726,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Πρωτότυπο: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Ενδέχεται να μην εντοπιστείτε από άλλες συσκευές επειδή χρησιμοποιείτε μια προσαρμοσμένη θύρα. (προεπιλογή: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Ενδέχεται να μην εντοπιστείτε από άλλες συσκευές επειδή χρησιμοποιείτε μια προσαρμοσμένη διεύθυνση αναμετάδοσης. (προεπιλογή: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "en": {
@@ -628,6 +808,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Original: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom port. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom multicast address. (default: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -692,6 +892,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Original: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom port. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom multicast address. (default: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "es-ES": {
@@ -754,6 +974,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Original: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Es posible que no seas visible para otros dispositivos porque estás utilizando un puerto personalizado. (Puerto por defecto: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Es posible que no seas visible para otros dispositivos porque estás utilizando una dirección multicast personalizada. (Dirección multicast por defecto: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -818,6 +1058,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Algne: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Kuna kasutad endamääratud porti, siis muud seadmed ei pruugi seda seadet leida. (vaikimisi: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Kuna kasutad endamääratud multiedastuse aadressi, siis muud seadmed ei pruugi seda seadet leida. (vaikimisi: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "eu": {
@@ -880,6 +1140,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Jatorrizkoa: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Portu berezi bat erabiltzen ari zarenez, agian ez zara beste gailuentzat ikusgarri izango (Lehenetsitako portua: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Multicast helbide berezi bat erabiltzen ari zarenez, agian ez zara beste gailuentzat ikusgarri izango. (Lehenetsitako multicast helbidea: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -944,6 +1224,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "اصلی: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ممکن است به دلیل استفاده از یک پورت سفارشی، دستگاه‌های دیگر شما را شناسایی نکنند (پیشفرض : \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ممکن است به دلیل استفاده از چندپخشی سفارشی، دستگاه‌های دیگر شما را شناسایی نکنند (پیشفرض: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "fi": {
@@ -1006,6 +1306,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Alkuperäinen: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Sinua ei ehkä havaita muiden laitteiden toimesta, koska käytät mukautettua porttia. (oletus: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Sinua ei ehkä havaita muiden laitteiden toimesta, koska käytät mukautettua multicast-osoitetta. (oletus: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1070,6 +1390,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Orihinal: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Maaaring hindi ka ma-detect ng ibang devices dahil ikaw ay gumagamit ng ibang port. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Maaaring hindi ka ma-detect ng ibang devices dahil ikaw ay gumagamit ng ibang multicast address. (default: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "fr": {
@@ -1132,6 +1472,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Original : \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Il se peut que vous ne soyez pas détecté par d'autres appareils car vous utilisez un port personnalisé. (par défaut : \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Il est possible que vous ne soyez pas détecté par d'autres appareils car vous utilisez une adresse multicast différente de celle par défaut. (par défaut : \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1196,6 +1556,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Original: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom port. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom multicast address. (default: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "gu": {
@@ -1258,6 +1638,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "મૂળ: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "તમે કસ્ટમ પોર્ટનો ઉપયોગ કરી રહ્યા છો તેથી તમે અન્ય ડિવાઇસ દ્વારા શોધી શકાય નહીં. (મૂળભૂત: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "તમે કસ્ટમ મલ્ટીકાસ્ટ સરનામાનો ઉપયોગ કરી રહ્યા છો તેથી તમે અન્ય ડિવાઇસ દ્વારા શોધી શકાય નહીં. (મૂળભૂત: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1322,6 +1722,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "מקורי: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "יתכן שלא יזוהו מכשירים אחרים בגלל שאתה משתמש ביציאה מותאמת אישית. (ברירת־מחדל: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "יתכן שלא יזוהו מכשירים אחרים בגלל שאתה משתמש בכתובת מולטיקאסט מותאמת אישית. (ברירת־מחדל: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "hi": {
@@ -1384,6 +1804,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "मूल: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "आप कस्टम पोर्ट का उपयोग कर रहे हैं इसलिए अन्य डिवाइस आपको पहचान नहीं सकते हैं। (डिफ़ॉल्ट: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "आप कस्टम मल्टीकास्ट पते का उपयोग कर रहे हैं इसलिए अन्य डिवाइस आपको पहचान नहीं सकते हैं। (डिफ़ॉल्ट: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1448,6 +1888,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Eredeti: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Előfordulhat, hogy más eszközök nem észlelik eszközét, mert egyéni portot használ. (alapértelmezett: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Előfordulhat, hogy más eszközök nem észlelik eszközét, mert egyéni multicast címet használ. (alapérték: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "id": {
@@ -1510,6 +1970,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Asli: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Anda mungkin tidak terdeteksi oleh perangkat lain karena menggunakan porta kustom. (bawaan: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Anda mungkin tidak terdeteksi oleh perangkat lain karena menggunakan alamat multicast khusus. (bawaan: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1574,6 +2054,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Originale: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Potresti non essere rilevato da altri dispositivi perché stai utilizzando una porta personalizzata. (predefinita: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Potresti non essere rilevato dagli altri dispositivi perché stai utilizzando un indirizzo multicast personalizzato. (predefinito: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "ja": {
@@ -1636,6 +2136,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "元の名前: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ポートが変更されているため、このデバイスが他のデバイスから検出されなくなる場合があります。(デフォルト: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "マルチキャストアドレスが変更されているため、他のデバイスから検出されなくなる場合があります。(デフォルト: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1700,6 +2220,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "ច្បាប់ដើម: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "អ្នកប្រហែលជាមិនត្រូវបានរកឃើញដោយឧបករណ៍ផ្សេងទៀតទេ ដោយសារតែអ្នកកំពុងប្រើច្រកដែលបង្កើតផ្ទាល់ខ្លួន។ (ច្រកដើម: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "អ្នកប្រហែលជាមិនត្រូវបានរកឃើញដោយឧបករណ៍ផ្សេងទៀតទេ ដោយសារតែអ្នកកំពុងប្រើអាសយដ្ឋានពហុផ្សាយដែលបង្កើតផ្ទាល់ខ្លួន។ (ច្រកដើម: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "ko": {
@@ -1762,6 +2302,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "기존 이름: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "사용자 지정 포트를 사용하면 다른 장치에서 기기가 감지되지 않을 수 있습니다. (기본값: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "사용자 지정 멀티캐스트 주소를 사용하면 다른 장치에서 기기가 감지되지 않을 수 있습니다. (기본값: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1826,6 +2386,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Original: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom port. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "You might not be detected by other devices because you are using a custom multicast address. (default: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "mn": {
@@ -1888,6 +2468,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Original: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Та өөр порт ашиглаж байгаа тул бусад төхөөрөмжинд олдохгүй байж магадгүй . (өгөгдмөл: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Хувийн multicast хаяг ашиглаж үед бусад төхөөрөмжид илрэхгүй байх магадлалтай. (default: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -1952,6 +2552,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Asal: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Anda mungkin tidak dapat dikesan oleh peranti lain kerana anda menggunakan port tersuai. (lalai: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Anda mungkin tidak dapat dikesan oleh peranti lain kerana anda menggunakan alamat multicast tersuai. (lalai: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "ne": {
@@ -2014,6 +2634,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "मूल: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "आपको अन्य उपकर्णों द्वारा पहचाना नहीं जा सकता है क्योंकि आप कस्टम पोर्ट का उपयोग कर रहे हैं। (डिफ़ॉल्ट: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "आप अन्य उपकर्णों द्वारा पहचाना नहीं जा सकता है क्योंकि आप कस्टम मल्टीकास्ट पता का उपयोग कर रहे हैं। (डिफ़ॉल्ट: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2078,6 +2718,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Origineel: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Je apparaat kan mogelijk niet worden gevonden omdat je een aangepaste poort gebruikt. (Standaard: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Je apparaat kan mogelijk niet worden gevonden omdat je een aangepast multicast-adres gebruikt. (Standaard: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "pl": {
@@ -2140,6 +2800,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Oryginalny: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Inne urządzenia mogą nie wykryć Twojego urządzenia, ponieważ używasz niestandardowego portu. (domyślnie: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Inne urządzenia mogą nie wykryć Twojego urządzenia, ponieważ używasz niestandardowego adresu multicast. (domyślnie: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2204,6 +2884,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Original: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Você pode estar indetectável para outros dispositivos por estar usando uma porta customizada. (Padrão: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Você pode estar indetectável para outros dispositivos por estar usando um endereço multicast customizado. (Padrão: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "pt-PT": {
@@ -2266,6 +2966,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Original: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pode estar indetectável para outros dispositivos por estar a usar uma porta personalizada. (Padrão: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pode estar indetectável para outros dispositivos por estar a usar um endereço multicast personalizado. (Padrão: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2330,6 +3050,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Original: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Este posibil să nu fii detectat de alte dispozitive pentru că folosești un port personalizat. (implicit: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Este posibil să nu fii detectat de alte dispozitive pentru că folosești o adresă multicast personalizată. (implicit: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "ru": {
@@ -2392,6 +3132,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Оригинальное имя файла: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Другие устройства могут вас не найти, поскольку вы используете другой, собственный порт. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Другие устройства могут вас не найти, поскольку вы используете другой, собственный адрес мультивещания. (default: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2456,6 +3216,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "මුල්: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ඔබ custom port එකක් භාවිතා කරන්නේ නම්, වෙනත් උපාංග වලට ඔබව හඳුනා ගත නොහැක. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ඔබ custom multicast ලිපිනයක් භාවිතා කරන්නේ නම්, වෙනත් උපාංග වලට ඔබව හඳුනා ගත නොහැක. (default: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "sk": {
@@ -2518,6 +3298,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Originál: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Iné zariadenia vás nemusia rozpoznať, pretože používate vlastný port. (predvolené: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Iné zariadenia vás nemusia rozpoznať, pretože používate vlastnú multicast adresu. (predvolené: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2582,6 +3382,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Izvirno: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Morda vas druge naprave ne bodo zaznale, ker uporabljate nestandardna vrata. (privzeto: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Morda vas druge naprave ne bodo zaznale, ker uporabljate nestandardni večtočkovni naslov. (privzeto: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "sr": {
@@ -2644,6 +3464,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Originalni naziv fajla: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Drugi uređaji vas možda neće otkriti, jer koristite prilagođeni port. (podrazumevani: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Drugi uređaji vas možda neće otkriti, jer koristite prilagođenu adresu višesmernog emitovanja. (podrazumevana: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2708,6 +3548,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Оригинални назив фајла: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Други уређаји вас можда неће открити, јер користите прилагођени порт. (подразумевани: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Други уређаји вас можда неће открити, јер користите прилагођену адресу вишесмерног емитовања. (подразумевана: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "sv": {
@@ -2770,6 +3630,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Orginal: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Du kanske inte upptäcks av andra enheter eftersom du använder en anpassad port. (standard: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Du kanske inte upptäcks av andra enheter eftersom du använder en anpassad multicast-adress. (standard: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2834,6 +3714,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "மூல: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "நீங்கள் தனிப்பயன் போர்ட்டைப் பயன்படுத்துவதால், பிற சாதனங்களால் உங்களைக் கண்டறிய முடியாமல் போகலாம். (இயல்புநிலை: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "நீங்கள் தனிப்பயன் மல்டிகாஸ்ட் முகவரியைப் பயன்படுத்துவதால் பிற சாதனங்களால் உங்களைக் கண்டறிய முடியாமல் போகலாம். (இயல்புநிலை: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "th": {
@@ -2896,6 +3796,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "ชื่อไฟล์เดิม: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "อุปกรณ์เครื่องอื่นอาจจะไม่สามารถค้นหาอุปกรณ์เครื่องนี้เจอในเครื่อข่ายได้เนื่องจากคุณแก้ไขพอร์ตเป็นหมายเลขอื่น (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "อุปกรณ์เครื่องอื่นอาจจะไม่สามารถค้นหาอุปกรณ์เครื่องนี้เจอในเครื่อข่ายได้เนื่องจากคุณกำหนดที่อยู่มัลติคาสต์ใหม่ด้วยตนเอง (default: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -2960,6 +3880,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "Orijinal: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Kişiselleştirilmiş bir port kullanıyorsanız ağınızdaki diğer cihazlar tarafından bulunamayabilirsiniz. (varsayılan: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Özel çoklu yayın adresini kullandığınız için diğer cihazlar tarafından algılanamayabilirsiniz.(varsayılan: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "uk": {
@@ -3022,6 +3962,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Оригінальне ім'я файлу: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Інші пристрої можуть вас не знайти, оскільки ви використовуєте інший, власний порт. (default: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Інші пристрої можуть вас не знайти, оскільки ви використовуєте іншу, власну адресу групової передачі. (default: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -3086,6 +4046,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "اصل: \u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ہو سکتا ہے آپ کو دوسرے آلات سے پتہ نہ چل سکے کیونکہ آپ حسب ضرورت پورٹ استعمال کر رہے ہیں۔ (پہلے سے طے شدہ: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "ہو سکتا ہے آپ کو دوسرے آلات سے پتہ نہ لگے کیونکہ آپ حسب ضرورت ملٹی کاسٹ ایڈریس استعمال کر رہے ہیں۔ (پہلے سے طے شدہ: \u0001defaultMulticast\u0002)"
+      }
     }
   },
   "vi": {
@@ -3148,6 +4128,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "Ban đầu: \u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Các thiết bị khác có thể không nhận diện được thiết bị của bạn, vì bạn đang dùng port tuỳ chỉnh. (mặc định: \u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Các thiết bị khác có thể không nhận diện được thiết bị của bạn, vì bạn đang dùng địa chỉ multicast tuỳ chỉnh. (mặc định: \u0001defaultMulticast\u0002)"
       }
     }
   },
@@ -3212,6 +4212,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "原名：\u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "由于正在使用自定义端口，你可能不会被其他设备检测到。（默认端口：\u0001defaultPort\u0002）"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "由于正在使用自定义多播地址，你可能不会被其他设备检测到。（默认地址：\u0001defaultMulticast\u0002）"
+      }
     }
   },
   "zh-HK": {
@@ -3275,6 +4295,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "other": "原名：\u0001original\u0002"
       }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "改 port 嘅話其他裝置有機會偵測唔到你。（預設：\u0001defaultPort\u0002）"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "用自訂多播地址嘅話其他裝置有機會偵測唔到你。（預設：\u0001defaultMulticast\u0002）"
+      }
     }
   },
   "zh-TW": {
@@ -3337,6 +4377,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "locale": "",
       "forms": {
         "other": "原始檔案名稱：\u0001original\u0002"
+      }
+    },
+    "settingsTab.network.portWarning": {
+      "parameters": [
+        "defaultPort"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "您可能無法被其他裝置偵測，因為您正在使用自訂通訊埠。(預設：\u0001defaultPort\u0002)"
+      }
+    },
+    "settingsTab.network.multicastGroupWarning": {
+      "parameters": [
+        "defaultMulticast"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "您可能無法被其他裝置偵測，因為您正在使用自訂多點傳送位址。(預設：\u0001defaultMulticast\u0002)"
       }
     }
   }

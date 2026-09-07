@@ -1,12 +1,14 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M98 / 2.0.98 / 2000098**：
-[未签名 debug 包](artifacts/AloeSend-2000098-M98-conversation-endpoint-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M99 / 2.0.99 / 2000099**：
+[未签名 debug 包](artifacts/AloeSend-2000099-M99-network-hints-unsigned.hap)。包含所有此前里程碑。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
 最新验证与待检查范围见 [交接记录](HANDOFF.md)。累计 M95 的 50 个主机测试文件通过；M96 组件回调修复编译通过。M90 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
 
 ## 最新修复
+
+- **M99**：非默认端口和组播地址显示 Flutter 的发现影响说明，并可恢复这两个字段的默认值。
 
 - **M98**：消息会话跟随同一设备的发现地址更新，保留草稿身份，无需退出重进。
 

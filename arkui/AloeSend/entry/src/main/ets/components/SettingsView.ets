@@ -1,4 +1,5 @@
-import { AppStore } from '../model/AppStore';
+import { AppStore, AppSettings } from '../model/AppStore';
+import { flutterText } from '../model/DynamicLocale';
 import { localSend } from '../network/LocalSendService';
 import { LengthMetrics } from '@kit.ArkUI';
 import { flutterLanguages } from '../model/FlutterLocales';
@@ -8,6 +9,13 @@ import { AppIcon } from './AppIcon';
 
 @Component
 export struct SettingsView {
+  private defaults: AppSettings = new AppSettings();
+
+  networkHint(port: boolean): string {
+    const values: Record<string, string> = {};
+    values[port ? 'defaultPort' : 'defaultMulticast'] = port ? String(this.defaults.port) : this.defaults.multicast;
+    return flutterText(port ? 'settingsTab.network.portWarning' : 'settingsTab.network.multicastGroupWarning', this.store.settings.language, values);
+  }
   @ObjectLink store: AppStore;
   onNavigate: (route: string) => void = () => {};
 
@@ -227,7 +235,17 @@ export struct SettingsView {
             Text(this.store.t('发现超时（毫秒）')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
             TextInput({ text: this.timeout, placeholder: '1500' }).type(InputType.Number).onChange((value: string) => this.timeout = value)
             TextInput({ text: this.port, placeholder: this.store.t('端口 53317') }).type(InputType.Number).onChange((value: string) => this.port = value)
+            if (this.port.trim() && Number(this.port) !== this.defaults.port) {
+              Text(this.networkHint(true)).fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary')).width('100%')
+            }
             TextInput({ text: this.group, placeholder: this.store.t('组播地址') }).onChange((value: string) => this.group = value)
+            if (this.group.trim() && this.group.trim() !== this.defaults.multicast) {
+              Text(this.networkHint(false)).fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary')).width('100%')
+            }
+            if (Number(this.port) !== this.defaults.port || this.group !== this.defaults.multicast) {
+              Button(this.store.t('恢复默认')).height(44).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
+                .onClick(() => { this.port = String(this.defaults.port); this.group = this.defaults.multicast; })
+            }
             Button(this.store.t('保存网络设置')).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.saveNetwork())
             Row() {
               Text(this.store.t('设备类型')).layoutWeight(1).fontColor($r('sys.color.font_primary'))

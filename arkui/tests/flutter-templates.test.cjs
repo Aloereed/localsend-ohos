@@ -44,6 +44,10 @@ const name = '$& $` $\' {0} ${n} 🌿';
 for (const [locale, templates] of Object.entries(catalog.locales)) {
   const key = 'dialogs.fileNameInput.original';
   assert.equal(flutterText(key, locale, { original: name }), renderTemplate(templates[key], { original: name }));
+  for (const [warning, values] of [
+    ['settingsTab.network.portWarning', { defaultPort: '53317' }],
+    ['settingsTab.network.multicastGroupWarning', { defaultMulticast: '224.0.0.167' }],
+  ]) assert.equal(flutterText(warning, locale, values), renderTemplate(templates[warning], values));
 }
 assert.equal(renderTemplate(catalog.locales.en['progressPage.header.receivingFrom'], { device: name }), `Receiving files from ${name}.`);
 assert.equal(expressionAt("'a; b'; next()", 0), "'a; b'");
