@@ -19,6 +19,8 @@ class XHR {
   open(method, url) { this.url = url; }
   send(file) {
     assert.equal(el('pick').disabled, true); assert.equal(el('text').readOnly, true);
+    assert.equal(el('language').disabled, true, 'language navigation must not interrupt an active upload');
+    assert.equal(el('applyLanguage').disabled, true);
     queueMicrotask(() => {
       this.upload.onprogress({ loaded: file.size / 2 }); observedProgress = el('progress').value;
       this.status = failUpload ? 500 : 200; this.onload();
@@ -49,6 +51,7 @@ vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], context);
   assert.equal(el('progress').value, 100);
   assert.equal(el('selected').textContent, 'Selected 1 items', 'skipped file remains in selection');
   assert.equal(el('pick').disabled, false);
+  assert.equal(el('language').disabled, false); assert.equal(el('applyLanguage').disabled, false);
   failUpload = true; await context.send([skipped], '');
   assert.equal(el('selected').textContent, 'Selected 1 items');
   assert.match(el('status').textContent, /Request failed 500/);

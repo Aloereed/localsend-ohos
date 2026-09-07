@@ -2,6 +2,18 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "文件超出声明长度": "The file exceeds its declared size",
+  "文件写入失败": "Could not write the file",
+  "文件未完整接收": "The file was not received completely",
+  "文件校验和不匹配": "The file checksum does not match",
+  "源文件读取不完整": "The source file could not be read completely",
+  "文件信息无效": "Invalid file information",
+  "设备返回了无效传输会话": "The device returned an invalid transfer session",
+  "发送方已断开连接": "The sender disconnected",
+  "接收连接超时": "The receiving connection timed out",
+  "设备证书指纹已改变，请确认设备身份后重新添加": "The device certificate fingerprint changed. Verify its identity and add it again.",
+  "文件发送失败 {0}": "File upload failed (HTTP {0})",
+  "设备返回 {0}": "The device returned HTTP {0}",
   "显示更多": "Show more",
   "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
   "搜索当前目录的文件夹": "Search folders in this directory",
@@ -529,6 +541,12 @@ export function uiText(text: string, language: string): string {
   const translated = flutterLabels[resolved];
   if (translated && translated[text]) return translated[text];
   if (english[text]) return english[text];
+  for (const prefix of ['文件发送失败 ', '设备返回 ']) {
+    if (text.startsWith(prefix) && /^\d{3}$/.test(text.slice(prefix.length))) {
+      const key = `${prefix}{0}`;
+      return (translated?.[key] || english[key]).replace('{0}', text.slice(prefix.length));
+    }
+  }
   // Single-field status messages retain device names verbatim.
   for (const key of ['已发送到 {0}', '已收到 {0} 的文件']) {
     const pieces = key.split('{0}');

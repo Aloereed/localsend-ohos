@@ -18,4 +18,9 @@ for (const name of ['$&', '$`', "$'", '$$', 'file {1}.txt', '照片 🌿 {0}']) 
 assert.equal(store.tf('{0} / {0} / {1}', ['literal {1}', '$&']), 'literal {1} / literal {1} / $&', 'replace each template slot once without interpreting inserted values');
 assert.equal(store.tf('{0} {2}', ['known']), 'known {2}', 'missing values remain visible');
 assert.equal(uiText('Unrecognized native error 801', 'en'), 'Unrecognized native error 801');
+assert.equal(uiText('文件发送失败 500', 'en'), 'File upload failed (HTTP 500)');
+assert.equal(uiText('设备返回 409', 'en'), 'The device returned HTTP 409');
+assert.equal(uiText('文件校验和不匹配', 'en'), 'The file checksum does not match');
+assert.equal(uiText('文件发送失败 500', 'zh'), '文件发送失败 500');
+assert.equal(uiText('文件发送失败 我的文件', 'en'), '文件发送失败 我的文件', 'only known numeric status templates are translated');
 console.log('PASS locale selection, parameterized labels and verbatim device/file names');

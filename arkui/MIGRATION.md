@@ -1,6 +1,7 @@
 # AloeSend ArkUI migration
 
 Started 2026-09-06 21:30 CST. Latest user-authorized continuation: 2026-09-07 approximately 09:30–15:30 CST; early completion allowed after the work is done. The user has left with the device: do not access it. Continue source, host-test and unsigned-build milestones.
+Additional user-authorized source-only continuation: 2026-09-07 approximately 15:42–16:42 CST. No device access.
 Source baseline: f341 / 227d25dc. Upstream reference: main / 6279d3e3.
 
 ## Contract
@@ -24,7 +25,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence through M121 (device checks are handed back to the user and do not authorize device access):
+implementation evidence through M122 (device checks are handed back to the user and do not authorize device access):
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
@@ -70,6 +71,8 @@ See `README.md` for morning checks and `PACKAGES.md` for verified archived packa
 Record commands, outcomes, known limitations and package hashes in `milestones/`.
 Unsigned HAPs cannot be runtime-installed on a normal device without signing. Build success
 does not prove device runtime behavior. Keep that distinction explicit in milestone notes.
+
+
 
 
 
