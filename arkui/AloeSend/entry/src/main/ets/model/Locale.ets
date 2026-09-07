@@ -1,6 +1,11 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "状态": "Status",
+  "失败原因": "Failure reason",
+  "传输失败": "Transfer failed",
+  "接收中…": "Receiving…",
+  "应用已退出，传输未完成": "The app closed before the transfer finished",
   "选择要发送的文件夹": "Choose a folder to send",
   "添加此文件夹": "Add this folder",
   "这个文件夹没有可发送的文件": "This folder contains no files to send",

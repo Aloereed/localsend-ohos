@@ -1,4 +1,4 @@
-import { AppStore, HistoryEntry, formatSize, mimeForName } from '../model/AppStore';
+import { AppStore, HistoryEntry, formatSize, mimeForName, historyStatus } from '../model/AppStore';
 import { AppIcon } from './AppIcon';
 
 @Component
@@ -16,6 +16,8 @@ export struct FileDetailsView {
     if (label === '大小与类型') return `${formatSize(entry.size)} · ${mimeForName(entry.name)}`;
     if (label === '设备') return entry.peer;
     if (label === '时间') return new Date(entry.time).toLocaleString();
+    if (label === '状态') return this.store.t(historyStatus(entry));
+    if (label === '失败原因') return this.store.t(entry.error);
     if (label === '文字') return entry.text;
     if (label === '已另存到') return entry.exportedPath;
     if (label === '相册副本') return entry.galleryPath;
@@ -44,6 +46,8 @@ export struct FileDetailsView {
           this.field('大小与类型')
           this.field('设备')
           this.field('时间')
+          this.field('状态')
+          if (this.current().error) { this.field('失败原因') }
           if (this.current().text) { this.field('文字') }
           if (this.current().exportedPath) { this.field('已另存到') }
           if (this.current().galleryPath) { this.field('相册副本') }

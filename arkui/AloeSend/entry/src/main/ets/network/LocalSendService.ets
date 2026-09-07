@@ -705,7 +705,10 @@ export class LocalSendService {
     }
     this.store.updateTransfer(transfer);
     const cancellation = new Cancellation(); this.sending.set(transfer.id, cancellation);
+    let declined = false;
     try {
+      await this.store.updateOutgoingHistory(transfer, files, true);
+      cancellation.check();
       const favorite = this.store.favorites.find((item: Peer) => item.ip === peer.ip && item.port === peer.port);
       if (favorite?.fingerprint && favorite.fingerprint !== peer.fingerprint) throw new Error('收藏设备的身份已改变，请核对后重新收藏');
       const payload: PrepareRequest = { info: this.info(), files: fileInfos };
@@ -725,13 +728,15 @@ export class LocalSendService {
       }
       cancellation.check();
       if (response.status === 204) {
-        for (const file of files) { if (file.text) await this.sentHistory(file, peer); }
         for (const file of transfer.files) {
           const source = files.find((item: ShareFile) => item.id === file.id)!;
           file.status = source.text ? 'complete' : 'skipped'; file.transferred = source.text ? file.size : 0;
         }
       } else {
-        if (response.status !== 200) throw new Error(response.status === 403 ? '对方拒绝了传输' : response.status === 409 ? '对方正在传输，请稍后重试' : response.status === 429 ? 'PIN 尝试次数过多' : `设备返回 ${response.status}`);
+        if (response.status !== 200) {
+          declined = response.status === 403;
+          throw new Error(declined ? '对方拒绝了传输' : response.status === 409 ? '对方正在传输，请稍后重试' : response.status === 429 ? 'PIN 尝试次数过多' : `设备返回 ${response.status}`);
+        }
         const prepared: PrepareReply = legacy ? { sessionId: 'legacy', files: JSON.parse(response.body) as Record<string, string> } : JSON.parse(response.body) as PrepareReply;
         if (!prepared.sessionId || !prepared.files) throw new Error('设备返回了无效传输会话');
         this.sendSessions.set(transfer.id, new SendSessionRef(peer, prepared.sessionId, legacy));
@@ -741,6 +746,8 @@ export class LocalSendService {
           const token = prepared.files[file.id];
           if (!token) { view.status = 'skipped'; this.store.updateTransfer(transfer); continue; }
           view.status = 'transferring'; this.store.updateTransfer(transfer);
+          await this.store.updateOutgoingHistory(transfer, files);
+          cancellation.check();
           let lastUpdate = 0;
           const uploadPath = legacy ? `/api/localsend/v1/send?fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}` :
             `/api/localsend/v2/upload?sessionId=${encodeURIComponent(prepared.sessionId)}&fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}`;
@@ -761,7 +768,8 @@ export class LocalSendService {
             }, cancellation);
           cancellation.check();
           if (upload.status !== 200) throw new Error(`文件发送失败 ${upload.status}`);
-          view.status = 'complete'; view.transferred = file.size; this.store.updateTransfer(transfer); await this.sentHistory(file, peer);
+          view.status = 'complete'; view.transferred = file.size; this.store.updateTransfer(transfer);
+          await this.store.updateOutgoingHistory(transfer, files);
         }
       }
       cancellation.check();
@@ -772,12 +780,10 @@ export class LocalSendService {
       transfer.status = cancellation.cancelled ? 'cancelled' : 'error'; transfer.error = (e as Error).message; transfer.finished = Date.now();
       for (const file of transfer.files) { if (file.status === 'transferring' || file.status === 'waiting') file.status = transfer.status; }
       this.store.log(`发送：${transfer.error}`);
-    } finally { this.sending.delete(transfer.id); this.sendSessions.delete(transfer.id); this.store.updateTransfer(transfer); }
-  }
-
-  private async sentHistory(file: ShareFile, peer: Peer): Promise<void> {
-    const entry = new HistoryEntry(); entry.name = file.name; entry.peer = peer.alias; entry.peerInfo = peer; entry.direction = 'send'; entry.size = file.size; entry.text = file.text; entry.path = file.uri;
-    await this.store.addHistory(entry);
+    } finally {
+      this.sending.delete(transfer.id); this.sendSessions.delete(transfer.id); this.store.updateTransfer(transfer);
+      await this.store.updateOutgoingHistory(transfer, files, false, declined);
+    }
   }
 
   async sendMany(peers: Peer[]): Promise<void> {

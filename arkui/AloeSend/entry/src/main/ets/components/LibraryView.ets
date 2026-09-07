@@ -1,4 +1,4 @@
-import { AppStore, HistoryEntry, formatSize } from '../model/AppStore';
+import { AppStore, HistoryEntry, formatSize, historyStatus } from '../model/AppStore';
 import { EmptyState } from './EmptyState';
 import { AppIcon } from './AppIcon';
 import { LengthMetrics } from '@kit.ArkUI';
@@ -40,7 +40,7 @@ export struct LibraryView {
           }.width('100%')
           Text(entry.text || entry.name).fontSize(16).lineHeight(24).maxLines(6).textOverflow({ overflow: TextOverflow.Ellipsis }).copyOption(CopyOptions.LocalDevice)
             .width('100%').fontColor($r('sys.color.font_primary'))
-          Text(`${new Date(entry.time).toLocaleString()} · ${formatSize(entry.size)}`)
+          Text(`${new Date(entry.time).toLocaleString()} · ${formatSize(entry.size)} · ${this.store.t(historyStatus(entry))}`)
             .fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
           Flex({ wrap: FlexWrap.Wrap, space: { main: LengthMetrics.vp(8), cross: LengthMetrics.vp(10) } }) {
             Button(this.store.t('详情')).onClick(() => { this.preview = entry; this.showPreview = true; })
@@ -65,7 +65,7 @@ export struct LibraryView {
             }).fontColor(this.store.dangerText).backgroundColor(this.store.controlSurface)
           }.width('100%')
         }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-      }, (entry: HistoryEntry) => entry.id)
+      }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.error || ''}`)
       if (this.entries().length > this.visibleCount) {
         Button(this.store.tf('继续查看 · 还有 {0} 项', [String(this.entries().length - this.visibleCount)]))
           .width('100%').height(48).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText).onClick(() => this.visibleCount += 30)

@@ -1,4 +1,4 @@
-import { AppStore, HistoryEntry, Peer, ShareFile, MessageDraft, formatSize, samePeer } from '../model/AppStore';
+import { AppStore, HistoryEntry, Peer, ShareFile, MessageDraft, formatSize, samePeer, historyStatus } from '../model/AppStore';
 import { Conversation, ConversationUpdates, conversationList, conversationTargets, inConversation, peerKey } from '../model/Conversations';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
@@ -162,7 +162,7 @@ export struct MessagesView {
           }.width('100%').onClick(() => this.store.openFile(entry))
         }
         Row() {
-          Text(`${new Date(entry.time).toLocaleTimeString()} · ${entry.direction === 'send' ? this.store.t('已发送') : this.store.t('已接收')}`)
+          Text(`${new Date(entry.time).toLocaleTimeString()} · ${this.store.t(historyStatus(entry))}`)
             .fontSize(11).fontColor($r('sys.color.font_secondary')).layoutWeight(1)
           Button(this.store.t('更多')).fontSize(12).height(30).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
             .bindMenu([
@@ -173,6 +173,13 @@ export struct MessagesView {
               { value: this.store.t('删除记录'), action: () => this.store.removeHistory(entry.id) }
             ])
         }.width('100%')
+        if (entry.error) {
+          Text(this.store.t(entry.error)).fontSize(12).lineHeight(18).fontColor(this.store.dangerText).width('100%')
+        }
+        if (entry.transferId && (entry.status === 'waiting' || entry.status === 'transferring')) {
+          Button(this.store.t('传输任务')).fontSize(12).height(36).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
+            .onClick(() => this.onTransfers())
+        }
       }.padding(18).layoutWeight(1).borderRadius(22)
         .backgroundColor(entry.direction === 'send' ? this.store.controlSurface : this.store.surfaceColor)
         .border({ width: entry.direction === 'send' ? 1 : 0, color: this.store.settings.accent })
@@ -205,7 +212,7 @@ export struct MessagesView {
             if (this.entries().length === 0) {
               EmptyState({ icon: 'message', title: this.query ? this.store.t('没有匹配的消息') : this.store.t('从一句问候开始'), description: this.store.t('文字和文件直接送达这台设备。'), accent: this.store.accentText })
             }
-            ForEach(this.entries().slice(-this.visibleCount), (entry: HistoryEntry) => { this.bubble(entry) }, (entry: HistoryEntry) => entry.id)
+            ForEach(this.entries().slice(-this.visibleCount), (entry: HistoryEntry) => { this.bubble(entry) }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.error || ''}`)
           }.width('100%').padding({ top: 8, bottom: 16 })
         }.width('100%').layoutWeight(1).align(Alignment.Bottom).onScroll(() => {
           this.atEnd = this.messageScroller.isAtEnd();

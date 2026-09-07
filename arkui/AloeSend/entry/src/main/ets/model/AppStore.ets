@@ -58,7 +58,19 @@ export class HistoryEntry {
   galleryPath: string = '';
   text: string = '';
   status: string = 'complete';
+  error: string = '';
+  transferId: string = '';
   peerInfo: Peer | undefined = undefined;
+}
+
+export function historyStatus(entry: HistoryEntry): string {
+  if (entry.status === 'waiting' || entry.status === 'pendingIncoming') return '等待确认';
+  if (entry.status === 'transferring' || entry.status === 'sending' || entry.status === 'receiving') return entry.direction === 'send' ? '发送中…' : '接收中…';
+  if (entry.status === 'error' || entry.status === 'failed') return '传输失败';
+  if (entry.status === 'cancelled' || entry.status === 'canceled') return '已取消';
+  if (entry.status === 'declined') return '已拒绝';
+  if (entry.status === 'skipped') return '已跳过';
+  return entry.direction === 'send' ? '已发送' : '已接收';
 }
 
 export class TransferFile {
@@ -256,7 +268,14 @@ export class AppStore {
       }
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
       this.history = JSON.parse(await this.storage.get('history', '[]') as string) as HistoryEntry[];
+      let interrupted = false;
+      for (const entry of this.history) {
+        if (entry.transferId && ['waiting', 'transferring', 'sending', 'receiving'].includes(entry.status)) {
+          entry.status = 'error'; entry.error = '应用已退出，传输未完成'; interrupted = true;
+        }
+      }
       this.persistentHistory = new Set(this.history.map((entry: HistoryEntry) => entry.id));
+      if (interrupted) await this.save();
       this.applyTheme();
       this.ready = true;
       this.log('原生状态层已初始化');
@@ -537,6 +556,31 @@ export class AppStore {
     }
     if (this.settings.saveHistory) this.persistentHistory.add(entry.id);
     this.persistentHistory = new Set(this.history.filter((item: HistoryEntry) => this.persistentHistory.has(item.id)).map((item: HistoryEntry) => item.id));
+    await this.save();
+  }
+
+  async updateOutgoingHistory(transfer: TransferView, files: ShareFile[], create: boolean = false, declined: boolean = false): Promise<void> {
+    const updates: Map<string, HistoryEntry> = new Map();
+    const additions: HistoryEntry[] = [];
+    for (const file of files) {
+      const id = `send:${transfer.id}:${file.id}`;
+      const existing = this.history.find((entry: HistoryEntry) => entry.id === id);
+      // Deleting a message while it is being sent must remain effective.
+      if (!existing && !create) continue;
+      const entry = existing ? JSON.parse(JSON.stringify(existing)) as HistoryEntry : new HistoryEntry();
+      entry.id = id; entry.transferId = transfer.id; entry.name = file.name;
+      entry.peer = transfer.peer; entry.peerInfo = transfer.peerInfo; entry.direction = 'send';
+      entry.time = transfer.started; entry.size = file.size; entry.text = file.text; entry.path = file.uri;
+      entry.status = transfer.files.find((item: TransferFile) => item.id === file.id)?.status || transfer.status;
+      if (declined && entry.status === 'error') entry.status = 'declined';
+      entry.error = entry.status === 'error' || entry.status === 'declined' || entry.status === 'cancelled' ? transfer.error : '';
+      updates.set(id, entry);
+      if (!existing) {
+        additions.push(entry);
+        if (this.settings.saveHistory) this.persistentHistory.add(id);
+      }
+    }
+    this.history = [...additions.reverse(), ...this.history.map((entry: HistoryEntry) => updates.get(entry.id) || entry)];
     await this.save();
   }
 
