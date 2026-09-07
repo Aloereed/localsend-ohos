@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000083 | [M83-declined-state](artifacts/AloeSend-2000083-M83-declined-state-unsigned.hap) | a29f2ed3 | C181D858F5FE84ADB9E12B51B7D1DA1833A99FA52E0DACFC4F5454275523A546 |
 | 2000082 | [M82-live-transfers](artifacts/AloeSend-2000082-M82-live-transfers-unsigned.hap) | cebea7cc | 2238301DF3CDEEB476DD20EF05CACBC85DFEDEB88A061E8363FF41702153587F |
 | 2000081 | [M81-navigation](artifacts/AloeSend-2000081-M81-navigation-unsigned.hap) | cf40cf42 | 63DB810A0509F462D09641D625848CAEFCFEDA345653832DD939724CAC7EF47D |
 | 2000080 | [M80-pin-input](artifacts/AloeSend-2000080-M80-pin-input-unsigned.hap) | aa361efa | D85E80023610AE63265175DE0162C2A1A32CCAF7C274ACE0D944984EF04DEE70 |

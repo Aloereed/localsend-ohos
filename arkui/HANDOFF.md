@@ -1,8 +1,10 @@
-# 当前交接 · M82
+# 当前交接 · M83
 
-最新包：[AloeSend-2000082-M82-live-transfers-unsigned.hap](artifacts/AloeSend-2000082-M82-live-transfers-unsigned.hap)。版本 2.0.82，包含 M1–M82 累计实现，无需逐个安装。源码提交 `cebea7ccbda9d53c350bc3bd407fd6a5f2f2fef9`，分支 `arkui`。
+最新包：[AloeSend-2000083-M83-declined-state-unsigned.hap](artifacts/AloeSend-2000083-M83-declined-state-unsigned.hap)。版本 2.0.83，包含 M1–M83 累计实现，无需逐个安装。源码提交 `a29f2ed30e7840c6d04af6f472624c41eb34d489`，分支 `arkui`。
 
-SHA-256：`2238301DF3CDEEB476DD20EF05CACBC85DFEDEB88A061E8363FF41702153587F`。
+SHA-256：`C181D858F5FE84ADB9E12B51B7D1DA1833A99FA52E0DACFC4F5454275523A546`。
+
+M83：发送拒绝统一为 declined，接收确认结束后同步文件状态和结束时间。服务集成、消息状态、取消测试及构建通过，83 个未签名包已校验，未访问设备。
 
 M82：任务列表只淘汰结束项，活动传输和等待确认不受 30 项上限挤压。活动状态与亮屏判断保持准确。47 个主机测试文件及构建通过，82 个未签名包校验通过，未访问设备。
 
