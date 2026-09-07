@@ -1,4 +1,10 @@
 {
+  "重试": "progressPage.fileCard.retry",
+  "加入发送清单": "dialogs.addFile.title",
+  "随机名称": "dialogs.quickActions.random",
+  "取消传输": "dialogs.cancelSession.title",
+  "请输入对方设备的接收 PIN": "dialogs.pin.title",
+  "PIN 不正确，请重新输入": "web.invalidPin",
   "状态": "sendPage.status.title",
   "接收中…": "messageTab.receiving",
   "重新读取": "webSharePage.stateCard.tryAgain",

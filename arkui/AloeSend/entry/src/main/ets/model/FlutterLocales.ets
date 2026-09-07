@@ -217,6 +217,12 @@ export const flutterLanguages: LanguageOption[] = [
 ];
 export const flutterLabels: Record<string, Record<string, string>> = {
   "ar": {
+    "重试": "Retry",
+    "加入发送清单": "أضف إلى الاختيار",
+    "随机名称": "عشوائي",
+    "取消传输": "إلغاء نقل الملف",
+    "请输入对方设备的接收 PIN": "أدخل رمز PIN",
+    "PIN 不正确，请重新输入": "رمز PIN غير صالح",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -309,6 +315,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "يستخدم تطبيق AloeSend شهادة موقع ذاتية التوقيع. يجب عليك قبولها في المتصفح."
   },
   "az": {
+    "重试": "Retry",
+    "加入发送清单": "Add to selection",
+    "随机名称": "Random",
+    "取消传输": "Cancel files transfer",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -401,6 +413,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "bg": {
+    "重试": "Retry",
+    "加入发送清单": "Добави към избора",
+    "随机名称": "Случаен",
+    "取消传输": "Отмени прехвърлянето на файлове",
+    "请输入对方设备的接收 PIN": "Въведете ПИН код",
+    "PIN 不正确，请重新输入": "Невалиден ПИН код",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -493,6 +511,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend използва самоподписан сертификат. Трябва да го приемете във вашия браузър."
   },
   "bn": {
+    "重试": "Retry",
+    "加入发送清单": "সিলেকশনে অ্যাড করুন",
+    "随机名称": "র‍্যান্ডম",
+    "取消传输": "ফাইল ট্রান্সফার ক্যানসেল করুন",
+    "请输入对方设备的接收 PIN": "পিন দিন",
+    "PIN 不正确，请重新输入": "পিনটি সঠিক নয়",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -585,6 +609,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend একটি সেল্ফ-সাইন্ড সার্টিফিকেট ব্যবহার করে। আপনাকে ব্রাউজারে এটি একসেপ্ট করতে হবে।"
   },
   "ca": {
+    "重试": "Retry",
+    "加入发送清单": "Afegir a la selecció",
+    "随机名称": "Aleatori",
+    "取消传输": "Cancel·lar transferència del fitxer",
+    "请输入对方设备的接收 PIN": "Introduïr PIN",
+    "PIN 不正确，请重新输入": "PIN invàlid",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -677,6 +707,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilitza un certificat auto-signat. Cal que l'accepteu al navegador."
   },
   "cs": {
+    "重试": "Retry",
+    "加入发送清单": "Přidat do výběru",
+    "随机名称": "Náhodné jméno",
+    "取消传输": "Zrušit přenos souborů",
+    "请输入对方设备的接收 PIN": "Vložit PIN",
+    "PIN 不正确，请重新输入": "Neplatný PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -769,6 +805,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend používá self-signed certifikát. Musíte ho přijmout ve vašem prohlížeči."
   },
   "da": {
+    "重试": "Retry",
+    "加入发送清单": "Tilføj til pakke",
+    "随机名称": "Tilfældig",
+    "取消传输": "Afbryd filoverførsel",
+    "请输入对方设备的接收 PIN": "Indtast PIN-kode",
+    "PIN 不正确，请重新输入": "Ugyldig PIN-kode",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -861,6 +903,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend benytter et selvsigneret certifikat. Det skal accepteres i browseren."
   },
   "de": {
+    "重试": "Retry",
+    "加入发送清单": "Zur Auswahl hinzufügen",
+    "随机名称": "Zufall",
+    "取消传输": "Dateiübertragung abbrechen",
+    "请输入对方设备的接收 PIN": "PIN eingeben",
+    "PIN 不正确，请重新输入": "Ungültige PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -953,6 +1001,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend verwendet ein selbstsigniertes Zertifikat. Du musst es im Browser akzeptieren."
   },
   "el": {
+    "重试": "Retry",
+    "加入发送清单": "Προσθήκη στις επιλογές",
+    "随机名称": "Τυχαία",
+    "取消传输": "Ακύρωση της μεταφοράς του αρχείου",
+    "请输入对方设备的接收 PIN": "Εισαγωγή PIN",
+    "PIN 不正确，请重新输入": "Μη έγκυρο PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1045,6 +1099,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "Το AloeSend χρησιμοποιεί αυτο-υπογεγραμμένο πιστοποιητικό. Χρειάζεται να το αποθεχτείτε στον φυλλομετρητή."
   },
   "en": {
+    "重试": "Retry",
+    "加入发送清单": "Add to selection",
+    "随机名称": "Random",
+    "取消传输": "Cancel files transfer",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1137,6 +1197,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "en-IN": {
+    "重试": "Retry",
+    "加入发送清单": "Add to selection",
+    "随机名称": "Random",
+    "取消传输": "Cancel file transfer",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1229,6 +1295,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "es-ES": {
+    "重试": "Retry",
+    "加入发送清单": "Añadir a selección",
+    "随机名称": "Aleatorio",
+    "取消传输": "Cancelar transferencia de archivos",
+    "请输入对方设备的接收 PIN": "Ingresar PIN",
+    "PIN 不正确，请重新输入": "PIN Inválido",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1321,6 +1393,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza un certificado autofirmado. Necesitas aceptarlo en el navegador."
   },
   "et": {
+    "重试": "Retry",
+    "加入发送清单": "Lisa valiku hulka",
+    "随机名称": "Juhuslikult",
+    "取消传输": "Katkesta failide edastamine",
+    "请输入对方设备的接收 PIN": "Sisesta PIN-kood",
+    "PIN 不正确，请重新输入": "Vigane PIN-kood",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1413,6 +1491,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend kasutab enda poolt allkirjastatud sertifikaate. Ühenduse toimimiseks palun nõustu nendega veebibrauseris."
   },
   "eu": {
+    "重试": "Retry",
+    "加入发送清单": "Gehitu aukeraketari",
+    "随机名称": "Ausazkoa",
+    "取消传输": "Bertan behera utzi fitxategi bidalketa",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1505,6 +1589,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend-ek autosinatutako zertifikatuak erabiltzen ditu. Nabigatzailean onartu behar duzu"
   },
   "fa": {
+    "重试": "Retry",
+    "加入发送清单": "افزودن به انتخاب شده‌ها",
+    "随机名称": "تصادفی",
+    "取消传输": "‌‌لغو انتقال فایل",
+    "请输入对方设备的接收 PIN": "پین را وارد کنید",
+    "PIN 不正确，请重新输入": "پین اشتباه است",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1597,6 +1687,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "لوکال‌سند از یک گواهی خودامضا استفاده می‌کند. شما باید آن را در مرورگر قبول کنید."
   },
   "fi": {
+    "重试": "Retry",
+    "加入发送清单": "Lisää valintaan",
+    "随机名称": "Satunnainen",
+    "取消传输": "Peruuta tiedostonsiirto",
+    "请输入对方设备的接收 PIN": "Syötä PIN-koodi",
+    "PIN 不正确，请重新输入": "Virheellinen PIN-koodi",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1689,6 +1785,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi."
   },
   "fil-PH": {
+    "重试": "Retry",
+    "加入发送清单": "Idagdag sa selection",
+    "随机名称": "Random",
+    "取消传输": "Kanselahin ang pagpapadala ng file",
+    "请输入对方设备的接收 PIN": "Ilagay ang PIN",
+    "PIN 不正确，请重新输入": "Ang PIN ay invalid",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1781,6 +1883,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "Ang AloeSend ay gumagamit ng self-signed certificate. Kailangan mo itong i-accept sa browser."
   },
   "fr": {
+    "重试": "Retry",
+    "加入发送清单": "Ajouter à la sélection",
+    "随机名称": "Aléatoire",
+    "取消传输": "Annuler le transfert de fichiers",
+    "请输入对方设备的接收 PIN": "Entrez le code PIN",
+    "PIN 不正确，请重新输入": "Code PIN invalide",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1873,6 +1981,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilise un certificat auto-signé. Vous devez l'accepter dans le navigateur."
   },
   "gl": {
+    "重试": "Retry",
+    "加入发送清单": "Add to selection",
+    "随机名称": "Random",
+    "取消传输": "Cancel files transfer",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -1965,6 +2079,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "gu": {
+    "重试": "Retry",
+    "加入发送清单": "પસંદગીમાં ઉમેરો",
+    "随机名称": "રેન્ડમ",
+    "取消传输": "ફાઇલ ટ્રાન્સફર રદ કરો",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2057,6 +2177,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "લોકલસેન્ડ એ સ્વ-સાઇન્ડ સર્ટિફિકેટનો ઉપયોગ કરે છે. તમારે તેને તમારા બ્રાઉઝરમાં સ્વીકારવું પડશે."
   },
   "he": {
+    "重试": "Retry",
+    "加入发送清单": "הוסף לבחירה",
+    "随机名称": "אקראי",
+    "取消传输": "בטל את העברת הקבצים",
+    "请输入对方设备的接收 PIN": "הזן סיסמה",
+    "PIN 不正确，请重新输入": "סיסמה לא חוקית",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2149,6 +2275,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend משתמש בתעודה עצמית. עליך לאשר אותה בדפדפן."
   },
   "hi": {
+    "重试": "Retry",
+    "加入发送清单": "फाइल जोड़ें",
+    "随机名称": "यादृच्छिक",
+    "取消传输": "फ़ाइल स्थानांतरण रद्द करें",
+    "请输入对方设备的接收 PIN": "PIN दर्ज करें",
+    "PIN 不正确，请重新输入": "अमान्य PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2241,6 +2373,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्व-हस्ताक्षरित प्रमाणपत्र का उपयोग करता है। आपको इसे अपने ब्राउज़र में स्वीकार करना होगा।"
   },
   "hu": {
+    "重试": "Retry",
+    "加入发送清单": "Hozzáadás a kijelöléshez",
+    "随机名称": "Véletlen",
+    "取消传输": "Fájlátvitel megszakítása",
+    "请输入对方设备的接收 PIN": "PIN kód megadása",
+    "PIN 不正确，请重新输入": "Érvénytelen a PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2333,6 +2471,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "A AloeSend a saját aláírt tanúsítványt használja. A böngészőben kell elfogadnod."
   },
   "id": {
+    "重试": "Retry",
+    "加入发送清单": "Tambahkan dalam pilihan",
+    "随机名称": "Acak",
+    "取消传输": "Batalkan pentransferan berkas",
+    "请输入对方设备的接收 PIN": "Masukkan PIN",
+    "PIN 不正确，请重新输入": "PIN Salah",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2425,6 +2569,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend menggunakan sertifikat self-signed. Anda perlu menerimanya di peramban."
   },
   "it": {
+    "重试": "Retry",
+    "加入发送清单": "Aggiungi alla selezione",
+    "随机名称": "Casuale",
+    "取消传输": "Interrompi trasferimento",
+    "请输入对方设备的接收 PIN": "Inserisci il PIN",
+    "PIN 不正确，请重新输入": "PIN non valido",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2517,6 +2667,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utilizza un certificato autofirmato. Devi accettarlo nel browser."
   },
   "ja": {
+    "重试": "Retry",
+    "加入发送清单": "選択に追加",
+    "随机名称": "ランダム",
+    "取消传输": "ファイル転送をキャンセル",
+    "请输入对方设备的接收 PIN": "PINコードを入力",
+    "PIN 不正确，请重新输入": "PINコードが無効です",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2609,6 +2765,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSendは自己署名証明書を使用しているため、ブラウザーで証明書を許可する必要があります。"
   },
   "km": {
+    "重试": "Retry",
+    "加入发送清单": "បន្ថែមទៅការជ្រើសរើស",
+    "随机名称": "ចៃដន្យ",
+    "取消传输": "បោះបង់ការផ្ទេរឯកសារ",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2701,6 +2863,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend ប្រើវិញ្ញាបនបត្រដែលចុះហត្ថលេខាដោយខ្លួនឯង។ អ្នកត្រូវទទួលយកវានៅក្នុងកម្មវិធី​ browser ។"
   },
   "ko": {
+    "重试": "Retry",
+    "加入发送清单": "선택 파일 추가",
+    "随机名称": "무작위",
+    "取消传输": "파일 전송 취소",
+    "请输入对方设备的接收 PIN": "PIN 번호 입력",
+    "PIN 不正确，请重新输入": "PIN 번호가 올바르지 않습니다",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2793,6 +2961,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend는 자체 서명된 인증서를 사용합니다. 브라우저에서 이를 허용해야 합니다."
   },
   "ml": {
+    "重试": "Retry",
+    "加入发送清单": "Add to selection",
+    "随机名称": "Random",
+    "取消传输": "Cancel files transfer",
+    "请输入对方设备的接收 PIN": "PIN എന്റർ ചെയ്യുക",
+    "PIN 不正确，请重新输入": "PIN തെറ്റാണു",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2885,6 +3059,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "mn": {
+    "重试": "Retry",
+    "加入发送清单": "Add to selection",
+    "随机名称": "Random",
+    "取消传输": "Cancel files transfer",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -2977,6 +3157,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend нь өөрийн гарын үсэг ашигладаг тул үүнийг browser дээрээ хүлээн зөвшөөрнө үү."
   },
   "ms": {
+    "重试": "Retry",
+    "加入发送清单": "Tambah ke pilihan",
+    "随机名称": "Rawak",
+    "取消传输": "Batalkan pemindahan fail",
+    "请输入对方设备的接收 PIN": "Masukkan PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3069,6 +3255,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uses a self-signed certificate. You need to accept it in your browser."
   },
   "ne": {
+    "重试": "Retry",
+    "加入发送清单": "चयनमा थप्नुहोस्",
+    "随机名称": "अनियमित",
+    "取消传输": "फाइल स्थानान्तरण रद्द गर्नुहोस्",
+    "请输入对方设备的接收 PIN": "पिन प्रविष्ट गर्नुहोस्",
+    "PIN 不正确，请重新输入": "अमान्य पिन",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3161,6 +3353,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend एक स्वयंसिग्ध प्रमाणपत्र प्रयोग गर्दछ। तपाईंले ब्राउजरमा यसलाई स्वीकार्नु पर्दछ।"
   },
   "nl": {
+    "重试": "Retry",
+    "加入发送清单": "Toevoegen aan selectie",
+    "随机名称": "Willekeurig",
+    "取消传输": "Bestandsoverdracht annuleren",
+    "请输入对方设备的接收 PIN": "Vul de code in",
+    "PIN 不正确，请重新输入": "Ongeldige code",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3253,6 +3451,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend maakt gebruik van een zelfondertekend certificaat. Je moet dit accepteren in je browser."
   },
   "pl": {
+    "重试": "Retry",
+    "加入发送清单": "Dodaj do wyboru",
+    "随机名称": "Losowy",
+    "取消传输": "Anuluj transfer plików",
+    "请输入对方设备的接收 PIN": "Wpisz kod PIN",
+    "PIN 不正确，请重新输入": "Nieprawidłowy kod PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3345,6 +3549,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend używa samopodpisanego certyfikatu. Musisz go zaakceptować w przeglądarce."
   },
   "pt-BR": {
+    "重试": "Retry",
+    "加入发送清单": "Adicionar à seleção",
+    "随机名称": "Aleatório",
+    "取消传输": "Cancelar transferência de arquivos",
+    "请输入对方设备的接收 PIN": "Digite o PIN",
+    "PIN 不正确，请重新输入": "PIN inválido",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3437,6 +3647,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend utiliza um certificado autoassinado. Você precisa aceitá-lo no navegador."
   },
   "pt-PT": {
+    "重试": "Retry",
+    "加入发送清单": "Adicionar à seleção",
+    "随机名称": "Aleatório",
+    "取消传输": "Cancelar transferência de ficheiros",
+    "请输入对方设备的接收 PIN": "Enter PIN",
+    "PIN 不正确，请重新输入": "Invalid PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3529,6 +3745,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "O AloeSend utiliza um certificado assinado automaticamente. Precisa de aceitá-lo no navegador."
   },
   "ro": {
+    "重试": "Retry",
+    "加入发送清单": "Adaugă la selecție",
+    "随机名称": "Aleatoriu",
+    "取消传输": "Anulează trimiterea fișierelor",
+    "请输入对方设备的接收 PIN": "Introdu codul PIN",
+    "PIN 不正确，请重新输入": "Codul PIN introdus este greșit",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3621,6 +3843,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend folosește un certificat auto-semnat. Trebuie să-l accepți în browserul tău."
   },
   "ru": {
+    "重试": "Retry",
+    "加入发送清单": "Добавить в выборку",
+    "随机名称": "Случайно",
+    "取消传输": "Отменить отправку файлов",
+    "请输入对方设备的接收 PIN": "Введите PIN-код",
+    "PIN 不正确，请重新输入": "Неверный PIN-код",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3713,6 +3941,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend использует самоподписанный сертификат. Вам необходимо принять его в браузере."
   },
   "si": {
+    "重试": "Retry",
+    "加入发送清单": "තේරීමට ඇඩ් කරන්න",
+    "随机名称": "අහඹු",
+    "取消传输": "ගොනු මාරු අවලංගු කරන්න",
+    "请输入对方设备的接收 PIN": "PIN ඇතුල් කරන්න",
+    "PIN 不正确，请重新输入": "වැරදි PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3805,6 +4039,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend self-signed certificate එකක් භාවිතා කරයි. ඔබ විසින් එය බ්‍රවුසරය (browser) තුළ දි පිළිගැනීම (accept) අවශ්‍ය වේ."
   },
   "sk": {
+    "重试": "Retry",
+    "加入发送清单": "Pridať do výberu",
+    "随机名称": "Náhodne",
+    "取消传输": "Zrušiť prenos súborov",
+    "请输入对方设备的接收 PIN": "Zadajte PIN",
+    "PIN 不正确，请重新输入": "Neplatný PIN kód",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3897,6 +4137,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend používa certifikát s vlastným podpisom. Musíte ho prijať vo svojom prehliadači."
   },
   "sl": {
+    "重试": "Retry",
+    "加入发送清单": "Dodaj k izbiri",
+    "随机名称": "Naključno",
+    "取消传输": "Prekliči prenos datotek",
+    "请输入对方设备的接收 PIN": "Vnesite PIN",
+    "PIN 不正确，请重新输入": "Neveljaven PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -3989,6 +4235,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend uporablja samopodpisano potrdilo. Sprejeti ga morate v svojem brskalniku."
   },
   "sr": {
+    "重试": "Retry",
+    "加入发送清单": "Dodajte u izbor",
+    "随机名称": "Nasumično",
+    "取消传输": "Otkažite prenos fajlova",
+    "请输入对方设备的接收 PIN": "Unesite PIN",
+    "PIN 不正确，请重新输入": "Neispravan PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4081,6 +4333,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend koristi samopotpisani sertifikat. Morate ga prihvatiti u svom pregledaču."
   },
   "sr-Cyrl": {
+    "重试": "Retry",
+    "加入发送清单": "Додајте у избор",
+    "随机名称": "Насумично",
+    "取消传输": "Откажите пренос фајлова",
+    "请输入对方设备的接收 PIN": "Унесите PIN",
+    "PIN 不正确，请重新输入": "Неисправан PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4173,6 +4431,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend користи самопотписани сертификат. Морате га прихватити у свом прегледачу."
   },
   "sv": {
+    "重试": "Retry",
+    "加入发送清单": "Lägg till i val",
+    "随机名称": "Slumpmässig",
+    "取消传输": "Avbryt filöverföring",
+    "请输入对方设备的接收 PIN": "Ange PIN-kod",
+    "PIN 不正确，请重新输入": "Ogiltig PIN-kod",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4265,6 +4529,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend använder ett självsignerat certifikat. Du behöver acceptera det i webbläsaren."
   },
   "ta": {
+    "重试": "Retry",
+    "加入发送清单": "தேர்வுக்கு சேர்",
+    "随机名称": "சீரற்ற",
+    "取消传输": "கோப்புகள் பரிமாற்றத்தை ரத்து செய்யவும்",
+    "请输入对方设备的接收 PIN": "PIN-ஐ உள்ளிடவும்",
+    "PIN 不正确，请重新输入": "தவறான PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4357,6 +4627,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend ஒரு சுய கையொப்பம் செய்யப்பட்ட சான்றிதழைப் பயன்படுத்துகிறது. உங்களின் உலாவியில் அதை ஏற்க வேண்டும்."
   },
   "th": {
+    "重试": "Retry",
+    "加入发送清单": "เพิ่มไปยังส่วนที่เลือกไว้",
+    "随机名称": "สุ่ม",
+    "取消传输": "ยกเลิกการโอนไฟล์",
+    "请输入对方设备的接收 PIN": "กรอกรหัส PIN",
+    "PIN 不正确，请重新输入": "รหัส PIN ไม่ถูกต้อง",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4449,6 +4725,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend ใช้ใบรับรองอุปกรณ์จากเว็บเบราเซอร์ (self-signed certificate) คุณต้องกดยอมรับใบรับรองนี้ในเบราว์เซอร์บนอุปกรณ์ของคุณ"
   },
   "tr": {
+    "重试": "Retry",
+    "加入发送清单": "Seçime ekle",
+    "随机名称": "Rastgele",
+    "取消传输": "Dosya transferini iptal et",
+    "请输入对方设备的接收 PIN": "PIN girin",
+    "PIN 不正确，请重新输入": "Geçersiz PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4541,6 +4823,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend, tarayıcıda kabul etmeniz gereken kendi-üretimli bir sertifika kullanır."
   },
   "uk": {
+    "重试": "Retry",
+    "加入发送清单": "Додати у вибірку",
+    "随机名称": "Випадково",
+    "取消传输": "Скасувати надсилання файлів",
+    "请输入对方设备的接收 PIN": "Введіть PIN-код",
+    "PIN 不正确，请重新输入": "Неправильний PIN-код",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4633,6 +4921,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend використовує самопідписаний сертифікат. Вам потрібно прийняти його в браузері."
   },
   "ur": {
+    "重试": "Retry",
+    "加入发送清单": "انتخاب میں شامل کریں",
+    "随机名称": "بے ترتیب",
+    "取消传输": "فائل ٹرانسفر منسوخ کریں۔",
+    "请输入对方设备的接收 PIN": "PIN درج کریں",
+    "PIN 不正确，请重新输入": "غلط PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4725,6 +5019,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend براؤزر میں استعمال کرنے کیلئے آپ کوخود سائن کردہ سرٹیفکیٹ قبول کرنا ہوگا۔"
   },
   "vi": {
+    "重试": "Retry",
+    "加入发送清单": "Thêm vào lựa chọn",
+    "随机名称": "Ngẫu nhiên",
+    "取消传输": "Dừng gửi tập tin",
+    "请输入对方设备的接收 PIN": "Nhập mã PIN",
+    "PIN 不正确，请重新输入": "Sai mã PIN",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -4817,6 +5117,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend dùng chứng chỉ tự tạo. Bạn cần chấp thuận trong trình duyệt."
   },
   "zh": {
+    "重试": "重试",
+    "加入发送清单": "添加文件",
+    "随机名称": "随机",
+    "取消传输": "取消文件传输",
+    "请输入对方设备的接收 PIN": "输入 PIN",
+    "PIN 不正确，请重新输入": "PIN 无效",
     "状态": "状态",
     "接收中…": "接收中",
     "重新读取": "重试",
@@ -4909,6 +5215,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend 使用自签名证书。您需要在浏览器中允许它。"
   },
   "zh-HK": {
+    "重试": "Retry",
+    "加入发送清单": "將檔案加至選擇",
+    "随机名称": "隨機",
+    "取消传输": "取消檔案傳輸",
+    "请输入对方设备的接收 PIN": "輸入密碼",
+    "PIN 不正确，请重新输入": "密碼無效。",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
@@ -5001,6 +5313,12 @@ export const flutterLabels: Record<string, Record<string, string>> = {
     "使用本机自签名证书，浏览器会要求确认。": "AloeSend 用嘅係自我簽署憑證。麻煩你喺瀏覽器度允許咗佢。"
   },
   "zh-TW": {
+    "重试": "Retry",
+    "加入发送清单": "新增檔案",
+    "随机名称": "隨機",
+    "取消传输": "取消檔案傳輸",
+    "请输入对方设备的接收 PIN": "輸入 PIN 碼",
+    "PIN 不正确，请重新输入": "PIN 碼無效",
     "状态": "Status",
     "接收中…": "Receiving",
     "重新读取": "Try Again",
