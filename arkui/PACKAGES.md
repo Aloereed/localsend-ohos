@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000078 | [M78-file-errors](artifacts/AloeSend-2000078-M78-file-errors-unsigned.hap) | ab9ea74d | 6E5CD7182FFBDE60353006B5D6A79AA34577E35789E09475DD92BF0DC94C9C79 |
 | 2000077 | [M77-file-progress](artifacts/AloeSend-2000077-M77-file-progress-unsigned.hap) | d228dc5b | 997677B749CF59352BA91B7C6DCC2F6B90B94E43B9D08D2B1F1C2B781A57495C |
 | 2000076 | [M76-file-retry](artifacts/AloeSend-2000076-M76-file-retry-unsigned.hap) | 859eb425 | E55AA48E495D0BA3AF5BFFF2D94359AA6A7378E974F72CECE1F93DFC40D25DEF |
 | 2000075 | [M75-retry-state](artifacts/AloeSend-2000075-M75-retry-state-unsigned.hap) | 0b1e2b23 | F130D47519AAE3BFEC0D0F09E03D6BD0C7D1D7073260189E4AD9894E0C02DED3 |

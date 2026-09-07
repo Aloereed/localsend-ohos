@@ -1,8 +1,10 @@
-# 当前交接 · M77
+# 当前交接 · M78
 
-最新包：[AloeSend-2000077-M77-file-progress-unsigned.hap](artifacts/AloeSend-2000077-M77-file-progress-unsigned.hap)。版本 2.0.77，包含 M1–M77 累计实现，无需逐个安装。源码提交 `d228dc5b59aeab73ded4c30c0d5e9b3dec17fccd`，分支 `arkui`。
+最新包：[AloeSend-2000078-M78-file-errors-unsigned.hap](artifacts/AloeSend-2000078-M78-file-errors-unsigned.hap)。版本 2.0.78，包含 M1–M78 累计实现，无需逐个安装。源码提交 `ab9ea74df78ba188d0bbf202288aeb38c5de8bf6`，分支 `arkui`。
 
-SHA-256：`997677B749CF59352BA91B7C6DCC2F6B90B94E43B9D08D2B1F1C2B781A57495C`。
+SHA-256：`6E5CD7182FFBDE60353006B5D6A79AA34577E35789E09475DD92BF0DC94C9C79`。
+
+M78：发送文件区分实际失败与任务停止前尚未开始，错误显示在文件行并同步历史，支持复制。文件重试/错误、服务集成、消息状态测试和编译通过；78 个包校验通过。接收端错误归属尚待进一步对齐。
 
 M77：活动文件新增逐项进度、字节数与百分比，整体进度和文件选择增加读屏标签。进度数值与语言测试、编译通过；77 个包已校验。界面动画和读屏实机效果待用户检查，本轮未访问设备。
 
