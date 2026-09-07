@@ -1,11 +1,17 @@
 import { AppStore } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
 import { LengthMetrics } from '@kit.ArkUI';
+import { flutterLanguages } from '../model/FlutterLocales';
+import { resolvedLanguage } from '../model/Locale';
 
 @Component
 export struct SettingsView {
   @ObjectLink store: AppStore;
   onNavigate: (route: string) => void = () => {};
+
+  languageOptions(): SelectOption[] { return [{ value: this.store.t('跟随系统') }, ...flutterLanguages.map((item): SelectOption => ({ value: item.name }))]; }
+  languageIndex(): number { return this.store.settings.language === 'system' ? 0 : flutterLanguages.findIndex((item) => item.id === resolvedLanguage(this.store.settings.language)) + 1; }
+  languageName(): string { return this.languageOptions()[this.languageIndex()].value as string; }
   @State alias: string = '';
   @State port: string = '';
   @State group: string = '';
@@ -121,11 +127,12 @@ export struct SettingsView {
       Column() {
         Row() {
           Text(this.store.t('语言')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-          Select([{ value: this.store.t('跟随系统') }, { value: '简体中文' }, { value: 'English' }])
-            .selected(this.store.settings.language === 'system' ? 0 : this.store.settings.language === 'en' ? 2 : 1)
-            .value(this.store.settings.language === 'system' ? this.store.t('跟随系统') : this.store.settings.language === 'en' ? 'English' : '简体中文')
-            .onSelect((index: number) => { this.store.settings.language = ['system', 'zh', 'en'][index]; this.store.save(); })
+          Select(this.languageOptions()).selected(this.languageIndex()).value(this.languageName()).layoutWeight(2)
+            .onSelect((index: number) => { this.store.settings.language = index === 0 ? 'system' : flutterLanguages[index - 1].id; this.store.save(); })
         }.padding(18).width('100%')
+        if (!['zh', 'en'].includes(resolvedLanguage(this.store.settings.language))) {
+          Text(this.store.t('部分原生界面说明暂以英文显示')).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%').padding({ left: 18, right: 18, bottom: 12 })
+        }
         Row() {
           Text(this.store.t('深浅模式')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
           Select([{ value: this.store.t('跟随系统') }, { value: this.store.t('浅色') }, { value: this.store.t('深色') }])

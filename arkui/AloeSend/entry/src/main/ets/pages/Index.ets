@@ -382,6 +382,7 @@ struct Index {
         .shadow({ radius: this.store.settings.reduceEffects ? 0 : 20, color: this.store.dark ? '#40000000' : '#18314665', offsetY: 6 }).margin({ top: 12 })
     }
     }.linearGradient({ angle: 155, colors: [[this.store.ambientColor, 0], [this.store.canvasColor, 0.38], [this.store.canvasColor, 1]] })
+      .direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
       .width('100%').height('100%')
       .onAreaChange((oldArea: Area, newArea: Area) => this.windowWidth = Number(newArea.width))
       .bindSheet($$this.directoryVisible, this.directorySheet(), { height: SheetSize.LARGE, showClose: true, onDisappear: () => this.closeDirectory('') })

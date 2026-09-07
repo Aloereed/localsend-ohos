@@ -5,7 +5,7 @@ import { systemShare } from '@kit.ShareKit';
 import { pasteboard, deviceInfo, BusinessError } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
-import { uiText } from './Locale';
+import { uiText, resolvedLanguage, isRtlLanguage } from './Locale';
 import { readableColor, presetAccent } from './Colors';
 import { LocalInterface } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
@@ -327,6 +327,7 @@ export class AppStore {
   }
 
   t(text: string): string { return uiText(text, this.settings.language); }
+  get rtl(): boolean { return isRtlLanguage(this.settings.language); }
   systemAccent: string = '#3478F6';
   get accent(): string { return presetAccent(this.settings.themePreset, this.settings.accent, this.systemAccent); }
   get dark(): boolean { return this.settings.theme === 'dark' || (this.settings.theme === 'system' && this.systemDark); }
@@ -868,7 +869,7 @@ export class AppStore {
   }
 
   randomAlias(): string {
-    const names = this.settings.language === 'en' ? ['Aloe', 'Mint', 'Bamboo', 'Lime', 'Cedar'] : ['芦荟', '薄荷', '竹影', '青柠', '雪松'];
+    const names = resolvedLanguage(this.settings.language).startsWith('zh') ? ['芦荟', '薄荷', '竹影', '青柠', '雪松'] : ['Aloe', 'Mint', 'Bamboo', 'Lime', 'Cedar'];
     return `${names[Math.floor(Math.random() * names.length)]} ${Math.floor(1000 + Math.random() * 9000)}`;
   }
 }

@@ -10,7 +10,7 @@ export struct PrivacyView {
   @Prop accepting: boolean = false;
   onAccept: () => void = () => {};
 
-  policy(): PrivacyPolicy { return resolvedLanguage(this.store.settings.language) === 'en' ? policy_en : policy_zh; }
+  policy(): PrivacyPolicy { return resolvedLanguage(this.store.settings.language).startsWith('zh') ? policy_zh : policy_en; }
 
   @Builder
   section(title: string, body: string) {

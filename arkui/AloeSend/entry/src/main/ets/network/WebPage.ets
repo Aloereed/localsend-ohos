@@ -4,7 +4,7 @@ import { resolvedLanguage } from '../model/Locale';
 import { readableColor } from '../model/Colors';
 
 export function webPage(alias: string, files: ShareFile[], language: string = 'zh', accent: string = '#168A75'): string {
-  const english = resolvedLanguage(language) === 'en';
+  const english = !resolvedLanguage(language).startsWith('zh');
   const t = (zh: string, en: string): string => english ? en : zh;
   const color = readableColor(/^#[0-9a-f]{6}$/i.test(accent) ? accent : '#168A75', '#FFFFFF');
   const words: Record<string, string> = {

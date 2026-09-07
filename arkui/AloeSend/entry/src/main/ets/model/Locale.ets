@@ -1,6 +1,8 @@
 import { i18n } from '@kit.LocalizationKit';
+import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "部分原生界面说明暂以英文显示": "Some native interface descriptions are currently shown in English",
   "主题预设": "Theme preset",
   "系统配色": "System colors",
   "自定义颜色": "Custom color",
@@ -460,19 +462,39 @@ const english: Record<string, string> = {
 };
 
 export function resolvedLanguage(language: string): string {
-  if (language !== 'system') return language;
-  try { return i18n.System.getSystemLanguage().startsWith('zh') ? 'zh' : 'en'; }
-  catch (_) { return 'zh'; }
+  let requested = language;
+  if (requested === 'system') {
+    try { requested = i18n.System.getSystemLanguage(); } catch (_) { requested = 'en'; }
+  }
+  const tag = requested.replace(/_/g, '-').toLowerCase();
+  if (tag.startsWith('zh')) {
+    if (tag.includes('-hans')) return 'zh';
+    if (tag.includes('-hk') || tag.includes('-mo')) return 'zh-HK';
+    if (tag.includes('-tw') || tag.includes('-hant')) return 'zh-TW';
+    return 'zh';
+  }
+  const exact = flutterLanguages.find((item) => item.id.toLowerCase() === tag);
+  if (exact) return exact.id;
+  const parent = flutterLanguages.filter((item) => tag.startsWith(item.id.toLowerCase() + '-')).sort((a, b) => b.id.length - a.id.length)[0];
+  if (parent) return parent.id;
+  const base = tag.split('-')[0];
+  return flutterLanguages.find((item) => item.id.toLowerCase() === base)?.id ||
+    flutterLanguages.find((item) => item.id.toLowerCase().split('-')[0] === base)?.id || 'en';
 }
 
+export function isRtlLanguage(language: string): boolean { return ['ar', 'fa', 'he', 'ur'].includes(resolvedLanguage(language).split('-')[0]); }
+
 export function uiText(text: string, language: string): string {
-  if (resolvedLanguage(language) !== 'en') return text;
+  const resolved = resolvedLanguage(language);
+  if (resolved === 'zh') return text;
+  const translated = resolved !== 'en' ? flutterLabels[resolved] : undefined;
+  if (translated && translated[text]) return translated[text];
   if (english[text]) return english[text];
   // Single-field status messages retain device names verbatim.
   for (const key of ['已发送到 {0}', '已收到 {0} 的文件']) {
     const pieces = key.split('{0}');
     if (text.startsWith(pieces[0]) && text.endsWith(pieces[1])) {
-      return english[key].replace('{0}', text.slice(pieces[0].length, text.length - pieces[1].length));
+      return (translated?.[key] || english[key]).replace('{0}', text.slice(pieces[0].length, text.length - pieces[1].length));
     }
   }
   return text;
