@@ -1,8 +1,10 @@
-# 当前交接 · M74
+# 当前交接 · M75
 
-最新包：[AloeSend-2000074-M74-subset-progress-unsigned.hap](artifacts/AloeSend-2000074-M74-subset-progress-unsigned.hap)。版本 2.0.74，包含 M1–M74 累计实现，无需逐个安装。源码提交 `694f038bb11c54dd1eeeaee4a672ffa331efbae6`，分支 `arkui`。
+最新包：[AloeSend-2000075-M75-retry-state-unsigned.hap](artifacts/AloeSend-2000075-M75-retry-state-unsigned.hap)。版本 2.0.75，包含 M1–M75 累计实现，无需逐个安装。源码提交 `0b1e2b238dd967f4f45d52a02ababe795f4b21c3`，分支 `arkui`。
 
-SHA-256：`C129290FEEAD2B012C9CC75253897B1E1A68F433D145530C5B7FEB6E6F1EA65F`。
+SHA-256：`F130D47519AAE3BFEC0D0F09E03D6BD0C7D1D7073260189E4AD9894E0C02DED3`。
+
+M75：重试期间禁用旧入口并在服务端去重；新任务创建后旧任务只显示已重试，没有启动则可继续重试。服务集成及取消、消息状态、部分接收回归通过，编译成功；75 个未签名包已验证。原生重试仍创建新任务，Flutter 同会话单文件重试的差异保留在后续对齐范围中。
 
 M74：对方部分接收时，上传开始前确定接受清单；进度分母和字节数排除跳过文件，完成/取消/失败不再显示剩余时间。真实 HTTP 部分接受与 204 预览确认测试通过，全部 44 个主机测试和构建通过；74 个累计未签名包已校验。
 
