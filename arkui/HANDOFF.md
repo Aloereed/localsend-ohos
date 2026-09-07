@@ -1,8 +1,10 @@
-# 当前交接 · M108
+# 当前交接 · M109
 
-最新包：[AloeSend-2000108-M108-persistence-order-unsigned.hap](artifacts/AloeSend-2000108-M108-persistence-order-unsigned.hap)。版本 2.0.108，包含 M1–M108 累计实现，无需逐个安装。源码提交 `4cfc65bd6a8d505ffb87f74ce60985a205e642d3`，分支 `arkui`。
+最新包：[AloeSend-2000109-M109-save-feedback-unsigned.hap](artifacts/AloeSend-2000109-M109-save-feedback-unsigned.hap)。版本 2.0.109，包含 M1–M109 累计实现，无需逐个安装。源码提交 `b72ef693ee6c4cdeec35c16778081e769f6e1325`，分支 `arkui`。
 
-SHA-256：`61A454882057077211482C9F8249D036D105339D106146C324BB1822E1114A97`。
+SHA-256：`44996740BA6A20207166932DECDB0B5B464A0BB6195E6E2C8A0930EE8A7B6CE7`。
+
+M109：保存返回明确结果，名称/PIN/网络/加密设置只在成功后提示已保存。53 个主机测试、编译及 109 个包校验通过。未访问设备，输入保留便于失败后重试。
 
 M108：保存与恢复设置串行执行，每轮保存取一致的当前快照，失败后队列继续，恢复执行前重查活动。累计 53 个主机测试、额外活动重查测试及编译通过，108 个包校验通过。未访问设备。
 
