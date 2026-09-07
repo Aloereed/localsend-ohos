@@ -1,8 +1,10 @@
-# 当前交接 · M81
+# 当前交接 · M82
 
-最新包：[AloeSend-2000081-M81-navigation-unsigned.hap](artifacts/AloeSend-2000081-M81-navigation-unsigned.hap)。版本 2.0.81，包含 M1–M81 累计实现，无需逐个安装。源码提交 `cf40cf42225dd6cb944606a0c3cf63f210e22c83`，分支 `arkui`。
+最新包：[AloeSend-2000082-M82-live-transfers-unsigned.hap](artifacts/AloeSend-2000082-M82-live-transfers-unsigned.hap)。版本 2.0.82，包含 M1–M82 累计实现，无需逐个安装。源码提交 `cebea7ccbda9d53c350bc3bd407fd6a5f2f2fef9`，分支 `arkui`。
 
-SHA-256：`63DB810A0509F462D09641D625848CAEFCFEDA345653832DD939724CAC7EF47D`。
+SHA-256：`2238301DF3CDEEB476DD20EF05CACBC85DFEDEB88A061E8363FF41702153587F`。
+
+M82：任务列表只淘汰结束项，活动传输和等待确认不受 30 项上限挤压。活动状态与亮屏判断保持准确。47 个主机测试文件及构建通过，82 个未签名包校验通过，未访问设备。
 
 M81：快捷跳转统一同步当前分页控制器，屏幕和系统返回共用逻辑，PIN 等待可返回取消。PIN 取消测试和构建通过；81 个包校验通过。HDS/普通底栏同步与键盘返回的实机效果待检查，未访问设备。
 
