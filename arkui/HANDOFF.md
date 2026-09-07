@@ -1,8 +1,10 @@
-# 当前交接 · M80
+# 当前交接 · M81
 
-最新包：[AloeSend-2000080-M80-pin-input-unsigned.hap](artifacts/AloeSend-2000080-M80-pin-input-unsigned.hap)。版本 2.0.80，包含 M1–M80 累计实现，无需逐个安装。源码提交 `aa361efab7961889039983accd240ddf609b39e9`，分支 `arkui`。
+最新包：[AloeSend-2000081-M81-navigation-unsigned.hap](artifacts/AloeSend-2000081-M81-navigation-unsigned.hap)。版本 2.0.81，包含 M1–M81 累计实现，无需逐个安装。源码提交 `cf40cf42225dd6cb944606a0c3cf63f210e22c83`，分支 `arkui`。
 
-SHA-256：`D85E80023610AE63265175DE0162C2A1A32CCAF7C274ACE0D944984EF04DEE70`。
+SHA-256：`63DB810A0509F462D09641D625848CAEFCFEDA345653832DD939724CAC7EF47D`。
+
+M81：快捷跳转统一同步当前分页控制器，屏幕和系统返回共用逻辑，PIN 等待可返回取消。PIN 取消测试和构建通过；81 个包校验通过。HDS/普通底栏同步与键盘返回的实机效果待检查，未访问设备。
 
 M80：原生设置、发送确认与浏览器上传均支持非数字及长 PIN；发送框加入错误反馈、隐藏/显示和键盘确认，取消清空。真实 HTTP PIN 流程、服务集成和浏览器脚本测试通过，最终构建与 80 个产物校验通过。未访问设备。
 
