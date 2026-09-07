@@ -1,8 +1,10 @@
-# 当前交接 · M83
+# 当前交接 · M84
 
-最新包：[AloeSend-2000083-M83-declined-state-unsigned.hap](artifacts/AloeSend-2000083-M83-declined-state-unsigned.hap)。版本 2.0.83，包含 M1–M83 累计实现，无需逐个安装。源码提交 `a29f2ed30e7840c6d04af6f472624c41eb34d489`，分支 `arkui`。
+最新包：[AloeSend-2000084-M84-share-list-unsigned.hap](artifacts/AloeSend-2000084-M84-share-list-unsigned.hap)。版本 2.0.84，包含 M1–M84 累计实现，无需逐个安装。源码提交 `e6e98d5d87dc8646e9045fe9e51489256a1d6950`，分支 `arkui`。
 
-SHA-256：`C181D858F5FE84ADB9E12B51B7D1DA1833A99FA52E0DACFC4F5454275523A546`。
+SHA-256：`D858C1AB1E6553388F44224DCC43AB2EB91541A646E7DB0B4C66A5898B1DB0F7`。
+
+M84：共享管理页增加全量文件名搜索、初始 30 项和每次 50 项展开、收起及空状态。下载确认请求不分页。界面编译与 84 个包校验通过，未访问设备；实际长列表交互待检查。
 
 M83：发送拒绝统一为 declined，接收确认结束后同步文件状态和结束时间。服务集成、消息状态、取消测试及构建通过，83 个未签名包已校验，未访问设备。
 
