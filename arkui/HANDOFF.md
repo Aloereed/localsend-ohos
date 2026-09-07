@@ -1,8 +1,10 @@
-# 当前交接 · M78
+# 当前交接 · M79
 
-最新包：[AloeSend-2000078-M78-file-errors-unsigned.hap](artifacts/AloeSend-2000078-M78-file-errors-unsigned.hap)。版本 2.0.78，包含 M1–M78 累计实现，无需逐个安装。源码提交 `ab9ea74df78ba188d0bbf202288aeb38c5de8bf6`，分支 `arkui`。
+最新包：[AloeSend-2000079-M79-receive-errors-unsigned.hap](artifacts/AloeSend-2000079-M79-receive-errors-unsigned.hap)。版本 2.0.79，包含 M1–M79 累计实现，无需逐个安装。源码提交 `237e8683858e4b3f95847cce331d5188e1658b9c`，分支 `arkui`。
 
-SHA-256：`6E5CD7182FFBDE60353006B5D6A79AA34577E35789E09475DD92BF0DC94C9C79`。
+SHA-256：`2475D7DC1C8C34E727ED72FA96E3FE34E75970254C5E0C123B6E925DF9C9D842`。
+
+M79：接收端记录具体文件失败原因，其他未完成项显示任务停止，已完成文件保持成功和有效路径。真实 TLS 校验失败及双端取消回归、构建通过；79 个包已校验。未访问设备。
 
 M78：发送文件区分实际失败与任务停止前尚未开始，错误显示在文件行并同步历史，支持复制。文件重试/错误、服务集成、消息状态测试和编译通过；78 个包校验通过。接收端错误归属尚待进一步对齐。
 
