@@ -72,7 +72,7 @@ try {
     $packages = @(Get-ChildItem -LiteralPath $outputDir -Filter '*.app' -File | Where-Object { $_.LastWriteTime -ge $started -and $_.Name -notlike '*unsigned*' })
     if ($packages.Count -ne 1) { throw "Expected one newly generated signed APP in $outputDir" }
     # Check the final nested module manifests, not only the editable source.
-    $disallowed = @('ohos.permission.READ_PASTEBOARD', 'ohos.permission.FILE_ACCESS_PERSIST')
+    $disallowed = @('ohos.permission.READ_PASTEBOARD', 'ohos.permission.FILE_ACCESS_PERSIST', 'ohos.permission.INTERNET')
     $actualPermissions = @()
     $appArchive = [IO.Compression.ZipFile]::OpenRead($packages[0].FullName)
     try {
@@ -90,7 +90,7 @@ try {
                 if ($packedModule.app.debug -ne $false) { throw 'A release module is still debuggable' }
                 if ($packedModule.app.bundleName -ne $profile.app.bundleName -or $packedModule.app.versionCode -ne $versionCode) { throw 'Packaged application identity/version mismatch' }
                 $requested = @($packedModule.module.requestPermissions | ForEach-Object name)
-                if (@($requested | Where-Object { $_ -in $disallowed }).Count) { throw 'Store APP still declares a permission pending approval' }
+                if (@($requested | Where-Object { $_ -in $disallowed }).Count) { throw 'Store APP still declares a permission excluded from this release' }
                 $actualPermissions += $requested
             } finally { $hapArchive.Dispose(); $memory.Dispose() }
         }
