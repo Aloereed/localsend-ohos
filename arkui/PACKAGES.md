@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000060 | [M60-language-picker](artifacts/AloeSend-2000060-M60-language-picker-unsigned.hap) | d1d53a9f | C343A71F80FCF004EACD75469BE264586F38A2A7D5641DCADB7E74FC3A1E6A45 |
 | 2000059 | [M59-flutter-locales](artifacts/AloeSend-2000059-M59-flutter-locales-unsigned.hap) | 816dc6a9 | B2ABB04DE317C926F498369D1ABED7B2B2C4018BF4282D28F728B1303AD32A22 |
 | 2000058 | [M58-theme-presets](artifacts/AloeSend-2000058-M58-theme-presets-unsigned.hap) | 4eef13e2 | 69600A6B710983656824119F1BAC6CA90E07838D6FE3548B0B7203BE01882C97 |
 | 2000057 | [M57-batch-actions](artifacts/AloeSend-2000057-M57-batch-actions-unsigned.hap) | c9fbe901 | 32F4A905FB68637F40793E448D07AFA400AE0AA4350AA4DA90E0941DF32C35CC |
