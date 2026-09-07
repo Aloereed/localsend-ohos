@@ -1,8 +1,10 @@
-# 当前交接 · M93
+# 当前交接 · M94
 
-最新包：[AloeSend-2000093-M93-receive-counts-unsigned.hap](artifacts/AloeSend-2000093-M93-receive-counts-unsigned.hap)。版本 2.0.93，包含 M1–M93 累计实现，无需逐个安装。源码提交 `ecb83ecf043271156469dc8fe116226ddc9373a9`，分支 `arkui`。
+最新包：[AloeSend-2000094-M94-receive-rename-unsigned.hap](artifacts/AloeSend-2000094-M94-receive-rename-unsigned.hap)。版本 2.0.94，包含 M1–M94 累计实现，无需逐个安装。源码提交 `fd0486eda46fc5a2cbe85e805724baa5dd56fea6`，分支 `arkui`。
 
-SHA-256：`743020D4E73C3BFA7C21C515B1F71E501AB6E8B617E9C965B0EF9C873AB5F81E`。
+SHA-256：`C4A341ED29652DCD75DE8028FFD313560FA9010EF0C6AEEC4D5511A0007F27E5`。
+
+M94：接收改名补回省略的原始扩展名，保留显式新扩展名；弹层显示原名，支持键盘完成。名称、服务集成和语言模板测试通过，最终编译及 94 个包校验通过。未访问设备，原生功能与视觉全面对齐仍在进行。
 
 M93：接收确认分别显示提供数量、已选数量与大小，修正部分取消选择后的统计范围不一致；全选/反选按钮可换行。53 语言模板与大小计算测试、最终编译通过，93 个包校验通过。未访问设备，界面实际效果待检查。
 
