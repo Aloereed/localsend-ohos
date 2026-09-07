@@ -9,7 +9,7 @@ const { LocalSendService } = load('network/LocalSendService');
   const work = path.join(__dirname, '../logs/file-retry-' + Date.now()); await fs.mkdir(work, { recursive: true });
   const store = new AppStore(); await store.init({ filesDir: work, getApplicationContext: () => ({ setColorMode() {} }) });
   const service = new LocalSendService(store);
-  const offers = [], uploads = []; let failSecond = true, cancels = 0;
+  const offers = [], uploads = []; let failSecond = true, cancels = 0, expired = '';
   const server = http.createServer((req, res) => {
     const chunks = []; req.on('data', chunk => chunks.push(chunk)); req.on('end', () => {
       if (req.url.includes('prepare-upload')) {
@@ -19,6 +19,9 @@ const { LocalSendService } = load('network/LocalSendService');
       } else {
         if (req.url.includes('/cancel')) cancels++;
         else uploads.push(new URL(req.url, 'http://localhost').searchParams.get('fileId'));
+        if (expired && new URL(req.url, 'http://localhost').searchParams.get('sessionId') === expired) {
+          res.writeHead(403, { 'content-length': 0 }); res.end(); return;
+        }
         res.writeHead(failSecond && (req.url.includes('fileId=second') || req.url.includes('fileId=fourth')) ? 500 : 200, { 'content-length': 0 }); res.end();
       }
     });
@@ -65,7 +68,19 @@ const { LocalSendService } = load('network/LocalSendService');
     assert.equal(offers.length, 3, 'explicit retry after cancellation requires fresh consent');
     assert.notEqual(store.transfers[0].id, cancelled);
     assert.equal(store.transfers[0].status, 'complete');
+    assert.equal(store.transfers.find(item => item.id === cancelled).retryTransferId, store.transfers[0].id);
+    failSecond = true;
+    const outdated = await service.send(peer, [files[1]]);
+    expired = 'attempt-4'; failSecond = false;
+    const cancelsBefore = cancels;
+    await service.retry(outdated);
+    assert.equal(offers.length, 5, 'expired token retry falls back to a new consent request');
+    assert.equal(store.transfers[0].status, 'complete');
+    assert.notEqual(store.transfers[0].id, outdated);
+    assert.equal(cancels, cancelsBefore, 'rejected stale credentials must not cancel another receiver session');
+    assert.equal(store.transfers.find(item => item.id === outdated).retryTransferId, store.transfers[0].id);
     console.log('PASS original-session per-file and bulk retry, preserved successes, consent once and duplicate guards');
   } finally { await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
+
 

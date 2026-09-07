@@ -63,6 +63,7 @@ class SendSessionRef {
 }
 
 class RetryContext {
+  remoteExpired: boolean = false;
   accepted: PrepareReply | undefined = undefined;
   legacy: boolean = false;
   peer: Peer;
@@ -769,6 +770,7 @@ export class LocalSendService {
     const files = selectedFiles.slice(); const transfer = existing || new TransferView();
     if (!existing) transfer.id = util.generateRandomUUID();
     const context = resumed || new RetryContext(peer, files, keepSelection || this.store.settings.sendMode === 'multiple');
+    context.remoteExpired = false;
     this.retryContexts.set(transfer.id, context);
     transfer.error = ''; transfer.finished = 0;
     if (this.retryContexts.size > 40) {
@@ -882,7 +884,10 @@ export class LocalSendService {
             await this.store.updateOutgoingHistory(transfer, files);
             continue;
           }
-          if (upload.status !== 200) throw new Error(`文件发送失败 ${upload.status}`);
+          if (upload.status !== 200) {
+            context.remoteExpired = upload.status === 403 || upload.status === 404;
+            throw new Error(`文件发送失败 ${upload.status}`);
+          }
           view.status = 'complete'; view.transferred = file.size; this.store.updateTransfer(transfer);
           await this.store.updateOutgoingHistory(transfer, files);
         }
@@ -896,7 +901,7 @@ export class LocalSendService {
     } catch (e) {
       context.accepted = undefined;
       const remote = this.sendSessions.get(transfer.id);
-      if (remote && !cancellation.cancelled) this.notifyCancel(remote.peer, remote.remoteId, remote.legacy);
+      if (remote && !cancellation.cancelled && !context.remoteExpired) this.notifyCancel(remote.peer, remote.remoteId, remote.legacy);
       transfer.status = cancellation.cancelled ? 'cancelled' : declined ? 'declined' : 'error'; transfer.error = (e as Error).message; transfer.finished = Date.now();
       const interruptedFile = transfer.files.some((file: TransferFile) => file.status === 'transferring');
       for (const file of transfer.files) {
@@ -959,20 +964,27 @@ export class LocalSendService {
       (previous.status !== 'error' && previous.status !== 'cancelled')) return;
     const incomplete = previous.files.filter((file: TransferFile) => file.status !== 'complete' && file.status !== 'skipped' &&
       !file.retryTransferId && (!fileId || file.id === fileId)).map((file: TransferFile) => file.id);
-    const files = context.files.filter((file: ShareFile) => incomplete.includes(file.id));
+    let files = context.files.filter((file: ShareFile) => incomplete.includes(file.id));
     if (!files.length) return;
     previous.retrying = true; this.store.updateTransfer(previous);
     try {
+      let source = previous;
       if (context.accepted && previous.status === 'error') {
         await this.send(context.peer, files, context.keepSelection, id);
-        return;
+        const current = this.store.transfers.find((transfer: TransferView) => transfer.id === id);
+        if (!context.remoteExpired || !current || current.status !== 'error') return;
+        source = current;
+        files = files.filter((file: ShareFile) => current.files.some((view: TransferFile) => view.id === file.id &&
+          view.status !== 'complete' && view.status !== 'skipped'));
+        if (!files.length) return;
       }
       const next = await this.send(context.peer, files, context.keepSelection);
       if (next) {
-        for (const file of previous.files) { if (incomplete.includes(file.id)) file.retryTransferId = next; }
-        if (previous.files.every((file: TransferFile) => file.status === 'complete' || file.status === 'skipped' || !!file.retryTransferId)) {
-          previous.retryTransferId = next;
+        for (const file of source.files) { if (files.some((item: ShareFile) => item.id === file.id)) file.retryTransferId = next; }
+        if (source.files.every((file: TransferFile) => file.status === 'complete' || file.status === 'skipped' || !!file.retryTransferId)) {
+          source.retryTransferId = next;
         }
+        if (this.store.transfers.some((transfer: TransferView) => transfer.id === id)) this.store.updateTransfer(source);
       }
     }
     finally {
