@@ -1,8 +1,10 @@
-# 当前交接 · M92
+# 当前交接 · M93
 
-最新包：[AloeSend-2000092-M92-share-counts-unsigned.hap](artifacts/AloeSend-2000092-M92-share-counts-unsigned.hap)。版本 2.0.92，包含 M1–M92 累计实现，无需逐个安装。源码提交 `762e62baa5ce9b2d060074787a0a14a8e057bf4a`，分支 `arkui`。
+最新包：[AloeSend-2000093-M93-receive-counts-unsigned.hap](artifacts/AloeSend-2000093-M93-receive-counts-unsigned.hap)。版本 2.0.93，包含 M1–M93 累计实现，无需逐个安装。源码提交 `ecb83ecf043271156469dc8fe116226ddc9373a9`，分支 `arkui`。
 
-SHA-256：`2CABB61FA4BD089F184CE864C09A7F549E5A657A8A924D2142D61B524E19BCF9`。
+SHA-256：`743020D4E73C3BFA7C21C515B1F71E501AB6E8B617E9C965B0EF9C873AB5F81E`。
+
+M93：接收确认分别显示提供数量、已选数量与大小，修正部分取消选择后的统计范围不一致；全选/反选按钮可换行。53 语言模板与大小计算测试、最终编译通过，93 个包校验通过。未访问设备，界面实际效果待检查。
 
 M92：浏览器分享的等待请求与文件总数使用 Flutter 模板，增加管理页分组标题；动态模板由 2 项增至 4 项，53 语言数量对照、目录定位回归及编译通过。92 个包校验通过。未访问设备，翻译覆盖和实机验收仍未全部完成。
 
