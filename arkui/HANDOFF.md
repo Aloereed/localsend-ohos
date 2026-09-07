@@ -1,5 +1,7 @@
 # 当前交接 · M126
 
+已按用户要求另行生成使用 Flutter 发布签名的 [2.0.126 release APP](artifacts/release/AloeSend-2000126-release-20260907-225915-signed.app)。构建源码 `d74af5b77942b67b3e6b05e589507b998a79b7fc`，构建前工作区干净。APP 与独立模块 HAP 签名验证均通过，APP 签名证书与 Flutter release profile 一致。原生日常配置已恢复。SHA-256：`1ACECA630C48EF99B5EF2A8E576803A155756CB886AF6B038657CEFF1E426F12`。这是本次应交付的正式签名包；release 目录更早的 unsigned 或试打包不是最终交付。
+
 最新包：[AloeSend-2000126-M126-bottom-immersion-unsigned.hap](artifacts/AloeSend-2000126-M126-bottom-immersion-unsigned.hap)，版本 2.0.126 / 2000126，产品源码 `3772c4c5`，分支 `arkui`。
 
 SHA-256：`324937E353BF6D410CFC30E8B4CB9A15F830B818B55E3155CE9DAA87E872D572`。
