@@ -312,6 +312,19 @@ export class AppStore {
     this.networkLogs = [entry, ...this.networkLogs].slice(0, 300);
   }
 
+  diagnosticSummary(lines: string[]): string {
+    let version = 'unknown'; let platform = 'unknown';
+    try { version = this.context?.resourceManager.getStringByNameSync('build_version') || 'unknown'; } catch (_) {}
+    try { platform = `API ${deviceInfo.sdkApiVersion} · ${deviceInfo.productModel}`; } catch (_) {}
+    const waiting = this.transfers.filter((item: TransferView) => item.status === 'waiting').length;
+    const active = this.transfers.filter((item: TransferView) => item.status === 'transferring').length;
+    return `AloeSend ${version} · ArkUI\n${new Date().toISOString()}\n${platform}\n${this.serverStatus}\n` +
+      `LocalSend 2.1 · ${this.listenerHttps ? 'HTTPS / Mbed TLS 3.6.7' : 'HTTP'}\n` +
+      `Port: ${this.listenerPort}\nMulticast: ${this.listenerMulticast}\nIP: ${this.localIps.join(', ')}\n` +
+      `SHA-256: ${this.settings.fingerprint}\nDownload access: ${this.downloadAccess}\n` +
+      `Waiting: ${waiting} · Active: ${active} · Queue: ${this.batchRemaining}\n\n${lines.join('\n')}`;
+  }
+
   async acceptPrivacy(): Promise<boolean> {
     if (this.privacyAccepted) return true;
     if (!this.storage) return false;

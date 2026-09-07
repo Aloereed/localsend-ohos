@@ -31,9 +31,7 @@ export struct DiagnosticsView {
   }
 
   summary(): string {
-    return `AloeSend · ArkUI\n${this.store.serverStatus}\nLocalSend 2.1 · ${this.store.listenerHttps ? 'HTTPS / Mbed TLS 3.6.7' : 'HTTP'}\n` +
-      `Port: ${this.store.listenerPort}\nMulticast: ${this.store.listenerMulticast}\nIP: ${this.store.localIps.join(', ')}\n` +
-      `SHA-256: ${this.store.settings.fingerprint}\nDownload access: ${this.store.downloadAccess}\n\n${this.lines().join('\n')}`;
+    return this.store.diagnosticSummary(this.lines());
   }
 
   clear(): void {

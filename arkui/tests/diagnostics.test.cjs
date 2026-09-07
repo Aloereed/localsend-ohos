@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
-const { load } = require('./host-runtime.cjs');
-const { AppStore } = load('model/AppStore');
+const { load, mocks } = require('./host-runtime.cjs');
+const { AppStore, TransferView } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
 const { HttpHead } = load('network/Protocol');
 (async () => {
@@ -15,5 +15,16 @@ const { HttpHead } = load('network/Protocol');
   assert.ok(!line.includes('123456') && !line.includes('private-token'));
   head.target = '/secret-user-path'; await service.handle({ ip: '192.168.1.2' }, head);
   assert.ok(!store.networkLogs[0].message.includes('secret-user-path'));
+  store.context = { resourceManager: { getStringByNameSync: name => { assert.equal(name, 'build_version'); return '2.0.90'; } } };
+  mocks['@kit.BasicServicesKit'].deviceInfo = { sdkApiVersion: 24, productModel: 'Host fixture' };
+  store.settings.pin = 'never-print-this';
+  store.transfers = [Object.assign(new TransferView(), { status: 'waiting' }), Object.assign(new TransferView(), { status: 'transferring' }), Object.assign(new TransferView(), { status: 'complete' })];
+  store.batchRemaining = 2;
+  const report = store.diagnosticSummary(['selected log']);
+  assert.match(report, /AloeSend 2\.0\.90/); assert.match(report, /API 24 · Host fixture/);
+  assert.match(report, /Waiting: 1 · Active: 1 · Queue: 2/);
+  assert.ok(report.endsWith('selected log')); assert.ok(!report.includes(store.settings.pin));
+  store.context = undefined; mocks['@kit.BasicServicesKit'].deviceInfo = undefined;
+  assert.match(store.diagnosticSummary([]), /AloeSend unknown/);
   console.log('PASS bounded diagnostic records, single-line device input and omission of query secrets and arbitrary paths');
 })().catch(error => { console.error(error); process.exitCode = 1; });
