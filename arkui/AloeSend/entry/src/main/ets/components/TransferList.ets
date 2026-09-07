@@ -134,7 +134,7 @@ export struct TransferList {
               Text(`${formatSize(this.done(this.current(transfer.id)))} / ${formatSize(this.total(this.current(transfer.id)))}`).layoutWeight(1).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.width('100%')
           }
-          if (this.current(transfer.id).error) { Text(this.store.t(this.current(transfer.id).error)).fontColor(this.store.dangerText).fontSize(14).width('100%') }
+          if (this.current(transfer.id).error) { Text(this.store.t(this.current(transfer.id).error)).fontColor(this.store.dangerText).fontSize(14).width('100%').copyOption(CopyOptions.LocalDevice) }
           if (this.current(transfer.id).storageNotice) { Text(this.store.t(this.current(transfer.id).storageNotice)).fontColor(this.store.accentText).fontSize(14).width('100%') }
           if (transfer.id === this.store.pendingReceive) {
             Row({ space: 12 }) {
@@ -171,6 +171,10 @@ export struct TransferList {
                   Text(this.currentFile(transfer.id, file.id).preview).fontSize(16).lineHeight(23).maxLines(10).fontColor($r('sys.color.font_primary')).copyOption(CopyOptions.LocalDevice)
                 }
                 Text(`${formatSize(this.currentFile(transfer.id, file.id).size)} · ${this.statusLabel(this.currentFile(transfer.id, file.id).status)}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
+                if (this.currentFile(transfer.id, file.id).error) {
+                  Text(this.store.t(this.currentFile(transfer.id, file.id).error)).fontSize(12).fontColor(this.store.dangerText)
+                    .copyOption(CopyOptions.LocalDevice)
+                }
                 if (this.currentFile(transfer.id, file.id).status === 'transferring') {
                   Row() {
                     Text(`${formatSize(this.currentFile(transfer.id, file.id).transferred)} / ${formatSize(this.currentFile(transfer.id, file.id).size)}`)

@@ -812,7 +812,13 @@ export class LocalSendService {
       const remote = this.sendSessions.get(transfer.id);
       if (remote && !cancellation.cancelled) this.notifyCancel(remote.peer, remote.remoteId, remote.legacy);
       transfer.status = cancellation.cancelled ? 'cancelled' : 'error'; transfer.error = (e as Error).message; transfer.finished = Date.now();
-      for (const file of transfer.files) { if (file.status === 'transferring' || file.status === 'waiting') file.status = transfer.status; }
+      const interruptedFile = transfer.files.some((file: TransferFile) => file.status === 'transferring');
+      for (const file of transfer.files) {
+        if (file.status === 'transferring' || file.status === 'waiting') {
+          file.error = interruptedFile && file.status === 'waiting' ? '任务已停止，此文件尚未开始传输' : transfer.error;
+          file.status = transfer.status;
+        }
+      }
       this.store.log(`发送：${transfer.error}`);
     } finally {
       this.sending.delete(transfer.id); this.sendSessions.delete(transfer.id); this.store.updateTransfer(transfer);

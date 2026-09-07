@@ -2,6 +2,7 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "任务已停止，此文件尚未开始传输": "The transfer stopped before this file started",
   "总体进度 {0}%": "Overall progress {0}%",
   "选择文件 {0}": "Select file {0}",
   "{0}，已传输 {1}%": "{0}, {1}% transferred",

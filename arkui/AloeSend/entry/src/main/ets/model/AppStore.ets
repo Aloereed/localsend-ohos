@@ -77,6 +77,7 @@ export function historyStatus(entry: HistoryEntry): string {
 }
 
 export class TransferFile {
+  error: string = '';
   retryTransferId: string = '';
   id: string = '';
   path: string = '';
@@ -679,7 +680,8 @@ export class AppStore {
       entry.time = transfer.started; entry.size = file.size; entry.text = file.text; entry.path = file.uri;
       entry.status = transferFiles.get(file.id)?.status || transfer.status;
       if (declined && entry.status === 'error') entry.status = 'declined';
-      entry.error = entry.status === 'error' || entry.status === 'declined' || entry.status === 'cancelled' ? transfer.error : '';
+      entry.error = entry.status === 'error' || entry.status === 'declined' || entry.status === 'cancelled' ?
+        (transferFiles.get(file.id)?.error || transfer.error) : '';
       updates.set(id, entry);
       if (!existing) {
         additions.push(entry);
