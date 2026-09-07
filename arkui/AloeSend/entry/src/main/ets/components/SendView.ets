@@ -1,6 +1,8 @@
 import { AppStore, ShareFile, Peer, formatSize } from '../model/AppStore';
 import { AppIcon } from './AppIcon';
 import { EmptyState } from './EmptyState';
+import { peerKey } from '../model/Conversations';
+import { selectedSendTargets } from '../model/SendTargets';
 
 @Component
 export struct SendView {
@@ -40,7 +42,7 @@ export struct SendView {
 
   beginSend(peer: Peer): void {
     if (this.store.settings.sendMode === 'multiple') {
-      const key = `${peer.ip}:${peer.port}`;
+      const key = peerKey(peer);
       this.targets = this.targets.includes(key) ? this.targets.filter((item: string) => item !== key) : [...this.targets, key];
       return;
     }
@@ -57,12 +59,11 @@ export struct SendView {
   }
 
   sendSelected(): void {
-    const peers: Peer[] = [];
-    for (const peer of [...this.store.peers, ...this.store.favorites]) {
-      if (this.targets.includes(`${peer.ip}:${peer.port}`) && !peers.some((item: Peer) => item.ip === peer.ip && item.port === peer.port)) peers.push(peer);
-    }
-    this.onSendMany(peers);
+    const peers = this.selectedPeers();
+    if (peers.length > 0) this.onSendMany(peers);
   }
+
+  selectedPeers(): Peer[] { return selectedSendTargets(this.targets, this.store.peers, this.store.favorites); }
 
   @Builder
   chooseEditor() {
@@ -139,8 +140,9 @@ export struct SendView {
         Text(`${peer.ip}:${peer.port}`).direction(Direction.Ltr).fontSize(12).fontColor($r('sys.color.font_secondary'))
         Text(`${peer.protocol === 'https' ? this.store.t('加密连接') : this.store.t('未加密')}${this.store.isFavorite(peer) ? this.store.t(' · 已收藏') : ''}`).fontSize(11).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onDetails(peer))
-      Button(this.store.settings.sendMode === 'multiple' ? (this.targets.includes(`${peer.ip}:${peer.port}`) ? this.store.t('已选') : this.store.t('选择')) : this.store.t('发送'))
+      Button(this.store.settings.sendMode === 'multiple' ? (this.targets.includes(peerKey(peer)) ? this.store.t('已选') : this.store.t('选择')) : this.store.t('发送'))
         .height(44).constraintSize({ minWidth: 64 }).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.beginSend(peer))
+        .accessibilitySelected(this.store.settings.sendMode === 'multiple' && this.targets.includes(peerKey(peer)))
     }.padding(18).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(22)
   }
 
@@ -204,10 +206,10 @@ export struct SendView {
       if (this.store.peers.length === 0) {
         EmptyState({ icon: 'search', title: this.store.t('寻找另一台设备'), description: this.store.t('在对方设备打开 LocalSend，并连接同一网络。也可以通过 IP 地址直接添加。'), accent: this.store.accentText })
       }
-      ForEach(this.store.peers, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
+      ForEach(this.store.peers, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peerKey(peer)}:${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
       if (this.store.favorites.length > 0) {
         Text(this.store.t('收藏设备')).fontSize(19).fontWeight(FontWeight.Medium).width('100%').fontColor($r('sys.color.font_primary')).margin({ top: 12 })
-        ForEach(this.store.favorites, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
+        ForEach(this.store.favorites, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peerKey(peer)}:${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
       }
       Row({ space: 12 }) {
         Button(this.store.t('通过地址添加')).layoutWeight(1).height(46).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText)
@@ -216,8 +218,8 @@ export struct SendView {
           .onClick(() => this.onWebShare())
       }.width('100%').margin({ top: 8 })
       if (this.store.settings.sendMode === 'multiple') {
-        Button(this.store.tf('发送给 {0} 台设备', [String(this.targets.length)])).width('100%').height(48).backgroundColor(this.store.accentFill)
-          .enabled(this.targets.length > 0 && this.store.files.length > 0).onClick(() => this.sendSelected())
+        Button(this.store.tf('发送给 {0} 台设备', [String(this.selectedPeers().length)])).width('100%').height(48).backgroundColor(this.store.accentFill)
+          .enabled(this.selectedPeers().length > 0 && this.store.files.length > 0).onClick(() => this.sendSelected())
       }
     }.width('100%')
       .bindSheet($$this.sheetVisible, this.sheetContent(), { height: this.sheetKind === 'text' || this.sheetKind === 'choose' ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY })
