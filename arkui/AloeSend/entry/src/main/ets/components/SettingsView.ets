@@ -50,12 +50,22 @@ export struct SettingsView {
   @Builder
   link(text: string, detail: string, destination: string) {
     Row({ space: 10 }) {
-      Text(this.store.t(text)).fontSize(16).fontColor($r('sys.color.font_primary')).layoutWeight(1)
-      Text(destination === 'diagnostics' ? this.store.t(this.store.serverStatus) : destination === 'network' ? this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选') : this.store.t(detail))
-        .fontSize(13).fontColor($r('sys.color.font_secondary'))
+      Column({ space: 5 }) {
+        Text(this.store.t(text)).fontSize(16).fontColor($r('sys.color.font_primary')).width('100%')
+        if (this.linkDetail(detail, destination)) {
+          Text(this.linkDetail(detail, destination)).fontSize(13).lineHeight(20)
+            .fontColor($r('sys.color.font_secondary')).width('100%')
+        }
+      }.layoutWeight(1).alignItems(HorizontalAlign.Start)
       AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') })
     }.padding(18).width('100%').constraintSize({ minHeight: 58 }).onClick(() => this.onNavigate(destination))
-      .accessibilityText(`${this.store.t(text)} ${this.store.t(detail)}`)
+      .accessibilityText(`${this.store.t(text)} ${this.linkDetail(detail, destination)}`)
+  }
+
+  linkDetail(detail: string, destination: string): string {
+    if (destination === 'diagnostics') return this.store.t(this.store.serverStatus);
+    if (destination === 'network') return this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选');
+    return this.store.t(detail);
   }
 
   toggleValue(key: string): boolean {
