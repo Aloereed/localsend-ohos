@@ -1,6 +1,11 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "部分完成": "Partially completed",
+  "{0} 个文件 · {1}": "{0} files · {1}",
+  "已完成 {0}/{1} 项": "Completed {0}/{1}",
+  "查看全部 {0} 项": "View all {0} items",
+  "这批文件": "Files in this transfer",
   "状态": "Status",
   "失败原因": "Failure reason",
   "传输失败": "Transfer failed",

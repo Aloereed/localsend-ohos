@@ -1,5 +1,5 @@
 import { AppStore, HistoryEntry, Peer, ShareFile, MessageDraft, formatSize, samePeer, historyStatus } from '../model/AppStore';
-import { Conversation, ConversationUpdates, conversationList, conversationTargets, inConversation, peerKey } from '../model/Conversations';
+import { Conversation, ConversationUpdates, MessageBatch, messageBatches, batchStatus, conversationList, conversationTargets, inConversation, peerKey } from '../model/Conversations';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 import { EmptyState } from './EmptyState';
@@ -20,6 +20,8 @@ export struct MessagesView {
   @State attachments: ShareFile[] = [];
   @State detailsKind: string = 'file';
   @State newMessages: number = 0;
+  @State selectedBatchKey: string = '';
+  @State batchLimit: number = 50;
   private updates: ConversationUpdates = new ConversationUpdates();
   private observedHistory: HistoryEntry[] = [];
   private atEnd: boolean = true;
@@ -71,10 +73,41 @@ export struct MessagesView {
         }.layoutWeight(1).width('100%')
         Button(this.store.t('完成')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.showDetails = false)
       }.padding(24).height('100%').width('100%')
-    } else { FileDetailsView({ store: this.store, entry: this.detailEntry }) }
+    } else if (this.detailsKind === 'batch') {
+      Column({ space: 16 }) {
+        Text(this.store.t('这批文件')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
+        Text(this.store.tf('已完成 {0}/{1} 项', [String(this.selectedBatch().completed), String(this.selectedBatch().entries.length)]))
+          .fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
+        Scroll() {
+          Column() {
+            ForEach(this.selectedBatch().entries.slice(0, this.batchLimit), (entry: HistoryEntry) => {
+              this.batchFile(entry, true)
+            }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.path}`)
+            if (this.selectedBatch().entries.length > this.batchLimit) {
+              Button(this.store.t('显示更多')).fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.batchLimit += 50)
+            }
+          }.width('100%')
+        }.layoutWeight(1).width('100%')
+      }.padding(24).height('100%').width('100%')
+    } else {
+      Column() {
+        if (this.selectedBatchKey) {
+          Button(this.store.t('这批文件')).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+            .onClick(() => this.detailsKind = 'batch')
+        }
+        FileDetailsView({ store: this.store, entry: this.detailEntry }).layoutWeight(1)
+      }.width('100%').height('100%')
+    }
   }
 
-  openDetails(entry: HistoryEntry): void { this.detailsKind = 'file'; this.detailEntry = entry; this.showDetails = true; }
+  openDetails(entry: HistoryEntry, fromBatch: boolean = false): void {
+    if (!fromBatch) this.selectedBatchKey = '';
+    this.detailsKind = 'file'; this.detailEntry = entry; this.showDetails = true;
+  }
+
+  batches(): MessageBatch[] { return messageBatches(this.entries(), this.query); }
+  selectedBatch(): MessageBatch { return messageBatches(this.entries()).find((batch: MessageBatch) => batch.key === this.selectedBatchKey) || new MessageBatch(); }
+  openBatch(batch: MessageBatch): void { this.selectedBatchKey = batch.key; this.batchLimit = 50; this.detailsKind = 'batch'; this.showDetails = true; }
 
   rememberDraft(): void {
     const value = new MessageDraft(); value.text = this.draft; value.files = this.attachments;
@@ -99,8 +132,45 @@ export struct MessagesView {
   }
 
   entries(): HistoryEntry[] {
-    return this.store.history.filter((entry: HistoryEntry) => inConversation(entry, this.peer) &&
-      `${entry.name} ${entry.text}`.toLowerCase().includes(this.query.toLowerCase())).slice().reverse();
+    return this.store.history.filter((entry: HistoryEntry) => inConversation(entry, this.peer)).slice().reverse();
+  }
+
+  @Builder
+  batchFile(entry: HistoryEntry, fromSheet: boolean) {
+    Row({ space: 12 }) {
+      AppIcon({ name: 'file', iconSize: 22, tint: this.store.accentText })
+      Column({ space: 4 }) {
+        Text(entry.name).fontSize(15).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
+        Text(`${formatSize(entry.size)} · ${this.store.t(historyStatus(entry))}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
+      }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+      if (fromSheet) {
+        Button(this.store.t('更多')).fontSize(12).height(36).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
+          .bindMenu(this.messageActions(entry))
+      } else { Text('›').fontSize(24).fontColor($r('sys.color.font_secondary')) }
+    }.width('100%').padding({ top: 12, bottom: 12 }).constraintSize({ minHeight: 64 })
+      .onClick(() => this.openDetails(entry, fromSheet)).accessibilityText(`${entry.name}, ${this.store.t(historyStatus(entry))}`)
+  }
+
+  @Builder
+  batchBubble(batch: MessageBatch) {
+    Row() {
+      if (batch.entries[0].direction === 'send') { Blank().width(24) }
+      Column({ space: 8 }) {
+        Text(this.store.tf('{0} 个文件 · {1}', [String(batch.entries.length), formatSize(batch.size)]))
+          .fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
+        Text(`${this.store.t(batchStatus(batch))} · ${this.store.tf('已完成 {0}/{1} 项', [String(batch.completed), String(batch.entries.length)])}`)
+          .fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
+        ForEach(batch.entries.slice(0, 3), (entry: HistoryEntry) => { this.batchFile(entry, false) }, (entry: HistoryEntry) => `${entry.id}:${entry.status}`)
+        Button(this.store.tf('查看全部 {0} 项', [String(batch.entries.length)])).width('100%').height(40)
+          .fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.openBatch(batch))
+        if (batch.entries.some((entry: HistoryEntry) => entry.status === 'waiting' || entry.status === 'transferring')) {
+          Button(this.store.t('传输任务')).width('100%').height(36).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+            .onClick(() => this.onTransfers())
+        }
+        Text(new Date(batch.time).toLocaleTimeString()).fontSize(11).fontColor($r('sys.color.font_secondary')).width('100%')
+      }.padding(18).layoutWeight(1).borderRadius(22).backgroundColor(batch.entries[0].direction === 'send' ? this.store.controlSurface : this.store.surfaceColor)
+      if (batch.entries[0].direction !== 'send') { Blank().width(24) }
+    }.width('100%')
   }
 
   async sendText(): Promise<void> {
@@ -212,14 +282,17 @@ export struct MessagesView {
         Search({ value: this.query, placeholder: this.store.t('搜索这段会话') }).onChange((value: string) => { this.query = value; this.visibleCount = 40; })
         Scroll(this.messageScroller) {
           Column({ space: 12 }) {
-            if (this.entries().length > this.visibleCount) {
+            if (this.batches().length > this.visibleCount) {
               Button(this.store.t('查看更早的消息')).height(44).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
                 .onClick(() => this.visibleCount += 40)
             }
-            if (this.entries().length === 0) {
+            if (this.batches().length === 0) {
               EmptyState({ icon: 'message', title: this.query ? this.store.t('没有匹配的消息') : this.store.t('从一句问候开始'), description: this.store.t('文字和文件直接送达这台设备。'), accent: this.store.accentText })
             }
-            ForEach(this.entries().slice(-this.visibleCount), (entry: HistoryEntry) => { this.bubble(entry) }, (entry: HistoryEntry) => `${entry.id}:${entry.status}:${entry.error || ''}`)
+            ForEach(this.batches().slice(-this.visibleCount), (batch: MessageBatch) => {
+              if (batch.entries.length > 1) { this.batchBubble(batch) }
+              else { this.bubble(batch.entries[0]) }
+            }, (batch: MessageBatch) => `${batch.key}:${batch.entries.length}:${batch.completed}:${batchStatus(batch)}:${batch.entries.slice(0, 3).map((entry: HistoryEntry) => `${entry.id}:${entry.name}:${entry.status}:${entry.error || ''}:${entry.path}`).join('|')}`)
           }.width('100%').padding({ top: 8, bottom: 16 })
         }.width('100%').layoutWeight(1).align(Alignment.Bottom).onScroll(() => {
           this.atEnd = this.messageScroller.isAtEnd();

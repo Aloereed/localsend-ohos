@@ -111,6 +111,7 @@ export async function importFlutterData(context: common.UIAbilityContext, target
       }
       for (const key of replaced) imported.delete(key);
       for (const entry of entries) {
+        entry.transferId = `flutter:${old.id}`;
         entry.peer = peer.alias; entry.peerInfo = peer; entry.time = time; entry.direction = old.direction === 'outgoing' ? 'send' : 'receive'; entry.status = state;
         imported.set(entry.id, entry);
       }
