@@ -8,7 +8,7 @@ import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText, resolvedLanguage, isRtlLanguage } from './Locale';
 import { flutterCount } from './DynamicLocale';
 import { readableColor, presetAccent } from './Colors';
-import { LocalInterface, ipv4, ipv6 } from '../network/Addresses';
+import { LocalInterface, ipv4, ipv6, multicastAddress } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { ensureDirectory } from '../platform/Directories';
@@ -272,6 +272,17 @@ export class AppStore {
       this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
       const saved = await this.storage.get('settings', '') as string;
       if (saved) this.settings = JSON.parse(saved) as AppSettings;
+      // Settings written by earlier builds bypassed the current form validation.
+      // Recover only invalid network fields; retain identity and user choices.
+      const defaults = new AppSettings();
+      if (!Number.isInteger(this.settings.port) || this.settings.port < 1024 || this.settings.port > 65535) {
+        this.settings.port = defaults.port;
+      }
+      if (!Number.isInteger(this.settings.discoveryTimeout) || this.settings.discoveryTimeout < 500 || this.settings.discoveryTimeout > 30000) {
+        this.settings.discoveryTimeout = defaults.discoveryTimeout;
+      }
+      try { this.settings.multicast = multicastAddress(this.settings.multicast); }
+      catch (_) { this.settings.multicast = defaults.multicast; }
       if (!['system', 'localsend', 'oled', 'yaru', 'custom'].includes(this.settings.themePreset)) this.settings.themePreset = 'custom';
       if (!this.settings.destinationMode) this.settings.destinationMode = 'private';
       if (!this.settings.deviceModel) this.settings.deviceModel = 'HarmonyOS';
