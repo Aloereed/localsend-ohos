@@ -751,14 +751,15 @@ export class AppStore {
   }
 
   async exportFile(entry: HistoryEntry): Promise<void> {
-    if (!this.context || !entry.path) return;
+    if (!this.context || (!entry.path && !entry.exportedPath)) return;
     try {
+      const sourcePath = await this.readableFilePath(entry);
       const options = new picker.DocumentSaveOptions();
       options.newFileNames = [entry.name.split('/').pop() || entry.name];
       if (this.settings.destination) options.defaultFilePathUri = this.settings.destination;
       const destinations = await new picker.DocumentViewPicker(this.context).save(options);
       if (!destinations.length) return;
-      const source = await fs.open(entry.path, fs.OpenMode.READ_ONLY);
+      const source = await fs.open(sourcePath, fs.OpenMode.READ_ONLY);
       try {
         const destination = await fs.open(destinations[0], fs.OpenMode.READ_WRITE);
         try { await fs.copyFile(source.fd, destination.fd); }
@@ -770,10 +771,22 @@ export class AppStore {
   }
 
   async openFile(entry: HistoryEntry): Promise<void> {
-    if (!entry.path) return;
+    if (!this.context || (!entry.path && !entry.exportedPath)) return;
     try {
-      await this.context?.startAbility({ action: 'ohos.want.action.viewData', uri: entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path), type: mimeForName(entry.name), flags: 1 });
+      const sourcePath = await this.readableFilePath(entry);
+      await this.context.startAbility({ action: 'ohos.want.action.viewData', uri: sourcePath.startsWith('file://') ? sourcePath : fileUri.getUriFromPath(sourcePath), type: mimeForName(entry.name), flags: 1 });
     } catch (e) { this.fail('打开文件失败，可尝试另存为', e as Error); }
+  }
+
+  async readableFilePath(entry: HistoryEntry): Promise<string> {
+    const candidates = [entry.path, entry.exportedPath].filter((path: string) => !!path);
+    for (const path of Array.from(new Set(candidates))) {
+      try {
+        const file = await fs.open(path, fs.OpenMode.READ_ONLY);
+        await fs.close(file); return path;
+      } catch (_) { /* Try the recorded exported copy if the original is unavailable. */ }
+    }
+    throw new Error(this.t('文件和另存副本均不可用，请检查是否已移动或删除'));
   }
 
   async openSelectedFile(file: ShareFile): Promise<void> {
