@@ -246,6 +246,7 @@ export class AppStore {
   onReceiveStarted: (transfer: TransferView) => void = () => {};
   onTransferActivity: (active: boolean) => void = () => {};
   onPickDownloadDirectory: (path: string, purpose: string) => Promise<string> = async () => '';
+  onContinuePhotoSelection: (selected: number, remaining: number) => Promise<boolean> = async () => false;
   downloadAccess: boolean = false;
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
@@ -340,12 +341,12 @@ export class AppStore {
       if (typeof this.settings.reduceEffects !== 'boolean') this.settings.reduceEffects = false;
       if (typeof this.settings.pureBlack !== 'boolean') this.settings.pureBlack = false;
       if (settingsReport.imported.length || settingsReport.preserved.length || settingsReport.skipped.length) {
-        this.flutterSettingsSummary = this.tf('Flutter 设置：已导入 {0} 项，保留本端 {1} 项，未兼容 {2} 项',
+        this.flutterSettingsSummary = this.tf('旧版本设置：已导入 {0} 项，保留本端 {1} 项，未兼容 {2} 项',
           [String(settingsReport.imported.length), String(settingsReport.preserved.length), String(settingsReport.skipped.length)]);
       }
       if (imported.favorites || imported.history || imported.messages || imported.skipped.length) {
         this.flutterImportSummary = this.tf('已导入 Flutter：{0} 个收藏、{1} 条历史、{2} 条消息；未识别 {3} 条（原数据保留）', [String(imported.favorites), String(imported.history), String(imported.messages), String(imported.skipped.length)]);
-        this.log(`Flutter 导入：收藏 ${imported.favorites}，历史 ${imported.history}，消息 ${imported.messages}，未识别 ${imported.skipped.length}`);
+        this.log(`旧版本导入：收藏 ${imported.favorites}，历史 ${imported.history}，消息 ${imported.messages}，未识别 ${imported.skipped.length}`);
       }
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
       // Earlier native versions did not distinguish saved remarks from device names.
@@ -411,14 +412,14 @@ export class AppStore {
       }
       try {
         const report = await importFlutterSettings(context, storage, true, JSON.stringify(this.settings));
-        this.flutterSettingsSummary = this.tf('Flutter 设置：已导入 {0} 项，保留本端 {1} 项，未兼容 {2} 项',
+        this.flutterSettingsSummary = this.tf('旧版本设置：已导入 {0} 项，保留本端 {1} 项，未兼容 {2} 项',
           [String(report.imported.length), String(report.preserved.length), String(report.skipped.length)]);
-        if (!report.imported.length) { this.notice = '没有可导入的 Flutter 设置'; return false; }
+        if (!report.imported.length) { this.notice = '没有可导入的旧版本设置'; return false; }
         this.settings = JSON.parse(await storage.get('settings', '') as string) as AppSettings;
         this.applyTheme();
-        this.notice = 'Flutter 设置已导入；网络设置重启服务后生效，保存目录仍需有效授权。';
+        this.notice = '旧版本设置已导入；网络设置重启服务后生效，保存目录仍需有效授权。';
         return true;
-      } catch (error) { this.fail('导入 Flutter 设置失败', error as Error); return false; }
+      } catch (error) { this.fail('导入旧版本设置失败', error as Error); return false; }
     });
   }
 
@@ -552,14 +553,10 @@ export class AppStore {
       }
       let uris: string[] = [];
       if (kind === 'photo') {
-        const options = new picker.PhotoSelectOptions();
-        options.MIMEType = picker.PhotoViewMIMETypes.IMAGE_VIDEO_TYPE;
-        options.maxSelectNumber = 100;
-        const result = await new picker.PhotoViewPicker(this.context).select(options);
-        uris = result.photoUris;
+        uris = await this.selectPhotoUris();
       } else {
         const options = new picker.DocumentSelectOptions();
-        options.maxSelectNumber = kind === 'folder' ? 1 : 100;
+        options.maxSelectNumber = kind === 'folder' ? 1 : 999;
         options.selectMode = kind === 'folder' ? picker.DocumentSelectMode.FOLDER : picker.DocumentSelectMode.FILE;
         try { uris = await new picker.DocumentViewPicker(this.context).select(options); }
         catch (error) {
@@ -628,16 +625,41 @@ export class AppStore {
     this.files = [...this.files, ...additions]; return true;
   }
 
+  private async selectPhotoUris(): Promise<string[]> {
+    const context = this.context;
+    if (!context) return [];
+    const selected: string[] = [];
+    const seen = new Set<string>();
+    // The system gallery accepts at most 500 per invocation. Keep each call
+    // valid and let the user continue to 999 without publishing a partial draft.
+    while (selected.length < 999) {
+      this.checkSelection();
+      const count = Math.min(500, 999 - selected.length);
+      const options = new picker.PhotoSelectOptions();
+      options.MIMEType = picker.PhotoViewMIMETypes.IMAGE_VIDEO_TYPE;
+      options.maxSelectNumber = count;
+      const result = await new picker.PhotoViewPicker(context).select(options);
+      this.checkSelection();
+      const previous = selected.length;
+      for (const uri of result.photoUris) {
+        if (!seen.has(uri) && selected.length < 999) { seen.add(uri); selected.push(uri); }
+      }
+      if (selected.length === 999 || selected.length === previous || result.photoUris.length < count) break;
+      if (!await this.onContinuePhotoSelection(selected.length, 999 - selected.length)) break;
+    }
+    this.checkSelection();
+    return selected;
+  }
+
   async selectAttachments(kind: string): Promise<ShareFile[]> {
     if (!this.context || this.busy) return [];
     this.beginSelection();
     try {
       let uris: string[];
       if (kind === 'photo') {
-        const options = new picker.PhotoSelectOptions(); options.MIMEType = picker.PhotoViewMIMETypes.IMAGE_VIDEO_TYPE; options.maxSelectNumber = 100;
-        uris = (await new picker.PhotoViewPicker(this.context).select(options)).photoUris;
+        uris = await this.selectPhotoUris();
       } else {
-        const options = new picker.DocumentSelectOptions(); options.maxSelectNumber = 100; options.selectMode = picker.DocumentSelectMode.FILE;
+        const options = new picker.DocumentSelectOptions(); options.maxSelectNumber = 999; options.selectMode = picker.DocumentSelectMode.FILE;
         uris = await new picker.DocumentViewPicker(this.context).select(options);
       }
       const files: ShareFile[] = [];

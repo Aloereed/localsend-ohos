@@ -73,7 +73,7 @@ const legacy = input => Object.fromEntries(Object.entries(input).map(([key, valu
   const first = new AppStore(); await first.init(context);
   assert.equal(first.ready, true); assert.equal(first.settings.alias, 'First upgrade');
   assert.equal(first.settings.https, false); assert.equal(first.settings.themePreset, 'yaru');
-  assert.match(first.flutterSettingsSummary, /Flutter settings/);
+  assert.match(first.flutterSettingsSummary, /Previous version settings/);
   first.settings.alias = 'User changed'; await first.save();
   const reboot = new AppStore(); await reboot.init(context); assert.equal(reboot.settings.alias, 'User changed');
   old = legacy({ alias: 'Manual', https: false }); values = {};

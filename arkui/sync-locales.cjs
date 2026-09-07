@@ -8,7 +8,7 @@ const options = [], labels = {};
 for (const [locale, values] of Object.entries(locales)) {
   const id = locale === 'zh-CN' ? 'zh' : locale;
   if (!values.locale) throw new Error('Locale has no display name: ' + locale);
-  options.push({ id, name: values.locale }); labels[id] = {};
+  options.push({ id, name: id === 'zh-TW' ? '繁體中文' : values.locale }); labels[id] = {};
   for (const [native, key] of Object.entries(keys)) {
     if (!values[key]) throw new Error(`Missing ${locale}:${key}`);
     labels[id][native] = values[key];

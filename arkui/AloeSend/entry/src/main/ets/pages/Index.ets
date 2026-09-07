@@ -19,6 +19,7 @@ import { FloatingNavigation } from '../components/FloatingNavigation';
 import { PinRequestView } from '../components/PinRequestView';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { HdsTabs, HdsTabsController, SystemMaterialParams } from '@kit.UIDesignKit';
+import { floatingBarLayout } from '../model/NavigationLayout';
 
 @Entry
 @Component
@@ -51,6 +52,17 @@ struct Index {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
     if (!this.store.ready) return;
     this.store.onReceiveStarted = () => { this.route = 'transfers'; };
+    this.store.onContinuePhotoSelection = async (selected: number, remaining: number): Promise<boolean> => {
+      try {
+        const result = await this.getUIContext().getPromptAction().showDialog({
+          title: this.store.t('继续添加照片或视频'),
+          message: this.store.tf('已选择 {0} 项，还可继续添加 {1} 项。', [String(selected), String(remaining)]),
+          buttons: [{ text: this.store.t('完成选择'), color: this.store.accentText },
+            { text: this.store.t('继续选择'), color: this.store.accentText }]
+        });
+        return result.index === 1;
+      } catch (_) { return false; }
+    };
     this.store.onPickDownloadDirectory = (path: string, purpose: string) => new Promise<string>((resolve) => {
       this.directoryResolver?.(''); this.directoryResolver = resolve;
       this.directoryInitial = path; this.directoryPurpose = purpose; this.directoryVisible = true;
@@ -371,8 +383,10 @@ struct Index {
           HdsTabs({ barPosition: BarPosition.End, index: this.tab, controller: this.systemTabsController }) {
             this.tabPages()
           }.barOverlap(true).vertical(false).barMode(BarMode.Fixed)
-            .barFloatingStyle({ barWidth: { smallWidth: '92%', mediumWidth: 420, largeWidth: 520 },
-              barSideMargin: 16, barBottomMargin: 16, systemMaterialEffect: this.systemMaterial(), thermoCtrl: true })
+            .barFloatingStyle({ barWidth: { smallWidth: floatingBarLayout(this.windowWidth).width,
+              mediumWidth: floatingBarLayout(this.windowWidth).width, largeWidth: floatingBarLayout(this.windowWidth).width },
+              barSideMargin: floatingBarLayout(this.windowWidth).sideMargin, barBottomMargin: 16,
+              adaptToHandedness: false, systemMaterialEffect: this.systemMaterial(), thermoCtrl: true })
             .barHeight(this.tab === 2 && this.messageDetail ? 0 : 74).width('100%').height('100%')
             .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index)
         } else {
@@ -382,10 +396,10 @@ struct Index {
           .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index)
         if (this.tab !== 2 || !this.messageDetail) {
           FloatingNavigation({ store: this.store, selected: this.tab, onSelect: (index: number) => this.selectTab(index) })
-            .width('92%').constraintSize({ maxWidth: 520 }).margin({ bottom: 16 })
+            .width(floatingBarLayout(this.windowWidth).width).margin({ bottom: 16 })
         }
         }
-        }.layoutWeight(1).width('100%')
+        }.layoutWeight(1).width('100%').clip(true)
       }
     }.width('100%').height('100%')
     }

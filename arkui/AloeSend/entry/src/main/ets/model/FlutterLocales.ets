@@ -212,7 +212,7 @@ export const flutterLanguages: LanguageOption[] = [
   },
   {
     "id": "zh-TW",
-    "name": "繁體中文 (台灣)"
+    "name": "繁體中文"
   }
 ];
 export const flutterLabels: Record<string, Record<string, string>> = {

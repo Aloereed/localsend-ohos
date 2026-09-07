@@ -1,11 +1,13 @@
 # AloeSend 原生 ArkUI
 
-正式发布包：[2.0.130 signed release APP](artifacts/release/AloeSend-2000130-release-20260908-000306-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。C++ 网络层迁移完成，暂时保留 INTERNET。
+上一正式发布包：[2.0.130 signed release APP](artifacts/release/AloeSend-2000130-release-20260908-000306-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。C++ 网络层迁移完成，暂时保留 INTERNET。
 
 发布 APP：运行 `./arkui/build-release.ps1`，沿用 `app/ohos/build-profile.Release.json5` 的签名身份、发布 profile 和兼容 SDK，保留原生模块配置。证书路径失效时只接受同目录中与发布 profile 证书匹配的完整证书链。签名信息临时使用，构建结束恢复日常配置；密码不写入脚本和产物清单。已签名 release APP 归档到 `arkui/artifacts/release/`，同时校验 APP 及独立模块 HAP 签名。
 
-当前建议检查 **M130 / 2.0.130 / 2000130**：
-[未签名 debug 包](artifacts/AloeSend-2000130-M130-native-network-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M131 / 2.0.131 / 2000131**：
+[未签名 debug 包](artifacts/AloeSend-2000131-M131-selection-layout-unsigned.hap)。包含所有此前里程碑。
+
+M131：导入文案统一为“从旧版本导入设置”，语言菜单显示“繁體中文”。文件和消息附件单次 999 项；图库因系统单次 500 项限制，选满后可继续添加到 999 项。悬浮底栏改为随窗口更新的明确宽度和居中间距，六个针对性主机测试及编译通过；实际缩放渲染待设备确认。
 
 M130 将 TCP/TLS 客户端、HTTP 接收与浏览器服务、UDP 设备发现迁至 C++；HTTPS 接收继续复用原有 C++/mbedTLS。ArkTS 保留协议状态、界面与网卡信息查询，不再创建系统 socket。60 个主机测试通过；HTTP、HTTPS 各 3 GiB 慢写盘回归哈希一致、接收队列约 64 KiB。INTERNET 暂时保留，是否能删除必须另做鸿蒙设备验证。
 
