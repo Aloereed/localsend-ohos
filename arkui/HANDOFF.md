@@ -1,8 +1,10 @@
-# 当前交接 · M87
+# 当前交接 · M88
 
-最新包：[AloeSend-2000087-M87-gallery-recovery-unsigned.hap](artifacts/AloeSend-2000087-M87-gallery-recovery-unsigned.hap)。版本 2.0.87，包含 M1–M87 累计实现，无需逐个安装。源码提交 `2c576e59c373ab6832cf178096f81158b05f4b3e`，分支 `arkui`。
+最新包：[AloeSend-2000088-M88-action-locales-unsigned.hap](artifacts/AloeSend-2000088-M88-action-locales-unsigned.hap)。版本 2.0.88，包含 M1–M88 累计实现，无需逐个安装。源码提交 `142847ea0bb12cfe2fcce482ec8f3dbf46f62c5d`，分支 `arkui`。
 
-SHA-256：`5274AE86E6EF86E0C40671AD39F2338C97B5DAFF9D623D30459B72F452191B88`。
+SHA-256：`52EB1ACF532A4BF51FFD1F5D875326B2FF74AEF8DEBD90551C2BDD13A96A3B6A`。
+
+M88：六类操作加入 Flutter 静态翻译映射，总数 96 项，语言测试和构建通过；88 个包校验通过。下一项已确认差异是单台成功关闭后的发送清单清理（Flutter send_provider.closeSession），需保护新加入内容并保留多台模式清单。未访问设备。
 
 M87：相册保存接入副本回退和源文件预检，部分失败仍持久化成功位置、保留剩余队列并报告数量。相册/历史路径测试与构建通过，87 个包校验通过。系统相册实际授权及失败占位项行为待实机验证，未访问设备。
 
