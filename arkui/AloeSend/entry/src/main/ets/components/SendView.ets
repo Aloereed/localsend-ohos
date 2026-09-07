@@ -1,5 +1,6 @@
 import { AppStore, ShareFile, Peer, formatSize } from '../model/AppStore';
 import { AppIcon } from './AppIcon';
+import { ClipboardPasteButton } from './ClipboardPasteButton';
 import { EmptyState } from './EmptyState';
 import { peerKey } from '../model/Conversations';
 import { selectedSendTargets } from '../model/SendTargets';
@@ -54,7 +55,7 @@ export struct SendView {
     if (kind === 'text') { this.textId = ''; this.text = ''; this.sheetKind = 'text'; return; }
     this.sheetVisible = false;
     const peer = this.pendingPeer; this.pendingPeer = undefined;
-    const selected = kind === 'clipboard' ? await this.store.paste() : await this.store.selectFiles(kind);
+    const selected = await this.store.selectFiles(kind);
     if (selected && peer) this.onSend(peer);
   }
 
@@ -74,7 +75,10 @@ export struct SendView {
       Button(this.store.t('照片与视频')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('photo'))
       Button(this.store.t('文件夹')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('folder'))
       Button(this.store.t('文字或链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('text'))
-      Button(this.store.t('剪贴板')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('clipboard'))
+      ClipboardPasteButton({ store: this.store, onPasted: () => {
+        const peer = this.pendingPeer; this.pendingPeer = undefined; this.sheetVisible = false;
+        if (peer) this.onSend(peer);
+      } })
     }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
@@ -88,7 +92,6 @@ export struct SendView {
       .onClick(() => {
         this.pendingPeer = undefined;
         if (kind === 'text') { this.textId = ''; this.text = ''; this.openSheet('text'); }
-        else if (kind === 'clipboard') this.store.paste();
         else this.store.selectFiles(kind);
       }).enabled(!this.store.busy).accessibilityText(this.store.tf('选择{0}', [label])).accessibilityLevel('yes')
   }
@@ -156,7 +159,7 @@ export struct SendView {
         this.action('照片', '▧', 'photo')
         this.action('文件夹', '▱', 'folder')
         this.action('文字 / 链接', 'Aa', 'text')
-        this.action('剪贴板', '▣', 'clipboard')
+        ClipboardPasteButton({ store: this.store, compact: true, onPasted: () => this.pendingPeer = undefined })
         }
       }.width('100%').scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off)
       if (this.store.busy && !this.store.selecting) { LoadingProgress().width(32).height(32) }

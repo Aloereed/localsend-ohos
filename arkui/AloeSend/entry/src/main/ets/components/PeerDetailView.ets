@@ -1,6 +1,7 @@
 import { AppStore, Peer } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
+import { ClipboardPasteButton } from './ClipboardPasteButton';
 
 @Component
 export struct PeerDetailView {
@@ -31,7 +32,7 @@ export struct PeerDetailView {
   async choose(kind: string): Promise<void> {
     if (kind === 'text') { this.textMode = true; return; }
     this.choosing = false;
-    const selected = kind === 'clipboard' ? await this.store.paste() : await this.store.selectFiles(kind);
+    const selected = await this.store.selectFiles(kind);
     if (selected) { this.choosing = false; this.onSend(); }
   }
 
@@ -50,7 +51,7 @@ export struct PeerDetailView {
         Button(this.store.t('照片与视频')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('photo'))
         Button(this.store.t('文件夹')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('folder'))
         Button(this.store.t('文字或链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('text'))
-        Button(this.store.t('剪贴板')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('clipboard'))
+        ClipboardPasteButton({ store: this.store, onPasted: () => { this.choosing = false; this.onSend(); } })
       }
     }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     }.width('100%').height('100%').align(Alignment.Top)

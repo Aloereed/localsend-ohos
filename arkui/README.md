@@ -4,8 +4,10 @@
 
 发布 APP：运行 `./arkui/build-release.ps1`，沿用 `app/ohos/build-profile.Release.json5` 的签名身份、发布 profile 和兼容 SDK，保留原生模块配置。证书路径失效时只接受同目录中与发布 profile 证书匹配的完整证书链。签名信息临时使用，构建结束恢复日常配置；密码不写入脚本和产物清单。已签名 release APP 归档到 `arkui/artifacts/release/`，同时校验 APP 及独立模块 HAP 签名。
 
-当前建议检查 **M126 / 2.0.126 / 2000126**：
-[未签名 debug 包](artifacts/AloeSend-2000126-M126-bottom-immersion-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M127 / 2.0.127 / 2000127**：
+[未签名 debug 包](artifacts/AloeSend-2000127-M127-store-permissions-unsigned.hap)。包含所有此前里程碑。
+
+M127 上架版本移除 READ_PASTEBOARD 和 FILE_ACCESS_PERSIST 声明。粘贴使用系统安全按钮的临时授权，不主动申请剪贴板权限；保存不调用持久权限激活，失效旧目录保留应用内副本并提示重新选择。release 脚本校验实际 APP 内所有模块均不声明这两项权限且 debug=false。
 
 M126 补齐底部系统栏布局与窗口背景，窗口及前台生命周期针对性测试、编译通过；实际手势区域观感待部署确认。
 

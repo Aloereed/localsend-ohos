@@ -71,6 +71,30 @@ try {
     $outputDir = Join-Path $projectRoot 'build\outputs\default'
     $packages = @(Get-ChildItem -LiteralPath $outputDir -Filter '*.app' -File | Where-Object { $_.LastWriteTime -ge $started -and $_.Name -notlike '*unsigned*' })
     if ($packages.Count -ne 1) { throw "Expected one newly generated signed APP in $outputDir" }
+    # Check the final nested module manifests, not only the editable source.
+    $disallowed = @('ohos.permission.READ_PASTEBOARD', 'ohos.permission.FILE_ACCESS_PERSIST')
+    $actualPermissions = @()
+    $appArchive = [IO.Compression.ZipFile]::OpenRead($packages[0].FullName)
+    try {
+        $modules = @($appArchive.Entries | Where-Object FullName -like '*.hap')
+        if (-not $modules.Count) { throw 'Release APP contains no modules' }
+        foreach ($module in $modules) {
+            $memory = [IO.MemoryStream]::new()
+            $stream = $module.Open()
+            try { $stream.CopyTo($memory) } finally { $stream.Dispose() }
+            $memory.Position = 0
+            $hapArchive = [IO.Compression.ZipArchive]::new($memory, [IO.Compression.ZipArchiveMode]::Read)
+            try {
+                $reader = [IO.StreamReader]::new($hapArchive.GetEntry('module.json').Open())
+                try { $packedModule = $reader.ReadToEnd() | ConvertFrom-Json } finally { $reader.Dispose() }
+                if ($packedModule.app.debug -ne $false) { throw 'A release module is still debuggable' }
+                if ($packedModule.app.bundleName -ne $profile.app.bundleName -or $packedModule.app.versionCode -ne $versionCode) { throw 'Packaged application identity/version mismatch' }
+                $requested = @($packedModule.module.requestPermissions | ForEach-Object name)
+                if (@($requested | Where-Object { $_ -in $disallowed }).Count) { throw 'Store APP still declares a permission pending approval' }
+                $actualPermissions += $requested
+            } finally { $hapArchive.Dispose(); $memory.Dispose() }
+        }
+    } finally { $appArchive.Dispose() }
     $verifyDir = Join-Path $releaseDir 'verification'
     New-Item -ItemType Directory -Path $verifyDir -Force | Out-Null
     $java = Join-Path $DevEcoRoot 'jbr\bin\java.exe'
@@ -92,6 +116,7 @@ try {
         flutterProfileSha256 = (Get-FileHash -LiteralPath $FlutterProfile -Algorithm SHA256).Hash
         certificateThumbprint = $certificate.Thumbprint
         appSignatureVerified = $true; moduleSignatureVerified = $true
+        requestedPermissions = @($actualPermissions | Sort-Object -Unique)
         sourceCommit = $sourceCommit; sourceDirty = $sourceDirty
         builtAt = (Get-Date).ToString('o'); bytes = $packages[0].Length; sha256 = $hash
     } | ConvertTo-Json | Set-Content -LiteralPath "$archive.json" -Encoding utf8

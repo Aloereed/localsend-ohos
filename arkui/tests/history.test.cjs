@@ -26,6 +26,7 @@ const work = path.join(__dirname, '../logs/history-fixture-' + Date.now());
   await fs.writeFile(entry.path, 'content'); await store.addHistory(entry);
   store.settings.destinationMode = 'folder'; store.settings.destination = path.join(work, 'default');
   const temporaryFolder = path.join(work, 'one-transfer');
+  await fs.mkdir(temporaryFolder);
   await store.saveReceivedCopy(entry, temporaryFolder, 'session-1');
   assert.equal(store.error, '');
   assert.equal(await fs.readFile(path.join(temporaryFolder, 'AloeSend-session-1/trip/photos/a.txt'), 'utf8'), 'content');

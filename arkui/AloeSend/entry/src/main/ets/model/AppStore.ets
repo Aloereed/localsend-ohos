@@ -1,6 +1,6 @@
 import { preferences } from '@kit.ArkData';
-import { common, ConfigurationConstant, abilityAccessCtrl } from '@kit.AbilityKit';
-import { picker, fileIo as fs, fileUri, fileShare } from '@kit.CoreFileKit';
+import { common, ConfigurationConstant } from '@kit.AbilityKit';
+import { picker, fileIo as fs, fileUri } from '@kit.CoreFileKit';
 import { systemShare } from '@kit.ShareKit';
 import { pasteboard, deviceInfo, BusinessError } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
@@ -708,18 +708,17 @@ export class AppStore {
     });
   }
 
-  async paste(): Promise<boolean> {
+  async paste(authorized: boolean = false): Promise<boolean> {
     this.error = '';
+    if (!authorized) { this.notice = '请点击系统粘贴按钮读取剪贴板'; return false; }
     try {
       if (!this.context) return false;
       const board = pasteboard.getSystemPasteboard();
       if (!await board.hasData()) { this.notice = '剪贴板是空的'; return false; }
-      const result = await abilityAccessCtrl.createAtManager().requestPermissionsFromUser(this.context, ['ohos.permission.READ_PASTEBOARD']);
-      if (result.authResults.some((value: number) => value !== 0)) { this.notice = '未授予剪贴板读取权限'; return false; }
       let data: pasteboard.PasteData;
       try { data = await board.getData(); }
       catch (error) {
-        // The clipboard can be cleared while the permission dialog is open.
+        // The clipboard can be cleared after the system paste gesture.
         // Recheck state instead of interpreting an undocumented error code.
         if ((error as BusinessError).code === 201) { this.notice = '未授予剪贴板读取权限'; return false; }
         let empty = false;
@@ -1004,7 +1003,9 @@ export class AppStore {
     try {
       const download = destination === this.downloadDirectory || destination.startsWith(`${this.downloadDirectory}/`);
       if (download && entry.path.startsWith(`${destination}/`)) { this.updateHistoryLocation(entry, entry.path); await this.save(); return; }
-      if (!download) await fileShare.activatePermission([{ uri: destination, operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
+      if (!download && !await fs.access(destination)) {
+        this.notice = '旧保存目录暂不可用，文件已保存在应用内。请重新选择目录或在历史记录中另存为。'; return;
+      }
       // A unique per-transfer directory prevents overwriting unrelated user files.
       let path = download ? `${destination}/${safeRelativePath(entry.name)}` : `${destination}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
       const original = path; let suffix = 1;

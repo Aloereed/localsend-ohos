@@ -2,6 +2,8 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "请点击系统粘贴按钮读取剪贴板": "Tap the system Paste button to read the clipboard",
+  "旧保存目录暂不可用，文件已保存在应用内。请重新选择目录或在历史记录中另存为。": "The previous save folder is unavailable. Files are kept in the app. Choose a folder again or use Save as from history.",
   "剪贴板是空的": "The clipboard is empty",
   "剪贴板中没有可发送的文字": "There is no text to send on the clipboard",
   "未授予剪贴板读取权限": "Clipboard access was not granted",
