@@ -7,7 +7,7 @@ import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText, resolvedLanguage, isRtlLanguage } from './Locale';
 import { readableColor, presetAccent } from './Colors';
-import { LocalInterface } from '../network/Addresses';
+import { LocalInterface, ipv4, ipv6 } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { ensureDirectory } from '../platform/Directories';
@@ -565,6 +565,25 @@ export class AppStore {
   toggleFavorite(peer: Peer): void {
     this.favorites = this.isFavorite(peer) ? this.favorites.filter((item: Peer) => !samePeer(item, peer)) : [...this.favorites, peer];
     this.save();
+  }
+
+  updateFavorite(peer: Peer, alias: string, address: string, portText: string): Peer {
+    const index = this.favorites.findIndex((item: Peer) => samePeer(item, peer));
+    if (index < 0) throw new Error('此设备已不在收藏中');
+    const ip = address.trim().replace(/^\[([^\]]+)\]$/, '$1');
+    if (!ipv4(ip) && !ipv6(ip)) throw new Error('请输入有效 IP 地址');
+    const port = Number(portText.trim());
+    if (!/^\d+$/.test(portText.trim()) || !Number.isInteger(port) || port < 1 || port > 65535) throw new Error('端口无效');
+    if (this.favorites.some((item: Peer, itemIndex: number) => itemIndex !== index && item.ip === ip && item.port === port)) {
+      throw new Error('此地址已被另一台收藏设备使用');
+    }
+    const updated = JSON.parse(JSON.stringify(this.favorites[index])) as Peer;
+    updated.alias = alias.trim() || updated.alias;
+    updated.ip = ip; updated.port = port;
+    // Keep the saved identity and protocol when editing an offline endpoint.
+    this.favorites = this.favorites.map((item: Peer, itemIndex: number) => itemIndex === index ? updated : item);
+    this.save();
+    return updated;
   }
 
   async addHistory(entry: HistoryEntry, offerGallerySave: boolean = this.settings.offerGallerySave): Promise<void> {

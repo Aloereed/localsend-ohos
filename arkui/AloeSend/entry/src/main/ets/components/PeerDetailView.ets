@@ -1,4 +1,4 @@
-import { AppStore, Peer, samePeer } from '../model/AppStore';
+import { AppStore, Peer } from '../model/AppStore';
 import { localSend } from '../network/LocalSendService';
 import { AppIcon } from './AppIcon';
 
@@ -7,13 +7,26 @@ export struct PeerDetailView {
   @ObjectLink store: AppStore;
   @Prop peer: Peer = new Peer();
   @State alias: string = '';
+  @State address: string = '';
+  @State port: string = '';
   @State choosing: boolean = false;
   @State textMode: boolean = false;
   @State text: string = '';
   onSend: () => void = () => {};
   onMessage: () => void = () => {};
+  onUpdate: (peer: Peer) => void = () => {};
 
-  aboutToAppear(): void { this.alias = this.peer.alias; }
+  aboutToAppear(): void {
+    this.alias = this.peer.alias; this.address = this.peer.ip; this.port = String(this.peer.port);
+  }
+
+  saveFavorite(): void {
+    try {
+      const updated = this.store.updateFavorite(this.peer, this.alias, this.address, this.port);
+      this.peer = updated; this.alias = updated.alias; this.address = updated.ip; this.port = String(updated.port);
+      this.onUpdate(updated); this.store.notice = this.store.t('收藏设备已更新');
+    } catch (error) { this.store.fail('更新收藏失败', error as Error); }
+  }
 
   async choose(kind: string): Promise<void> {
     if (kind === 'text') { this.textMode = true; return; }
@@ -61,13 +74,14 @@ export struct PeerDetailView {
         Column({ space: 12 }) {
           Text(this.store.t('收藏备注')).fontSize(16).fontColor($r('sys.color.font_primary')).width('100%')
           TextInput({ text: this.alias }).maxLength(40).onChange((value: string) => this.alias = value)
-          Button(this.store.t('保存备注')).backgroundColor(this.store.accentFill).onClick(() => {
-            this.store.favorites = this.store.favorites.map((item: Peer) => {
-              if (!samePeer(item, this.peer)) return item;
-              const renamed = JSON.parse(JSON.stringify(item)) as Peer; renamed.alias = this.alias.trim() || item.alias;
-              return renamed;
-            }); this.store.save(); this.store.notice = this.store.t('收藏备注已保存');
-          })
+          Text(this.store.t('IP 地址')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
+          TextInput({ text: this.address, placeholder: '192.168.1.10' }).direction(Direction.Ltr)
+            .onChange((value: string) => this.address = value)
+          Text(this.store.t('端口')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
+          TextInput({ text: this.port, placeholder: '53317' }).direction(Direction.Ltr).type(InputType.Number).maxLength(5)
+            .onChange((value: string) => this.port = value)
+          Text(this.store.t('修改地址不会改变已保存的设备指纹。')).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
+          Button(this.store.t('保存收藏')).backgroundColor(this.store.accentFill).onClick(() => this.saveFavorite())
         }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(24)
       }
       Column({ space: 12 }) {

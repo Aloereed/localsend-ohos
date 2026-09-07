@@ -216,6 +216,7 @@ struct Index {
       Button('Ko-fi').width('100%').height(48).margin({ top: 16 }).fontColor(this.store.accentText).backgroundColor(this.store.surfaceColor).onClick(() => this.store.openUrl('https://ko-fi.com/tienisto'))
     } else if (this.route === 'network') { NetworkView({ store: this.store }) }
     else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer,
+      onUpdate: (peer: Peer) => this.selectedPeer = peer,
       onSend: () => { localSend.send(this.selectedPeer); this.route = 'transfers'; },
       onMessage: () => { this.store.messageTarget = this.selectedPeer; this.route = ''; this.tab = 2; } }) }
     else if (this.route === 'transfers') { TransferList({ store: this.store }) }
