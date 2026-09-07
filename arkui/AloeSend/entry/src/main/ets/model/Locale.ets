@@ -147,6 +147,7 @@ const english: Record<string, string> = {
   "关于 AloeSend": "About AloeSend",
   "通过链接分享": "Share via link",
   "返回": "Back",
+  "恢复选择和名称": "Reset selection and names",
   "收到分享请求": "Incoming share",
   "查看内容，再决定是否接收": "Review the content before accepting",
   "设备": "Device",

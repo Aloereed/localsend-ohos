@@ -15,7 +15,7 @@ export struct TransferList {
   @State batchEdit: boolean = false;
   @State batchMode: string = 'counter';
   @State prefix: string = '';
-  @State padZero: boolean = true;
+  @State padZero: boolean = false;
   @State sortFirst: boolean = false;
 
   current(id: string): TransferView {
@@ -141,10 +141,10 @@ export struct TransferList {
                   if (value !== this.current(transfer.id).offerGallerySave) localSend.setReceiveGalleryOffer(value);
                 }).accessibilityText(this.store.t('本次接收提示保存到相册'))
             }.width('100%')
-            Row({ space: 8 }) {
+            Flex({ wrap: FlexWrap.Wrap }) {
               Button(this.store.t('批量重命名')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
                 .onClick(() => { this.batchEdit = true; this.renameSheet = true; })
-              Button(this.store.t('恢复原名称')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.resetReceiveNames())
+              Button(this.store.t('恢复选择和名称')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.resetReceiveNames())
             }.width('100%')
             Row({ space: 10 }) {
               Text(this.store.tf('共 {0} 项 · {1}', [String(this.current(transfer.id).files.length), formatSize(this.total(this.current(transfer.id)))])).layoutWeight(1).fontSize(13).fontColor($r('sys.color.font_secondary'))

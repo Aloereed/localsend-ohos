@@ -43,9 +43,19 @@ function post(port, target, body) {
   try {
     const batch = await pending(); const originalIds = batch.rows().map(entry => entry.id);
     assert.equal(originalIds.length, 2); assert.ok(batch.rows().every(entry => entry.status === 'waiting' && !entry.path));
+    service.renameReceive('first', 'temporary.txt'); service.selectReceiveFile('second', false);
+    service.resetReceiveNames();
+    const restored = store.transfers.find(transfer => transfer.id === batch.id);
+    assert.equal(restored.files.find(file => file.id === 'first').name, 'first.txt');
+    assert.ok(restored.files.every(file => file.selected), 'reset restores the complete original selection like Flutter');
     service.renameReceive('first', 'renamed.txt'); service.selectReceiveFile('second', false); service.acceptReceive(true);
     const accepted = await batch.response; assert.equal(accepted.status, 200); const session = JSON.parse(accepted.body);
     assert.deepEqual(Object.keys(session.files), ['first']);
+    service.selectReceiveFile('first', false); service.selectReceiveFile('second', true); service.resetReceiveNames();
+    const locked = store.transfers.find(transfer => transfer.id === batch.id);
+    assert.equal(locked.files.find(file => file.id === 'first').selected, true);
+    assert.equal(locked.files.find(file => file.id === 'first').name, 'renamed.txt');
+    assert.equal(locked.files.find(file => file.id === 'second').selected, false, 'late UI callbacks cannot change accepted files');
     const upload = await post(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=first&token=${session.files.first}`, bytes);
     assert.equal(upload.status, 200); assert.deepEqual(batch.rows().map(entry => entry.id), originalIds);
     const complete = batch.rows().find(entry => entry.status === 'complete'), skipped = batch.rows().find(entry => entry.status === 'skipped');

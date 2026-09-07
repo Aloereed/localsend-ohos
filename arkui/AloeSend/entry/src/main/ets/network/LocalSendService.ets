@@ -560,6 +560,7 @@ export class LocalSendService {
   }
 
   selectReceiveFile(id: string, selected: boolean): void {
+    if (!this.receiving || this.receiving.accepted) return;
     const file = this.receiving?.view.files.find((item: TransferFile) => item.id === id);
     if (file && this.receiving) { file.selected = selected; this.store.updateTransfer(this.receiving.view); }
   }
@@ -575,6 +576,7 @@ export class LocalSendService {
     const occupied: string[] = [];
     for (const file of session.view.files) {
       file.name = uniqueName(safeRelativePath(session.files[file.id].fileName), occupied); occupied.push(file.name);
+      file.selected = true;
     }
     this.store.updateTransfer(session.view);
   }
