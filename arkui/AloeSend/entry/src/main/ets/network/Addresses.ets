@@ -16,6 +16,14 @@ export function ipv4(ip: string): boolean {
   return /^\d{1,3}(\.\d{1,3}){3}$/.test(ip) && ip.split('.').every((part: string) => Number(part) <= 255);
 }
 
+export function multicastAddress(input: string): string {
+  const address = input.trim();
+  if (!ipv4(address)) throw new Error('请输入有效的 IPv4 组播地址');
+  const parts = address.split('.').map((part: string) => Number(part));
+  if (parts[0] < 224 || parts[0] > 239) throw new Error('请输入有效的 IPv4 组播地址');
+  return parts.join('.');
+}
+
 export function ipv6(ip: string): boolean {
   const scoped = ip.split('%');
   if (scoped.length > 2 || (scoped.length === 2 && !/^[a-zA-Z0-9_.-]+$/.test(scoped[1]))) return false;

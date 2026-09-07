@@ -1,5 +1,6 @@
 import { AppStore, AppSettings } from '../model/AppStore';
 import { flutterText } from '../model/DynamicLocale';
+import { multicastAddress } from '../network/Addresses';
 import { localSend } from '../network/LocalSendService';
 import { LengthMetrics } from '@kit.ArkUI';
 import { flutterLanguages } from '../model/FlutterLocales';
@@ -117,14 +118,15 @@ export struct SettingsView {
   async saveNetwork(): Promise<void> {
     const port = Number(this.port);
     const timeout = Number(this.timeout);
-    if (!Number.isInteger(timeout) || timeout < 500 || timeout > 30000) { this.store.error = this.store.t('发现超时范围为 500–30000 毫秒'); return; }
-    if (!Number.isInteger(port) || port < 1024 || port > 65535) { this.store.error = this.store.t('端口范围为 1024–65535'); return; }
-    const parts = this.group.split('.').map((part: string) => Number(part));
-    if (parts.length !== 4 || parts.some((part: number) => !Number.isInteger(part) || part < 0 || part > 255) || parts[0] < 224 || parts[0] > 239) {
+    if (!/^\d+$/.test(this.timeout.trim()) || !Number.isInteger(timeout) || timeout < 500 || timeout > 30000) { this.store.error = this.store.t('发现超时范围为 500–30000 毫秒'); return; }
+    if (!/^\d+$/.test(this.port.trim()) || !Number.isInteger(port) || port < 1024 || port > 65535) { this.store.error = this.store.t('端口范围为 1024–65535'); return; }
+    let group = '';
+    try { group = multicastAddress(this.group); } catch (_) {
       this.store.error = this.store.t('请输入有效的 IPv4 组播地址'); return;
     }
+    this.store.error = '';
     this.store.settings.port = port;
-    this.store.settings.multicast = this.group;
+    this.store.settings.multicast = group; this.group = group;
     this.store.settings.discoveryTimeout = timeout; this.store.settings.deviceModel = this.model.trim() || 'HarmonyOS';
     if (await this.store.save()) this.store.notice = this.store.t('网络设置已保存，重启接收服务后生效');
   }
