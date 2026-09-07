@@ -1,10 +1,12 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M122 / 2.0.122 / 2000122**：
-[未签名 debug 包](artifacts/AloeSend-2000122-M122-transfer-error-locales-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M123 / 2.0.123 / 2000123**：
+[未签名 debug 包](artifacts/AloeSend-2000123-M123-immersive-cancel-unsigned.hap)。包含所有此前里程碑。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
-最新验证与待检查范围见 [交接记录](HANDOFF.md)。M122 全部 57 个主机测试文件及编译通过。M121 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
+最新验证与待检查范围见 [交接记录](HANDOFF.md)。M123 全部 58 个主机测试文件及编译通过。M121 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
+
+- **M123**：全屏透明系统栏、主题对比度与安全区域避让；取消通知延长等待、v2 传输失败重试并优先于致命错误响应；加密设置旁增加 Windows 托盘退出重开提示。Windows 真机互操作仍待确认。
 
 ## 最新修复
 

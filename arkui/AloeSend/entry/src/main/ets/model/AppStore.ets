@@ -180,6 +180,9 @@ export function mimeForName(name: string): string {
 
 @Observed
 export class AppStore {
+  safeTopPx: number = 0;
+  safeBottomPx: number = 0;
+  onThemeChanged: () => void = () => {};
   readonly downloadDirectory: string = '/storage/Users/currentUser/Download/com.aloereed.aloesend';
   settings: AppSettings = new AppSettings();
   files: ShareFile[] = [];
@@ -449,6 +452,7 @@ export class AppStore {
       const color = this.context?.resourceManager.getColorSync($r('sys.color.brand'));
       if (color !== undefined) this.systemAccent = '#' + (color & 0xFFFFFF).toString(16).padStart(6, '0').toUpperCase();
     } catch (_) { /* Keep the last known system accent if unavailable. */ }
+    this.onThemeChanged();
   }
   tf(text: string, values: string[]): string {
     if ((text === '已选 {0} 项' || text === '已选 {0} 项 · {1}') && values.length >= (text.endsWith('{1}') ? 2 : 1)) {

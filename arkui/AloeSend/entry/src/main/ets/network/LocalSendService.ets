@@ -199,6 +199,9 @@ class UploadSink implements BodySink {
       this.service.store.updateTransfer(this.session.view);
     }
     if (!recoverable) this.service.failReceive(this.session, this.channel.failureReason || '文件接收中断', this.channel);
+    // A response/EOF can move Flutter out of its sending state before /cancel
+    // arrives. Keep the upload alive until the control request has completed.
+    if (!recoverable) await this.session.stopNotification;
     await this.pendingWrite.catch(() => {});
     if (this.output) { await fs.close(this.output).catch(() => {}); this.output = undefined; }
     if (this.path) await fs.unlink(`${this.path}.part`).catch(() => {});
@@ -728,11 +731,22 @@ export class LocalSendService {
     });
   }
 
-  private notifyCancel(peer: Peer, sessionId: string, legacy: boolean): Promise<void> {
+  private async notifyCancel(peer: Peer, sessionId: string, legacy: boolean): Promise<void> {
     const path = legacy ? '/api/localsend/v1/cancel' : `/api/localsend/v2/cancel?sessionId=${encodeURIComponent(sessionId)}`;
-    return request(peer, 'POST', path, '', new Cancellation(), 1000).then((reply) => {
-      this.store.log(reply.status === 200 ? '对方已确认终止传输' : `终止通知未被对方接受：HTTP ${reply.status}`);
-    }).catch((error: Error) => this.store.log(`终止通知发送失败：${error.message}`));
+    // A new TLS handshake can take more than one second on a busy receiver.
+    // Retry transport failures once, preserving protocol, identity and session.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const reply = await request(peer, 'POST', path, '', new Cancellation(), 4000);
+        if (reply.status === 200) { this.store.log('对方已确认终止传输'); return; }
+        this.store.log(`终止通知未被对方接受：HTTP ${reply.status}`);
+        break;
+      } catch (error) {
+        this.store.log(`终止通知发送失败：${(error as Error).message}`);
+        if (error instanceof PeerIdentityError || legacy) break;
+      }
+    }
+    this.store.notice = this.store.t('本端已停止，但未收到对方的终止确认。若 Windows 端仍在发送，请在对方取消任务；切换过加密设置时请退出并重新打开 LocalSend。');
   }
 
   private cancelByPeer(ip: string, remoteId: string, legacy: boolean): boolean {

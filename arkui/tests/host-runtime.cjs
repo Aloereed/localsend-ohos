@@ -142,6 +142,7 @@ const mocks = {
   '@kit.LocalizationKit': { intl: { PluralRules: Intl.PluralRules }, i18n: { System: { getSystemLanguage: () => 'zh-Hans' } } },
   '@kit.BackgroundTasksKit': { backgroundTaskManager: { BackgroundMode: { DATA_TRANSFER: 1 }, startBackgroundRunning: async () => {}, stopBackgroundRunning: async () => {} } },
   '@kit.AbilityKit': { ConfigurationConstant: { ColorMode: { COLOR_MODE_DARK: 0, COLOR_MODE_LIGHT: 1, COLOR_MODE_NOT_SET: -1 } } },
+  '@kit.ArkUI': { window: { AvoidAreaType: { TYPE_SYSTEM: 0, TYPE_CUTOUT: 1, TYPE_NAVIGATION_INDICATOR: 2 } } },
   '@kit.ArkData': { preferences: { getPreferences: async context => {
     const values = new Map(); return { get: async (key, fallback) => values.has(key) ? values.get(key) : fallback, put: async (key, value) => values.set(key, value), flush: async () => {} };
   } } },

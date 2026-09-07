@@ -110,7 +110,7 @@ export struct SettingsView {
           if (key === 'https') this.store.settings.https = value;
           const saved = await this.store.save();
           if (key === 'visible') localSend.announce();
-          if (key === 'https' && saved) this.store.notice = this.store.t('加密设置已保存，请在没有传输时重启服务');
+          if (key === 'https' && saved) this.store.notice = this.store.t('加密设置已保存。重启本端服务后，请完全退出并重新打开 Windows 端 LocalSend，避免传输停在 0%。');
         }).accessibilityText(this.store.t(title))
     }.padding(18).width('100%')
   }
@@ -241,6 +241,8 @@ export struct SettingsView {
         this.toggle('高级设置', '端口与组播地址', 'advanced')
         if (this.store.settings.advanced) {
           this.toggle('HTTPS 加密传输', '建议保持开启；修改后需重启接收服务', 'https')
+          Text(this.store.t('切换加密后，Windows 端 LocalSend 可能仍使用旧连接，导致进度停在 0%。请重启本端接收服务，并在 Windows 系统托盘退出 LocalSend 后重新打开。'))
+            .fontSize(13).lineHeight(21).fontColor($r('sys.color.font_secondary')).width('100%').padding({ left: 18, right: 18, bottom: 16 })
           Column({ space: 12 }) {
             Text(this.store.t('设备型号')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
             TextInput({ text: this.model, placeholder: 'HarmonyOS' }).maxLength(80).onChange((value: string) => this.model = value)

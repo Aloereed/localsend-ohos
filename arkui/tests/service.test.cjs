@@ -271,9 +271,13 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
     await check('local receive cancellation reaches the sender over HTTP and HTTPS and stops the pending batch', async () => {
       const cert = await fs.readFile(path.join(work, 'identity-cert.pem'));
       const key = await fs.readFile(path.join(work, 'identity-key.pem'));
-      for (const protocol of ['http', 'https']) {
-        let notified = '', requests = 0; const sockets = new Set();
-        const handler = (req, res) => { requests++; notified = req.url; req.resume(); res.writeHead(200, { 'content-length': 2 }); res.end('{}'); };
+      for (const [protocol, scenario] of [['http', 'normal'], ['https', 'slow'], ['https', 'retry'], ['https', 'failure']]) {
+        let notified = '', requests = 0, confirmed = false, closedBeforeConfirmation = false; const sockets = new Set();
+        const handler = (req, res) => {
+          requests++; notified = req.url; req.resume();
+          if (scenario === 'retry' && requests === 1) { req.socket.destroy(); return; }
+          setTimeout(() => { confirmed = true; res.writeHead(200, { 'content-length': 2 }); res.end('{}'); }, scenario === 'normal' ? 0 : 1300);
+        };
         const remote = protocol === 'https' ? https.createServer({ cert, key }, handler) : http.createServer(handler);
         remote.on('connection', socket => { sockets.add(socket); socket.on('close', () => sockets.delete(socket)); });
         await new Promise(resolve => remote.listen(0, '127.0.0.1', resolve));
@@ -286,17 +290,21 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
           const session = (await call(port, '/api/localsend/v2/prepare-upload', payload)).json();
           client = tls.connect({ host: '127.0.0.1', port, rejectUnauthorized: false });
           client.on('error', () => {}); await new Promise(resolve => client.once('secureConnect', resolve));
+          client.on('close', () => { if (!confirmed) closedBeforeConfirmation = true; });
+          client.on('data', () => { if (!confirmed) closedBeforeConfirmation = true; });
           client.write(`POST /api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1} HTTP/1.1\r\nHost: localhost\r\nContent-Length: ${data.length}\r\n\r\n`);
           client.write(data.subarray(0, 1000));
           await until(() => store.transfers[0].files[0].transferred === 1000);
-          service.cancel(session.sessionId); service.cancel(session.sessionId);
-          assert.equal(store.transfers[0].status, 'cancelled');
-          assert.equal(store.transfers[0].files[1].status, 'cancelled');
+          if (scenario === 'failure') service.receiving.uploads[0].fail(new Error('injected fatal receive error'));
+          else { service.cancel(session.sessionId); service.cancel(session.sessionId); }
+          assert.equal(store.transfers[0].status, scenario === 'failure' ? 'error' : 'cancelled');
+          assert.equal(store.transfers[0].files[1].status, scenario === 'failure' ? 'error' : 'cancelled');
           await until(() => notified, 1500);
           assert.equal(notified, `/api/localsend/v2/cancel?sessionId=${session.sessionId}`);
-          assert.equal(requests, 1, 'duplicate cancel does not notify twice');
-          await until(() => store.logs.some(line => line.includes('对方已确认终止传输')));
-          await until(() => handles.size === 0);
+          await until(() => confirmed, 4000);
+          assert.equal(requests, scenario === 'retry' ? 2 : 1, 'retry only a failed transport; duplicate cancel is ignored');
+          await until(() => handles.size === 0, 4000);
+          assert.equal(closedBeforeConfirmation, false, 'Flutter must receive cancellation before upload response or EOF');
         } finally { client?.destroy(); for (const socket of sockets) socket.destroy(); await new Promise(resolve => remote.close(resolve)); }
       }
     });

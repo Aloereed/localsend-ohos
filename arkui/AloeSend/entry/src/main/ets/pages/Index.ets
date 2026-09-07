@@ -404,6 +404,8 @@ struct Index {
     }.linearGradient({ angle: 155, colors: [[this.store.ambientColor, 0], [this.store.canvasColor, 0.38], [this.store.canvasColor, 1]] })
       .direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
       .width('100%').height('100%')
+      .ignoreLayoutSafeArea([LayoutSafeAreaType.SYSTEM], [LayoutSafeAreaEdge.TOP, LayoutSafeAreaEdge.BOTTOM])
+      .padding({ top: this.getUIContext().px2vp(this.store.safeTopPx), bottom: this.getUIContext().px2vp(this.store.safeBottomPx) })
       .onAreaChange((oldArea: Area, newArea: Area) => this.windowWidth = Number(newArea.width))
       .bindSheet($$this.directoryVisible, this.directorySheet(), { height: SheetSize.LARGE, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY, onDisappear: () => this.closeDirectory('') })
   }

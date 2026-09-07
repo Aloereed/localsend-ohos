@@ -2,6 +2,9 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "加密设置已保存。重启本端服务后，请完全退出并重新打开 Windows 端 LocalSend，避免传输停在 0%。": "Encryption settings saved. Restart this device's service, then fully quit and reopen LocalSend on Windows to avoid transfers getting stuck at 0%.",
+  "切换加密后，Windows 端 LocalSend 可能仍使用旧连接，导致进度停在 0%。请重启本端接收服务，并在 Windows 系统托盘退出 LocalSend 后重新打开。": "After changing encryption, LocalSend on Windows may reuse an old connection and stay at 0%. Restart this receiving service, then quit LocalSend from the Windows system tray and reopen it.",
+  "本端已停止，但未收到对方的终止确认。若 Windows 端仍在发送，请在对方取消任务；切换过加密设置时请退出并重新打开 LocalSend。": "Stopped locally, but the other device has not confirmed cancellation. If Windows is still sending, cancel the task there; after changing encryption, fully quit and reopen LocalSend.",
   "文件超出声明长度": "The file exceeds its declared size",
   "文件写入失败": "Could not write the file",
   "文件未完整接收": "The file was not received completely",

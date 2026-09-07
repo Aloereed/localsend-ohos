@@ -11,6 +11,25 @@ export default class EntryAbility extends UIAbility {
   private foreground: boolean = true;
   private screenKeeper: ScreenKeeper | undefined = undefined;
   private windowGeneration: number = 0;
+  private mainWindow: window.Window | undefined = undefined;
+
+  private syncSystemBars(): void {
+    this.mainWindow?.setWindowSystemBarProperties({ statusBarColor: '#00000000', navigationBarColor: '#00000000',
+      statusBarContentColor: appStore.dark ? '#FFFFFF' : '#182431',
+      navigationBarContentColor: appStore.dark ? '#FFFFFF' : '#182431'
+    }).catch((error: Error) => appStore.log(`设置系统栏失败：${error.message}`));
+  }
+
+  private syncSafeArea(): void {
+    if (!this.mainWindow) return;
+    try {
+      const system = this.mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
+      const cutout = this.mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_CUTOUT);
+      const navigation = this.mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
+      appStore.safeTopPx = Math.max(system.topRect.height, cutout.topRect.height);
+      appStore.safeBottomPx = Math.max(system.bottomRect.height, navigation.bottomRect.height);
+    } catch (error) { appStore.log(`读取系统栏避让区域失败：${(error as Error).message}`); }
+  }
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     appStore.onTransferActivity = (active: boolean) => { this.screenKeeper?.sync(active && this.foreground); };
     appStore.onPrivacyAccepted = async () => {
@@ -35,8 +54,14 @@ export default class EntryAbility extends UIAbility {
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     const generation = ++this.windowGeneration;
-    windowStage.getMainWindow().then((mainWindow: window.Window) => {
+    windowStage.getMainWindow().then(async (mainWindow: window.Window) => {
       if (generation !== this.windowGeneration) return;
+      this.mainWindow = mainWindow;
+      appStore.onThemeChanged = () => this.syncSystemBars();
+      await mainWindow.setWindowLayoutFullScreen(true);
+      if (generation !== this.windowGeneration) return;
+      this.syncSystemBars(); this.syncSafeArea();
+      mainWindow.on('avoidAreaChange', () => this.syncSafeArea());
       this.screenKeeper = new ScreenKeeper((enabled: boolean) => mainWindow.setWindowKeepScreenOn(enabled), (message: string) => appStore.log(message));
       this.screenKeeper.sync(this.foreground && appStore.transfers.some((item) => item.status === 'transferring'));
     }).catch((error: Error) => appStore.log(`读取主窗口失败：${error.message}`));
@@ -56,6 +81,9 @@ export default class EntryAbility extends UIAbility {
     this.foreground = false; this.screenKeeper?.sync(false);
     appStore.log('应用进入后台；长时任务申请结果请查看传输日志');
   }
-  onWindowStageDestroy(): void { this.windowGeneration++; this.screenKeeper?.sync(false); this.screenKeeper = undefined; }
+  onWindowStageDestroy(): void {
+    this.windowGeneration++; this.screenKeeper?.sync(false); this.screenKeeper = undefined;
+    this.mainWindow?.off('avoidAreaChange'); this.mainWindow = undefined; appStore.onThemeChanged = () => {};
+  }
   onDestroy(): void { this.foreground = false; this.windowGeneration++; this.screenKeeper?.sync(false); webShare.stop(); localSend.stop(); }
 }
