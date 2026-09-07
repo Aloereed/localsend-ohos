@@ -7,3 +7,5 @@
 产物：`artifacts/AloeSend-2000090-M90-diagnostic-context-unsigned.hap`，版本 2.0.90。
 
 SHA-256：`E51AB892C5E266D41DBD2A9AC5C8DCC83DFDAF45F5D589591E1B4C53FDEF5F29`。
+
+补充回归：49 个主机测试全部通过。当前源码另行完成 3 GiB 真实 HTTPS 接收，首次写盘暂停一秒、每 32 次写入暂停 10 毫秒（共 1,538 次），全程接收队列峰值 65,749 字节，文件 SHA-256 一致，文件句柄归零，耗时 58.1 秒。日志：`arkui/backpressure-current-3gib.log`。未使用鸿蒙设备；本次确认已有 M51 背压修复在当前版本仍通过主机测试，没有再次修改网络实现。

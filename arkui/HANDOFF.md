@@ -1,8 +1,10 @@
-# 当前交接 · M89
+# 当前交接 · M90
 
-最新包：[AloeSend-2000089-M89-selection-finish-unsigned.hap](artifacts/AloeSend-2000089-M89-selection-finish-unsigned.hap)。版本 2.0.89，包含 M1–M89 累计实现，无需逐个安装。源码提交 `1dadf8863594b3a66f1c7cc3ac1b5f73bea6c2e3`，分支 `arkui`。
+最新包：[AloeSend-2000090-M90-diagnostic-context-unsigned.hap](artifacts/AloeSend-2000090-M90-diagnostic-context-unsigned.hap)。版本 2.0.90，包含 M1–M90 累计实现，无需逐个安装。源码提交 `89bddd68ca3c6bc1d8b9fa238682ffb709d45f26`，分支 `arkui`。
 
-SHA-256：`9BF8849BBAB88A510888D92D73CC280BEF4D93DF041302538791578A406D3FF4`。
+SHA-256：`E51AB892C5E266D41DBD2A9AC5C8DCC83DFDAF45F5D589591E1B4C53FDEF5F29`。
+
+M90：诊断报告增加构建版本、系统 API、机型、采集时间及任务数量。49 个主机测试通过；当前源码重跑 3 GiB HTTPS 慢写盘测试成功，首次暂停一秒并追加 1,538 次 10 毫秒暂停，队列峰值 65,749 字节，SHA-256 一致、文件句柄归零，耗时 58.1 秒。仅主机验证，未访问设备，不能代替 Windows LocalSend 到鸿蒙实机复测。
 
 M89：单台成功任务关闭时移除仍与原发送内容一致的选择；新内容/编辑、多台、失败均保留，每个结果只处理一次。49 个主机测试和构建通过，89 个包校验通过，未访问设备。
 
