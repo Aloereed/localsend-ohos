@@ -1,4 +1,12 @@
-# 当前交接 · M126
+# 当前交接 · M127
+
+最终上架包：[2.0.127 signed release APP](artifacts/release/AloeSend-2000127-release-20260907-232231-signed.app)。源码 `a7b7ccf6fd89a53a73b2de74e89d75abd6983251`，构建前工作区干净，沿用 Flutter 发布身份。SHA-256：`EF1824470108070AF458B8E6F48BDB18F2F10FA9ED85086F1AFFB8D80FDF9AE4`。
+
+最终 APP 内模块检查通过：debug=false，版本 2.0.127 / 2000127，只有 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING 三个权限声明，不含用户仍在申请的 READ_PASTEBOARD / FILE_ACCESS_PERSIST。APP 及独立模块 HAP 签名验证通过。59 个主机测试通过，未访问设备，未上传商店。系统粘贴按钮和 DOWNLOAD 授权实机交互仍待检查。
+
+调试包：[M127 unsigned HAP](artifacts/AloeSend-2000127-M127-store-permissions-unsigned.hap)，SHA-256 `292159D7C09BC8875777B084E6E3F50EAF2AC50963C18162662351C2623180A8`。
+
+## M126 历史交接
 
 已按用户要求另行生成使用 Flutter 发布签名的 [2.0.126 release APP](artifacts/release/AloeSend-2000126-release-20260907-225915-signed.app)。构建源码 `d74af5b77942b67b3e6b05e589507b998a79b7fc`，构建前工作区干净。APP 与独立模块 HAP 签名验证均通过，APP 签名证书与 Flutter release profile 一致。原生日常配置已恢复。SHA-256：`1ACECA630C48EF99B5EF2A8E576803A155756CB886AF6B038657CEFF1E426F12`。这是本次应交付的正式签名包；release 目录更早的 unsigned 或试打包不是最终交付。
 
