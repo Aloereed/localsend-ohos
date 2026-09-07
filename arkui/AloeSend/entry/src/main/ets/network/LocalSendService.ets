@@ -8,6 +8,7 @@ import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { TlsIdentity } from './TlsIdentity';
 import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter } from './Transport';
 import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
+import { storageError } from '../platform/StorageError';
 import { batchReceiveNames } from '../model/ReceiveNames';
 import { SecureServer, SecureConnection } from './SecureServer';
 import { ensureDirectory } from '../platform/Directories';
@@ -127,7 +128,8 @@ class UploadSink implements BodySink {
 
   async write(bytes: Uint8Array): Promise<void> {
     this.pendingWrite = this.writeBytes(bytes);
-    await this.pendingWrite;
+    try { await this.pendingWrite; }
+    catch (error) { throw new Error(this.service.store.t(storageError(error as Error))); }
   }
 
   private async writeBytes(bytes: Uint8Array): Promise<void> {
@@ -155,9 +157,11 @@ class UploadSink implements BodySink {
       const hash = (await this.hash.digest()).data.reduce((value: string, byte: number) => value + byte.toString(16).padStart(2, '0'), '');
       if (hash !== this.fileInfo.hash!.toLowerCase()) throw new Error('文件校验和不匹配');
     }
-    if (this.output) { await fs.close(this.output); this.output = undefined; }
+    try { if (this.output) { await fs.close(this.output); this.output = undefined; } }
+    catch (error) { throw new Error(this.service.store.t(storageError(error as Error))); }
     if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
-    await fs.rename(`${this.path}.part`, this.path);
+    try { await fs.rename(`${this.path}.part`, this.path); }
+    catch (error) { throw new Error(this.service.store.t(storageError(error as Error))); }
     this.finished = true; this.view.status = 'complete'; this.view.path = this.path;
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
     entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
@@ -620,8 +624,9 @@ export class LocalSendService {
       if (session.cancelled || channel.closed) throw new Error('接收已取消');
       return sink;
     } catch (error) {
-      channel.failureReason = (error as Error).message;
-      await sink.abort(); throw error as Error;
+      const failure = new Error(this.store.t(storageError(error as Error)));
+      channel.failureReason = failure.message;
+      await sink.abort(); throw failure;
     }
   }
 

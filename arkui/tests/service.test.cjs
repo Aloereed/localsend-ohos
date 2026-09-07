@@ -134,6 +134,27 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
     await check('incoming path traversal rejected before consent or file writes', async () => {
       assert.equal((await call(port, '/api/localsend/v2/prepare-upload', offer('../outside', data))).status, 400);
     });
+    await check('disk-full mid-write removes partial files, reports storage cause and accepts the next transfer', async () => {
+      const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('disk-full.bin', data))).json();
+      const disk = mocks['@kit.CoreFileKit'].fileIo, write = disk.write; let writes = 0;
+      disk.write = async (fd, bytes) => {
+        if (++writes > 1) throw Object.assign(new Error('No space left on device'), { code: 13900025 });
+        return write(fd, bytes.slice(0, 1));
+      };
+      try {
+        const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
+        assert.equal(result.status, 400);
+        const failed = store.history.find(entry => entry.transferId === session.sessionId);
+        assert.equal(failed.status, 'error'); assert.equal(failed.path, ''); assert.match(failed.error, /空间不足/);
+        assert.equal(store.activeTransfers, false);
+        await until(() => handles.size === 0);
+        await until(async () => { try { await fs.access(path.join(work, 'received', session.sessionId, 'disk-full.bin.part')); return false; } catch (_) { return true; } });
+      } finally { disk.write = write; }
+      const next = (await call(port, '/api/localsend/v2/prepare-upload', offer('after-full.bin', data))).json();
+      assert.ok(next.sessionId);
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${next.sessionId}&fileId=f1&token=${next.files.f1}`, data)).status, 200);
+      assert.deepEqual(await fs.readFile(store.history.find(entry => entry.transferId === next.sessionId).path), data);
+    });
     await check('checksum mismatch removes partial output and never records success', async () => {
       const count = store.history.length;
       const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('bad-hash.bin', data, { hash: '0'.repeat(64) }))).json();
