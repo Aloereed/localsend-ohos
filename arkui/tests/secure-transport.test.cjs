@@ -25,7 +25,10 @@ async function check(mode) {
       for (const packet of packets) callbacks.message?.({ message: Uint8Array.from(packet).buffer, remoteInfo: { address: '127.0.0.1', port: 1 } });
     }
     const adapter = {
-      on(name, callback) { callbacks[name] = callback; },
+      onMessage(callback) { callbacks.message = callback; },
+      onClose(callback) { callbacks.close = callback; },
+      onError(callback) { callbacks.error = callback; },
+      resume() {},
       async send({ data }) { await new Promise((resolve, reject) => socket.write(Buffer.from(data), error => error ? reject(error) : resolve())); },
       async close() { clearTimeout(timer); socket.destroy(); }
     };

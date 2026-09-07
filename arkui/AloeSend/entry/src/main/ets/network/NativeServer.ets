@@ -28,6 +28,7 @@ export class NativeConnection {
   private handler: RequestHandler;
   private responded: boolean = false;
   private completed: boolean = false;
+  private consumed: (() => void)[] = [];
   onError: (message: string) => void = () => {};
   onClosed: () => void = () => {};
 
@@ -45,7 +46,7 @@ export class NativeConnection {
   attachTls(tls: SecureConnection): void {
     if (this.closed) { tls.close().catch(() => {}); return; }
     this.tls = tls; this.encrypted = true;
-    tls.onMessage = (info: socket.SocketMessageInfo) => { this.ip = info.remoteInfo.address; this.enqueue(new Uint8Array(info.message)); };
+    tls.onMessage = (info: socket.SocketMessageInfo) => { this.ip = info.remoteInfo.address; return this.enqueue(new Uint8Array(info.message)); };
     tls.onClose = () => this.disconnected();
     tls.onError = (error: Error) => this.fail(error);
     this.touch();
@@ -56,12 +57,19 @@ export class NativeConnection {
     this.timeout = setTimeout(() => this.fail(new Error('接收连接超时')), 180000);
   }
 
-  private enqueue(bytes: Uint8Array): void {
-    if (this.closed || this.responded) return;
+  private enqueue(bytes: Uint8Array): Promise<void> {
+    if (this.closed || this.responded) return Promise.resolve();
     this.touch(); this.queuedBytes += bytes.length;
-    if (this.queuedBytes > 33554432) { this.fail(new Error('写入速度不足，接收缓冲区已满')); return; }
+    if (this.queuedBytes > 33554432) { this.fail(new Error('写入速度不足，接收缓冲区已满')); return Promise.resolve(); }
+    const consumed = new Promise<void>((resolve) => this.consumed.push(resolve));
     this.pending.push(bytes);
     if (!this.draining) this.drain().catch((error: Error) => this.fail(error));
+    return consumed;
+  }
+
+  private acknowledge(): void {
+    const consumed = this.consumed; this.consumed = [];
+    for (const resolve of consumed) resolve();
   }
 
   private async drain(): Promise<void> {
@@ -82,6 +90,7 @@ export class NativeConnection {
       }
     } finally {
       this.draining = false;
+      this.acknowledge();
       if (this.closed || this.responded) { this.pending = []; this.queuedBytes = 0; }
     }
   }
@@ -129,6 +138,7 @@ export class NativeConnection {
     if (this.closed) return;
     this.closed = true;
     this.pending = [];
+    this.acknowledge();
     this.onClosed();
     if (!this.completed) this.sink?.abort().catch(() => {});
     if (this.timeout !== -1) clearTimeout(this.timeout);
@@ -140,6 +150,7 @@ export class NativeConnection {
     if (!this.failureReason && !this.completed) this.failureReason = '发送方已断开连接';
     if (!this.closed && !this.completed) this.sink?.abort().catch(() => {});
     this.closed = true;
+    this.acknowledge();
     if (!wasClosed) this.onClosed();
     if (this.timeout !== -1) clearTimeout(this.timeout);
   }

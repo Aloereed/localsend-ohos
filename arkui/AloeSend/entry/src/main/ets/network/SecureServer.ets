@@ -1,43 +1,46 @@
 import { socket } from '@kit.NetworkKit';
 import * as tls from 'libaloetls.so';
+import { PullSocket, PullServer } from './PullSocket';
 
 // TLS records stay binary all the way through the application-owned engine.
 // This avoids the OS TLSSocketServer binary-to-C-string crash on affected devices.
 export class SecureConnection {
-  onMessage: (info: socket.SocketMessageInfo) => void = () => {};
+  onMessage: (info: socket.SocketMessageInfo) => Promise<void> = async () => {};
   onClose: () => void = () => {};
   onError: (error: Error) => void = () => {};
-  private tcp: socket.TCPSocketConnection;
+  private tcp: PullSocket;
   private id: number;
   private closed: boolean = false;
   private outgoing: Promise<void> = Promise.resolve();
+  private incoming: Promise<void> = Promise.resolve();
   private handshakeTimer: number = -1;
   private closing: Promise<void> | undefined = undefined;
   onDispose: () => void = () => {};
 
-  constructor(tcp: socket.TCPSocketConnection, server: number) {
+  constructor(tcp: PullSocket, server: number) {
     this.tcp = tcp; this.id = tls.createSession(server);
     this.handshakeTimer = setTimeout(() => this.fail(new Error('TLS 握手超时')), 30000);
-    tcp.on('message', (info: socket.SocketMessageInfo) => {
+    tcp.onMessage((info: socket.SocketMessageInfo) => {
       if (this.closed) return;
-      try {
-        // Socket callbacks may be delivered in a burst on ArkTS. Deferring every
-        // record behind a Promise accumulated encrypted input even though feed
-        // is synchronous. Consume it here and leave disk buffering to HTTP.
-        // Split coalesced OS packets to respect the native engine's input bound.
+      this.incoming = this.incoming.then(async () => {
+        // PullSocket supplies one chunk per acknowledgement. Awaiting disk I/O
+        // here stops native recv, so TCP slows the sender instead of accumulating
+        // an unbounded event queue in ArkTS. Split any coalesced input as well.
         for (let offset = 0; offset < info.message.byteLength && !this.closed; offset += 65536) {
           const result = tls.feed(this.id, info.message.slice(offset, offset + 65536));
-          if (result.wire.byteLength) this.flush(result.wire).catch((error: Error) => this.fail(error));
+          if (result.wire.byteLength) await this.flush(result.wire);
           if (result.plain.byteLength && !this.closed) {
             clearTimeout(this.handshakeTimer); this.handshakeTimer = -1;
-            this.onMessage({ message: result.plain, remoteInfo: info.remoteInfo });
+            await this.onMessage({ message: result.plain, remoteInfo: info.remoteInfo });
           }
-          if (result.closed) this.close().catch(() => {});
+          if (result.closed) await this.close();
         }
-      } catch (error) { this.fail(error as Error); }
+        if (!this.closed) this.tcp.resume();
+      }).catch((error: Error) => this.fail(error));
     });
-    tcp.on('close', () => this.dispose());
-    tcp.on('error', (error) => this.fail(new Error(`TLS TCP ${error.code}`)));
+    tcp.onClose(() => this.dispose());
+    tcp.onError((error: Error) => this.fail(error));
+    tcp.resume();
   }
 
   private flush(bytes: ArrayBuffer): Promise<void> {
@@ -88,7 +91,7 @@ export class SecureConnection {
 }
 
 export class SecureServer {
-  private tcp: socket.TCPSocketServer | undefined = undefined;
+  private tcp: PullServer | undefined = undefined;
   private id: number = -1;
   private clients: Set<SecureConnection> = new Set();
 
@@ -96,16 +99,14 @@ export class SecureServer {
     connected: (client: SecureConnection) => void, failed: (error: Error) => void): Promise<void> {
     this.id = tls.createServer(certificate, key);
     try {
-      this.tcp = socket.constructTCPSocketServerInstance();
-      await this.tcp.listen(address);
-      this.tcp.on('connect', (tcp: socket.TCPSocketConnection) => {
+      this.tcp = new PullServer();
+      await this.tcp.listen(address, (tcp: PullSocket) => {
         try {
           if (this.clients.size >= 32) { tcp.close().catch(() => {}); return; }
           const client = new SecureConnection(tcp, this.id); this.clients.add(client);
           client.onDispose = () => this.clients.delete(client); connected(client);
         } catch (error) { tcp.close().catch(() => {}); failed(error as Error); }
       });
-      this.tcp.on('error', (error) => failed(new Error(`TCP ${error.code}`)));
     } catch (error) { await this.close(); throw error as Error; }
   }
 
