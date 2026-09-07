@@ -1,4 +1,12 @@
-# 当前交接 · M124
+# 当前交接 · M125
+
+最新包：[AloeSend-2000125-M125-empty-clipboard-unsigned.hap](artifacts/AloeSend-2000125-M125-empty-clipboard-unsigned.hap)，版本 2.0.125 / 2000125，产品源码 `a4beff75`，分支 `arkui`。包含此前累计实现。
+
+SHA-256：`851EF5D7C8814B40CE8C4C410C052D82E39DA8CB71F7ABC92C5BC4380C0F9FBE`。
+
+M125：空剪贴板普通提示、读取期间被清空的竞态处理、非文字与权限反馈；真实读取错误仍报错，待发送选择保留。59 个主机测试及构建通过，未访问设备。
+
+## M124 交接记录
 
 最新包：[AloeSend-2000124-M124-flutter-settings-unsigned.hap](artifacts/AloeSend-2000124-M124-flutter-settings-unsigned.hap)，版本 2.0.124 / 2000124，产品源码提交 `a44f22fe`，分支 `arkui`。包含此前累计实现。
 
