@@ -1,10 +1,12 @@
-# 当前交接 · M116
+# 当前交接 · M117
 
 阶段验收与明确未完成项见 [验收记录](ACCEPTANCE.md)。下一项源码差异是单文件重试会话语义；隐私检查及语言同步已重新核对，不能将当前版本描述为全面对齐完成。
 
-最新包：[AloeSend-2000116-M116-expired-session-retry-unsigned.hap](artifacts/AloeSend-2000116-M116-expired-session-retry-unsigned.hap)。版本 2.0.116，包含 M1–M116 累计实现，无需逐个安装。源码提交 `53ebc71d7083bd906776e26c92f626ffc097b3a8`，分支 `arkui`。
+最新包：[AloeSend-2000117-M117-file-failure-isolation-unsigned.hap](artifacts/AloeSend-2000117-M117-file-failure-isolation-unsigned.hap)。版本 2.0.117，包含 M1–M117 累计实现，无需逐个安装。源码提交 `68c0c231a270a55f787819c51b9c1f179699bc2c`，分支 `arkui`。
 
-SHA-256：`FFA2AA62BD19E9B4B34F42AD52BF67C5C50EB1094FCA0C67DBBD437899EA2EA4`。
+SHA-256：`84B9CC42FF22A930441B841B1D0E4EA2E48D9AE6CF263F6C8F77AB7933B24C65`。
+
+M117：文件级源读取/上传断连错误保留重试，清理集合互斥；明确取消、身份改变、失效会话仍终止。56 个主机测试、额外双端源文件恢复与清理竞态测试、构建及 117 个包校验通过。未访问设备。
 
 M116：旧 token 403/404 后自动重新请求确认，仅补传未成功文件；不向过期会话发送取消。56 个主机测试、构建及 116 个包校验通过。未访问设备。
 
@@ -146,6 +148,7 @@ Windows LocalSend 重启后，零进度现象恢复。这是用户提供的实�
 - HDS API 23 系统材质已接入；不要沿用此前“只能模糊、必须 API 26”的过时结论。实际视觉效果仍需设备检查。
 
 详细里程碑、范围和材质依据见 [PACKAGES.md](PACKAGES.md)、[MIGRATION.md](MIGRATION.md)、[DESIGN.md](DESIGN.md)。
+
 
 
 
