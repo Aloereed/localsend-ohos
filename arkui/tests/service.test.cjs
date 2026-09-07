@@ -143,13 +143,17 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       };
       try {
         const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
-        assert.equal(result.status, 400);
+        assert.equal(result.status, 500);
         const failed = store.history.find(entry => entry.transferId === session.sessionId);
         assert.equal(failed.status, 'error'); assert.equal(failed.path, ''); assert.match(failed.error, /空间不足/);
         assert.equal(store.activeTransfers, false);
         await until(() => handles.size === 0);
         await until(async () => { try { await fs.access(path.join(work, 'received', session.sessionId, 'disk-full.bin.part')); return false; } catch (_) { return true; } });
       } finally { disk.write = write; }
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data)).status, 200,
+        'disk recovery must allow retry with the same accepted token');
+      assert.equal(store.transfers.find(item => item.id === session.sessionId).status, 'complete');
+      assert.equal(store.history.find(entry => entry.transferId === session.sessionId).error, '');
       const next = (await call(port, '/api/localsend/v2/prepare-upload', offer('after-full.bin', data))).json();
       assert.ok(next.sessionId);
       assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${next.sessionId}&fileId=f1&token=${next.files.f1}`, data)).status, 200);
@@ -163,19 +167,31 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       const session = (await call(port, '/api/localsend/v2/prepare-upload', payload)).json();
       assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=good&token=${session.files.good}`, data)).status, 200);
       const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
-      assert.equal(result.status, 400); assert.equal(store.history.length, count + 3);
+      assert.equal(result.status, 500); assert.equal(store.history.length, count + 3);
       const failed = store.history.find(entry => entry.id === `receive:${session.sessionId}:f1`);
       assert.equal(failed.status, 'error'); assert.equal(failed.path, ''); assert.match(failed.error, /校验和/);
       const later = store.history.find(entry => entry.id === `receive:${session.sessionId}:later`);
-      assert.equal(later.error, '任务已停止，此文件尚未开始传输'); assert.equal(later.path, '');
+      assert.equal(later.error, ''); assert.equal(later.path, '');
       const good = store.history.find(entry => entry.id === `receive:${session.sessionId}:good`);
       assert.equal(good.status, 'complete'); assert.equal(good.error, ''); assert.deepEqual(await fs.readFile(good.path), data);
       const view = store.transfers.find(item => item.id === session.sessionId);
       assert.match(view.files.find(file => file.id === 'f1').error, /校验和/);
       assert.equal(view.files.find(file => file.id === 'later').error, later.error);
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=later&token=${session.files.later}`, data)).status, 200);
+      assert.equal(view.status, 'error', 'a later success must retain the earlier file failure');
       await until(() => handles.size === 0);
       await assert.rejects(fs.access(path.join(work, 'received', session.sessionId, 'bad-hash.bin')));
       await assert.rejects(fs.access(path.join(work, 'received', session.sessionId, 'bad-hash.bin.part')));
+      assert.equal((await call(port, `/api/localsend/v2/cancel?sessionId=${session.sessionId}`, '')).status, 200,
+        'sender cancellation must invalidate a retained failed session');
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data)).status, 403);
+    });
+    await check('restart invalidates retained failed receive tokens', async () => {
+      const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('restart-failed.bin', data, { hash: '0'.repeat(64) }))).json();
+      const upload = `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`;
+      assert.equal((await call(port, upload, data)).status, 500);
+      await service.stop(); await service.start();
+      assert.equal((await call(port, upload, data)).status, 403);
     });
     await check('cancellation closes active uploads and removes incomplete files', async () => {
       const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('cancel.bin', data))).json();
@@ -512,3 +528,4 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
   await until(() => handles.size === 0);
   console.log(`${checks} service integration groups passed; zero open file handles`);
 })().catch(error => { console.error(error); process.exitCode = 1; });
+

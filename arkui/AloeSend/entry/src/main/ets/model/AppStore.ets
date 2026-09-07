@@ -798,7 +798,7 @@ export class AppStore {
       entry.status = file.status;
       if (file.status !== 'complete') {
         if (!file.selected && transfer.status !== 'waiting') entry.status = 'skipped';
-        else if (['error', 'cancelled', 'declined'].includes(transfer.status)) entry.status = transfer.status;
+        else if (['cancelled', 'declined'].includes(transfer.status)) entry.status = transfer.status;
       }
       // Paths become available only after checksum verification and rename.
       entry.path = file.status === 'complete' ? file.path : '';

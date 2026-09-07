@@ -122,7 +122,8 @@ class UploadSink implements BodySink {
     }
     if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
     if (this.session.cancelled || this.channel.closed) { await this.session.stopNotification; throw new Error('接收已取消'); }
-    this.view.status = 'transferring'; this.session.view.status = 'transferring';
+    this.view.status = 'transferring'; this.view.error = ''; this.view.transferred = 0;
+    this.session.view.status = 'transferring'; this.session.view.error = ''; this.session.view.finished = 0;
     this.session.lastActivity = Date.now();
     this.service.store.updateTransfer(this.session.view);
   }
@@ -139,8 +140,10 @@ class UploadSink implements BodySink {
     let offset = 0;
     while (offset < bytes.length) {
       if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
-      const written = await fs.write(this.output!.fd, bytes.slice(offset).buffer as ArrayBuffer);
-      if (written <= 0) throw new Error('文件写入失败');
+      let written = 0;
+      try { written = await fs.write(this.output!.fd, bytes.slice(offset).buffer as ArrayBuffer); }
+      catch (error) { this.channel.failureStatus = 500; throw error as Error; }
+      if (written <= 0) { this.channel.failureStatus = 500; throw new Error('文件写入失败'); }
       offset += written;
     }
     await this.hash?.update({ data: bytes });
@@ -156,13 +159,13 @@ class UploadSink implements BodySink {
     if (this.received !== this.fileInfo.size) throw new Error('文件未完整接收');
     if (this.hash) {
       const hash = (await this.hash.digest()).data.reduce((value: string, byte: number) => value + byte.toString(16).padStart(2, '0'), '');
-      if (hash !== this.fileInfo.hash!.toLowerCase()) throw new Error('文件校验和不匹配');
+      if (hash !== this.fileInfo.hash!.toLowerCase()) { this.channel.failureStatus = 500; throw new Error('文件校验和不匹配'); }
     }
     try { if (this.output) { await fs.close(this.output); this.output = undefined; } }
-    catch (error) { throw new Error(this.service.store.t(storageError(error as Error))); }
+    catch (error) { this.channel.failureStatus = 500; throw new Error(this.service.store.t(storageError(error as Error))); }
     if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
     try { await fs.rename(`${this.path}.part`, this.path); }
-    catch (error) { throw new Error(this.service.store.t(storageError(error as Error))); }
+    catch (error) { this.channel.failureStatus = 500; throw new Error(this.service.store.t(storageError(error as Error))); }
     this.finished = true; this.view.status = 'complete'; this.view.path = this.path;
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
     entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
@@ -179,10 +182,12 @@ class UploadSink implements BodySink {
     // Release the session before asynchronous disk cleanup. A blocked write
     // must not keep the receive entry point busy or leave other files running.
     if (!this.session.cancelled) this.view.error = this.channel.failureReason || '文件接收中断';
-    this.service.failReceive(this.session, this.channel.failureReason || '文件接收中断', this.channel);
+    const recoverable = this.channel.failureStatus === 500 && !this.session.cancelled;
+    if (!recoverable) this.service.failReceive(this.session, this.channel.failureReason || '文件接收中断', this.channel);
     await this.pendingWrite.catch(() => {});
     if (this.output) { await fs.close(this.output).catch(() => {}); this.output = undefined; }
     if (this.path) await fs.unlink(`${this.path}.part`).catch(() => {});
+    if (recoverable) await this.service.failReceiveFile(this.session, this.view, this.channel);
   }
 }
 
@@ -277,7 +282,7 @@ export class LocalSendService {
     if (this.timer !== -1) { clearInterval(this.timer); this.timer = -1; }
     for (const retry of this.discoveryRetries) clearTimeout(retry);
     this.discoveryRetries = [];
-    if (this.receiving && (this.receiving.view.status === 'waiting' || this.receiving.view.status === 'transferring')) this.cancel(this.receiving.id);
+    if (this.receiving && ['waiting', 'transferring', 'error'].includes(this.receiving.view.status)) this.cancel(this.receiving.id);
     for (const channel of this.channels) channel.close(); this.channels = [];
     await this.udp?.close().catch(() => {}); this.udp = undefined;
     await this.tcp?.close().catch(() => {}); this.tcp = undefined;
@@ -638,6 +643,7 @@ export class LocalSendService {
       return sink;
     } catch (error) {
       const failure = new Error(this.store.t(storageError(error as Error)));
+      if (!session.cancelled && !channel.closed) channel.failureStatus = 500;
       channel.failureReason = failure.message;
       await sink.abort(); throw failure;
     }
@@ -646,11 +652,26 @@ export class LocalSendService {
   finishReceiveFile(session: ReceiveSession): void {
     session.lastActivity = Date.now();
     if (session.cancelled) return;
-    if (session.view.files.filter((file: TransferFile) => file.selected).every((file: TransferFile) => file.status === 'complete')) {
-      session.view.status = 'complete'; session.view.finished = Date.now(); this.store.notice = session.view.storageNotice || `已收到 ${session.peer.alias} 的文件`;
+    const selected = session.view.files.filter((file: TransferFile) => file.selected);
+    if (selected.every((file: TransferFile) => file.status === 'complete' || file.status === 'error')) {
+      const failed = selected.find((file: TransferFile) => file.status === 'error');
+      session.view.status = failed ? 'error' : 'complete'; session.view.error = failed ? failed.error : '';
+      session.view.finished = Date.now();
+      if (!failed) this.store.notice = session.view.storageNotice || `已收到 ${session.peer.alias} 的文件`;
     }
     this.store.updateTransfer(session.view);
     this.store.updateIncomingHistory(session.view);
+  }
+
+  async failReceiveFile(session: ReceiveSession, file: TransferFile, channel: NativeConnection): Promise<void> {
+    if (session.cancelled) return;
+    file.status = 'error'; file.path = '';
+    session.lastActivity = Date.now();
+    if (!session.uploads.some((upload: NativeConnection) => upload !== channel && !upload.closed)) {
+      session.view.status = 'error'; session.view.error = file.error; session.view.finished = Date.now();
+    }
+    this.store.updateTransfer(session.view);
+    await this.store.updateIncomingHistory(session.view);
   }
 
   checkReceiveIdle(): void {
@@ -699,7 +720,7 @@ export class LocalSendService {
 
   private cancelByPeer(ip: string, remoteId: string, legacy: boolean): boolean {
     const session = this.receiving;
-    if (session && session.ip === ip && !session.cancelled && (session.view.status === 'waiting' || session.view.status === 'transferring') &&
+    if (session && session.ip === ip && !session.cancelled && ['waiting', 'transferring', 'error'].includes(session.view.status) &&
       (legacy ? session.legacy : session.id === remoteId || (!session.accepted && !remoteId))) {
       this.cancel(session.id, false); return true;
     }

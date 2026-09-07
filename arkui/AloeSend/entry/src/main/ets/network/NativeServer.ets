@@ -16,6 +16,7 @@ export class NativeConnection {
   encrypted: boolean = false;
   closed: boolean = false;
   failureReason: string = '';
+  failureStatus: number = 400;
   private tcp: socket.TCPSocketConnection | undefined = undefined;
   private tls: SecureConnection | undefined = undefined;
   private headBytes: Uint8Array = new Uint8Array(0);
@@ -28,6 +29,7 @@ export class NativeConnection {
   private handler: RequestHandler;
   private responded: boolean = false;
   private completed: boolean = false;
+  private failing: boolean = false;
   private consumed: (() => void)[] = [];
   onError: (message: string) => void = () => {};
   onClosed: () => void = () => {};
@@ -58,7 +60,7 @@ export class NativeConnection {
   }
 
   private enqueue(bytes: Uint8Array): Promise<void> {
-    if (this.closed || this.responded) return Promise.resolve();
+    if (this.closed || this.responded || this.failing) return Promise.resolve();
     this.touch(); this.queuedBytes += bytes.length;
     if (this.queuedBytes > 33554432) { this.fail(new Error('写入速度不足，接收缓冲区已满')); return Promise.resolve(); }
     const consumed = new Promise<void>((resolve) => this.consumed.push(resolve));
@@ -155,13 +157,14 @@ export class NativeConnection {
     if (this.timeout !== -1) clearTimeout(this.timeout);
   }
 
-  private fail(error: Error): void {
-    if (this.closed) return;
+  private async fail(error: Error): Promise<void> {
+    if (this.closed || this.failing) return;
+    this.failing = true;
     this.failureReason = error.message;
     this.onError(error.message);
-    this.sink?.abort().catch(() => {});
+    await this.sink?.abort().catch(() => {});
     if (this.responded) { this.close(); return; }
-    this.respond(400, JSON.stringify({ message: error.message })).catch(() => this.close());
+    this.respond(this.failureStatus, JSON.stringify({ message: error.message })).catch(() => this.close());
   }
 }
 
