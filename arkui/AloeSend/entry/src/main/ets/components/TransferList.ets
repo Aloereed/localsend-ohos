@@ -201,7 +201,12 @@ export struct TransferList {
           } else if (this.current(transfer.id).status === 'waiting' || this.current(transfer.id).status === 'transferring') {
             Button(this.store.t('取消传输')).fontColor(this.store.dangerText).backgroundColor(this.store.controlSurface).onClick(() => { if (!webShare.cancel(transfer.id)) localSend.cancel(transfer.id); })
           } else if (this.current(transfer.id).direction === 'send' && (this.current(transfer.id).status === 'error' || this.current(transfer.id).status === 'cancelled')) {
-            Button(this.store.t('重试未完成文件')).backgroundColor(this.store.accentFill).onClick(() => localSend.retry(transfer.id))
+            if (this.current(transfer.id).retryTransferId) {
+              Text(this.store.t('已在新任务中重试')).fontSize(13).fontColor($r('sys.color.font_secondary'))
+            } else {
+              Button(this.store.t(this.current(transfer.id).retrying ? '正在重试…' : '重试未完成文件'))
+                .enabled(!this.current(transfer.id).retrying).backgroundColor(this.store.accentFill).onClick(() => localSend.retry(transfer.id))
+            }
           }
         }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(28)
       }, (transfer: TransferView) => transfer.id)

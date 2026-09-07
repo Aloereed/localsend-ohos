@@ -713,10 +713,10 @@ export class LocalSendService {
 
   submitPin(pin: string): void { this.pinResolver?.(pin); this.pinResolver = undefined; this.store.pendingPin = ''; }
 
-  async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files): Promise<void> {
-    if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return; }
-    if (!selectedFiles.length) { this.store.notice = '请先选择文件或输入文字'; return; }
-    if (this.sending.size >= 4) { this.store.notice = '已有 4 项发送任务，请等待完成后再发送'; return; }
+  async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files): Promise<string> {
+    if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return ''; }
+    if (!selectedFiles.length) { this.store.notice = '请先选择文件或输入文字'; return ''; }
+    if (this.sending.size >= 4) { this.store.notice = '已有 4 项发送任务，请等待完成后再发送'; return ''; }
     const files = selectedFiles.slice(); const transfer = new TransferView(); transfer.id = util.generateRandomUUID();
     this.retryContexts.set(transfer.id, new RetryContext(peer, files));
     if (this.retryContexts.size > 40) {
@@ -818,6 +818,7 @@ export class LocalSendService {
       this.sending.delete(transfer.id); this.sendSessions.delete(transfer.id); this.store.updateTransfer(transfer);
       await this.store.updateOutgoingHistory(transfer, files, false, declined);
     }
+    return transfer.id;
   }
 
   async sendMany(peers: Peer[]): Promise<void> {
@@ -843,8 +844,18 @@ export class LocalSendService {
     const context = this.retryContexts.get(id);
     const previous = this.store.transfers.find((transfer: TransferView) => transfer.id === id);
     if (!context || !previous) { this.store.notice = '请重新选择原文件后发送'; return; }
+    if (previous.retrying || previous.retryTransferId || previous.direction !== 'send' ||
+      (previous.status !== 'error' && previous.status !== 'cancelled')) return;
     const incomplete = previous.files.filter((file: TransferFile) => file.status !== 'complete' && file.status !== 'skipped').map((file: TransferFile) => file.id);
-    await this.send(context.peer, context.files.filter((file: ShareFile) => incomplete.includes(file.id)));
+    const files = context.files.filter((file: ShareFile) => incomplete.includes(file.id));
+    if (!files.length) return;
+    previous.retrying = true; this.store.updateTransfer(previous);
+    try { previous.retryTransferId = await this.send(context.peer, files); }
+    finally {
+      previous.retrying = false;
+      // Do not resurrect an old row evicted by the bounded transfer list.
+      if (this.store.transfers.some((transfer: TransferView) => transfer.id === id)) this.store.updateTransfer(previous);
+    }
   }
 }
 

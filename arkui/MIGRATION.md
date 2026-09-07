@@ -24,7 +24,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence through M74 (device checks are handed back to the user and do not authorize device access):
+implementation evidence through M75 (device checks are handed back to the user and do not authorize device access):
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
