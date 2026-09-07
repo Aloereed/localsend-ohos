@@ -4,6 +4,8 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000055 | [M55-incoming-history](artifacts/AloeSend-2000055-M55-incoming-history-unsigned.hap) | 583a68bb | 818D421D726AC7F61E710FB5066DC24405F21D02EACDF43263BCED567BBF0D2E |
+| 2000054 | [M54-message-status](artifacts/AloeSend-2000054-M54-message-status-unsigned.hap) | dfd04054 | 846BE7BFD11EECF2A4967F7860D58BF24B47528565593196C1BB3D2CB6428908 |
 | 2000053 | [M53-folder-fallback](artifacts/AloeSend-2000053-M53-folder-fallback-unsigned.hap) | 6963f4a6 | 9D7B6781AE2C22D3F9425637088A3073A715B57F3FEEF453B1E92537DEF39FB8 |
 | 2000052 | [M52-tcp-lifecycle](artifacts/AloeSend-2000052-M52-tcp-lifecycle-unsigned.hap) | a90b6a05 | 6192243063B11C96900CC4D696ECF3E0CA480569D36D2310EE7FCF65292D1391 |
 | 2000051 | [M51-tcp-backpressure](artifacts/AloeSend-2000051-M51-tcp-backpressure-unsigned.hap) | da3a14dc | 81389BB21C2CF458D8F79FD3E30D0E79DE9A9C0649117CCA1906E6F8E70086B1 |

@@ -24,7 +24,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence through M53 (device checks are handed back to the user and do not authorize device access):
+implementation evidence through M55 (device checks are handed back to the user and do not authorize device access):
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
@@ -32,7 +32,7 @@ implementation evidence through M53 (device checks are handed back to the user a
 | Send, selected files | SendView, PeerDetail, AppStore | Five input types, editing, selected-file preview and batch send implemented; OS file/photo/folder pickers and viewer handoff need device coverage. |
 | Discovery and favorites | LocalSendService, SendView, SettingsView | Automatic discovery schedule, manual addresses and identity matching covered by host tests. |
 | Progress | TransferList, NativeServer, SecureServer, PullSocket/native TCP | M51: 3 GiB real TLS upload with a one-second disk stall, SHA-256 match and about 64 KiB application queue; M52: blocked-send cancellation and 12 immediate restart cycles. HTTP/HTTPS cancellation and immediate resend pass. Actual HarmonyOS large-file performance remains unverified. |
-| Messages and history | MessagesView, LibraryView, FileDetailsView | Search, conversation isolation, reading-position-aware new messages, open/export/share, live saved locations, favorite conversation targets and public folder reveal implemented; system interactions need device confirmation. |
+| Messages and history | MessagesView, LibraryView, FileDetailsView | M54–M55 retain live/terminal send and receive states, stable IDs, errors and partial results; deletion/private history and interrupted restart tested. Search, conversation isolation, reading position, live saved locations and available-file actions implemented. Batch presentation and system interactions remain to be checked. |
 | Browser sharing | WebShareView, WebShareService, WebPage | Real HTTP consent, upload/download, PIN, cancellation and resource tests pass. Full-screen QR/link presentation implemented; device visual check pending. |
 | Settings and appearance | SettingsView, Locale, AppStore | Chinese/English/system, colors, theme, animations, reduced effects, OLED background, receive and network controls implemented; original extra theme presets and full translation coverage not claimed. |
 | Help, privacy, credits, diagnostics | Index information routes, PrivacyView, DiagnosticsView and SettingsView | M43 privacy content generated exactly from Flutter with a synchronization test. Native routes, searchable discovery/HTTP logs, certificate regeneration and preference restoration implemented. Refena tracing is Flutter-runtime-specific. |
