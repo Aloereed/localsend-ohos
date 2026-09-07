@@ -1,6 +1,7 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "已导入 Flutter：{0} 个收藏、{1} 条历史、{2} 条消息；未识别 {3} 条（原数据保留）": "Imported from Flutter: {0} favorites, {1} history records, {2} messages; {3} unreadable records (original data retained)",
   "对方终止了传输": "The other device stopped the transfer",
   "打开所选文件失败": "Could not open the selected file",
   "打开 {0}": "Open {0}",

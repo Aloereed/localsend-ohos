@@ -3,7 +3,8 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { load, mocks } = require('./host-runtime.cjs');
 mocks['@kit.AbilityKit'].UIAbility = class {};
-mocks['@kit.ArkData'].preferences.getPreferences = async context => {
+mocks['@kit.ArkData'].preferences.getPreferences = async (context, name) => {
+  if (name === 'FlutterSharedPreferences') return { get: async (key, fallback) => fallback };
   const file = path.join(context.filesDir, 'preferences.json');
   const values = JSON.parse(await fs.readFile(file, 'utf8').catch(() => '{}'));
   return { get: async (key, fallback) => key in values ? values[key] : fallback,

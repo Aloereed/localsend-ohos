@@ -44,6 +44,9 @@ export struct DiagnosticsView {
   build() {
     Column({ space: 16 }) {
       Column({ space: 10 }) {
+        if (this.store.flutterImportSummary) {
+          Text(this.store.flutterImportSummary).fontSize(14).lineHeight(21).fontColor(this.store.accentText).width('100%')
+        }
         Text(this.store.t(this.store.serverStatus)).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
         Text(`LocalSend 2.1 · ${this.store.listenerHttps ? 'HTTPS / Mbed TLS 3.6.7' : 'HTTP'}`).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
         Text(`${this.store.localIps.join('\n')}\n${this.store.listenerPort} · ${this.store.listenerMulticast}`).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%').copyOption(CopyOptions.LocalDevice)

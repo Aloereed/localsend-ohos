@@ -12,6 +12,7 @@ import { safeRelativePath } from '../network/Protocol';
 import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { ensureDirectory } from '../platform/Directories';
 import { publicParentUri } from '../platform/FileLocation';
+import { importFlutterData } from '../platform/FlutterImport';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -217,6 +218,7 @@ export class AppStore {
   private persistentHistory: Set<string> = new Set();
   private initialization: Promise<void> | undefined = undefined;
   initializationError: string = '';
+  flutterImportSummary: string = '';
 
   async init(context: common.UIAbilityContext): Promise<void> {
     if (this.ready) return;
@@ -231,6 +233,7 @@ export class AppStore {
     this.initializationError = '';
     try {
       this.storage = await preferences.getPreferences(context, 'aloesend-native-v1');
+      const imported = await importFlutterData(context, this.storage);
       this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
       const saved = await this.storage.get('settings', '') as string;
       if (saved) this.settings = JSON.parse(saved) as AppSettings;
@@ -246,6 +249,10 @@ export class AppStore {
       if (typeof this.settings.offerGallerySave !== 'boolean') this.settings.offerGallerySave = false;
       if (typeof this.settings.reduceEffects !== 'boolean') this.settings.reduceEffects = false;
       if (typeof this.settings.pureBlack !== 'boolean') this.settings.pureBlack = false;
+      if (imported.favorites || imported.history || imported.messages || imported.skipped.length) {
+        this.flutterImportSummary = this.tf('已导入 Flutter：{0} 个收藏、{1} 条历史、{2} 条消息；未识别 {3} 条（原数据保留）', [String(imported.favorites), String(imported.history), String(imported.messages), String(imported.skipped.length)]);
+        this.log(`Flutter 导入：收藏 ${imported.favorites}，历史 ${imported.history}，消息 ${imported.messages}，未识别 ${imported.skipped.length}`);
+      }
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
       this.history = JSON.parse(await this.storage.get('history', '[]') as string) as HistoryEntry[];
       this.persistentHistory = new Set(this.history.map((entry: HistoryEntry) => entry.id));
@@ -500,7 +507,7 @@ export class AppStore {
   }
 
   async addHistory(entry: HistoryEntry, offerGallerySave: boolean = this.settings.offerGallerySave): Promise<void> {
-    this.history = [entry, ...this.history].slice(0, 1000);
+    this.history = [entry, ...this.history];
     if (offerGallerySave && entry.direction === 'receive' && entry.path && this.isMedia(entry)) {
       this.galleryQueue = [...this.galleryQueue, entry];
     }
