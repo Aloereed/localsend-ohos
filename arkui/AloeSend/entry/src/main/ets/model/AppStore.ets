@@ -14,6 +14,7 @@ import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { ensureDirectory } from '../platform/Directories';
 import { publicParentUri } from '../platform/FileLocation';
 import { importFlutterData } from '../platform/FlutterImport';
+import { importFlutterSettings } from '../platform/FlutterSettings';
 import { checkDownloadFolder, downloadFolderFiles } from '../platform/DownloadFolders';
 import { directoryIdentity } from '../platform/DirectoryIdentity';
 
@@ -180,6 +181,7 @@ export function mimeForName(name: string): string {
 
 @Observed
 export class AppStore {
+  flutterSettingsSummary: string = '';
   safeTopPx: number = 0;
   safeBottomPx: number = 0;
   onThemeChanged: () => void = () => {};
@@ -273,12 +275,13 @@ export class AppStore {
     try {
       this.storage = await preferences.getPreferences(context, 'aloesend-native-v1');
       const imported = await importFlutterData(context, this.storage);
+      const settingsReport = await importFlutterSettings(context, this.storage);
       this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
       const saved = await this.storage.get('settings', '') as string;
       if (saved) {
         const previous = JSON.parse(saved) as AppSettings;
         // Before presets existed, the stored accent was the user's theme.
-        if (!previous.themePreset) previous.themePreset = 'custom';
+        if (!previous.themePreset && previous.accent) previous.themePreset = 'custom';
         const merged = new AppSettings();
         if (previous.alias !== undefined) merged.alias = previous.alias;
         if (previous.fingerprint !== undefined) merged.fingerprint = previous.fingerprint;
@@ -336,6 +339,10 @@ export class AppStore {
       if (typeof this.settings.offerGallerySave !== 'boolean') this.settings.offerGallerySave = false;
       if (typeof this.settings.reduceEffects !== 'boolean') this.settings.reduceEffects = false;
       if (typeof this.settings.pureBlack !== 'boolean') this.settings.pureBlack = false;
+      if (settingsReport.imported.length || settingsReport.preserved.length || settingsReport.skipped.length) {
+        this.flutterSettingsSummary = this.tf('Flutter 设置：已导入 {0} 项，保留本端 {1} 项，未兼容 {2} 项',
+          [String(settingsReport.imported.length), String(settingsReport.preserved.length), String(settingsReport.skipped.length)]);
+      }
       if (imported.favorites || imported.history || imported.messages || imported.skipped.length) {
         this.flutterImportSummary = this.tf('已导入 Flutter：{0} 个收藏、{1} 条历史、{2} 条消息；未识别 {3} 条（原数据保留）', [String(imported.favorites), String(imported.history), String(imported.messages), String(imported.skipped.length)]);
         this.log(`Flutter 导入：收藏 ${imported.favorites}，历史 ${imported.history}，消息 ${imported.messages}，未识别 ${imported.skipped.length}`);
@@ -393,6 +400,26 @@ export class AppStore {
       this.privacyAccepted = true;
       return true;
     } catch (e) { this.fail('保存隐私选择失败，请重试', e as Error); return false; }
+  }
+
+  async inheritFlutterSettings(): Promise<boolean> {
+    if (!this.context || !this.storage) return false;
+    const context = this.context; const storage = this.storage;
+    return this.persist(async (): Promise<boolean> => {
+      if (this.activeTransfers || this.identityResetting || this.webUrl || this.webStarting) {
+        this.notice = '请先结束传输并停止浏览器分享'; return false;
+      }
+      try {
+        const report = await importFlutterSettings(context, storage, true, JSON.stringify(this.settings));
+        this.flutterSettingsSummary = this.tf('Flutter 设置：已导入 {0} 项，保留本端 {1} 项，未兼容 {2} 项',
+          [String(report.imported.length), String(report.preserved.length), String(report.skipped.length)]);
+        if (!report.imported.length) { this.notice = '没有可导入的 Flutter 设置'; return false; }
+        this.settings = JSON.parse(await storage.get('settings', '') as string) as AppSettings;
+        this.applyTheme();
+        this.notice = 'Flutter 设置已导入；网络设置重启服务后生效，保存目录仍需有效授权。';
+        return true;
+      } catch (error) { this.fail('导入 Flutter 设置失败', error as Error); return false; }
+    });
   }
 
   async restoreSettings(): Promise<boolean> {

@@ -2,6 +2,13 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "从 Flutter 导入设置": "Import Flutter settings",
+  "将用旧版保存的设置覆盖本端对应选项，包括名称、主题、接收和网络设置。收藏、历史、消息和本机证书保持不变。": "Replace corresponding options with your saved Flutter settings, including your name, theme, receiving and network preferences. Favorites, history, messages and this device's certificate are kept.",
+  "首次升级自动继承；已有本端设置会保留，可在此重新导入。": "Settings are inherited on first upgrade. Existing native settings are kept; you can import again here.",
+  "Flutter 设置：已导入 {0} 项，保留本端 {1} 项，未兼容 {2} 项": "Flutter settings: {0} imported, {1} native options kept, {2} unsupported",
+  "没有可导入的 Flutter 设置": "No Flutter settings are available to import",
+  "Flutter 设置已导入；网络设置重启服务后生效，保存目录仍需有效授权。": "Flutter settings imported. Restart the service to apply network changes; the save folder still requires valid access.",
+  "导入 Flutter 设置失败": "Could not import Flutter settings",
   "加密设置已保存。重启本端服务后，请完全退出并重新打开 Windows 端 LocalSend，避免传输停在 0%。": "Encryption settings saved. Restart this device's service, then fully quit and reopen LocalSend on Windows to avoid transfers getting stuck at 0%.",
   "切换加密后，Windows 端 LocalSend 可能仍使用旧连接，导致进度停在 0%。请重启本端接收服务，并在 Windows 系统托盘退出 LocalSend 后重新打开。": "After changing encryption, LocalSend on Windows may reuse an old connection and stay at 0%. Restart this receiving service, then quit LocalSend from the Windows system tray and reopen it.",
   "本端已停止，但未收到对方的终止确认。若 Windows 端仍在发送，请在对方取消任务；切换过加密设置时请退出并重新打开 LocalSend。": "Stopped locally, but the other device has not confirmed cancellation. If Windows is still sending, cancel the task there; after changing encryption, fully quit and reopen LocalSend.",

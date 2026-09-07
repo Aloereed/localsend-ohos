@@ -31,6 +31,16 @@ export struct SettingsView {
   @State model: string = '';
   @State languageVisible: boolean = false;
 
+  importSettings(): void {
+    this.getUIContext().showAlertDialog({ title: this.store.t('从 Flutter 导入设置'),
+      message: this.store.t('将用旧版保存的设置覆盖本端对应选项，包括名称、主题、接收和网络设置。收藏、历史、消息和本机证书保持不变。'),
+      primaryButton: { value: this.store.t('取消'), action: () => {} },
+      secondaryButton: { value: this.store.t('导入'), action: () => {
+        this.store.inheritFlutterSettings().then((changed: boolean) => { if (changed) this.aboutToAppear(); });
+      } }
+    });
+  }
+
   @Builder
   languageSheet() { LanguagePicker({ store: this.store, onChoose: () => this.languageVisible = false }) }
 
@@ -273,6 +283,11 @@ export struct SettingsView {
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       this.title('帮助与支持')
       Column() {
+        Button(this.store.t('从 Flutter 导入设置')).width('100%').height(48).backgroundColor(Color.Transparent)
+          .fontColor(this.store.accentText).enabled(!this.store.activeTransfers && !this.store.webUrl && !this.store.webStarting && !this.store.identityResetting)
+          .onClick(() => this.importSettings())
+        Text(this.store.flutterSettingsSummary || this.store.t('首次升级自动继承；已有本端设置会保留，可在此重新导入。'))
+          .fontSize(13).lineHeight(20).fontColor($r('sys.color.font_secondary')).padding({ left: 18, right: 18, bottom: 14 }).width('100%')
         this.link('使用帮助', '', 'help')
         this.link('隐私政策', '', 'privacy')
         this.link('开源许可', '', 'licenses')

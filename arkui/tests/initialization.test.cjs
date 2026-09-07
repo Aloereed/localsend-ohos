@@ -7,7 +7,8 @@ const { AppStore } = load('model/AppStore');
   const store = new AppStore(); let attempts = 0, writes = 0, failHistory = true;
   const settings = JSON.stringify({ ...store.settings, alias: 'Preserved device' });
   const values = { settings, flutter_import_v1: '{"favorites":0,"history":0,"messages":0,"skipped":[]}', privacy_policy_accepted: true, favorites: '[]', history: '[{"id":"kept","name":"received.txt"}]' };
-  preferences.getPreferences = async () => {
+  preferences.getPreferences = async (_, name) => {
+    if (name === 'FlutterSharedPreferences') return { get: async (key, fallback) => fallback };
     attempts++;
     if (attempts === 1) throw new Error('temporarily unavailable');
     return {
