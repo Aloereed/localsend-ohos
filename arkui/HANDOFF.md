@@ -1,8 +1,10 @@
-# 当前交接 · M86
+# 当前交接 · M87
 
-最新包：[AloeSend-2000086-M86-history-actions-unsigned.hap](artifacts/AloeSend-2000086-M86-history-actions-unsigned.hap)。版本 2.0.86，包含 M1–M86 累计实现，无需逐个安装。源码提交 `214d59d4222bd0e269defb3bfefe774784a85d7a`，分支 `arkui`。
+最新包：[AloeSend-2000087-M87-gallery-recovery-unsigned.hap](artifacts/AloeSend-2000087-M87-gallery-recovery-unsigned.hap)。版本 2.0.87，包含 M1–M87 累计实现，无需逐个安装。源码提交 `2c576e59c373ab6832cf178096f81158b05f4b3e`，分支 `arkui`。
 
-SHA-256：`CDA5269A105114C333FBFA42B0B4D6F8FC556E2A8613AEE31AE49A46F25018DB`。
+SHA-256：`5274AE86E6EF86E0C40671AD39F2338C97B5DAFF9D623D30459B72F452191B88`。
+
+M87：相册保存接入副本回退和源文件预检，部分失败仍持久化成功位置、保留剩余队列并报告数量。相册/历史路径测试与构建通过，87 个包校验通过。系统相册实际授权及失败占位项行为待实机验证，未访问设备。
 
 M86：历史副本回退用于重新发送与系统分享，补齐仅副本记录的界面入口及路径更新刷新。48 个主机测试和最终构建通过，86 个包校验通过。相册保存回退仍待处理，未访问设备。
 
