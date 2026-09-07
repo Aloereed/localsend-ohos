@@ -10,4 +10,4 @@
 
 六个针对性测试文件通过：selection-limits、selection-atomic、flutter-settings、flutter-locales、privacy、immersive-window。覆盖 999 文件/附件，图库 500+499、取消/重复/原子性、语言同步、旧设置继承、隐私启动及系统栏逻辑；几何序列跨越 1440、840、600、440、390、320、280 vp 等宽度并确认始终居中且不越界。M130 网络代码没有改变，其 60 文件回归和 HTTP/HTTPS 各 3 GiB 测试仍为网络证据。
 
-鸿蒙编译通过，版本 2.0.131 / 2000131。调试归档 `artifacts/AloeSend-2000131-M131-selection-layout-unsigned.hap`，SHA-256 `4ADFABAE21F01EC72545980B7B28C4AA9FC69AE9532D8A9BA9CD8FE9D6B5981D`。发布包沿用 Flutter release 身份。未访问设备。权限沿用 M130，INTERNET 保留，两项待审权限仍不存在。
+鸿蒙编译通过，版本 2.0.131 / 2000131。调试归档 `artifacts/AloeSend-2000131-M131-selection-layout-unsigned.hap`，SHA-256 `2246EAD4562753A1B3645EBE7C1E65ABC841F1780B09B655DD6131E6C88D182C`。发布包沿用 Flutter release 身份。未访问设备。用户追加明确要求移除 INTERNET，已从模块清单删除，发布脚本改为要求最终模块不含 INTERNET、READ_PASTEBOARD、FILE_ACCESS_PERSIST。最终只保留 GET_NETWORK_INFO 和 KEEP_BACKGROUND_RUNNING。本轮未验证鸿蒙无 INTERNET 权限时的网络行为。
