@@ -1,8 +1,10 @@
-# 当前交接 · M106
+# 当前交接 · M107
 
-最新包：[AloeSend-2000106-M106-folder-keyboard-unsigned.hap](artifacts/AloeSend-2000106-M106-folder-keyboard-unsigned.hap)。版本 2.0.106，包含 M1–M106 累计实现，无需逐个安装。源码提交 `9a0e9335c42fdb8ebb7e77db75a42ab464b5f11f`，分支 `arkui`。
+最新包：[AloeSend-2000107-M107-selection-empty-unsigned.hap](artifacts/AloeSend-2000107-M107-selection-empty-unsigned.hap)。版本 2.0.107，包含 M1–M107 累计实现，无需逐个安装。源码提交 `bb631fa592e6ca22219cce52603b2b6dd277955e`，分支 `arkui`。
 
-SHA-256：`66F84C9B7E81CB30316E8C966239CC1AFEEF219FDF8715815770F3E3387E4CC5`。
+SHA-256：`5C388AAFB20EFFDF1C4553E69F8B9C5A55AEB2A21929239FCB5A8F7FF20F6156`。
+
+M107：全部取消接收选择后显示空选择提示，目录确认接入 Flutter 翻译，静态映射 98 项。语言测试及编译通过，107 个包校验通过。未访问设备，视觉验收仍待完成。
 
 M106：目录弹层键盘避让与搜索/目录切换回顶，编译和 106 个包校验通过。未访问设备，实际键盘交互待验收。
 
