@@ -1,6 +1,11 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "选择要发送的文件夹": "Choose a folder to send",
+  "添加此文件夹": "Add this folder",
+  "这个文件夹没有可发送的文件": "This folder contains no files to send",
+  "请选择应用下载目录内的文件夹": "Choose a folder within the app's download directory",
+  "文件夹已移动或不可访问": "The folder was moved or cannot be accessed",
   "已导入 Flutter：{0} 个收藏、{1} 条历史、{2} 条消息；未识别 {3} 条（原数据保留）": "Imported from Flutter: {0} favorites, {1} history records, {2} messages; {3} unreadable records (original data retained)",
   "对方终止了传输": "The other device stopped the transfer",
   "打开所选文件失败": "Could not open the selected file",

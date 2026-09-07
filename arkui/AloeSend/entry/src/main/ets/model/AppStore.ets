@@ -13,6 +13,7 @@ import { photoAccessHelper } from '@kit.MediaLibraryKit';
 import { ensureDirectory } from '../platform/Directories';
 import { publicParentUri } from '../platform/FileLocation';
 import { importFlutterData } from '../platform/FlutterImport';
+import { checkDownloadFolder, downloadFolderFiles } from '../platform/DownloadFolders';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -211,7 +212,7 @@ export class AppStore {
   onTransferCompleted: (transfer: TransferView) => void = () => {};
   onReceiveStarted: (transfer: TransferView) => void = () => {};
   onTransferActivity: (active: boolean) => void = () => {};
-  onPickDownloadDirectory: (path: string) => Promise<string> = async () => '';
+  onPickDownloadDirectory: (path: string, purpose: string) => Promise<string> = async () => '';
   downloadAccess: boolean = false;
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
@@ -363,12 +364,21 @@ export class AppStore {
   }
 
   async selectFiles(kind: string): Promise<void> {
-    if (!this.context) return;
-    if (kind === 'folder' && !canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
-      this.notice = '此设备不支持选择整个文件夹，可多选文件，或选择压缩包发送'; kind = 'file';
-    }
+    if (!this.context || this.busy) return;
     this.busy = true;
     try {
+      if (kind === 'folder' && !canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
+        const path = await this.pickDownloadFolder('send');
+        if (!path) return;
+        const selected = await downloadFolderFiles(this.downloadDirectory, path);
+        const additions: ShareFile[] = [];
+        for (const file of selected) {
+          if (!this.files.some((item: ShareFile) => item.uri === file.path)) additions.push(await this.readShareFile(file.path, file.name));
+        }
+        this.files = [...this.files, ...additions];
+        if (!selected.length) this.notice = '这个文件夹没有可发送的文件';
+        return;
+      }
       let uris: string[] = [];
       if (kind === 'photo') {
         const options = new picker.PhotoSelectOptions();
@@ -618,11 +628,17 @@ export class AppStore {
   }
 
   async pickDestination(): Promise<string> {
+    return this.pickDownloadFolder('save');
+  }
+
+  async pickDownloadFolder(purpose: string): Promise<string> {
     if (!this.context) return '';
     if (!this.downloadAccess) await this.ensureDownloadAccess();
     if (!this.downloadAccess) return '';
     const current = this.settings.destination;
-    return this.onPickDownloadDirectory(current === this.downloadDirectory || current.startsWith(`${this.downloadDirectory}/`) ? current : this.downloadDirectory);
+    const selected = await this.onPickDownloadDirectory(current === this.downloadDirectory || current.startsWith(`${this.downloadDirectory}/`) ? current : this.downloadDirectory, purpose);
+    if (selected) await checkDownloadFolder(this.downloadDirectory, selected);
+    return selected;
   }
 
   async saveReceivedCopy(entry: HistoryEntry, sessionDestination: string | undefined = undefined, sessionId: string = ''): Promise<void> {

@@ -17,6 +17,7 @@ export struct PeerDetailView {
 
   async choose(kind: string): Promise<void> {
     if (kind === 'text') { this.textMode = true; return; }
+    this.choosing = false;
     if (kind === 'clipboard') await this.store.paste(); else await this.store.selectFiles(kind);
     if (this.store.files.length) { this.choosing = false; this.onSend(); }
   }

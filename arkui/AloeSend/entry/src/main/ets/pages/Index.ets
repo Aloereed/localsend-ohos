@@ -31,6 +31,7 @@ struct Index {
   @State creditsText: string = '';
   @State directoryVisible: boolean = false;
   @State directoryInitial: string = '';
+  @State directoryPurpose: string = 'save';
   @State acceptingPrivacy: boolean = false;
   private directoryResolver: ((path: string) => void) | undefined = undefined;
   private tabsController: TabsController = new TabsController();
@@ -43,9 +44,9 @@ struct Index {
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
     if (!this.store.ready) return;
     this.store.onReceiveStarted = () => { this.route = 'transfers'; };
-    this.store.onPickDownloadDirectory = (path: string) => new Promise<string>((resolve) => {
+    this.store.onPickDownloadDirectory = (path: string, purpose: string) => new Promise<string>((resolve) => {
       this.directoryResolver?.(''); this.directoryResolver = resolve;
-      this.directoryInitial = path; this.directoryVisible = true;
+      this.directoryInitial = path; this.directoryPurpose = purpose; this.directoryVisible = true;
     });
     this.store.onTransferCompleted = (transfer: TransferView) => {
       if (transfer.direction === 'receive' && transfer.peerInfo && this.store.settings.openMessagesOnReceive) {
@@ -93,7 +94,7 @@ struct Index {
 
   @Builder
   directorySheet() {
-    DownloadDirectoryPicker({ store: this.store, initialPath: this.directoryInitial, onChoose: (path: string) => this.closeDirectory(path) })
+    DownloadDirectoryPicker({ store: this.store, initialPath: this.directoryInitial, purpose: this.directoryPurpose, onChoose: (path: string) => this.closeDirectory(path) })
   }
 
   title(): string {

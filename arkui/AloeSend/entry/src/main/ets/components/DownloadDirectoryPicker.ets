@@ -1,4 +1,4 @@
-import { fileIo as fs } from '@kit.CoreFileKit';
+import { downloadSubfolders, insideDownloadFolder } from '../platform/DownloadFolders';
 import { AppStore } from '../model/AppStore';
 import { AppIcon } from './AppIcon';
 
@@ -6,6 +6,7 @@ import { AppIcon } from './AppIcon';
 export struct DownloadDirectoryPicker {
   @ObjectLink store: AppStore;
   @Prop initialPath: string = '';
+  @Prop purpose: string = 'save';
   @State path: string = '';
   @State folders: string[] = [];
   @State loading: boolean = false;
@@ -19,26 +20,19 @@ export struct DownloadDirectoryPicker {
 
   async load(path: string): Promise<void> {
     const root = this.store.downloadDirectory;
-    if (path !== root && !path.startsWith(`${root}/`)) return;
-    if (path.split('/').some((part: string) => part === '..' || part === '.')) return;
+    if (!insideDownloadFolder(root, path)) return;
     const generation = ++this.generation;
     this.path = path; this.loading = true; this.error = ''; this.folders = []; this.limit = 50;
     try {
-      const names = await fs.listFile(path);
-      const folders: string[] = [];
-      for (const name of names) {
-        if (name.startsWith('.') || name.includes('/')) continue;
-        if ((await fs.stat(`${path}/${name}`)).isDirectory()) folders.push(name);
-        if (generation !== this.generation) return;
-      }
-      if (generation === this.generation) this.folders = folders.sort();
+      const folders = await downloadSubfolders(root, path);
+      if (generation === this.generation) this.folders = folders;
     } catch (error) { if (generation === this.generation) this.error = (error as Error).message; }
     finally { if (generation === this.generation) this.loading = false; }
   }
 
   build() {
     Column({ space: 16 }) {
-      Text(this.store.t('选择保存目录')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
+      Text(this.store.t(this.purpose === 'send' ? '选择要发送的文件夹' : '选择保存目录')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
       Text(this.path === this.store.downloadDirectory ? 'Download/com.aloereed.aloesend' : this.path.slice(this.store.downloadDirectory.length + 1))
         .fontSize(14).maxLines(3).fontColor($r('sys.color.font_secondary')).width('100%')
       if (this.path !== this.store.downloadDirectory) {
@@ -48,7 +42,10 @@ export struct DownloadDirectoryPicker {
       Scroll() {
         Column({ space: 10 }) {
           if (this.loading) { LoadingProgress().width(36).height(36) }
-          if (this.error) { Text(this.error).fontColor(this.store.dangerText).fontSize(14) }
+          if (this.error) {
+            Text(this.store.t(this.error)).fontColor(this.store.dangerText).fontSize(14)
+            Button(this.store.t('重新读取')).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.load(this.path))
+          }
           if (!this.loading && !this.error && this.folders.length === 0) {
             Text(this.store.t('没有子文件夹')).fontColor($r('sys.color.font_secondary')).fontSize(15).padding(24)
           }
@@ -65,7 +62,7 @@ export struct DownloadDirectoryPicker {
           }
         }.width('100%')
       }.width('100%').layoutWeight(1).align(Alignment.Top)
-      Button(this.store.t('选择此文件夹')).height(50).width('100%').backgroundColor(this.store.accentFill)
+      Button(this.store.t(this.purpose === 'send' ? '添加此文件夹' : '选择此文件夹')).height(50).width('100%').backgroundColor(this.store.accentFill)
         .enabled(!this.loading && !this.error).onClick(() => this.onChoose(this.path))
     }.padding(24).width('100%').height('100%')
   }

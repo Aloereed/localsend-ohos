@@ -5,7 +5,7 @@ const { load, mocks, handles } = require('./host-runtime.cjs');
 const { AppStore, HistoryEntry } = load('model/AppStore');
 (async () => {
   const root = path.join(__dirname, '../logs/download-fixture-' + Date.now()); await fs.mkdir(root, { recursive: true });
-  const store = new AppStore(); store.downloadDirectory = path.join(root, 'Download/com.aloereed.aloesend');
+  const store = new AppStore(); store.downloadDirectory = path.join(root, 'Download/com.aloereed.aloesend').replaceAll('\\', '/');
   await store.init({ filesDir: root, getApplicationContext: () => ({ setColorMode() {} }) });
   let requested = 0, accepted = true, persistCalls = 0;
   mocks['@kit.CoreFileKit'].picker.DocumentSaveOptions = class {};

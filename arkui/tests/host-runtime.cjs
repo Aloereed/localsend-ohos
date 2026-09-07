@@ -13,6 +13,7 @@ const root = path.join(__dirname, '../AloeSend/entry/src/main/ets');
 const handles = new Map(); let nextFd = 1;
 const caches = new Map();
 const timers = { setTimeout, clearTimeout, setInterval, clearInterval };
+const capabilities = { folderSelection: true };
 const modes = { READ_ONLY: 0, READ_WRITE: 2, CREATE: 64, TRUNC: 512 };
 const nativeFs = {
   access: file => fsp.access(file).then(() => true, () => false),
@@ -23,6 +24,7 @@ const nativeFs = {
   },
   async close(file) { const fd = typeof file === 'number' ? file : file.fd; const h = handles.get(fd); handles.delete(fd); if (h) await h.close(); },
   async stat(file) { return typeof file === 'number' ? handles.get(file).stat() : fsp.stat(file); },
+  lstat: file => fsp.lstat(file),
   async read(fd, data) { return (await handles.get(fd).read(new Uint8Array(data), 0, data.byteLength, null)).bytesRead; },
   async write(fd, data) { const b = typeof data === 'string' ? Buffer.from(data) : Buffer.from(data); return (await handles.get(fd).write(b, 0, b.length, null)).bytesWritten; },
   readText: file => fsp.readFile(file, 'utf8'),
@@ -148,7 +150,7 @@ function load(relative) {
   const output = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2021, module: ts.ModuleKind.CommonJS, experimentalDecorators: true } }).outputText;
   const exports = {}; caches.set(file, exports);
   const localRequire = name => name.startsWith('.') ? load(path.resolve(path.dirname(file), name)) : mocks[name] || require(name);
-  vm.runInNewContext(output, { exports, require: localRequire, Observed: value => value, Uint8Array, ArrayBuffer, Date, Error, Promise, Map, Set, Number, Object, JSON, String, Math, RegExp, parseInt, encodeURIComponent, decodeURIComponent, ...timers, console }, { filename: file });
+  vm.runInNewContext(output, { exports, require: localRequire, Observed: value => value, canIUse: name => name === 'SystemCapability.FileManagement.UserFileService.FolderSelection' ? capabilities.folderSelection : true, Uint8Array, ArrayBuffer, Date, Error, Promise, Map, Set, Number, Object, JSON, String, Math, RegExp, parseInt, encodeURIComponent, decodeURIComponent, ...timers, console }, { filename: file });
   return exports;
 }
-module.exports = { load, handles, mocks, timers };
+module.exports = { load, handles, mocks, timers, capabilities };
