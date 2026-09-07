@@ -203,8 +203,8 @@ export struct MessagesView {
     }
     this.sending = true;
     try {
-      await localSend.send(this.peer, files);
-      if (this.store.transfers.find((item) => item.files.some((sent) => sent.id === files[0].id))?.status === 'complete') {
+      const transferId = await localSend.send(this.peer, files);
+      if (transferId && this.store.transfers.find((item) => item.id === transferId)?.status === 'complete') {
         this.store.messageDrafts.delete(targetKey);
         if (peerKey(this.peer) === targetKey) { this.draft = ''; this.attachments = []; this.scrollToLatest(); }
       }
