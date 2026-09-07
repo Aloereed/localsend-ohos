@@ -93,7 +93,7 @@ export struct SettingsView {
       }.alignItems(HorizontalAlign.Start).layoutWeight(1)
       Toggle({ type: ToggleType.Switch, isOn: this.toggleValue(key) }).selectedColor(this.store.accentFill)
         .enabled(key !== 'black' || this.store.settings.themePreset !== 'oled')
-        .onChange((value: boolean) => {
+        .onChange(async (value: boolean) => {
           if (value === this.toggleValue(key)) return;
           if (key === 'quickSave') this.store.settings.quickSave = value;
           if (key === 'favorites') this.store.settings.favoriteQuickSave = value;
@@ -107,14 +107,14 @@ export struct SettingsView {
           if (key === 'visible') this.store.settings.visible = value;
           if (key === 'advanced') this.store.settings.advanced = value;
           if (key === 'https') this.store.settings.https = value;
-          this.store.save();
+          const saved = await this.store.save();
           if (key === 'visible') localSend.announce();
-          if (key === 'https') this.store.notice = this.store.t('加密设置已保存，请在没有传输时重启服务');
+          if (key === 'https' && saved) this.store.notice = this.store.t('加密设置已保存，请在没有传输时重启服务');
         }).accessibilityText(this.store.t(title))
     }.padding(18).width('100%')
   }
 
-  saveNetwork(): void {
+  async saveNetwork(): Promise<void> {
     const port = Number(this.port);
     const timeout = Number(this.timeout);
     if (!Number.isInteger(timeout) || timeout < 500 || timeout > 30000) { this.store.error = this.store.t('发现超时范围为 500–30000 毫秒'); return; }
@@ -126,8 +126,7 @@ export struct SettingsView {
     this.store.settings.port = port;
     this.store.settings.multicast = this.group;
     this.store.settings.discoveryTimeout = timeout; this.store.settings.deviceModel = this.model.trim() || 'HarmonyOS';
-    this.store.save();
-    this.store.notice = this.store.t('网络设置已保存，重启接收服务后生效');
+    if (await this.store.save()) this.store.notice = this.store.t('网络设置已保存，重启接收服务后生效');
   }
 
   build() {
@@ -142,9 +141,9 @@ export struct SettingsView {
           Button(this.store.t('使用机型名称')).fontSize(13).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
             .onClick(() => this.alias = this.store.systemDeviceName())
         }.width('100%')
-        Button(this.store.t('保存名称')).type(ButtonType.Capsule).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => {
+        Button(this.store.t('保存名称')).type(ButtonType.Capsule).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(async () => {
           this.store.settings.alias = this.alias.trim() || this.store.t('我的鸿蒙设备');
-          this.store.save(); localSend.announce(); this.store.notice = this.store.t('设备名称已保存');
+          if (await this.store.save()) { localSend.announce(); this.store.notice = this.store.t('设备名称已保存'); }
         })
       }.padding(20).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
       this.title('外观')
@@ -217,8 +216,9 @@ export struct SettingsView {
           Text(this.store.t('接收 PIN')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
           TextInput({ text: this.pin, placeholder: this.store.t('留空表示不设 PIN') }).type(InputType.Password).showPasswordIcon(true).direction(Direction.Ltr)
             .onChange((value: string) => this.pin = value)
-          Button(this.store.t('保存 PIN')).onClick(() => {
-            this.store.settings.pin = this.pin; this.store.save(); this.store.notice = this.store.t('接收 PIN 已更新');
+          Button(this.store.t('保存 PIN')).onClick(async () => {
+            this.store.settings.pin = this.pin;
+            if (await this.store.save()) this.store.notice = this.store.t('接收 PIN 已更新');
           }).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
         }.padding(18)
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)

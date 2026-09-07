@@ -439,7 +439,8 @@ export class AppStore {
     this.log(this.error);
   }
 
-  async save(): Promise<void> {
+  async save(): Promise<boolean> {
+    if (!this.storage) return false;
     try {
       // Replacing the settings object also notifies @Observed consumers.
       this.settings = JSON.parse(JSON.stringify(this.settings)) as AppSettings;
@@ -452,7 +453,8 @@ export class AppStore {
         await this.storage?.put('history', history);
         await this.storage?.flush();
       });
-    } catch (e) { this.fail('保存设置失败', e as Error); }
+      return true;
+    } catch (e) { this.fail('保存设置失败', e as Error); return false; }
   }
 
   applyTheme(): void {
