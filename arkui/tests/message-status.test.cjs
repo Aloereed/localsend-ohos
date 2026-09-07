@@ -49,6 +49,11 @@ async function until(predicate) {
     assert.deepEqual(refused.rows().map(entry => entry.id), ids);
     assert.ok(refused.rows().every(entry => entry.status === 'declined' && entry.error.includes('拒绝')));
     assert.equal(historyStatus(refused.rows()[0]), '已拒绝');
+    const refusedTransfer = store.transfers.find(item => item.id === refused.id);
+    assert.equal(refusedTransfer.status, 'declined');
+    assert.ok(refusedTransfer.files.every(file => file.status === 'declined'));
+    await service.retry(refused.id);
+    assert.equal(store.transfers[0].id, refused.id, 'declined requests must not expose failure retry semantics');
 
     const partial = await start(); failSecond = true; accept(); await partial.done;
     assert.equal(partial.rows().find(entry => entry.text === 'First message').status, 'complete');

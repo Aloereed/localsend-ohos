@@ -259,9 +259,14 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       store.settings.quickSave = false;
       let response = call(port, '/api/localsend/v2/prepare-upload', offer('decline.bin', data));
       await until(() => !!store.pendingReceive); service.acceptReceive(false); assert.equal((await response).status, 403);
+      assert.equal(store.transfers[0].status, 'declined'); assert.ok(store.transfers[0].finished);
+      assert.equal(store.transfers[0].files[0].status, 'declined');
       response = call(port, '/api/localsend/v2/prepare-upload', offer('accept.bin', data));
       await until(() => !!store.pendingReceive); service.selectReceiveFile('f1', false); service.acceptReceive(true);
-      assert.equal((await response).status, 403); store.settings.quickSave = true;
+      assert.equal((await response).status, 403);
+      assert.equal(store.transfers[0].status, 'declined'); assert.ok(store.transfers[0].finished);
+      assert.equal(store.transfers[0].files[0].status, 'skipped');
+      store.settings.quickSave = true;
     });
     await check('PIN required and valid PIN accepts a request', async () => {
       store.settings.pin = '123456';

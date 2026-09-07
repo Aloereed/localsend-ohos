@@ -517,7 +517,9 @@ export class LocalSendService {
       catch (_) { this.store.log('收藏身份验证失败，转为手动确认'); }
     }
     if (channel.closed || session.cancelled) {
-      session.view.status = 'cancelled'; this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); return;
+      session.view.status = 'cancelled'; session.view.finished = Date.now();
+      for (const file of session.view.files) { if (file.status === 'waiting') file.status = 'cancelled'; }
+      this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); return;
     }
     if (!automatic) {
       this.store.pendingReceive = session.id;
@@ -528,12 +530,19 @@ export class LocalSendService {
       if (this.store.pendingReceive === session.id) this.store.pendingReceive = '';
       if (!accepted || session.cancelled || channel.closed) {
         session.view.status = session.cancelled || channel.closed ? 'cancelled' : 'declined'; session.view.finished = Date.now();
+        for (const file of session.view.files) {
+          if (file.status === 'waiting') file.status = file.selected ? session.view.status : 'skipped';
+        }
         this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); await channel.respond(403); return;
       }
     }
     session.accepted = true;
     const selected = session.view.files.filter((file: TransferFile) => file.selected);
-    if (!selected.length) { session.view.status = 'declined'; this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); await channel.respond(403); return; }
+    if (!selected.length) {
+      session.view.status = 'declined'; session.view.finished = Date.now();
+      for (const file of session.view.files) file.status = 'skipped';
+      this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); await channel.respond(403); return;
+    }
     if (!session.legacy && selected.every((file: TransferFile) => !!session.files[file.id].preview && session.files[file.id].fileType === 'text/plain')) {
       for (const file of selected) {
         const entry = new HistoryEntry(); entry.name = file.name; entry.text = session.files[file.id].preview!;
@@ -821,7 +830,7 @@ export class LocalSendService {
     } catch (e) {
       const remote = this.sendSessions.get(transfer.id);
       if (remote && !cancellation.cancelled) this.notifyCancel(remote.peer, remote.remoteId, remote.legacy);
-      transfer.status = cancellation.cancelled ? 'cancelled' : 'error'; transfer.error = (e as Error).message; transfer.finished = Date.now();
+      transfer.status = cancellation.cancelled ? 'cancelled' : declined ? 'declined' : 'error'; transfer.error = (e as Error).message; transfer.finished = Date.now();
       const interruptedFile = transfer.files.some((file: TransferFile) => file.status === 'transferring');
       for (const file of transfer.files) {
         if (file.status === 'transferring' || file.status === 'waiting') {
