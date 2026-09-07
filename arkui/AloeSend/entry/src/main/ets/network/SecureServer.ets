@@ -120,7 +120,7 @@ export class SecureServer {
   }
 
   async close(): Promise<void> {
-    for (const client of Array.from(this.clients)) await client.close();
+    await Promise.all(Array.from(this.clients).map((client: SecureConnection) => client.close()));
     await this.tcp?.close().catch(() => {}); this.tcp = undefined;
     if (this.id !== -1) { tls.closeServer(this.id); this.id = -1; }
   }
