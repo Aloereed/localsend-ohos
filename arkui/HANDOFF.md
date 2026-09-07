@@ -1,8 +1,10 @@
-# 当前交接 · M84
+# 当前交接 · M85
 
-最新包：[AloeSend-2000084-M84-share-list-unsigned.hap](artifacts/AloeSend-2000084-M84-share-list-unsigned.hap)。版本 2.0.84，包含 M1–M84 累计实现，无需逐个安装。源码提交 `e6e98d5d87dc8646e9045fe9e51489256a1d6950`，分支 `arkui`。
+最新包：[AloeSend-2000085-M85-history-path-unsigned.hap](artifacts/AloeSend-2000085-M85-history-path-unsigned.hap)。版本 2.0.85，包含 M1–M85 累计实现，无需逐个安装。源码提交 `9e28213d5f4ad04d47bbdadea0599b50abc5c6db`，分支 `arkui`。
 
-SHA-256：`D858C1AB1E6553388F44224DCC43AB2EB91541A646E7DB0B4C66A5898B1DB0F7`。
+SHA-256：`E08556D6894BFC0F92151A0392DF7DD6EED929874E79F40BDBCBF9D3213A3E07`。
+
+M85：历史打开和另存为支持可读副本回退，在保存选择器之前验证源文件。真实文件内容与句柄测试及编译通过；85 个包校验通过。未访问设备，其他历史文件动作仍在审查。
 
 M84：共享管理页增加全量文件名搜索、初始 30 项和每次 50 项展开、收起及空状态。下载确认请求不分页。界面编译与 84 个包校验通过，未访问设备；实际长列表交互待检查。
 
