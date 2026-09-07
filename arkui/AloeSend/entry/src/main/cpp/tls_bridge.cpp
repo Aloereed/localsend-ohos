@@ -58,6 +58,14 @@ napi_value process(napi_env env, napi_callback_info info, bool writing) {
 }
 napi_value feed(napi_env env, napi_callback_info info) { return process(env, info, false); }
 napi_value write(napi_env env, napi_callback_info info) { return process(env, info, true); }
+napi_value shutdown(napi_env env, napi_callback_info info) {
+    return invoke(env, info, [&](napi_value* args) {
+        auto found = sessions.find(integer(env, args[0]));
+        if (found == sessions.end()) throw std::runtime_error("TLS connection closed");
+        found->second->shutdown();
+        napi_value result = buffer(env, found->second->output); found->second->output.clear(); return result;
+    });
+}
 napi_value closeSession(napi_env env, napi_callback_info info) { return invoke(env, info, [&](napi_value* args) { sessions.erase(integer(env, args[0])); return number(env, 0); }); }
 napi_value closeServer(napi_env env, napi_callback_info info) { return invoke(env, info, [&](napi_value* args) { servers.erase(integer(env, args[0])); return number(env, 0); }); }
 napi_value init(napi_env env, napi_value exports) {
@@ -66,6 +74,7 @@ napi_value init(napi_env env, napi_value exports) {
         {"createSession", nullptr, createSession, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"feed", nullptr, feed, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"write", nullptr, write, nullptr, nullptr, nullptr, napi_default, nullptr},
+        {"shutdown", nullptr, shutdown, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"closeSession", nullptr, closeSession, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"closeServer", nullptr, closeServer, nullptr, nullptr, nullptr, napi_default, nullptr}};
     napi_define_properties(env, exports, sizeof(functions) / sizeof(functions[0]), functions); return exports;

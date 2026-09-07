@@ -100,5 +100,9 @@ struct Session {
             check(count); if (!count) throw std::runtime_error("TLS write made no progress"); offset += count;
         }
     }
+    void shutdown() {
+        if (ready && !closed) check(mbedtls_ssl_close_notify(&ssl));
+        closed = true;
+    }
 };
 }

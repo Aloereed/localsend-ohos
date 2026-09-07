@@ -265,6 +265,7 @@ export class AppStore {
 
   log(message: string): void {
     this.logs = [`${new Date().toLocaleTimeString()}  ${message}`, ...this.logs].slice(0, 300);
+    console.info(`[AloeSend] ${message}`);
   }
 
   networkLog(category: string, message: string): void {

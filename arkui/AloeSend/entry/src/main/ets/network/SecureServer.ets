@@ -12,6 +12,7 @@ export class SecureConnection {
   private closed: boolean = false;
   private outgoing: Promise<void> = Promise.resolve();
   private handshakeTimer: number = -1;
+  private closing: Promise<void> | undefined = undefined;
   onDispose: () => void = () => {};
 
   constructor(tcp: socket.TCPSocketConnection, server: number) {
@@ -65,7 +66,25 @@ export class SecureConnection {
     tls.closeSession(this.id); this.onClose(); this.onDispose();
   }
 
-  async close(): Promise<void> { this.dispose(); await this.tcp.close().catch(() => {}); }
+  close(): Promise<void> {
+    if (this.closing) return this.closing;
+    this.closing = this.finishClose(); return this.closing;
+  }
+
+  private async finishClose(): Promise<void> {
+    if (this.closed) return;
+    // A TCP EOF is not a TLS close_notify. Complete the TLS shutdown before
+    // releasing the socket so strict clients can finish their HTTP response.
+    let timer: number = -1;
+    try {
+      const wire = tls.shutdown(this.id);
+      await Promise.race([this.flush(wire), new Promise<void>((resolve) => { timer = setTimeout(resolve, 1000); })]);
+    } catch (_) { /* Broken channels still have to release their native state. */ }
+    finally {
+      if (timer !== -1) clearTimeout(timer);
+      this.dispose(); await this.tcp.close().catch(() => {});
+    }
+  }
 }
 
 export class SecureServer {

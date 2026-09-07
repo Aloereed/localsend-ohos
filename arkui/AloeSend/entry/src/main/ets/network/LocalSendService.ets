@@ -51,6 +51,7 @@ class ReceiveSession {
   expired: boolean = false;
   lastActivity: number = Date.now();
   uploads: NativeConnection[] = [];
+  stopNotification: Promise<void> = Promise.resolve();
 }
 
 class SendSessionRef {
@@ -118,7 +119,7 @@ class UploadSink implements BodySink {
       this.service.store.log(`下载目录写入失败，改用应用内目录：${(error as Error).message}`);
     }
     if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
-    if (this.session.cancelled || this.channel.closed) throw new Error('接收已取消');
+    if (this.session.cancelled || this.channel.closed) { await this.session.stopNotification; throw new Error('接收已取消'); }
     this.view.status = 'transferring'; this.session.view.status = 'transferring';
     this.session.lastActivity = Date.now();
     this.service.store.updateTransfer(this.session.view);
@@ -130,30 +131,32 @@ class UploadSink implements BodySink {
   }
 
   private async writeBytes(bytes: Uint8Array): Promise<void> {
-    if (this.finished || this.session.cancelled) throw new Error('接收已取消');
+    if (this.finished || this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
     if (this.received + bytes.length > this.fileInfo.size) throw new Error('文件超出声明长度');
     let offset = 0;
     while (offset < bytes.length) {
-      if (this.session.cancelled) throw new Error('接收已取消');
+      if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
       const written = await fs.write(this.output!.fd, bytes.slice(offset).buffer as ArrayBuffer);
       if (written <= 0) throw new Error('文件写入失败');
       offset += written;
     }
     await this.hash?.update({ data: bytes });
-    if (this.session.cancelled) throw new Error('接收已取消');
+    if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
     this.received += bytes.length; this.view.transferred = this.received;
+    if (this.received === bytes.length) this.service.store.log(`已收到首段文件数据（${this.channel.encrypted ? 'HTTPS' : 'HTTP'}）`);
     this.session.lastActivity = Date.now();
     if (Date.now() - this.lastUpdate > 100) { this.service.store.updateTransfer(this.session.view); this.lastUpdate = Date.now(); }
   }
 
   async finish(): Promise<void> {
-    if (this.session.cancelled || this.received !== this.fileInfo.size) throw new Error('文件未完整接收');
+    if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
+    if (this.received !== this.fileInfo.size) throw new Error('文件未完整接收');
     if (this.hash) {
       const hash = (await this.hash.digest()).data.reduce((value: string, byte: number) => value + byte.toString(16).padStart(2, '0'), '');
       if (hash !== this.fileInfo.hash!.toLowerCase()) throw new Error('文件校验和不匹配');
     }
     if (this.output) { await fs.close(this.output); this.output = undefined; }
-    if (this.session.cancelled) throw new Error('接收已取消');
+    if (this.session.cancelled) { await this.session.stopNotification; throw new Error('接收已取消'); }
     await fs.rename(`${this.path}.part`, this.path);
     this.finished = true; this.view.status = 'complete'; this.view.path = this.path;
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
@@ -523,7 +526,9 @@ export class LocalSendService {
     for (const file of selected) tokens[file.id] = util.generateRandomUUID();
     session.tokens = tokens; session.lastActivity = Date.now(); session.view.status = 'transferring'; this.store.updateTransfer(session.view);
     const response: PrepareReply = { sessionId: session.id, files: tokens };
+    this.store.log(`已确认接收 ${selected.length} 项，正在发送上传凭据`);
     await channel.respond(200, JSON.stringify(head.target.includes('/v1/') ? tokens : response));
+    this.store.log('上传凭据已发送，等待文件连接');
   }
 
   acceptReceive(accepted: boolean): void { this.receiving?.resolve(accepted); }
@@ -576,6 +581,7 @@ export class LocalSendService {
   }
 
   private async openUpload(channel: NativeConnection, head: HttpHead): Promise<BodySink> {
+    this.store.log(`文件上传连接已到达（${channel.encrypted ? 'HTTPS' : 'HTTP'}）`);
     const session = this.receiving;
     const id = queryValue(head.target, 'sessionId') || (head.target.includes('/v1/') ? session?.id : '');
     const fileId = queryValue(head.target, 'fileId'); const token = queryValue(head.target, 'token');
@@ -629,13 +635,17 @@ export class LocalSendService {
     }
     if (this.store.pendingReceive === session.id) this.store.pendingReceive = '';
     this.store.updateTransfer(session.view);
-    if (notifyPeer && session.accepted) this.notifyCancel(session.peer, session.id, session.legacy);
-    for (const channel of session.uploads) { if (channel !== respondingChannel) channel.close(); }
+    if (notifyPeer && session.accepted) session.stopNotification = this.notifyCancel(session.peer, session.id, session.legacy);
+    // Give the control request priority over a socket EOF. Flutter only accepts
+    // receiver cancellation while its send session is still active.
+    session.stopNotification.then(() => {
+      for (const channel of session.uploads) { if (channel !== respondingChannel) channel.close(); }
+    });
   }
 
-  private notifyCancel(peer: Peer, sessionId: string, legacy: boolean): void {
+  private notifyCancel(peer: Peer, sessionId: string, legacy: boolean): Promise<void> {
     const path = legacy ? '/api/localsend/v1/cancel' : `/api/localsend/v2/cancel?sessionId=${encodeURIComponent(sessionId)}`;
-    request(peer, 'POST', path, '', new Cancellation(), 5000).then((reply) => {
+    return request(peer, 'POST', path, '', new Cancellation(), 1000).then((reply) => {
       this.store.log(reply.status === 200 ? '对方已确认终止传输' : `终止通知未被对方接受：HTTP ${reply.status}`);
     }).catch((error: Error) => this.store.log(`终止通知发送失败：${error.message}`));
   }
