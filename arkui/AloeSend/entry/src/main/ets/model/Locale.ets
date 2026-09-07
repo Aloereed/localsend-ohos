@@ -2,6 +2,8 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "搜索语言名称或代码": "Search language name or code",
+  "没有匹配的语言": "No matching languages",
   "部分原生界面说明暂以英文显示": "Some native interface descriptions are currently shown in English",
   "主题预设": "Theme preset",
   "系统配色": "System colors",

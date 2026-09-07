@@ -3,6 +3,7 @@ import { localSend } from '../network/LocalSendService';
 import { LengthMetrics } from '@kit.ArkUI';
 import { flutterLanguages } from '../model/FlutterLocales';
 import { resolvedLanguage } from '../model/Locale';
+import { LanguagePicker } from './LanguagePicker';
 
 @Component
 export struct SettingsView {
@@ -18,6 +19,10 @@ export struct SettingsView {
   @State pin: string = '';
   @State timeout: string = '';
   @State model: string = '';
+  @State languageVisible: boolean = false;
+
+  @Builder
+  languageSheet() { LanguagePicker({ store: this.store, onChoose: () => this.languageVisible = false }) }
 
   aboutToAppear(): void {
     this.alias = this.store.settings.alias;
@@ -127,9 +132,9 @@ export struct SettingsView {
       Column() {
         Row() {
           Text(this.store.t('语言')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
-          Select(this.languageOptions()).selected(this.languageIndex()).value(this.languageName()).layoutWeight(2)
-            .onSelect((index: number) => { this.store.settings.language = index === 0 ? 'system' : flutterLanguages[index - 1].id; this.store.save(); })
-        }.padding(18).width('100%')
+          Text(this.languageName()).fontSize(14).maxLines(2).fontColor($r('sys.color.font_secondary')).layoutWeight(2).textAlign(TextAlign.End)
+          Text(this.store.rtl ? '‹' : '›').fontSize(24).fontColor($r('sys.color.font_secondary')).margin({ left: 8 })
+        }.padding(18).width('100%').constraintSize({ minHeight: 60 }).onClick(() => this.languageVisible = true)
         if (!['zh', 'en'].includes(resolvedLanguage(this.store.settings.language))) {
           Text(this.store.t('部分原生界面说明暂以英文显示')).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%').padding({ left: 18, right: 18, bottom: 12 })
         }
@@ -242,6 +247,6 @@ export struct SettingsView {
         this.link('关于 AloeSend', '原生鸿蒙', 'about')
         this.link('支持开源项目', '', 'donate')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
-    }.width('100%')
+    }.width('100%').bindSheet($$this.languageVisible, this.languageSheet(), { height: SheetSize.LARGE, showClose: true })
   }
 }
