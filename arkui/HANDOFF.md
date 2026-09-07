@@ -1,8 +1,10 @@
-# 当前交接 · M75
+# 当前交接 · M76
 
-最新包：[AloeSend-2000075-M75-retry-state-unsigned.hap](artifacts/AloeSend-2000075-M75-retry-state-unsigned.hap)。版本 2.0.75，包含 M1–M75 累计实现，无需逐个安装。源码提交 `0b1e2b238dd967f4f45d52a02ababe795f4b21c3`，分支 `arkui`。
+最新包：[AloeSend-2000076-M76-file-retry-unsigned.hap](artifacts/AloeSend-2000076-M76-file-retry-unsigned.hap)。版本 2.0.76，包含 M1–M76 累计实现，无需逐个安装。源码提交 `859eb425bbed116bd30147ba2627c70eb6326202`，分支 `arkui`。
 
-SHA-256：`F130D47519AAE3BFEC0D0F09E03D6BD0C7D1D7073260189E4AD9894E0C02DED3`。
+SHA-256：`E55AA48E495D0BA3AF5BFFF2D94359AA6A7378E974F72CECE1F93DFC40D25DEF`。
+
+M76：补齐单文件重试，后续批量操作排除已重试项，失败的新任务可以继续重试。新增真实 HTTP 四轮请求清单测试及服务集成回归通过，编译成功，76 个包校验通过。仍需接收方确认新的重试会话，未复用已终止会话的令牌。
 
 M75：重试期间禁用旧入口并在服务端去重；新任务创建后旧任务只显示已重试，没有启动则可继续重试。服务集成及取消、消息状态、部分接收回归通过，编译成功；75 个未签名包已验证。原生重试仍创建新任务，Flutter 同会话单文件重试的差异保留在后续对齐范围中。
 
