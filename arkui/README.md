@@ -1,7 +1,9 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M125 / 2.0.125 / 2000125**：
-[未签名 debug 包](artifacts/AloeSend-2000125-M125-empty-clipboard-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M126 / 2.0.126 / 2000126**：
+[未签名 debug 包](artifacts/AloeSend-2000126-M126-bottom-immersion-unsigned.hap)。包含所有此前里程碑。
+
+M126 补齐底部系统栏布局与窗口背景，窗口及前台生命周期针对性测试、编译通过；实际手势区域观感待部署确认。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
 最新验证与待检查范围见 [交接记录](HANDOFF.md)。M124 全部 59 个主机测试文件及编译通过。M121 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。

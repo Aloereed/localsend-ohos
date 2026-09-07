@@ -14,6 +14,10 @@ export default class EntryAbility extends UIAbility {
   private mainWindow: window.Window | undefined = undefined;
 
   private syncSystemBars(): void {
+    // Also paint the window behind the gesture area during layout transitions.
+    // A transparent navigation bar alone can expose the system's default fill.
+    try { this.mainWindow?.setWindowBackgroundColor(appStore.canvasColor); }
+    catch (error) { appStore.log(`设置窗口背景失败：${(error as Error).message}`); }
     this.mainWindow?.setWindowSystemBarProperties({ statusBarColor: '#00000000', navigationBarColor: '#00000000',
       statusBarContentColor: appStore.dark ? '#FFFFFF' : '#182431',
       navigationBarContentColor: appStore.dark ? '#FFFFFF' : '#182431'
@@ -27,7 +31,7 @@ export default class EntryAbility extends UIAbility {
       const cutout = this.mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_CUTOUT);
       const navigation = this.mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
       appStore.safeTopPx = Math.max(system.topRect.height, cutout.topRect.height);
-      appStore.safeBottomPx = Math.max(system.bottomRect.height, navigation.bottomRect.height);
+      appStore.safeBottomPx = Math.max(system.bottomRect.height, navigation.bottomRect.height, cutout.bottomRect.height);
     } catch (error) { appStore.log(`读取系统栏避让区域失败：${(error as Error).message}`); }
   }
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -72,6 +76,7 @@ export default class EntryAbility extends UIAbility {
 
   onForeground(): void {
     this.foreground = true;
+    this.syncSystemBars(); this.syncSafeArea();
     this.screenKeeper?.sync(appStore.transfers.some((item) => item.status === 'transferring'));
     appStore.log('应用已回到前台');
     appStore.init(this.context).then(async (): Promise<void> => { if (appStore.ready && appStore.privacyAccepted) await localSend.discover(false); }).catch((error: Error) => appStore.log(error.message));
