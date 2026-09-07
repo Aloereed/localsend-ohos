@@ -54,8 +54,8 @@ export struct LibraryView {
               }).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
               Button(this.store.t('另存为')).onClick(() => this.store.exportFile(entry)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
             }
-            Button(this.store.t('再次发送')).onClick(() => this.store.resend(entry)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
             if (entry.text || entry.path) {
+              Button(this.store.t('再次发送')).onClick(() => this.store.resend(entry)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
               Button(this.store.t('分享')).onClick(() => this.store.shareEntry(entry)).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
             }
             Button(this.store.t('删除')).onClick(() => {

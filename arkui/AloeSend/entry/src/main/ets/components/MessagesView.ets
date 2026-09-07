@@ -138,6 +138,19 @@ export struct MessagesView {
       } } });
   }
 
+  messageActions(entry: HistoryEntry): MenuElement[] {
+    const actions: MenuElement[] = [{ value: this.store.t('详情'), action: () => this.openDetails(entry) }];
+    if (entry.text || entry.path) {
+      actions.push({ value: this.store.t(entry.text ? '复制文字' : '打开文件'), action: () => {
+        if (entry.text) this.store.copy(entry.text); else this.store.openFile(entry);
+      } });
+      actions.push({ value: this.store.t('系统分享'), action: () => this.store.shareEntry(entry) });
+      actions.push({ value: this.store.t('再次发送'), action: () => this.store.resend(entry) });
+    }
+    actions.push({ value: this.store.t('删除记录'), action: () => this.store.removeHistory(entry.id) });
+    return actions;
+  }
+
   @Builder
   bubble(entry: HistoryEntry) {
     Row() {
@@ -159,19 +172,13 @@ export struct MessagesView {
               Text(entry.name).fontSize(15).maxLines(3).fontColor($r('sys.color.font_primary'))
               Text(formatSize(entry.size)).fontSize(12).fontColor($r('sys.color.font_secondary'))
             }.alignItems(HorizontalAlign.Start).layoutWeight(1)
-          }.width('100%').onClick(() => this.store.openFile(entry))
+          }.width('100%').onClick(() => { if (entry.path) this.store.openFile(entry); else this.openDetails(entry); })
         }
         Row() {
           Text(`${new Date(entry.time).toLocaleTimeString()} · ${this.store.t(historyStatus(entry))}`)
             .fontSize(11).fontColor($r('sys.color.font_secondary')).layoutWeight(1)
           Button(this.store.t('更多')).fontSize(12).height(30).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
-            .bindMenu([
-              { value: this.store.t('详情'), action: () => this.openDetails(entry) },
-              { value: entry.text ? this.store.t('复制文字') : this.store.t('打开文件'), action: () => { if (entry.text) this.store.copy(entry.text); else this.store.openFile(entry); } },
-              { value: this.store.t('系统分享'), action: () => this.store.shareEntry(entry) },
-              { value: this.store.t('再次发送'), action: () => this.store.resend(entry) },
-              { value: this.store.t('删除记录'), action: () => this.store.removeHistory(entry.id) }
-            ])
+            .bindMenu(this.messageActions(entry))
         }.width('100%')
         if (entry.error) {
           Text(this.store.t(entry.error)).fontSize(12).lineHeight(18).fontColor(this.store.dangerText).width('100%')

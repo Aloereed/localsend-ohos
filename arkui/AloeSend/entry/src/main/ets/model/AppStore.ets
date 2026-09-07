@@ -561,17 +561,19 @@ export class AppStore {
 
   async updateOutgoingHistory(transfer: TransferView, files: ShareFile[], create: boolean = false, declined: boolean = false): Promise<void> {
     const updates: Map<string, HistoryEntry> = new Map();
+    const existingEntries = new Map(this.history.map((entry: HistoryEntry): [string, HistoryEntry] => [entry.id, entry]));
+    const transferFiles = new Map(transfer.files.map((file: TransferFile): [string, TransferFile] => [file.id, file]));
     const additions: HistoryEntry[] = [];
     for (const file of files) {
       const id = `send:${transfer.id}:${file.id}`;
-      const existing = this.history.find((entry: HistoryEntry) => entry.id === id);
+      const existing = existingEntries.get(id);
       // Deleting a message while it is being sent must remain effective.
       if (!existing && !create) continue;
       const entry = existing ? JSON.parse(JSON.stringify(existing)) as HistoryEntry : new HistoryEntry();
       entry.id = id; entry.transferId = transfer.id; entry.name = file.name;
       entry.peer = transfer.peer; entry.peerInfo = transfer.peerInfo; entry.direction = 'send';
       entry.time = transfer.started; entry.size = file.size; entry.text = file.text; entry.path = file.uri;
-      entry.status = transfer.files.find((item: TransferFile) => item.id === file.id)?.status || transfer.status;
+      entry.status = transferFiles.get(file.id)?.status || transfer.status;
       if (declined && entry.status === 'error') entry.status = 'declined';
       entry.error = entry.status === 'error' || entry.status === 'declined' || entry.status === 'cancelled' ? transfer.error : '';
       updates.set(id, entry);
@@ -581,6 +583,40 @@ export class AppStore {
       }
     }
     this.history = [...additions.reverse(), ...this.history.map((entry: HistoryEntry) => updates.get(entry.id) || entry)];
+    await this.save();
+  }
+
+  async updateIncomingHistory(transfer: TransferView, create: boolean = false): Promise<void> {
+    const existingEntries = new Map(this.history.map((entry: HistoryEntry): [string, HistoryEntry] => [entry.id, entry]));
+    const updates: Map<string, HistoryEntry> = new Map(); const additions: HistoryEntry[] = [];
+    for (const file of transfer.files) {
+      const id = `receive:${transfer.id}:${file.id}`; const existing = existingEntries.get(id);
+      if (!existing && !create) continue;
+      const entry = existing ? JSON.parse(JSON.stringify(existing)) as HistoryEntry : new HistoryEntry();
+      entry.id = id; entry.transferId = transfer.id; entry.name = file.name; entry.time = transfer.started;
+      entry.direction = 'receive'; entry.peer = transfer.peer; entry.peerInfo = transfer.peerInfo; entry.size = file.size;
+      if (!existing) entry.text = file.preview;
+      entry.status = file.status;
+      if (file.status !== 'complete') {
+        if (!file.selected && transfer.status !== 'waiting') entry.status = 'skipped';
+        else if (['error', 'cancelled', 'declined'].includes(transfer.status)) entry.status = transfer.status;
+      }
+      // Paths become available only after checksum verification and rename.
+      entry.path = file.status === 'complete' ? file.path : '';
+      entry.error = ['error', 'cancelled', 'declined'].includes(entry.status) ? transfer.error : '';
+      updates.set(id, entry);
+      if (!existing) { additions.push(entry); if (this.settings.saveHistory) this.persistentHistory.add(id); }
+    }
+    this.history = [...additions.reverse(), ...this.history.map((entry: HistoryEntry) => updates.get(entry.id) || entry)];
+    await this.save();
+  }
+
+  async completeIncomingHistory(entry: HistoryEntry, transfer: TransferView, file: TransferFile): Promise<void> {
+    entry.id = `receive:${transfer.id}:${file.id}`; entry.transferId = transfer.id; entry.time = transfer.started;
+    entry.status = 'complete';
+    const existing = this.history.find((item: HistoryEntry) => item.id === entry.id);
+    if (existing) this.history = this.history.map((item: HistoryEntry) => item.id === entry.id ? entry : item);
+    if (transfer.offerGallerySave && entry.path && this.isMedia(entry)) this.galleryQueue = [...this.galleryQueue, entry];
     await this.save();
   }
 
@@ -761,7 +797,7 @@ export class AppStore {
   }
 
   async shareEntry(entry: HistoryEntry): Promise<void> {
-    if (!this.context) return;
+    if (!this.context || (!entry.text && !entry.path)) return;
     try {
       const record: systemShare.SharedRecord = entry.text ? { utd: 'general.plain-text', content: entry.text } :
         { utd: mimeForName(entry.name).startsWith('image/') ? 'general.image' : mimeForName(entry.name).startsWith('video/') ? 'general.video' : 'general.file',

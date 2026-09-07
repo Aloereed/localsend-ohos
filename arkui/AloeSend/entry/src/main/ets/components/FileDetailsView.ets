@@ -72,12 +72,12 @@ export struct FileDetailsView {
         Button(this.store.t('打开链接')).width('100%').height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
           .onClick(() => this.store.openUrl(this.current().text.trim()))
       }
-      Row({ space: 12 }) {
+      if (this.current().text || this.current().path) { Row({ space: 12 }) {
         Button(this.store.t('分享')).layoutWeight(1).height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.shareEntry(this.current()))
         if (this.current().path) {
           Button(this.store.t('另存为')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.store.exportFile(this.current()))
         }
-      }.width('100%')
+      }.width('100%') }
     }.width('100%').height('100%').padding(24)
   }
 }

@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const http = require('node:http');
-const { load } = require('./host-runtime.cjs');
+const { load, mocks } = require('./host-runtime.cjs');
 const { AppStore, Peer, ShareFile, historyStatus } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
 const work = path.join(__dirname, '../logs/message-status-' + Date.now());
@@ -69,9 +69,16 @@ async function until(predicate) {
     assert.ok(!JSON.parse(await store.storage.get('history', '[]')).some(entry => entry.transferId === privateSession.id), 'status updates must not persist a private session after the setting changes');
 
     const interrupted = await start();
-    const restarted = new AppStore(); await restarted.init(context);
-    assert.ok(restarted.history.filter(entry => entry.transferId === interrupted.id).every(entry => entry.status === 'error' && entry.error.includes('未完成')));
-    assert.ok(JSON.parse(await restarted.storage.get('history', '[]')).filter(entry => entry.transferId === interrupted.id).every(entry => entry.status === 'error'));
+    const preferences = mocks['@kit.ArkData'].preferences, openPreferences = preferences.getPreferences;
+    const restarted = new AppStore();
+    // The general host adapter returns a fresh store per init. Reopen the
+    // actual saved values here so the restart assertion cannot pass on [] .
+    preferences.getPreferences = async () => store.storage;
+    try { await restarted.init(context); } finally { preferences.getPreferences = openPreferences; }
+    const recovered = restarted.history.filter(entry => entry.transferId === interrupted.id);
+    assert.equal(recovered.length, 2); assert.ok(recovered.every(entry => entry.status === 'error' && entry.error.includes('未完成')));
+    const persisted = JSON.parse(await restarted.storage.get('history', '[]')).filter(entry => entry.transferId === interrupted.id);
+    assert.equal(persisted.length, 2); assert.ok(persisted.every(entry => entry.status === 'error'));
     service.cancel(interrupted.id); await interrupted.done; prepared.end('{}');
     console.log('PASS real outgoing messages: pending persistence, rejection, partial failure, cancellation, deletion, private history and interrupted restart');
   } finally { await service.stop(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }

@@ -135,7 +135,9 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       const count = store.history.length;
       const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('bad-hash.bin', data, { hash: '0'.repeat(64) }))).json();
       const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
-      assert.equal(result.status, 400); assert.equal(store.history.length, count);
+      assert.equal(result.status, 400); assert.equal(store.history.length, count + 1);
+      const failed = store.history.find(entry => entry.transferId === session.sessionId);
+      assert.equal(failed.status, 'error'); assert.equal(failed.path, ''); assert.match(failed.error, /校验和/);
       await until(() => handles.size === 0);
       await assert.rejects(fs.access(path.join(work, 'received', session.sessionId, 'bad-hash.bin')));
       await assert.rejects(fs.access(path.join(work, 'received', session.sessionId, 'bad-hash.bin.part')));

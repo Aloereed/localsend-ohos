@@ -162,7 +162,7 @@ class UploadSink implements BodySink {
     const entry = new HistoryEntry(); entry.name = this.view.name; entry.peer = this.session.peer.alias;
     entry.size = this.received; entry.path = this.path; entry.peerInfo = this.session.peer;
     if (this.fileInfo.preview && this.fileInfo.fileType === 'text/plain' && this.received <= 400000) entry.text = await fs.readText(this.path);
-    await this.service.store.addHistory(entry, this.session.view.offerGallerySave);
+    await this.service.store.completeIncomingHistory(entry, this.session.view, this.view);
     await this.service.store.saveReceivedCopy(entry, this.session.view.destination, this.session.id);
     this.service.finishReceiveFile(this.session);
     await this.channel.respond(200);
@@ -488,8 +488,15 @@ export class LocalSendService {
       session.view.files.push(view);
     }
     this.receiving = session; this.store.updateTransfer(session.view); this.upsertPeer(session.peer);
+    this.store.updateIncomingHistory(session.view, true);
     channel.onClosed = () => {
-      if (!session.accepted) { session.cancelled = true; session.resolve(false); }
+      if (!session.accepted) {
+        session.cancelled = true; session.resolve(false);
+        if (session.view.status === 'waiting') {
+          session.view.status = 'cancelled'; session.view.finished = Date.now();
+          this.store.updateTransfer(session.view); this.store.updateIncomingHistory(session.view);
+        }
+      }
     };
     let automatic = this.store.settings.quickSave;
     if (!automatic && this.store.settings.favoriteQuickSave && channel.encrypted && session.peer.protocol === 'https' &&
@@ -500,7 +507,7 @@ export class LocalSendService {
       catch (_) { this.store.log('收藏身份验证失败，转为手动确认'); }
     }
     if (channel.closed || session.cancelled) {
-      session.view.status = 'cancelled'; this.store.updateTransfer(session.view); return;
+      session.view.status = 'cancelled'; this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); return;
     }
     if (!automatic) {
       this.store.pendingReceive = session.id;
@@ -509,22 +516,28 @@ export class LocalSendService {
         session.resolve = (value: boolean) => { clearTimeout(timer); resolve(value); };
       });
       if (this.store.pendingReceive === session.id) this.store.pendingReceive = '';
-      if (!accepted || session.cancelled || channel.closed) { session.view.status = session.cancelled || channel.closed ? 'cancelled' : 'declined'; this.store.updateTransfer(session.view); await channel.respond(403); return; }
+      if (!accepted || session.cancelled || channel.closed) {
+        session.view.status = session.cancelled || channel.closed ? 'cancelled' : 'declined'; session.view.finished = Date.now();
+        this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); await channel.respond(403); return;
+      }
     }
     session.accepted = true;
     const selected = session.view.files.filter((file: TransferFile) => file.selected);
-    if (!selected.length) { session.view.status = 'declined'; this.store.updateTransfer(session.view); await channel.respond(403); return; }
+    if (!selected.length) { session.view.status = 'declined'; this.store.updateTransfer(session.view); await this.store.updateIncomingHistory(session.view); await channel.respond(403); return; }
     if (!session.legacy && selected.every((file: TransferFile) => !!session.files[file.id].preview && session.files[file.id].fileType === 'text/plain')) {
       for (const file of selected) {
         const entry = new HistoryEntry(); entry.name = file.name; entry.text = session.files[file.id].preview!;
         entry.peer = session.peer.alias; entry.peerInfo = session.peer; entry.size = encodeText(entry.text).length;
-        await this.store.addHistory(entry); file.status = 'complete'; file.transferred = file.size;
+        file.status = 'complete'; file.transferred = file.size;
+        await this.store.completeIncomingHistory(entry, session.view, file);
       }
-      session.view.status = 'complete'; session.view.finished = Date.now(); this.store.updateTransfer(session.view); await channel.respond(204); return;
+      session.view.status = 'complete'; session.view.finished = Date.now(); this.store.updateTransfer(session.view);
+      await this.store.updateIncomingHistory(session.view); await channel.respond(204); return;
     }
     const tokens: Record<string, string> = {};
     for (const file of selected) tokens[file.id] = util.generateRandomUUID();
     session.tokens = tokens; session.lastActivity = Date.now(); session.view.status = 'transferring'; this.store.updateTransfer(session.view);
+    await this.store.updateIncomingHistory(session.view);
     const response: PrepareReply = { sessionId: session.id, files: tokens };
     this.store.log(`已确认接收 ${selected.length} 项，正在发送上传凭据`);
     await channel.respond(200, JSON.stringify(head.target.includes('/v1/') ? tokens : response));
@@ -595,6 +608,7 @@ export class LocalSendService {
     const sink = new UploadSink(this, session, info, view, channel);
     view.status = 'transferring'; session.uploads.push(channel);
     try {
+      await this.store.updateIncomingHistory(session.view);
       await sink.init();
       if (session.cancelled || channel.closed) throw new Error('接收已取消');
       return sink;
@@ -611,6 +625,7 @@ export class LocalSendService {
       session.view.status = 'complete'; session.view.finished = Date.now(); this.store.notice = session.view.storageNotice || `已收到 ${session.peer.alias} 的文件`;
     }
     this.store.updateTransfer(session.view);
+    this.store.updateIncomingHistory(session.view);
   }
 
   checkReceiveIdle(): void {
@@ -635,6 +650,7 @@ export class LocalSendService {
     }
     if (this.store.pendingReceive === session.id) this.store.pendingReceive = '';
     this.store.updateTransfer(session.view);
+    this.store.updateIncomingHistory(session.view);
     if (notifyPeer && session.accepted) session.stopNotification = this.notifyCancel(session.peer, session.id, session.legacy);
     // Give the control request priority over a socket EOF. Flutter only accepts
     // receiver cancellation while its send session is still active.
