@@ -1,6 +1,7 @@
 import { i18n } from '@kit.LocalizationKit';
 
 const english: Record<string, string> = {
+  "对方终止了传输": "The other device stopped the transfer",
   "打开所选文件失败": "Could not open the selected file",
   "打开 {0}": "Open {0}",
   "本次接收提示保存到相册": "Offer to save this transfer to Photos",

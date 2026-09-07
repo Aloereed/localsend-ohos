@@ -226,6 +226,38 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         assert.equal(seen[0].files[file.id].size, data.length);
       } finally { await new Promise(r => remote.close(r)); }
     });
+    await check('receiver cancellation promptly stops an active sender and pending files without cancellation echo', async () => {
+      let uploading = false, echoed = false; const sockets = new Set();
+      const remote = http.createServer((req, res) => {
+        if (req.url.includes('/cancel')) { echoed = true; res.end('{}'); return; }
+        if (req.url.includes('prepare-upload')) {
+          const chunks = []; req.on('data', chunk => chunks.push(chunk)); req.on('end', () => {
+            const payload = JSON.parse(Buffer.concat(chunks));
+            const body = JSON.stringify({ sessionId: 'receiver-cancels', files: Object.fromEntries(Object.keys(payload.files).map(id => [id, 'token'])) });
+            res.writeHead(200, { 'content-length': Buffer.byteLength(body) }); res.end(body);
+          });
+        } else { uploading = true; req.pause(); }
+      });
+      remote.on('connection', socket => { sockets.add(socket); socket.on('close', () => sockets.delete(socket)); });
+      await new Promise(r => remote.listen(0, '127.0.0.1', r));
+      try {
+        const source = path.join(work, 'cancel-outgoing.bin'); await fs.writeFile(source, Buffer.alloc(8 * 1024 * 1024, 0x5a));
+        const file = new ShareFile(); file.name = 'cancel-outgoing.bin'; file.uri = source; file.size = 8 * 1024 * 1024;
+        const next = new ShareFile(); next.name = 'next.bin'; next.uri = source; next.size = file.size;
+        const peer = new Peer(); peer.ip = '127.0.0.1'; peer.port = remote.address().port; peer.protocol = 'http'; peer.alias = 'Cancelling receiver';
+        const sending = service.send(peer, [file, next]); await until(() => uploading);
+        assert.equal((await call(port, '/api/localsend/v2/cancel?sessionId=wrong-session', {})).status, 403);
+        assert.equal(store.transfers[0].status, 'transferring');
+        const started = Date.now();
+        assert.equal((await call(port, '/api/localsend/v2/cancel?sessionId=receiver-cancels', {})).status, 200);
+        await until(() => service.sending.size === 0, 1500); await sending;
+        assert.ok(Date.now() - started < 1500);
+        assert.equal(store.transfers[0].status, 'cancelled');
+        assert.equal(store.transfers[0].files[1].status, 'cancelled');
+        assert.match(store.transfers[0].error, /对方终止/); assert.equal(echoed, false);
+        await until(() => handles.size === 0);
+      } finally { for (const socket of sockets) socket.destroy(); await new Promise(r => remote.close(r)); }
+    });
     await check('legacy v1 uses original send-request/send routes and token-map response', async () => {
       const prepared = await call(port, '/api/localsend/v1/send-request', offer('legacy.bin', data));
       assert.equal(prepared.status, 200); const tokens = prepared.json(); assert.equal(typeof tokens.f1, 'string');

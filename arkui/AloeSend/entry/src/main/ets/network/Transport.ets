@@ -9,9 +9,10 @@ export function decodeText(bytes: Uint8Array): string { return new util.TextDeco
 
 export class Cancellation {
   cancelled: boolean = false;
+  reason: string = '传输已取消';
   close: () => void = () => {};
-  cancel(): void { this.cancelled = true; this.close(); }
-  check(): void { if (this.cancelled) throw new Error('传输已取消'); }
+  cancel(reason: string = '传输已取消'): void { this.reason = reason; this.cancelled = true; this.close(); }
+  check(): void { if (this.cancelled) throw new Error(this.reason); }
 }
 
 export class HttpReply {
@@ -39,8 +40,11 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
   let decoder: HttpBodyDecoder | undefined = undefined;
   let fingerprint = '';
   let timeout: number = -1;
+  const pendingWrites: Set<(error: Error) => void> = new Set();
   const close = (): void => {
     if (timeout !== -1) clearTimeout(timeout);
+    for (const reject of pendingWrites) reject(new Error(token.cancelled ? token.reason : '连接已结束'));
+    pendingWrites.clear();
     if (tcp) tcp.close().catch(() => {});
     if (tls) tls.close().catch(() => {});
   };
@@ -75,7 +79,7 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
         complete();
       } catch (e) { fail(e as Error); }
     };
-    token.close = () => fail(new Error('传输已取消'));
+    token.close = () => fail(new Error(token.reason));
     const start = async (): Promise<void> => {
       touch();
       const address: socket.NetAddress = { address: peer.ip, port: peer.port, family: peer.ip.includes(':') ? 2 : 1 };
@@ -110,8 +114,11 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
       token.check();
       const write: ChunkWriter = async (bytes: Uint8Array): Promise<void> => {
         token.check(); if (finished) throw new Error('连接已结束'); touch();
-        if (tcp) await tcp.send({ data: bytes.buffer as ArrayBuffer });
-        if (tls) await tls.send(bytes.buffer as ArrayBuffer);
+        await new Promise<void>((resolve, reject) => {
+          pendingWrites.add(reject);
+          const sent = tcp ? tcp.send({ data: bytes.buffer as ArrayBuffer }) : tls!.send(bytes.buffer as ArrayBuffer);
+          sent.then(() => { pendingWrites.delete(reject); resolve(); }, (error: Error) => { pendingWrites.delete(reject); reject(error); });
+        });
       };
       const host = peer.ip.includes(':') ? `[${peer.ip}]` : peer.ip;
       await write(encodeText(`${method} ${path} HTTP/1.1\r\nHost: ${host}:${peer.port}\r\nContent-Type: application/json\r\nContent-Length: ${size}\r\nConnection: close\r\n\r\n`));

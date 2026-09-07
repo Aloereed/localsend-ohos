@@ -430,8 +430,7 @@ export class LocalSendService {
       } else if ((/^\/api\/localsend\/v[12]\/prepare-upload$/.test(path) || path === '/api/localsend/v1/send-request') && head.method === 'POST') await this.prepare(channel, head, bytes);
       else if (/^\/api\/localsend\/v[12]\/cancel$/.test(path) && head.method === 'POST') {
         const id = queryValue(head.target, 'sessionId');
-        if (this.receiving && this.receiving.ip === channel.ip && (this.receiving.id === id || (path.includes('/v1/') && this.receiving.legacy))) this.cancel(this.receiving.id);
-        await channel.respond(200);
+        await channel.respond(this.cancelByPeer(channel.ip, id, path.includes('/v1/')) ? 200 : 403);
       } else await channel.respond(404);
     });
   }
@@ -596,15 +595,41 @@ export class LocalSendService {
     this.store.updateTransfer(session.view);
   }
 
-  cancel(id: string): void {
+  private cancelByPeer(ip: string, remoteId: string, legacy: boolean): boolean {
+    const session = this.receiving;
+    if (session && session.ip === ip && !session.cancelled && (session.view.status === 'waiting' || session.view.status === 'transferring') &&
+      (legacy ? session.legacy : session.id === remoteId || (!session.accepted && !remoteId))) {
+      this.cancel(session.id, false); return true;
+    }
+    const matching: string[] = [];
+    for (const entry of this.sendSessions.entries()) {
+      if (entry[1].peer.ip === ip && (legacy ? entry[1].legacy : !!remoteId && entry[1].remoteId === remoteId)) matching.push(entry[0]);
+    }
+    if (matching.length !== 1) return false;
+    const id = matching[0]; const cancellation = this.sending.get(id);
+    if (!cancellation) return false;
+    cancellation.cancel('对方终止了传输');
+    const transfer = this.store.transfers.find((item: TransferView) => item.id === id);
+    if (transfer) {
+      transfer.status = 'cancelled'; transfer.error = '对方终止了传输'; transfer.finished = Date.now();
+      for (const file of transfer.files) { if (file.status === 'waiting' || file.status === 'transferring') file.status = 'cancelled'; }
+      this.store.updateTransfer(transfer);
+    }
+    return true;
+  }
+
+  cancel(id: string, notifyPeer: boolean = true): void {
     this.sending.get(id)?.cancel();
     if (this.store.pendingPin === id) this.submitPin('');
     const sending = this.sendSessions.get(id);
-    if (sending) request(sending.peer, 'POST', sending.legacy ? '/api/localsend/v1/cancel' : `/api/localsend/v2/cancel?sessionId=${encodeURIComponent(sending.remoteId)}`).catch(() => {});
+    if (sending && notifyPeer) request(sending.peer, 'POST', sending.legacy ? '/api/localsend/v1/cancel' : `/api/localsend/v2/cancel?sessionId=${encodeURIComponent(sending.remoteId)}`, '', new Cancellation(), 5000).catch(() => {});
     if (this.receiving?.id === id) {
       this.receiving.cancelled = true; this.receiving.resolve(false); this.receiving.view.status = 'cancelled';
+      this.receiving.view.finished = Date.now();
       this.store.pendingReceive = ''; this.store.updateTransfer(this.receiving.view);
       for (const channel of this.receiving.uploads) channel.close();
+      const peer = this.receiving.view.peerInfo;
+      if (notifyPeer && peer && this.receiving.accepted) request(peer, 'POST', this.receiving.legacy ? '/api/localsend/v1/cancel' : `/api/localsend/v2/cancel?sessionId=${encodeURIComponent(id)}`, '', new Cancellation(), 5000).catch(() => {});
     }
   }
 
@@ -648,6 +673,7 @@ export class LocalSendService {
         if (!pin) { cancellation.cancel(); cancellation.check(); }
         response = await request(peer, 'POST', `${preparePath}?pin=${encodeURIComponent(pin)}`, JSON.stringify(payload), cancellation);
       }
+      cancellation.check();
       if (response.status === 204) {
         for (const file of files) { if (file.text) await this.sentHistory(file, peer); }
         for (const file of transfer.files) {
@@ -683,14 +709,16 @@ export class LocalSendService {
                 }
               } finally { await fs.close(source); }
             }, cancellation);
+          cancellation.check();
           if (upload.status !== 200) throw new Error(`文件发送失败 ${upload.status}`);
           view.status = 'complete'; view.transferred = file.size; this.store.updateTransfer(transfer); await this.sentHistory(file, peer);
         }
       }
+      cancellation.check();
       transfer.status = 'complete'; transfer.finished = Date.now(); this.store.notice = `已发送到 ${peer.alias}`;
     } catch (e) {
-      transfer.status = cancellation.cancelled ? 'cancelled' : 'error'; transfer.error = (e as Error).message;
-      for (const file of transfer.files) { if (file.status === 'transferring') file.status = transfer.status; }
+      transfer.status = cancellation.cancelled ? 'cancelled' : 'error'; transfer.error = (e as Error).message; transfer.finished = Date.now();
+      for (const file of transfer.files) { if (file.status === 'transferring' || file.status === 'waiting') file.status = transfer.status; }
       this.store.log(`发送：${transfer.error}`);
     } finally { this.sending.delete(transfer.id); this.sendSessions.delete(transfer.id); this.store.updateTransfer(transfer); }
   }
