@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000072 | [M72-storage-errors](artifacts/AloeSend-2000072-M72-storage-errors-unsigned.hap) | 0d716044 | 1BEB408A4E0F4D6A9BB88E27E8446A2D939BFB79947533E2DD5B6B7266ADE449 |
 | 2000071 | [M71-selection-progress](artifacts/AloeSend-2000071-M71-selection-progress-unsigned.hap) | b42704d9 | 92702962710CC4F72E941975868C37F77BBF284C23A8632CD2F5D34FD9E25CCA |
 | 2000070 | [M70-folder-cycles](artifacts/AloeSend-2000070-M70-folder-cycles-unsigned.hap) | 21485c7a | 1DAE14A278E3015236B3E7BAFEC68F1D50E0DDB3745286564249D6411B749C0C |
 | 2000069 | [M69-literal-formatting](artifacts/AloeSend-2000069-M69-literal-formatting-unsigned.hap) | aa2d7db9 | 8A3CD9EFDFEB4B7EAC65B2B574AA8FBBCE1BF8478F4F4B3E4AEA7D5DDA5D4C18 |
