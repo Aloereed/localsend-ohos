@@ -178,12 +178,17 @@ export struct SendView {
             Text(file.name).fontSize(15).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
             Text(`${formatSize(file.size)} · ${file.text ? this.store.t('文字') : file.mime}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
           }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => {
-            if (!file.text) { this.store.error = ''; this.renameId = file.id; this.renameText = file.name.slice(file.name.lastIndexOf('/') + 1); this.openSheet('rename'); }
-            else { this.textId = file.id; this.text = file.text; this.openSheet('text'); }
+            const current = this.store.files.find((item: ShareFile) => item.id === file.id);
+            if (!current) return;
+            if (!current.text) { this.store.error = ''; this.renameId = current.id; this.renameText = current.name.slice(current.name.lastIndexOf('/') + 1); this.openSheet('rename'); }
+            else { this.textId = current.id; this.text = current.text; this.openSheet('text'); }
           })
           if (file.uri && !file.text) {
             Button(this.store.t('打开')).height(44).fontSize(12).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
-              .onClick(() => this.store.openSelectedFile(file)).accessibilityText(this.store.tf('打开 {0}', [file.name]))
+              .onClick(() => {
+                const current = this.store.files.find((item: ShareFile) => item.id === file.id);
+                if (current) this.store.openSelectedFile(current);
+              }).accessibilityText(this.store.tf('打开 {0}', [file.name]))
           }
           Button('×').fontSize(22).backgroundColor(Color.Transparent).fontColor($r('sys.color.font_secondary'))
             .onClick(() => this.store.removeFile(file.id)).accessibilityText(this.store.tf('移除 {0}', [file.name]))
