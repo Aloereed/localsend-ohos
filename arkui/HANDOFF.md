@@ -1,4 +1,12 @@
-# 当前交接 · M128
+# 当前交接 · M129
+
+最新发布包：[2.0.129 signed release APP](artifacts/release/AloeSend-2000129-release-20260907-233453-signed.app)，源码 `0ef0766c97ad1d0ea2621a8492fb474372d01360`，构建前工作区干净，沿用 Flutter 发布签名。SHA-256：`42D0540C9183BA8BAF827E396B2C798232DFBFE1CBDE7626B81F97EC8B585435`。
+
+用户最新明确要求恢复原生 INTERNET，此要求取代 M128 的删除要求。最终模块仅声明 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING；READ_PASTEBOARD 和 FILE_ACCESS_PERSIST 仍不声明。debug=false、版本和包名检查通过，APP 与独立 HAP 签名检查通过。未访问设备。
+
+调试归档：`artifacts/AloeSend-2000129-M129-restore-network-permission-unsigned.hap`，SHA-256 `F9A51B7ECE7B822C5A72DF38D71975F56DE35B19C5A81E647767B0C9849FA207`。
+
+## M128 历史交接（权限要求已被 M129 取代）
 
 最终发布包：[2.0.128 signed release APP](artifacts/release/AloeSend-2000128-release-20260907-232654-signed.app)，源码 `25e3258a23e29c40e8abd5d75779e23089330b01`，构建前工作区干净，沿用 Flutter 发布签名。SHA-256：`D3900AF4674CEB25174A31307AC7177F01F31540F216E1B438DFDA7843F5B31E`。
 

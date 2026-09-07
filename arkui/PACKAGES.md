@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000129 | [M129-restore-network-permission](artifacts/AloeSend-2000129-M129-restore-network-permission-unsigned.hap) | 0ef0766c | F9A51B7ECE7B822C5A72DF38D71975F56DE35B19C5A81E647767B0C9849FA207 |
 | 2000128 | [M128-no-internet-permission](artifacts/AloeSend-2000128-M128-no-internet-permission-unsigned.hap) | 25e3258a | 62E16C65A1D855A85CCCA95793789A601474BC3D71011BC178B29E59DFAD7332 |
 | 2000127 | [M127-store-permissions](artifacts/AloeSend-2000127-M127-store-permissions-unsigned.hap) | a7b7ccf6 | 292159D7C09BC8875777B084E6E3F50EAF2AC50963C18162662351C2623180A8 |
 | 2000126 | [M126-bottom-immersion](artifacts/AloeSend-2000126-M126-bottom-immersion-unsigned.hap) | 3772c4c5 | 324937E353BF6D410CFC30E8B4CB9A15F830B818B55E3155CE9DAA87E872D572 |

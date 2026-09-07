@@ -1,4 +1,8 @@
-# M128 阶段验收 · 2026-09-07
+# M129 阶段验收 · 2026-09-07
+
+用户确认原生版需要 INTERNET，已恢复。2.0.129 正式签名包构建及 APP/HAP 签名检查通过；实际模块声明 INTERNET、GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，不含两项待审权限。debug=false、版本及包名校验通过，源码 `0ef0766c`。未访问设备。
+
+## M128 历史验收
 
 按用户要求移除 INTERNET，2.0.128 签名 APP 构建及签名检查通过，实际包内仅有 GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING。未访问设备，未验证权限删除后的设备端传输功能；没有以主机测试声称该行为已验证。源码 `25e3258a`。
 
