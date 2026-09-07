@@ -278,6 +278,10 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       store.settings.quickSave = false;
       const pending = call(port, '/api/localsend/v2/prepare-upload', offer('original.bin', data));
       await until(() => !!store.pendingReceive);
+      assert.equal(service.renameReceive('f1', 'stale.bin', 'previous-session'), false);
+      assert.equal(service.batchRenameReceive('counter', 'Stale-', false, false, 'previous-session'), false);
+      assert.equal(store.transfers[0].files[0].name, 'original.bin', 'stale editors cannot rename a new session with the same file ID');
+      assert.equal(service.renameReceive('f1', 'original.bin', store.pendingReceive), true);
       assert.equal(service.batchRenameReceive('counter', 'Batch-', true, false), true);
       assert.equal(store.transfers[0].files[0].name, 'Batch-1.bin');
       service.selectAllReceive('none'); service.resetReceiveNames();

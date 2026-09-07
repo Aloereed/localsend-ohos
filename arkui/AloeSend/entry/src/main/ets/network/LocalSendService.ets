@@ -596,16 +596,18 @@ export class LocalSendService {
     this.store.updateTransfer(session.view);
   }
 
-  batchRenameReceive(mode: string, prefix: string, padZero: boolean, sortFirst: boolean): boolean {
+  batchRenameReceive(mode: string, prefix: string, padZero: boolean, sortFirst: boolean, sessionId: string = ''): boolean {
     const session = this.receiving; if (!session || session.accepted) return false;
+    if (sessionId && session.id !== sessionId) return false;
     try {
       session.view.files = batchReceiveNames(session.view.files, mode, prefix, padZero, sortFirst);
       this.store.updateTransfer(session.view); return true;
     } catch (e) { this.store.fail('批量重命名失败', e as Error); return false; }
   }
 
-  renameReceive(id: string, name: string): boolean {
+  renameReceive(id: string, name: string, sessionId: string = ''): boolean {
     if (!this.receiving || this.receiving.accepted) return false;
+    if (sessionId && this.receiving.id !== sessionId) return false;
     const file = this.receiving.view.files.find((item: TransferFile) => item.id === id);
     if (!file) return false;
     try {

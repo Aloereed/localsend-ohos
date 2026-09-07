@@ -7,12 +7,13 @@ import { flutterCount, flutterText } from '../model/DynamicLocale';
 
 @Component
 export struct TransferList {
-  @ObjectLink store: AppStore;
+  @ObjectLink @Watch('checkRenameSession') store: AppStore;
   @Prop pendingOnly: boolean = false;
   @Prop consentActions: boolean = true;
   @State fileLimit: number = 30;
   @State renameSheet: boolean = false;
   @State renameId: string = '';
+  @State renameTransferId: string = '';
   @State renameText: string = '';
   @State batchEdit: boolean = false;
   @State batchMode: string = 'counter';
@@ -20,14 +21,18 @@ export struct TransferList {
   @State padZero: boolean = false;
   @State sortFirst: boolean = false;
 
+  checkRenameSession(): void {
+    if (this.renameSheet && this.renameTransferId !== this.store.pendingReceive) this.renameSheet = false;
+  }
+
   originalLabel(): string {
     const values: Record<string, string> = {};
-    values['original'] = this.currentFile(this.store.pendingReceive, this.renameId).originalName;
+    values['original'] = this.currentFile(this.renameTransferId, this.renameId).originalName;
     return flutterText('dialogs.fileNameInput.original', this.store.settings.language, values);
   }
 
   saveName(): void {
-    if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
+    if (localSend.renameReceive(this.renameId, this.renameText, this.renameTransferId)) this.renameSheet = false;
   }
 
   current(id: string): TransferView {
@@ -61,7 +66,7 @@ export struct TransferList {
           }.width('100%')
         }
         Button(this.store.t('应用到所选文件')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
-          if (localSend.batchRenameReceive(this.batchMode, this.prefix, this.padZero, this.sortFirst)) this.renameSheet = false;
+          if (localSend.batchRenameReceive(this.batchMode, this.prefix, this.padZero, this.sortFirst, this.renameTransferId)) this.renameSheet = false;
         })
       }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     } else {
@@ -162,7 +167,7 @@ export struct TransferList {
             }.width('100%')
             Flex({ wrap: FlexWrap.Wrap }) {
               Button(this.store.t('批量重命名')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
-                .onClick(() => { this.batchEdit = true; this.renameSheet = true; })
+                .onClick(() => { this.renameTransferId = transfer.id; this.batchEdit = true; this.renameSheet = true; })
               Button(this.store.t('恢复选择和名称')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => localSend.resetReceiveNames())
             }.width('100%')
             Column({ space: 6 }) {
@@ -224,7 +229,7 @@ export struct TransferList {
               }
               if (transfer.id === this.store.pendingReceive && !this.currentFile(transfer.id, file.id).preview) {
                 Button(this.store.t('改名')).fontSize(12).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
-                  .onClick(() => { this.batchEdit = false; this.renameId = file.id; this.renameText = this.currentFile(transfer.id, file.id).name; this.renameSheet = true; })
+                  .onClick(() => { this.renameTransferId = transfer.id; this.batchEdit = false; this.renameId = file.id; this.renameText = this.currentFile(transfer.id, file.id).name; this.renameSheet = true; })
               }
             }.width('100%').padding({ top: 8, bottom: 8 })
           }, (file: TransferFile) => file.id)
