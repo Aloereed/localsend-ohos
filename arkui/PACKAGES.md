@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000104 | [M104-settings-layout](artifacts/AloeSend-2000104-M104-settings-layout-unsigned.hap) | 3d6c9026 | D7D5438DE5FF0E8ACC2FE6DA3846D9CF9CE0389EBDFFBAF4CED59BFB06A51BAC |
 | 2000103 | [M103-tls-stop-admission](artifacts/AloeSend-2000103-M103-tls-stop-admission-unsigned.hap) | 2b8118c3 | D651ECEFF1AB7B051E646021042B2894F439CE83EFC0CC8FF20A90F0B6E77085 |
 | 2000102 | [M102-tls-stop-bound](artifacts/AloeSend-2000102-M102-tls-stop-bound-unsigned.hap) | 9de9b54d | 2A941091D2FA93E3670EAD1C327FC91663A8571898211C3E5A9D65B619843C61 |
 | 2000101 | [M101-tls-response-close](artifacts/AloeSend-2000101-M101-tls-response-close-unsigned.hap) | 1ae7da0c | E1337EA9089BC83A834F2C288F4632EC727968831B259E4A2E839FF7CC4E539B |

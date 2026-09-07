@@ -1,8 +1,10 @@
-# 当前交接 · M103
+# 当前交接 · M104
 
-最新包：[AloeSend-2000103-M103-tls-stop-admission-unsigned.hap](artifacts/AloeSend-2000103-M103-tls-stop-admission-unsigned.hap)。版本 2.0.103，包含 M1–M103 累计实现，无需逐个安装。源码提交 `2b8118c33bb43ca500adf3271d5abf2bc676f740`，分支 `arkui`。
+最新包：[AloeSend-2000104-M104-settings-layout-unsigned.hap](artifacts/AloeSend-2000104-M104-settings-layout-unsigned.hap)。版本 2.0.104，包含 M1–M104 累计实现，无需逐个安装。源码提交 `3d6c9026b9bbe859b21c20a57ad7e8c312bde372`，分支 `arkui`。
 
-SHA-256：`D651ECEFF1AB7B051E646021042B2894F439CE83EFC0CC8FF20A90F0B6E77085`。
+SHA-256：`D7D5438DE5FF0E8ACC2FE6DA3846D9CF9CE0389EBDFFBAF4CED59BFB06A51BAC`。
+
+M104：设置入口标题、说明上下排列，避免长状态挤压标题，读屏共用当前状态。布局编译通过，104 个包校验通过。未访问设备，字体缩放和实际视觉仍待验收。
 
 M103：停止期间拒绝新 TLS 会话，回归及构建通过，103 个包校验通过。M102 另完成 3 GiB 持续慢写盘测试，SHA-256 一致、峰值 65,750 字节、句柄归零，56.3 秒。未访问设备。
 
