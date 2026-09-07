@@ -243,6 +243,13 @@ export class AppStore {
   downloadAccess: boolean = false;
   context: common.UIAbilityContext | undefined = undefined;
   private storage: preferences.Preferences | undefined = undefined;
+  private persistence: Promise<void> = Promise.resolve();
+
+  private persist<T>(operation: () => Promise<T>): Promise<T> {
+    const pending = this.persistence.then(operation);
+    this.persistence = pending.then(() => {}, () => {});
+    return pending;
+  }
   private persistentHistory: Set<string> = new Set();
   private initialization: Promise<void> | undefined = undefined;
   initializationError: string = '';
@@ -342,19 +349,25 @@ export class AppStore {
       this.notice = '请先结束传输并停止浏览器分享'; return false;
     }
     if (!this.storage) return false;
+    const storage = this.storage;
+    return this.persist(async (): Promise<boolean> => {
+    if (this.activeTransfers || this.identityResetting || this.webUrl || this.webStarting) {
+      this.notice = '请先结束传输并停止浏览器分享'; return false;
+    }
     const previous = JSON.stringify(this.settings);
     const defaults = new AppSettings(); defaults.fingerprint = this.settings.fingerprint;
     if (this.downloadAccess) { defaults.destinationMode = 'download'; defaults.destination = this.downloadDirectory; }
     try {
-      await this.storage.put('settings', JSON.stringify(defaults));
-      await this.storage.flush();
+      await storage.put('settings', JSON.stringify(defaults));
+      await storage.flush();
       this.settings = defaults; this.galleryQueue = []; this.applyTheme();
       this.notice = this.listenerRunning ? '默认设置已恢复，网络设置重启服务后生效' : '默认设置已恢复';
       return true;
     } catch (error) {
-      await this.storage.put('settings', previous).then(() => this.storage?.flush()).catch(() => {});
+      await storage.put('settings', previous).then(() => storage.flush()).catch(() => {});
       this.fail('恢复设置失败', error as Error); return false;
     }
+    });
   }
 
   t(text: string): string { return uiText(text, this.settings.language); }
@@ -430,10 +443,15 @@ export class AppStore {
     try {
       // Replacing the settings object also notifies @Observed consumers.
       this.settings = JSON.parse(JSON.stringify(this.settings)) as AppSettings;
-      await this.storage?.put('settings', JSON.stringify(this.settings));
-      await this.storage?.put('favorites', JSON.stringify(this.favorites));
-      await this.storage?.put('history', JSON.stringify(this.history.filter((entry: HistoryEntry) => this.persistentHistory.has(entry.id))));
-      await this.storage?.flush();
+      await this.persist(async () => {
+        const settings = JSON.stringify(this.settings);
+        const favorites = JSON.stringify(this.favorites);
+        const history = JSON.stringify(this.history.filter((entry: HistoryEntry) => this.persistentHistory.has(entry.id)));
+        await this.storage?.put('settings', settings);
+        await this.storage?.put('favorites', favorites);
+        await this.storage?.put('history', history);
+        await this.storage?.flush();
+      });
     } catch (e) { this.fail('保存设置失败', e as Error); }
   }
 
