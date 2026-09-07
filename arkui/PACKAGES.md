@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000062 | [M62-favorite-address](artifacts/AloeSend-2000062-M62-favorite-address-unsigned.hap) | 1ef0a0b0 | 1E37DED8F6B0B1153091B1E5BEA6773F80C12ECE9B6F8AAE47F26724BFA0ADB4 |
 | 2000061 | [M61-rtl-navigation](artifacts/AloeSend-2000061-M61-rtl-navigation-unsigned.hap) | 0339a20e | FBA7A8E6788822EA313EE800198FD44CB29191CEEA673B275046D046D9371692 |
 | 2000060 | [M60-language-picker](artifacts/AloeSend-2000060-M60-language-picker-unsigned.hap) | d1d53a9f | C343A71F80FCF004EACD75469BE264586F38A2A7D5641DCADB7E74FC3A1E6A45 |
 | 2000059 | [M59-flutter-locales](artifacts/AloeSend-2000059-M59-flutter-locales-unsigned.hap) | 816dc6a9 | B2ABB04DE317C926F498369D1ABED7B2B2C4018BF4282D28F728B1303AD32A22 |
