@@ -14,3 +14,9 @@ export function remainingSeconds(transfer: TransferView, speed: number): number 
   if (transfer.status !== 'transferring' || speed <= 0) return 0;
   return Math.max(0, Math.ceil((transferTotal(transfer) - transferredBytes(transfer)) / speed));
 }
+
+export function filePercent(file: TransferFile): number {
+  if (file.status === 'complete') return 100;
+  if (file.size <= 0) return 0;
+  return Math.max(0, Math.min(100, file.transferred * 100 / file.size));
+}

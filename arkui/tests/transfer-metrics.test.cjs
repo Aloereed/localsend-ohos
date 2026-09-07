@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const { load } = require('./host-runtime.cjs');
 const { TransferView, TransferFile } = load('model/AppStore');
-const { transferTotal, transferredBytes, remainingSeconds } = load('model/TransferMetrics');
+const { transferTotal, transferredBytes, remainingSeconds, filePercent } = load('model/TransferMetrics');
 const transfer = new TransferView(); transfer.status = 'transferring';
 const accepted = new TransferFile(); accepted.size = 100; accepted.transferred = 40;
 const skipped = new TransferFile(); skipped.size = 900; skipped.status = 'skipped';
@@ -10,6 +10,13 @@ transfer.files = [accepted, skipped, deselected];
 assert.equal(transferTotal(transfer), 100);
 assert.equal(transferredBytes(transfer), 40);
 assert.equal(remainingSeconds(transfer, 20), 3);
+assert.equal(filePercent(accepted), 40);
+const empty = new TransferFile();
+assert.equal(filePercent(empty), 0, 'an empty file waiting for acknowledgement is not complete');
+empty.status = 'complete'; assert.equal(filePercent(empty), 100);
+empty.status = 'transferring'; empty.size = 10; empty.transferred = 11;
+assert.equal(filePercent(empty), 100);
+empty.transferred = -1; assert.equal(filePercent(empty), 0);
 assert.equal(remainingSeconds(transfer, 0), 0);
 for (const status of ['waiting', 'complete', 'error', 'cancelled', 'declined']) {
   transfer.status = status;

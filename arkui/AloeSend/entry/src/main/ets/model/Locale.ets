@@ -2,6 +2,9 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "总体进度 {0}%": "Overall progress {0}%",
+  "选择文件 {0}": "Select file {0}",
+  "{0}，已传输 {1}%": "{0}, {1}% transferred",
   "正在重试…": "Retrying…",
   "已在新任务中重试": "Retried in a new transfer",
   "已重试": "Retried",

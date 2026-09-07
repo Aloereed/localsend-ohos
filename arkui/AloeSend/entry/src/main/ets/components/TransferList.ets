@@ -2,7 +2,7 @@ import { AppStore, TransferView, TransferFile, HistoryEntry, formatSize } from '
 import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { AppIcon } from './AppIcon';
-import { transferTotal, transferredBytes, remainingSeconds } from '../model/TransferMetrics';
+import { transferTotal, transferredBytes, remainingSeconds, filePercent } from '../model/TransferMetrics';
 
 @Component
 export struct TransferList {
@@ -126,6 +126,7 @@ export struct TransferList {
             Progress({ value: this.percent(this.current(transfer.id)), total: 100, type: ProgressType.Linear })
               .color(this.store.accentText).backgroundColor(this.store.controlSurface)
               .style({ strokeWidth: 6, enableSmoothEffect: this.store.settings.animations }).width('100%')
+              .accessibilityText(this.store.tf('总体进度 {0}%', [String(Math.floor(this.percent(this.current(transfer.id))))]))
             if (this.current(transfer.id).direction === 'receive' && this.current(transfer.id).status === 'transferring' && this.done(this.current(transfer.id)) === 0) {
               Text(this.store.t('已确认，等待发送方传输…')).fontSize(13).fontColor($r('sys.color.font_secondary')).width('100%')
             }
@@ -161,6 +162,7 @@ export struct TransferList {
             Row({ space: 10 }) {
               if (transfer.id === this.store.pendingReceive) {
                 Checkbox().select(this.currentFile(transfer.id, file.id).selected).selectedColor(this.store.accentFill)
+                  .accessibilityText(this.store.tf('选择文件 {0}', [this.currentFile(transfer.id, file.id).name]))
                   .onChange((selected: boolean) => localSend.selectReceiveFile(file.id, selected))
               }
               Column({ space: 5 }) {
@@ -169,6 +171,18 @@ export struct TransferList {
                   Text(this.currentFile(transfer.id, file.id).preview).fontSize(16).lineHeight(23).maxLines(10).fontColor($r('sys.color.font_primary')).copyOption(CopyOptions.LocalDevice)
                 }
                 Text(`${formatSize(this.currentFile(transfer.id, file.id).size)} · ${this.statusLabel(this.currentFile(transfer.id, file.id).status)}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
+                if (this.currentFile(transfer.id, file.id).status === 'transferring') {
+                  Row() {
+                    Text(`${formatSize(this.currentFile(transfer.id, file.id).transferred)} / ${formatSize(this.currentFile(transfer.id, file.id).size)}`)
+                      .fontSize(12).fontColor($r('sys.color.font_secondary')).layoutWeight(1)
+                    Text(`${Math.floor(filePercent(this.currentFile(transfer.id, file.id)))}%`)
+                      .fontSize(12).fontColor(this.store.accentText)
+                  }.width('100%')
+                  Progress({ value: filePercent(this.currentFile(transfer.id, file.id)), total: 100, type: ProgressType.Linear })
+                    .color(this.store.accentText).backgroundColor(this.store.controlSurface).width('100%')
+                    .style({ strokeWidth: 3, enableSmoothEffect: this.store.settings.animations })
+                    .accessibilityText(this.store.tf('{0}，已传输 {1}%', [this.currentFile(transfer.id, file.id).name, String(Math.floor(filePercent(this.currentFile(transfer.id, file.id))))]))
+                }
               }.alignItems(HorizontalAlign.Start).layoutWeight(1)
               if (this.currentFile(transfer.id, file.id).status === 'complete' && this.currentFile(transfer.id, file.id).path) {
                 Button(this.store.t('打开')).height(44).fontSize(13).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
