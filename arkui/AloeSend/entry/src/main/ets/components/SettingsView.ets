@@ -197,7 +197,7 @@ export struct SettingsView {
         this.link('接收历史', '', 'history')
         Column({ space: 10 }) {
           Text(this.store.t('接收 PIN')).fontSize(14).fontColor($r('sys.color.font_secondary')).width('100%')
-          TextInput({ text: this.pin, placeholder: this.store.t('留空表示不设 PIN') }).type(InputType.Number).maxLength(12)
+          TextInput({ text: this.pin, placeholder: this.store.t('留空表示不设 PIN') }).type(InputType.Password).showPasswordIcon(true).direction(Direction.Ltr)
             .onChange((value: string) => this.pin = value)
           Button(this.store.t('保存 PIN')).onClick(() => {
             this.store.settings.pin = this.pin; this.store.save(); this.store.notice = this.store.t('接收 PIN 已更新');

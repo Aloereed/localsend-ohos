@@ -2,6 +2,7 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "PIN 不正确，请重新输入": "Incorrect PIN. Try again.",
   "任务已停止，此文件尚未开始传输": "The transfer stopped before this file started",
   "任务已停止，此文件接收未完成": "The transfer stopped before this file finished receiving",
   "总体进度 {0}%": "Overall progress {0}%",

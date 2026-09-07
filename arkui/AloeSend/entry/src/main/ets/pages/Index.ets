@@ -16,6 +16,7 @@ import { DownloadDirectoryPicker } from '../components/DownloadDirectoryPicker';
 import { PrivacyView } from '../components/PrivacyView';
 import { DiagnosticsView } from '../components/DiagnosticsView';
 import { FloatingNavigation } from '../components/FloatingNavigation';
+import { PinRequestView } from '../components/PinRequestView';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { HdsTabs, HdsTabsController, SystemMaterialParams } from '@kit.UIDesignKit';
 
@@ -25,7 +26,6 @@ struct Index {
   @State store: AppStore = appStore;
   @State tab: number = 0;
   @State route: string = '';
-  @State pinText: string = '';
   @State selectedPeer: Peer = new Peer();
   @State windowWidth: number = 400;
   @State messageDetail: boolean = false;
@@ -344,14 +344,7 @@ struct Index {
         }.padding({ left: 16, right: 16 }).width('100%')
       }
       if (this.store.pendingPin) {
-        Column({ space: 12 }) {
-          Text(this.store.t('请输入对方设备的接收 PIN')).fontSize(18).fontColor($r('sys.color.font_primary'))
-          TextInput({ text: this.pinText, placeholder: 'PIN' }).type(InputType.Number).maxLength(12).onChange((value: string) => this.pinText = value)
-          Row({ space: 12 }) {
-            Button(this.store.t('取消')).onClick(() => localSend.submitPin(''))
-            Button(this.store.t('确认')).backgroundColor(this.store.accentFill).onClick(() => { localSend.submitPin(this.pinText); this.pinText = ''; })
-          }
-        }.padding(24).width('100%')
+        PinRequestView({ store: this.store })
       }
       if (this.store.pendingReceive) {
         ReceiveRequestView({ store: this.store }).layoutWeight(1)

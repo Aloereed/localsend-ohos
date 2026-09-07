@@ -718,7 +718,7 @@ export class LocalSendService {
     }
   }
 
-  submitPin(pin: string): void { this.pinResolver?.(pin); this.pinResolver = undefined; this.store.pendingPin = ''; }
+  submitPin(pin: string): void { this.pinResolver?.(pin); this.pinResolver = undefined; this.store.pendingPin = ''; this.store.pendingPinInvalid = false; }
 
   async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files): Promise<string> {
     if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return ''; }
@@ -754,11 +754,14 @@ export class LocalSendService {
         legacy = true; preparePath = '/api/localsend/v1/send-request';
         response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
       }
+      let pinSubmitted = false;
       while (response.status === 401) {
         if (this.store.pendingPin && this.store.pendingPin !== transfer.id) throw new Error('请先完成另一项传输的 PIN 确认，再重试此任务');
         this.store.pendingPin = transfer.id;
+        this.store.pendingPinInvalid = pinSubmitted;
         const pin = await new Promise<string>((resolve) => { this.pinResolver = resolve; });
         if (!pin) { cancellation.cancel(); cancellation.check(); }
+        pinSubmitted = true;
         response = await request(peer, 'POST', `${preparePath}?pin=${encodeURIComponent(pin)}`, JSON.stringify(payload), cancellation);
       }
       cancellation.check();

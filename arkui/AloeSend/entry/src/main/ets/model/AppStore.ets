@@ -222,6 +222,7 @@ export class AppStore {
   transfers: TransferView[] = [];
   pendingReceive: string = '';
   pendingPin: string = '';
+  pendingPinInvalid: boolean = false;
   webUrl: string = '';
   webStarting: boolean = false;
   webRequests: WebAccessRequest[] = [];
