@@ -1,8 +1,10 @@
-# 当前交接 · M111
+# 当前交接 · M112
 
-最新包：[AloeSend-2000111-M111-saved-network-unsigned.hap](artifacts/AloeSend-2000111-M111-saved-network-unsigned.hap)。版本 2.0.111，包含 M1–M111 累计实现，无需逐个安装。源码提交 `5be2ea1b482188a436cf556f550960868ffd3bbd`，分支 `arkui`。
+最新包：[AloeSend-2000112-M112-settings-upgrade-unsigned.hap](artifacts/AloeSend-2000112-M112-settings-upgrade-unsigned.hap)。版本 2.0.112，包含 M1–M112 累计实现，无需逐个安装。源码提交 `eafd93295c49af012d54ad87293d01eeefdd9b03`，分支 `arkui`。
 
-SHA-256：`E8EF225DEF398EEF5E3063066D539004388E3C1B9B369CB91AA73ED61BD7D3A4`。
+SHA-256：`2CF6CA513FE0A8236DD6276CC13FED9BC30B62A97FC6E106B5A4F2CFEE969203`。
+
+M112：旧配置缺失字段补默认值，保留明确关闭项、身份和旧主题颜色。55 个主机测试、最终编译和 112 个包校验通过。未访问设备。
 
 M111：启动读取旧网络配置时仅恢复无效字段，保留有效设置与身份。55 个主机测试、构建及 111 个包校验通过。M110 另完成 3 GiB HTTPS 慢写盘复测，峰值 65,750 字节、SHA-256 一致、句柄归零。未访问设备。
 
@@ -134,4 +136,5 @@ Windows LocalSend 重启后，零进度现象恢复。这是用户提供的实�
 - HDS API 23 系统材质已接入；不要沿用此前“只能模糊、必须 API 26”的过时结论。实际视觉效果仍需设备检查。
 
 详细里程碑、范围和材质依据见 [PACKAGES.md](PACKAGES.md)、[MIGRATION.md](MIGRATION.md)、[DESIGN.md](DESIGN.md)。
+
 

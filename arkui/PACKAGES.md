@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000112 | [M112-settings-upgrade](artifacts/AloeSend-2000112-M112-settings-upgrade-unsigned.hap) | eafd9329 | 2CF6CA513FE0A8236DD6276CC13FED9BC30B62A97FC6E106B5A4F2CFEE969203 |
 | 2000111 | [M111-saved-network](artifacts/AloeSend-2000111-M111-saved-network-unsigned.hap) | 5be2ea1b | E8EF225DEF398EEF5E3063066D539004388E3C1B9B369CB91AA73ED61BD7D3A4 |
 | 2000110 | [M110-network-validation](artifacts/AloeSend-2000110-M110-network-validation-unsigned.hap) | 6d22b952 | 5D63A717BC95D5D5C61B479448F6CF853E56E712AB57B521845F1B236F03B25F |
 | 2000109 | [M109-save-feedback](artifacts/AloeSend-2000109-M109-save-feedback-unsigned.hap) | b72ef693 | 44996740BA6A20207166932DECDB0B5B464A0BB6195E6E2C8A0930EE8A7B6CE7 |
