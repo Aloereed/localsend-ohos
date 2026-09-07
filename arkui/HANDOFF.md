@@ -1,8 +1,10 @@
-# 当前交接 · M91
+# 当前交接 · M92
 
-最新包：[AloeSend-2000091-M91-file-details-unsigned.hap](artifacts/AloeSend-2000091-M91-file-details-unsigned.hap)。版本 2.0.91，包含 M1–M91 累计实现，无需逐个安装。源码提交 `7296d1227638ccaacf67c23211c98c1e81e1681a`，分支 `arkui`。
+最新包：[AloeSend-2000092-M92-share-counts-unsigned.hap](artifacts/AloeSend-2000092-M92-share-counts-unsigned.hap)。版本 2.0.92，包含 M1–M92 累计实现，无需逐个安装。源码提交 `762e62baa5ce9b2d060074787a0a14a8e057bf4a`，分支 `arkui`。
 
-SHA-256：`C71B13BDD3300FAFB4670187A1852B00B287598BD06B86D09B8AE5002873C4C3`。
+SHA-256：`2CABB61FA4BD089F184CE864C09A7F549E5A657A8A924D2142D61B524E19BCF9`。
+
+M92：浏览器分享的等待请求与文件总数使用 Flutter 模板，增加管理页分组标题；动态模板由 2 项增至 4 项，53 语言数量对照、目录定位回归及编译通过。92 个包校验通过。未访问设备，翻译覆盖和实机验收仍未全部完成。
 
 M91：图片详情接入可读副本回退、异步过期结果保护及解码失败图标；详情操作放入滚动区域。历史路径测试和最终编译通过，91 个包校验通过。未访问设备，图片显示和短屏交互仍待实机验收。
 
