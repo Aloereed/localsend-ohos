@@ -6,6 +6,11 @@ const { load, mocks, handles } = require('./host-runtime.cjs');
 const { AppStore, Peer, ShareFile } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
 const work = path.join(__dirname, '../logs/session-retry-' + Date.now());
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+async function until(predicate) {
+  const start = Date.now();
+  while (!predicate()) { if (Date.now() - start > 3000) throw new Error('condition timeout'); await delay(5); }
+}
 async function create(name, encrypted) {
   const root = path.join(work, name); await fs.mkdir(root, { recursive: true });
   const probe = net.createServer(); await new Promise(resolve => probe.listen(0, '127.0.0.1', resolve));
@@ -62,6 +67,20 @@ async function create(name, encrypted) {
       assert.equal(receiver.store.transfers[0].status, 'complete');
       assert.equal(offers, 2, 'source read failure retains the second accepted session');
       assert.equal(handles.size, 0);
+      const large = path.join(work, 'cancel-retry-' + encrypted); await fs.writeFile(large, Buffer.alloc(8 * 1024 * 1024, 0x39));
+      const largeFile = Object.assign(new ShareFile(), { name: 'large.bin', uri: large, size: 8 * 1024 * 1024 });
+      fail = true; const cancelId = await sender.service.send(peer, [largeFile]);
+      const cancelledReceive = receiver.store.transfers[0].id;
+      disk.write = async (fd, bytes) => { await delay(10); return write(fd, bytes); };
+      const retry = sender.service.retry(cancelId);
+      await until(() => receiver.store.transfers[0].files[0].transferred > 0);
+      receiver.service.cancel(cancelledReceive);
+      await retry;
+      assert.equal(sender.store.transfers[0].status, 'cancelled');
+      assert.equal(sender.store.transfers[0].retrying, false);
+      assert.equal(receiver.store.transfers[0].status, 'cancelled');
+      assert.equal(offers, 3, 'cancel during retry must not start fallback consent');
+      await until(() => handles.size === 0);
       console.log(`PASS ${encrypted ? 'HTTPS' : 'HTTP'} native peers recover disk failure in original session with exact files and consent once`);
     } finally { disk.write = write; await sender.service.stop(); await receiver.service.stop(); }
   }

@@ -79,6 +79,15 @@ const { LocalSendService } = load('network/LocalSendService');
     assert.notEqual(store.transfers[0].id, outdated);
     assert.equal(cancels, cancelsBefore, 'rejected stale credentials must not cancel another receiver session');
     assert.equal(store.transfers.find(item => item.id === outdated).retryTransferId, store.transfers[0].id);
+    failSecond = true;
+    const stopped = await service.send(peer, [files[1]]);
+    assert.equal(service.sendSessions.size, 1);
+    await service.stop();
+    assert.equal(service.sendSessions.size, 0, 'stop releases retained remote sessions');
+    assert.equal(service.retryContexts.get(stopped).accepted, undefined);
+    failSecond = false; await service.retry(stopped);
+    assert.equal(offers.length, 7, 'retry after stopping needs fresh consent');
+    assert.equal(store.transfers[0].status, 'complete');
     console.log('PASS original-session per-file and bulk retry, preserved successes, consent once and duplicate guards');
   } finally { await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

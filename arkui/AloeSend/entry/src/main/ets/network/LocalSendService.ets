@@ -295,6 +295,7 @@ export class LocalSendService {
     for (const retry of this.discoveryRetries) clearTimeout(retry);
     this.discoveryRetries = [];
     if (this.receiving && ['waiting', 'transferring', 'error'].includes(this.receiving.view.status)) this.cancel(this.receiving.id);
+    for (const id of Array.from(this.sendSessions.keys())) { if (!this.sending.has(id)) this.cancel(id); }
     for (const channel of this.channels) channel.close(); this.channels = [];
     await this.udp?.close().catch(() => {}); this.udp = undefined;
     await this.tcp?.close().catch(() => {}); this.tcp = undefined;
