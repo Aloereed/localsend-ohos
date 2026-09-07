@@ -1,8 +1,10 @@
-# 当前交接 · M95
+# 当前交接 · M96
 
-最新包：[AloeSend-2000095-M95-send-rename-unsigned.hap](artifacts/AloeSend-2000095-M95-send-rename-unsigned.hap)。版本 2.0.95，包含 M1–M95 累计实现，无需逐个安装。源码提交 `63c3015c679f05ff3657670b8d25509e02294417`，分支 `arkui`。
+最新包：[AloeSend-2000096-M96-selection-callbacks-unsigned.hap](artifacts/AloeSend-2000096-M96-selection-callbacks-unsigned.hap)。版本 2.0.96，包含 M1–M96 累计实现，无需逐个安装。源码提交 `3b1160eb6b789df8ca0c2015fba880ad8be06f1a`，分支 `arkui`。
 
-SHA-256：`4BB9EA71EFDF4C59DFF928F7F0F0F3C390A3342B5A5F6BFCA76ED4D0C97C209A`。
+SHA-256：`6F8DF088E49F2232A63DF056E332F21FEE5C330F9A308ED574A89A69E71F99E1`。
+
+M96：编辑/打开回调查询当前选择项，避免行复用捕获旧文字。修改前累计 50 个主机测试通过，本轮组件变更最终编译通过，96 个包校验通过。未访问设备，长文字重复编辑实机交互待验收。
 
 M95：发送改名保留目录，纠正错误后按本次结果关闭，添加控制字符校验与键盘完成。新改名测试及成功选择清理回归、最终构建通过，95 个包校验通过。未访问设备。
 
