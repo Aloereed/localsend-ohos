@@ -1,8 +1,10 @@
-# 当前交接 · M73
+# 当前交接 · M74
 
-最新包：[AloeSend-2000073-M73-dynamic-locales-unsigned.hap](artifacts/AloeSend-2000073-M73-dynamic-locales-unsigned.hap)。版本 2.0.73，包含 M1–M73 累计实现，无需逐个安装。源码提交 `32927ad569e099b00d9cb5b041d9b571b4606bea`，分支 `arkui`。
+最新包：[AloeSend-2000074-M74-subset-progress-unsigned.hap](artifacts/AloeSend-2000074-M74-subset-progress-unsigned.hap)。版本 2.0.74，包含 M1–M74 累计实现，无需逐个安装。源码提交 `694f038bb11c54dd1eeeaee4a672ffa331efbae6`，分支 `arkui`。
 
-SHA-256：`E24BB9B50230BE72825B51FAFB35B956A236E3A5606797DCF2EBACA0896BC8E4`。
+SHA-256：`C129290FEEAD2B012C9CC75253897B1E1A68F433D145530C5B7FEB6E6F1EA65F`。
+
+M74：对方部分接收时，上传开始前确定接受清单；进度分母和字节数排除跳过文件，完成/取消/失败不再显示剩余时间。真实 HTTP 部分接受与 204 预览确认测试通过，全部 44 个主机测试和构建通过；74 个累计未签名包已校验。
 
 M73：动态提取器覆盖 53 个语言版本的 29 个模板；选择数量和浏览器链接说明已接入。42 个主机测试文件通过，ArkTS 参数字典调整后语言测试及编译复测通过。其余动态文案和原生新增说明的语言覆盖仍需继续，不能视为全部语言对齐。包清单已验证 73 个累计产物。
 

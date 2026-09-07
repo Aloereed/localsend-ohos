@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000074 | [M74-subset-progress](artifacts/AloeSend-2000074-M74-subset-progress-unsigned.hap) | 694f038b | C129290FEEAD2B012C9CC75253897B1E1A68F433D145530C5B7FEB6E6F1EA65F |
 | 2000073 | [M73-dynamic-locales](artifacts/AloeSend-2000073-M73-dynamic-locales-unsigned.hap) | 32927ad5 | E24BB9B50230BE72825B51FAFB35B956A236E3A5606797DCF2EBACA0896BC8E4 |
 | 2000072 | [M72-storage-errors](artifacts/AloeSend-2000072-M72-storage-errors-unsigned.hap) | 0d716044 | 1BEB408A4E0F4D6A9BB88E27E8446A2D939BFB79947533E2DD5B6B7266ADE449 |
 | 2000071 | [M71-selection-progress](artifacts/AloeSend-2000071-M71-selection-progress-unsigned.hap) | b42704d9 | 92702962710CC4F72E941975868C37F77BBF284C23A8632CD2F5D34FD9E25CCA |
