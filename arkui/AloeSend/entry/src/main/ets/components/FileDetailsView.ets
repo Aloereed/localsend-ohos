@@ -65,7 +65,7 @@ export struct FileDetailsView {
           }
         }.width('100%')
       }
-      if (this.current().path && this.store.isMedia(this.current())) {
+      if ((this.current().path || this.current().exportedPath) && this.store.isMedia(this.current())) {
         Button(this.store.t('保存到相册')).width('100%').height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText)
           .enabled(!this.store.savingToGallery).onClick(() => this.store.saveToGallery([this.current()]))
       }

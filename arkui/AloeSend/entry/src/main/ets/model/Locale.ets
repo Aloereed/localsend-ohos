@@ -2,6 +2,7 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "已保存 {0} 项，其余文件未保存到相册": "Saved {0} items; the remaining files were not saved to Gallery",
   "文件和另存副本均不可用，请检查是否已移动或删除": "The file and its saved copy are unavailable. Check whether they were moved or deleted.",
   "搜索共享文件": "Search shared files",
   "没有匹配的文件": "No matching files",

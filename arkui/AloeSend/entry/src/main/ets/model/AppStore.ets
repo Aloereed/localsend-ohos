@@ -899,20 +899,24 @@ export class AppStore {
 
   async saveToGallery(entries: HistoryEntry[]): Promise<void> {
     if (!this.context || this.savingToGallery) return;
-    const media = entries.filter((entry: HistoryEntry) => !!entry.path && this.isMedia(entry)).slice(0, 100);
+    const media = entries.filter((entry: HistoryEntry) => (!!entry.path || !!entry.exportedPath) && this.isMedia(entry)).slice(0, 100);
     if (!media.length) return;
     this.savingToGallery = true;
     let helper: photoAccessHelper.PhotoAccessHelper | undefined = undefined;
+    let saved = 0;
     try {
+      const sources: string[] = [];
+      for (const entry of media) {
+        const path = await this.readableFilePath(entry);
+        sources.push(path.startsWith('file://') ? path : fileUri.getUriFromPath(path));
+      }
       helper = photoAccessHelper.getPhotoAccessHelper(this.context);
-      const sources = media.map((entry: HistoryEntry) => entry.path.startsWith('file://') ? entry.path : fileUri.getUriFromPath(entry.path));
       const configs: photoAccessHelper.PhotoCreationConfig[] = media.map((entry: HistoryEntry): photoAccessHelper.PhotoCreationConfig => {
         const name = entry.name.split('/').pop() || entry.name; const dot = name.lastIndexOf('.');
         return { title: name.slice(0, dot), fileNameExtension: name.slice(dot + 1),
           photoType: mimeForName(name).startsWith('video/') ? photoAccessHelper.PhotoType.VIDEO : photoAccessHelper.PhotoType.IMAGE };
       });
       const destinations = await helper.showAssetsCreationDialog(sources, configs);
-      let saved = 0;
       for (let index = 0; index < Math.min(destinations.length, media.length); index++) {
         if (!destinations[index]) continue;
         const source = await fs.open(sources[index], fs.OpenMode.READ_ONLY);
@@ -924,9 +928,13 @@ export class AppStore {
         this.updateHistoryLocation(media[index], destinations[index], true); saved++;
         this.galleryQueue = this.galleryQueue.filter((entry: HistoryEntry) => entry.id !== media[index].id);
       }
-      if (saved) { await this.save(); this.notice = this.tf('已保存 {0} 项到相册', [String(saved)]); }
-    } catch (e) { this.fail('保存到相册失败，应用内文件仍保留', e as Error); }
-    finally { await helper?.release().catch(() => {}); this.savingToGallery = false; }
+      if (saved) this.notice = this.tf('已保存 {0} 项到相册', [String(saved)]);
+    } catch (e) {
+      this.fail(saved ? this.tf('已保存 {0} 项，其余文件未保存到相册', [String(saved)]) : '保存到相册失败，应用内文件仍保留', e as Error);
+    } finally {
+      if (saved) await this.save();
+      await helper?.release().catch(() => {}); this.savingToGallery = false;
+    }
   }
 
   async shareEntry(entry: HistoryEntry): Promise<void> {
