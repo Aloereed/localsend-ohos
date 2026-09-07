@@ -2,6 +2,7 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "显示更多": "Show more",
   "当前还没有选择要接收的文件。": "No file has been selected for receiving yet.",
   "搜索当前目录的文件夹": "Search folders in this directory",
   "没有匹配的文件夹": "No matching folders",
@@ -525,7 +526,7 @@ export function isRtlLanguage(language: string): boolean { return ['ar', 'fa', '
 export function uiText(text: string, language: string): string {
   const resolved = resolvedLanguage(language);
   if (resolved === 'zh') return text;
-  const translated = resolved !== 'en' ? flutterLabels[resolved] : undefined;
+  const translated = flutterLabels[resolved];
   if (translated && translated[text]) return translated[text];
   if (english[text]) return english[text];
   // Single-field status messages retain device names verbatim.

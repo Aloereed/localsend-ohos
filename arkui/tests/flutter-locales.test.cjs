@@ -24,6 +24,14 @@ assert.equal(uiText('取消', 'de-DE'), catalog.locales.de['general.cancel']);
 assert.equal(uiText('发送', 'ja-JP'), catalog.locales.ja['sendTab.title']);
 assert.equal(uiText('设备名称', 'zh-Hant-TW'), catalog.locales['zh-TW']['settingsTab.network.alias']);
 assert.equal(uiText('接收', 'en-US'), 'Receive');
+for (const [native, key] of Object.entries(require('../flutter-locale-keys.json'))) {
+  for (const [locale, values] of Object.entries(catalog.locales)) {
+    if (locale === 'zh-CN') continue;
+    assert.equal(uiText(native, locale), values[key], `${locale}:${native} must use the generated Flutter mapping`);
+  }
+}
+assert.equal(uiText('关闭', 'en'), 'Close');
+assert.equal(uiText('显示更多', 'en'), 'Show more');
 assert.equal(uiText('设备此刻的名字', 'fr'), '设备此刻的名字', 'unrecognized user content must not be translated');
 assert.equal(uiText('打开所选文件失败', 'fr'), 'Could not open the selected file', 'native-only copy uses an explicit English fallback');
 assert.equal(resolvedLanguage('zh-Hans-TW'), 'zh'); assert.equal(resolvedLanguage('zh-Hant-HK'), 'zh-HK');
