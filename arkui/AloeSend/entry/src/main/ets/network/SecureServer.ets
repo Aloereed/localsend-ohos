@@ -15,13 +15,19 @@ export class SecureConnection {
   private incoming: Promise<void> = Promise.resolve();
   private handshakeTimer: number = -1;
   private closing: Promise<void> | undefined = undefined;
+  private peerClosed: Promise<void> = Promise.resolve();
+  private peerEnded: () => void = () => {};
   onDispose: () => void = () => {};
 
   constructor(tcp: PullSocket, server: number) {
+    this.peerClosed = new Promise<void>((resolve) => { this.peerEnded = resolve; });
     this.tcp = tcp; this.id = tls.createSession(server);
     this.handshakeTimer = setTimeout(() => this.fail(new Error('TLS 握手超时')), 30000);
     tcp.onMessage((info: socket.SocketMessageInfo) => {
       if (this.closed) return;
+      // After close_notify, drain in-flight ciphertext without delivering it to
+      // HTTP or disk. Closing TCP with unread input can reset an early response.
+      if (this.closing) { this.tcp.resume(); return; }
       this.incoming = this.incoming.then(async () => {
         // PullSocket supplies one chunk per acknowledgement. Awaiting disk I/O
         // here stops native recv, so TCP slows the sender instead of accumulating
@@ -38,7 +44,7 @@ export class SecureConnection {
         if (!this.closed) this.tcp.resume();
       }).catch((error: Error) => this.fail(error));
     });
-    tcp.onClose(() => this.dispose());
+    tcp.onClose(() => { this.peerEnded(); this.dispose(); });
     tcp.onError((error: Error) => this.fail(error));
     tcp.resume();
   }
@@ -81,7 +87,10 @@ export class SecureConnection {
     let timer: number = -1;
     try {
       const wire = tls.shutdown(this.id);
-      await Promise.race([this.flush(wire), new Promise<void>((resolve) => { timer = setTimeout(resolve, 1000); })]);
+      const drained = this.flush(wire).then(async () => {
+        if (!this.closed) { this.tcp.resume(); await this.peerClosed; }
+      });
+      await Promise.race([drained, new Promise<void>((resolve) => { timer = setTimeout(resolve, 1000); })]);
     } catch (_) { /* Broken channels still have to release their native state. */ }
     finally {
       if (timer !== -1) clearTimeout(timer);
