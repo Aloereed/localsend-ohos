@@ -8,8 +8,17 @@ export struct WebShareView {
   @State encrypted: boolean = false;
   @State presenting: boolean = false;
   @State presentationMode: string = 'qr';
+  @State fileQuery: string = '';
+  @State fileLimit: number = 30;
 
-  checkShare(): void { if (!this.store.webUrl) this.presenting = false; }
+  checkShare(): void {
+    if (!this.store.webUrl) { this.presenting = false; this.fileQuery = ''; this.fileLimit = 30; }
+  }
+
+  matchingFiles(): ShareFile[] {
+    const query = this.fileQuery.trim().toLocaleLowerCase();
+    return query ? this.store.webFiles.filter((file: ShareFile) => file.name.toLocaleLowerCase().includes(query)) : this.store.webFiles;
+  }
 
   @Builder
   presentation() {
@@ -93,12 +102,28 @@ export struct WebShareView {
             }.width('100%')
           }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(24)
         }, (request: WebAccessRequest) => request.id)
-        ForEach(this.store.webFiles, (file: ShareFile) => {
+        Search({ value: this.fileQuery, placeholder: this.store.t('搜索共享文件') })
+          .width('100%').onChange((value: string) => { this.fileQuery = value; this.fileLimit = 30; })
+          .accessibilityText(this.store.t('搜索共享文件'))
+        if (this.matchingFiles().length === 0) {
+          Text(this.store.t(this.fileQuery.trim() ? '没有匹配的文件' : '当前没有共享文件'))
+            .fontSize(14).fontColor($r('sys.color.font_secondary')).padding(20)
+        }
+        ForEach(this.matchingFiles().slice(0, this.fileLimit), (file: ShareFile) => {
           Row() {
             Text(file.name).fontSize(15).layoutWeight(1).maxLines(2).fontColor($r('sys.color.font_primary'))
             Text(formatSize(file.size)).fontSize(12).fontColor($r('sys.color.font_secondary'))
           }.padding(18).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(20)
         }, (file: ShareFile) => file.id)
+        if (this.matchingFiles().length > this.fileLimit) {
+          Button(this.store.tf('继续查看 · 还有 {0} 项', [String(this.matchingFiles().length - this.fileLimit)]))
+            .width('100%').height(44).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+            .onClick(() => this.fileLimit += 50)
+        }
+        if (this.fileLimit > 30 && this.matchingFiles().length > 30) {
+          Button(this.store.t('收起清单')).height(44).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
+            .onClick(() => this.fileLimit = 30)
+        }
       }
     }.width('100%').bindContentCover($$this.presenting, this.presentation(), {
       modalTransition: this.store.settings.animations ? ModalTransition.DEFAULT : ModalTransition.NONE

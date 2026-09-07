@@ -2,6 +2,9 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "搜索共享文件": "Search shared files",
+  "没有匹配的文件": "No matching files",
+  "当前没有共享文件": "No files are currently shared",
   "PIN 不正确，请重新输入": "Incorrect PIN. Try again.",
   "任务已停止，此文件尚未开始传输": "The transfer stopped before this file started",
   "任务已停止，此文件接收未完成": "The transfer stopped before this file finished receiving",
