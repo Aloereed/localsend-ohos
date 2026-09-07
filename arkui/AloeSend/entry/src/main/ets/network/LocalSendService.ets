@@ -840,17 +840,26 @@ export class LocalSendService {
     for (const id of this.sending.keys()) this.cancel(id);
   }
 
-  async retry(id: string): Promise<void> {
+  async retry(id: string, fileId: string = ''): Promise<void> {
     const context = this.retryContexts.get(id);
     const previous = this.store.transfers.find((transfer: TransferView) => transfer.id === id);
     if (!context || !previous) { this.store.notice = '请重新选择原文件后发送'; return; }
     if (previous.retrying || previous.retryTransferId || previous.direction !== 'send' ||
       (previous.status !== 'error' && previous.status !== 'cancelled')) return;
-    const incomplete = previous.files.filter((file: TransferFile) => file.status !== 'complete' && file.status !== 'skipped').map((file: TransferFile) => file.id);
+    const incomplete = previous.files.filter((file: TransferFile) => file.status !== 'complete' && file.status !== 'skipped' &&
+      !file.retryTransferId && (!fileId || file.id === fileId)).map((file: TransferFile) => file.id);
     const files = context.files.filter((file: ShareFile) => incomplete.includes(file.id));
     if (!files.length) return;
     previous.retrying = true; this.store.updateTransfer(previous);
-    try { previous.retryTransferId = await this.send(context.peer, files); }
+    try {
+      const next = await this.send(context.peer, files);
+      if (next) {
+        for (const file of previous.files) { if (incomplete.includes(file.id)) file.retryTransferId = next; }
+        if (previous.files.every((file: TransferFile) => file.status === 'complete' || file.status === 'skipped' || !!file.retryTransferId)) {
+          previous.retryTransferId = next;
+        }
+      }
+    }
     finally {
       previous.retrying = false;
       // Do not resurrect an old row evicted by the bounded transfer list.

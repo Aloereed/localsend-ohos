@@ -174,6 +174,18 @@ export struct TransferList {
                 Button(this.store.t('打开')).height(44).fontSize(13).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
                   .onClick(() => this.openReceived(transfer.id, file.id))
               } else if (this.currentFile(transfer.id, file.id).status === 'complete') { Text('✓').fontColor(this.store.accentText).fontSize(20) }
+              if (this.current(transfer.id).direction === 'send' &&
+                (this.current(transfer.id).status === 'error' || this.current(transfer.id).status === 'cancelled') &&
+                (this.currentFile(transfer.id, file.id).status === 'error' || this.currentFile(transfer.id, file.id).status === 'cancelled')) {
+                if (this.currentFile(transfer.id, file.id).retryTransferId) {
+                  Text(this.store.t('已重试')).fontSize(12).fontColor($r('sys.color.font_secondary'))
+                } else {
+                  Button(this.store.t('重试')).height(44).fontSize(13).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+                    .enabled(!this.current(transfer.id).retrying)
+                    .accessibilityText(this.store.tf('重试 {0}', [this.currentFile(transfer.id, file.id).name]))
+                    .onClick(() => localSend.retry(transfer.id, file.id))
+                }
+              }
               if (transfer.id === this.store.pendingReceive && !this.currentFile(transfer.id, file.id).preview) {
                 Button(this.store.t('改名')).fontSize(12).fontColor(this.store.accentText).backgroundColor(Color.Transparent)
                   .onClick(() => { this.batchEdit = false; this.renameId = file.id; this.renameText = this.currentFile(transfer.id, file.id).name; this.renameSheet = true; })
