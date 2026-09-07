@@ -1,6 +1,6 @@
 # 当前交接 · M122
 
-阶段验收与明确未完成项见 [验收记录](ACCEPTANCE.md)。M114–M120 已实现并主机验证同会话重试、逐文件失败处理、过期回退和取消。完整多语言与上游新增功能审查仍未全部完成，不能将当前版本描述为全面对齐完成。
+阶段验收与明确未完成项见 [验收记录](ACCEPTANCE.md)。M114–M120 已实现并主机验证同会话重试、逐文件失败处理、过期回退和取消。完整多语言、上游校验和设置和双端指纹核验页仍未完成。main 的 WebRTC 默认关闭、配对仍是 TODO，不再将其误列为已启用功能的缺项。不能将当前版本描述为全面对齐完成。
 
 最新包：[AloeSend-2000122-M122-transfer-error-locales-unsigned.hap](artifacts/AloeSend-2000122-M122-transfer-error-locales-unsigned.hap)。版本 2.0.122，包含 M1–M122 累计实现，无需逐个安装。源码提交 `7db7138f9fbccb20eaff93aaae989e91b30e952a`，分支 `arkui`。
 
@@ -158,6 +158,7 @@ Windows LocalSend 重启后，零进度现象恢复。这是用户提供的实�
 - HDS API 23 系统材质已接入；不要沿用此前“只能模糊、必须 API 26”的过时结论。实际视觉效果仍需设备检查。
 
 详细里程碑、范围和材质依据见 [PACKAGES.md](PACKAGES.md)、[MIGRATION.md](MIGRATION.md)、[DESIGN.md](DESIGN.md)。
+
 
 
 

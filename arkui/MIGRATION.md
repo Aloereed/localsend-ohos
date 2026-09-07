@@ -40,7 +40,7 @@ implementation evidence through M122 (device checks are handed back to the user 
 | Upgrade and folder selection | FlutterImport, DownloadFolders, DownloadDirectoryPicker | M45 imports Flutter favorites/history/messages without modifying source data; rollback/retry and 1,100 records tested. M47/M53 custom Download directory picker covers missing capability and runtime unsupported errors. Overwrite upgrade/signature and authorization behavior need user device checks. |
 | Legacy UI | Shared native flows | No duplicate legacy navigation shell; equivalent actions are consolidated. Final interaction audit pending. |
 | Android/desktop-only actions | Platform scope | APK installed-app picker, desktop tray, autostart and shell integration are not HarmonyOS equivalents. |
-| Upstream Rust rewrite | Preserved upstream reference | LocalSend interoperability is implemented; Rust-only WebRTC/pairing parity is not claimed. |
+| Upstream Rust rewrite | Preserved upstream reference | LocalSend interoperability is implemented. main/6279d3e3 disables WebRTC by default and pairing is TODO; these are experimental, not enabled parity gates. Checksum settings and the combined-fingerprint verification page remain unported. |
 
 See `README.md` for morning checks and `PACKAGES.md` for verified archived packages.
 
@@ -71,6 +71,7 @@ See `README.md` for morning checks and `PACKAGES.md` for verified archived packa
 Record commands, outcomes, known limitations and package hashes in `milestones/`.
 Unsigned HAPs cannot be runtime-installed on a normal device without signing. Build success
 does not prove device runtime behavior. Keep that distinction explicit in milestone notes.
+
 
 
 

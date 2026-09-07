@@ -22,8 +22,14 @@ M121 源码另完成 3 GiB HTTPS 慢写盘回归：首次暂停一秒，再暂�
 ## 无需真机但仍未全部完成
 
 - **完整多语言覆盖**：104 个公共标签已同步；大量鸿蒙专用说明仍回退英文。53 个语言选项不代表所有文案已翻译。
-- **上游新增功能的完整清单及移植**：当前完成的是 LocalSend 局域网协议和主要 Flutter 流程；Rust 重写中的 WebRTC/配对能力未实现，不能宣称所有上游新增功能已拿齐。
+- **上游新增校验和设置**：main 的 settings_tab.dart 已有 createChecksums/verifyChecksums 开关，原生设置尚无对应项。原生能校验收到的哈希，但尚未提供发送前生成哈希的配置和完整行为。
+- **双端指纹核验页**：main 的 device_details_page.dart 提供 VerifyPage，将双方指纹排序拼接并以图形/文本核验。原生 PeerDetailView 目前只展示、复制对方指纹，尚未实现这套对照页面。
+- **完整上游对照审查**：上述缺项来自 main / 6279d3e3 的实际源码核查，其他新增功能仍需逐项审查。
 - **最终全功能逐项对照**：已知重试差异本轮完成了代码和主机验证，但不能用测试数量替代所有页面、平台特性和边界的完整审查。
+
+## 上游实验功能说明（更正此前记录）
+
+已核对 main / 6279d3e3：app/lib/provider/network/webrtc/signaling_provider.dart 的 webRTCEnabled 为 false，packages/localsend_isolates/rust/src/api/webrtc.rs 中配对仍是 TODO。这两项未在原生实现，但不应列为“上游已启用常规功能”的同等级移植缺项。
 
 ## 已有实现但仍需真机验收
 
@@ -33,3 +39,4 @@ M121 源码另完成 3 GiB HTTPS 慢写盘回归：首次暂停一秒，再暂�
 - 原 logo、图标、下拉值、浮动底栏与光感实际效果，以及大字体、键盘、读屏、平板/折叠屏。
 
 最新包及哈希见 [HANDOFF.md](HANDOFF.md)，每项改动的细节见 [milestones/](milestones/)。主机证据不授权访问设备，也不能替代以上实机验收。
+
