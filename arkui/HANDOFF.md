@@ -1,8 +1,10 @@
-# 当前交接 · M94
+# 当前交接 · M95
 
-最新包：[AloeSend-2000094-M94-receive-rename-unsigned.hap](artifacts/AloeSend-2000094-M94-receive-rename-unsigned.hap)。版本 2.0.94，包含 M1–M94 累计实现，无需逐个安装。源码提交 `fd0486eda46fc5a2cbe85e805724baa5dd56fea6`，分支 `arkui`。
+最新包：[AloeSend-2000095-M95-send-rename-unsigned.hap](artifacts/AloeSend-2000095-M95-send-rename-unsigned.hap)。版本 2.0.95，包含 M1–M95 累计实现，无需逐个安装。源码提交 `63c3015c679f05ff3657670b8d25509e02294417`，分支 `arkui`。
 
-SHA-256：`C4A341ED29652DCD75DE8028FFD313560FA9010EF0C6AEEC4D5511A0007F27E5`。
+SHA-256：`4BB9EA71EFDF4C59DFF928F7F0F0F3C390A3342B5A5F6BFCA76ED4D0C97C209A`。
+
+M95：发送改名保留目录，纠正错误后按本次结果关闭，添加控制字符校验与键盘完成。新改名测试及成功选择清理回归、最终构建通过，95 个包校验通过。未访问设备。
 
 M94：接收改名补回省略的原始扩展名，保留显式新扩展名；弹层显示原名，支持键盘完成。名称、服务集成和语言模板测试通过，最终编译及 94 个包校验通过。未访问设备，原生功能与视觉全面对齐仍在进行。
 
