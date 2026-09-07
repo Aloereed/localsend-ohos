@@ -1,8 +1,10 @@
-# 当前交接 · M101
+# 当前交接 · M102
 
-最新包：[AloeSend-2000101-M101-tls-response-close-unsigned.hap](artifacts/AloeSend-2000101-M101-tls-response-close-unsigned.hap)。版本 2.0.101，包含 M1–M101 累计实现，无需逐个安装。源码提交 `1ae7da0c0e05e5a787b03f66b260bb7e07f9c4e0`，分支 `arkui`。
+最新包：[AloeSend-2000102-M102-tls-stop-bound-unsigned.hap](artifacts/AloeSend-2000102-M102-tls-stop-bound-unsigned.hap)。版本 2.0.102，包含 M1–M102 累计实现，无需逐个安装。源码提交 `9de9b54dd149ccb4353fdfdd3e529af7312eec82`，分支 `arkui`。
 
-SHA-256：`E1337EA9089BC83A834F2C288F4632EC727968831B259E4A2E839FF7CC4E539B`。
+SHA-256：`2A941091D2FA93E3670EAD1C327FC91663A8571898211C3E5A9D65B619843C61`。
+
+M102：底层 TLS 服务并行收尾，六个不主动关闭客户端的直接关闭从 6.1 秒降至 1.1 秒，会话释放后立即重启成功。关闭边界、提前响应、取消回归与编译通过，102 个包校验通过。未访问设备。
 
 M101：定位 M100 的提前拒绝 HTTPS 重置，旧实现独立测试复现；关闭通知后有时限地排空在途密文，20 次 4 MiB 提前拒绝均收到完整 403。累计 51 个主机测试、编译及 101 个包校验通过。未访问设备，实机仍待验收。
 
