@@ -1,0 +1,32 @@
+const assert = require('node:assert/strict');
+const { load } = require('./host-runtime.cjs');
+const { AppStore, TransferView, TransferFile } = load('model/AppStore');
+const store = new AppStore(), activity = [];
+store.onTransferActivity = active => activity.push(active);
+const large = Object.assign(new TransferView(), { id: 'large', status: 'transferring' });
+large.files = [Object.assign(new TransferFile(), { id: 'data', size: 3 * 1024 ** 3, transferred: 100 })];
+const waiting = Object.assign(new TransferView(), { id: 'pin', status: 'waiting' });
+store.updateTransfer(large); store.updateTransfer(waiting);
+for (let i = 0; i < 60; i++) store.updateTransfer(Object.assign(new TransferView(), { id: 'finished-' + i, status: 'complete' }));
+assert.equal(store.transfers.length, 30);
+assert.ok(store.transfers.some(item => item.id === 'large'));
+assert.ok(store.transfers.some(item => item.id === 'pin'));
+assert.equal(store.transfers[0].id, 'finished-59', 'keep recency ordering');
+assert.equal(store.activeTransfers, true);
+assert.deepEqual(activity, [true], 'finished traffic must not release the screen for an active transfer');
+large.files[0].transferred = 200; store.updateTransfer(large);
+assert.equal(store.transfers.find(item => item.id === 'large').files[0].transferred, 200);
+large.status = 'cancelled'; store.updateTransfer(large);
+assert.deepEqual(activity, [true, false]);
+assert.equal(store.activeTransfers, true, 'PIN wait is still a live operation');
+waiting.status = 'cancelled'; store.updateTransfer(waiting);
+assert.equal(store.activeTransfers, false);
+
+const many = new AppStore();
+const live = Array.from({ length: 35 }, (_, i) => Object.assign(new TransferView(), { id: String(i), status: 'transferring' }));
+for (const item of live) many.updateTransfer(item);
+assert.equal(many.transfers.length, 35, 'a display budget must never discard a live task');
+for (const item of live) { item.status = 'complete'; many.updateTransfer(item); }
+assert.equal(many.transfers.length, 30, 'the normal bound resumes after completion');
+assert.equal(many.activeTransfers, false);
+console.log('PASS live transfer retention, bounded finished rows, progress updates and screen activity');

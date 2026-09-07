@@ -390,7 +390,14 @@ export class AppStore {
     const previous = this.transfers.find((item: TransferView) => item.id === transfer.id);
     if (!transfer.activeStarted && transfer.status === 'transferring') transfer.activeStarted = Date.now();
     const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
-    this.transfers = previous ? this.transfers.map((item: TransferView) => item.id === transfer.id ? snapshot : item) : [snapshot, ...this.transfers].slice(0, 30);
+    const updated = previous ? this.transfers.map((item: TransferView) => item.id === transfer.id ? snapshot : item) : [snapshot, ...this.transfers];
+    // Finished rows may age out, but live tasks must retain progress and cancel.
+    const liveCount = updated.filter((item: TransferView) => item.status === 'waiting' || item.status === 'transferring').length;
+    let finishedSlots = Math.max(0, 30 - liveCount);
+    this.transfers = updated.filter((item: TransferView) => {
+      if (item.status === 'waiting' || item.status === 'transferring') return true;
+      return finishedSlots-- > 0;
+    });
     const active = this.transfers.some((item: TransferView) => item.status === 'transferring');
     if (active !== wasActive) this.onTransferActivity(active);
     if (this.context) backgroundKeeper.sync(active, this.context,
