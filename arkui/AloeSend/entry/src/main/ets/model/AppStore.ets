@@ -6,6 +6,7 @@ import { pasteboard, deviceInfo, BusinessError } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
 import { backgroundKeeper } from '../platform/BackgroundKeeper';
 import { uiText, resolvedLanguage, isRtlLanguage } from './Locale';
+import { flutterCount } from './DynamicLocale';
 import { readableColor, presetAccent } from './Colors';
 import { LocalInterface, ipv4, ipv6 } from '../network/Addresses';
 import { safeRelativePath } from '../network/Protocol';
@@ -369,6 +370,10 @@ export class AppStore {
     } catch (_) { /* Keep the last known system accent if unavailable. */ }
   }
   tf(text: string, values: string[]): string {
+    if ((text === '已选 {0} 项' || text === '已选 {0} 项 · {1}') && values.length >= (text.endsWith('{1}') ? 2 : 1)) {
+      const selected = flutterCount('receivePage.filesCard.selected', this.settings.language, values[0]);
+      return text.endsWith('{1}') ? selected + ' · ' + values[1] : selected;
+    }
     return this.t(text).replace(/\{(\d+)\}/g, (placeholder: string, index: string) => {
       const position = Number(index);
       return position < values.length ? values[position] : placeholder;

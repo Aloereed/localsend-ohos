@@ -63,7 +63,16 @@ function streamUpload(port, route, block, count) {
   const enqueue = NativeConnection.prototype.enqueue; let peak = 0, waiting = false, release, upload;
   NativeConnection.prototype.enqueue = function(bytes) { const result = enqueue.call(this, bytes); peak = Math.max(peak, this.queuedBytes); return result; };
   const paused = new Promise(resolve => { release = resolve; });
-  disk.write = async (fd, bytes) => { if (!waiting) { waiting = true; await paused; } return write(fd, bytes); };
+  const stallEvery = Number(process.env.ALOE_DISK_STALL_EVERY || 0);
+  const stallMs = Number(process.env.ALOE_DISK_STALL_MS || 10);
+  assert.ok(Number.isInteger(stallEvery) && stallEvery >= 0);
+  assert.ok(Number.isFinite(stallMs) && stallMs >= 0);
+  let writes = 0, stalls = 0;
+  disk.write = async (fd, bytes) => {
+    if (!waiting) { waiting = true; await paused; }
+    if (stallEvery && ++writes % stallEvery === 0) { stalls++; await delay(stallMs); }
+    return write(fd, bytes);
+  };
   try {
     const block = crypto.randomBytes(65536);
     const mib = Number(process.env.ALOE_LARGE_MIB || 128), count = mib * 16;
@@ -78,13 +87,15 @@ function streamUpload(port, route, block, count) {
     assert.ok(peak <= 131072, `disk pause must bound the application queue; observed ${peak} bytes`);
     assert.ok(upload.produced() < block.length * count, 'the sender must encounter TCP backpressure while disk writes are paused');
     release(); assert.equal(await upload.result, 200);
+    assert.ok(peak <= 131072, `the entire transfer must bound the application queue; observed ${peak} bytes`);
+    if (stallEvery) assert.ok(stalls > 1, 'repeated slow disk writes must be exercised');
     assert.equal(store.transfers[0].status, 'complete');
     assert.equal((await fs.stat(store.history[0].path)).size, block.length * count);
     const actual = crypto.createHash('sha256');
     for await (const bytes of require('node:fs').createReadStream(store.history[0].path)) actual.update(bytes);
     assert.equal(actual.digest('hex'), expected);
     await until(() => handles.size === 0);
-    console.log(`PASS ${mib} MiB real TLS receive after one-second disk stall; SHA-256 matches, peak queue ${peak} bytes, zero file handles`);
+    console.log(`PASS ${mib} MiB real TLS receive after one-second disk stall and ${stalls} recurring ${stallMs} ms stalls; SHA-256 matches, peak queue ${peak} bytes, zero file handles`);
   } finally {
     release(); upload?.close(); disk.write = write; NativeConnection.prototype.enqueue = enqueue; await service.stop();
   }

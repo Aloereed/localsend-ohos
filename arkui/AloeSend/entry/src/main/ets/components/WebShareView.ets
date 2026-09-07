@@ -1,5 +1,6 @@
 import { AppStore, ShareFile, WebAccessRequest, formatSize } from '../model/AppStore';
 import { webShare } from '../network/WebShareService';
+import { flutterCount } from '../model/DynamicLocale';
 
 @Component
 export struct WebShareView {
@@ -21,6 +22,8 @@ export struct WebShareView {
       }.width('100%')
       Scroll() {
         Column({ space: 24 }) {
+          Text(flutterCount('webSharePage.openLink', this.store.settings.language, '1'))
+            .fontSize(16).fontColor($r('sys.color.font_secondary')).textAlign(TextAlign.Center)
           if (this.presentationMode === 'qr' && this.store.webUrl) {
             QRCode(this.store.webUrl).width('80%').aspectRatio(1).constraintSize({ maxWidth: 380, maxHeight: 380 })
               .color('#101318').backgroundColor('#FFFFFF').padding(16).borderRadius(24)

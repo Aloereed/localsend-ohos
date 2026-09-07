@@ -13,6 +13,10 @@ HTTPS 服务改为原生 TCP 按需读取。每次最多读取 64 KiB，ArkTS �
 
 复测命令：`node --test arkui/tests/backpressure.test.cjs`；环境变量 `ALOE_LARGE_MIB=3072` 启用 3 GiB 校验。需先运行 `arkui/build-native-tests.ps1` 构建主机原生模块。
 
+### 持续慢写盘补测（2026-09-07）
+
+在 M72 源码上补测 3 GiB HTTPS 接收：除首次暂停写盘一秒外，设置 `ALOE_DISK_STALL_EVERY=32`、`ALOE_DISK_STALL_MS=10`，每 32 次写入再暂停 10 毫秒，共触发 1,538 次。整个传输期间应用队列峰值 65,750 字节，文件大小与 SHA-256 正确，文件句柄全部释放，测试耗时 56.4 秒。测试新增全程队列上限断言，避免只检查首次暂停阶段。日志为 `arkui/backpressure-recurring-3gib.log`。这是 Windows 主机真实 TLS 测试，未访问鸿蒙设备；本次只扩展验证，沿用 M72 未签名包。
+
 产物：`artifacts/AloeSend-2000051-M51-tcp-backpressure-unsigned.hap`，版本 `2.0.51`。
 
 SHA-256：`81389BB21C2CF458D8F79FD3E30D0E79DE9A9C0649117CCA1906E6F8E70086B1`。
