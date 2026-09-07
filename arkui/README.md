@@ -1,12 +1,14 @@
 # AloeSend 原生 ArkUI
 
-当前建议检查 **M114 / 2.0.114 / 2000114**：
-[未签名 debug 包](artifacts/AloeSend-2000114-M114-receive-file-retry-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M115 / 2.0.115 / 2000115**：
+[未签名 debug 包](artifacts/AloeSend-2000115-M115-send-session-retry-unsigned.hap)。包含所有此前里程碑。
 
 完整的倒序下载路径、提交和 SHA-256 见 [包清单](PACKAGES.md)，各轮实现与验证见 [里程碑记录](milestones/)。
 最新验证与待检查范围见 [交接记录](HANDOFF.md)。M113 全部 55 个主机测试文件及编译通过。M110 的 3 GiB HTTPS 慢写盘回归通过。用户于 9 月 7 日上午离开设备，后续仅做主机与源码验证。
 
 ## 最新修复
+
+- **M115**：发送端原会话重试失败文件，成功项不重发；真实 HTTP/HTTPS 双原生服务恢复磁盘失败且只确认一次。
 
 - **M114**：可恢复接收文件错误保留会话，清理后返回 500，允许原 token 重试；取消和重启使凭据失效。
 
@@ -174,6 +176,7 @@ M40 通过全部 22 个宿主测试文件与 ArkUI 编译，包含实际 MbedTLS
 ```
 
 新里程碑使用新的名称和递增版本号调用 `build.ps1`，完成验证并提交后用 `record-milestone.ps1` 记录源码提交。`verify-artifacts.ps1 -WriteCatalog` 刷新倒序清单。不要覆盖已归档版本。
+
 
 
 

@@ -441,14 +441,14 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         const retry = service.retry(previous.id);
         assert.equal(store.transfers.find(item => item.id === previous.id).retrying, true);
         await Promise.all([retry, service.retry(previous.id)]);
-        assert.equal(store.transfers[0].status, 'complete'); assert.deepEqual(offers[1], ['second']);
+        assert.equal(store.transfers[0].status, 'complete'); assert.equal(offers.length, 1);
         const retried = store.transfers.find(item => item.id === previous.id);
-        assert.equal(retried.retrying, false); assert.equal(retried.retryTransferId, store.transfers[0].id);
+        assert.equal(retried.retrying, false); assert.equal(retried.retryTransferId, '');
         await service.retry(previous.id);
-        assert.equal(offers.length, 2, 'double clicks and the old completed retry entry must not duplicate a transfer');
+        assert.equal(offers.length, 1, 'same-session retry and double clicks must not duplicate consent');
         const queue = service.sendMany([peer, peer]); store.files = [];
         await queue; assert.equal(store.batchRemaining, 0);
-        assert.deepEqual(offers.slice(2), [['first', 'second'], ['first', 'second']]);
+        assert.deepEqual(offers.slice(1), [['first', 'second'], ['first', 'second']]);
       } finally { await new Promise(r => remote.close(r)); }
     });
     await check('128 MiB nonzero binary TLS upload completes with matching SHA-256 and one progress navigation event', async () => {

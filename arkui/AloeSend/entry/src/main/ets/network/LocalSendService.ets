@@ -6,7 +6,7 @@ import { AppStore, appStore, Peer, ShareFile, HistoryEntry, TransferView, Transf
 import { HttpHead, queryValue, safeRelativePath, uniqueName } from './Protocol';
 import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { TlsIdentity } from './TlsIdentity';
-import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter } from './Transport';
+import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter, HttpReply } from './Transport';
 import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
 import { storageError } from '../platform/StorageError';
 import { batchReceiveNames, receiveName } from '../model/ReceiveNames';
@@ -63,6 +63,8 @@ class SendSessionRef {
 }
 
 class RetryContext {
+  accepted: PrepareReply | undefined = undefined;
+  legacy: boolean = false;
   peer: Peer;
   files: ShareFile[];
   keepSelection: boolean;
@@ -730,22 +732,26 @@ export class LocalSendService {
     }
     if (matching.length !== 1) return false;
     const id = matching[0]; const cancellation = this.sending.get(id);
-    if (!cancellation) return false;
-    cancellation.cancel('对方终止了传输');
+    cancellation?.cancel('对方终止了传输');
+    const context = this.retryContexts.get(id); if (context) context.accepted = undefined;
+    this.sendSessions.delete(id);
     const transfer = this.store.transfers.find((item: TransferView) => item.id === id);
     if (transfer) {
       transfer.status = 'cancelled'; transfer.error = '对方终止了传输'; transfer.finished = Date.now();
       for (const file of transfer.files) { if (file.status === 'waiting' || file.status === 'transferring') file.status = 'cancelled'; }
       this.store.updateTransfer(transfer);
+      if (context) this.store.updateOutgoingHistory(transfer, context.files);
     }
     return true;
   }
 
   cancel(id: string, notifyPeer: boolean = true): void {
     this.sending.get(id)?.cancel();
+    const context = this.retryContexts.get(id); if (context) context.accepted = undefined;
     if (this.store.pendingPin === id) this.submitPin('');
     const sending = this.sendSessions.get(id);
     if (sending && notifyPeer) this.notifyCancel(sending.peer, sending.remoteId, sending.legacy);
+    this.sendSessions.delete(id);
     if (this.receiving?.id === id) {
       this.endReceive(this.receiving, 'cancelled', '', notifyPeer);
     }
@@ -753,20 +759,34 @@ export class LocalSendService {
 
   submitPin(pin: string): void { this.pinResolver?.(pin); this.pinResolver = undefined; this.store.pendingPin = ''; this.store.pendingPinInvalid = false; }
 
-  async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files, keepSelection: boolean = false): Promise<string> {
+  async send(peer: Peer, selectedFiles: ShareFile[] = this.store.files, keepSelection: boolean = false, resumeId: string = ''): Promise<string> {
     if (this.store.identityResetting) { this.store.notice = '正在重置证书，请稍后'; return ''; }
     if (!selectedFiles.length) { this.store.notice = '请先选择文件或输入文字'; return ''; }
     if (this.sending.size >= 4) { this.store.notice = '已有 4 项发送任务，请等待完成后再发送'; return ''; }
-    const files = selectedFiles.slice(); const transfer = new TransferView(); transfer.id = util.generateRandomUUID();
-    this.retryContexts.set(transfer.id, new RetryContext(peer, files, keepSelection || this.store.settings.sendMode === 'multiple'));
+    const resumed = resumeId ? this.retryContexts.get(resumeId) : undefined;
+    const existing = resumeId ? this.store.transfers.find((item: TransferView) => item.id === resumeId) : undefined;
+    if (resumeId && (!existing || !resumed?.accepted || this.sending.has(resumeId))) return '';
+    const files = selectedFiles.slice(); const transfer = existing || new TransferView();
+    if (!existing) transfer.id = util.generateRandomUUID();
+    const context = resumed || new RetryContext(peer, files, keepSelection || this.store.settings.sendMode === 'multiple');
+    this.retryContexts.set(transfer.id, context);
+    transfer.error = ''; transfer.finished = 0;
     if (this.retryContexts.size > 40) {
-      for (const id of this.retryContexts.keys()) { if (!this.sending.has(id)) { this.retryContexts.delete(id); break; } }
+      for (const id of this.retryContexts.keys()) {
+        if (!this.sending.has(id) && id !== transfer.id) {
+          const remote = this.sendSessions.get(id);
+          if (remote) this.notifyCancel(remote.peer, remote.remoteId, remote.legacy);
+          this.sendSessions.delete(id); this.retryContexts.delete(id); break;
+        }
+      }
     }
     transfer.peer = peer.alias; transfer.encrypted = peer.protocol === 'https';
     transfer.peerInfo = peer;
     const fileInfos: Record<string, FileInfo> = {};
     for (const file of files) {
-      const view = new TransferFile(); view.id = file.id; view.name = file.name; view.size = file.size; transfer.files.push(view);
+      if (!existing) {
+        const view = new TransferFile(); view.id = file.id; view.name = file.name; view.size = file.size; transfer.files.push(view);
+      }
       const info: FileInfo = { id: file.id, fileName: file.text ? 'message.txt' : file.name, size: file.size, fileType: file.mime };
       if (file.text) info.preview = file.text;
       fileInfos[file.id] = info;
@@ -780,9 +800,12 @@ export class LocalSendService {
       const favorite = this.store.favorites.find((item: Peer) => item.ip === peer.ip && item.port === peer.port);
       if (favorite?.fingerprint && favorite.fingerprint !== peer.fingerprint) throw new Error('收藏设备的身份已改变，请核对后重新收藏');
       const payload: PrepareRequest = { info: this.info(), files: fileInfos };
-      let legacy = peer.version === '1.0';
+      let legacy = resumed ? resumed.legacy : peer.version === '1.0';
       let preparePath = legacy ? '/api/localsend/v1/send-request' : '/api/localsend/v2/prepare-upload';
-      let response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
+      let response = new HttpReply();
+      if (resumed?.accepted) {
+        response.status = 200; response.body = JSON.stringify(legacy ? resumed.accepted.files : resumed.accepted);
+      } else response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
       if (response.status === 404 && !legacy) {
         legacy = true; preparePath = '/api/localsend/v1/send-request';
         response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
@@ -811,6 +834,13 @@ export class LocalSendService {
         }
         const prepared: PrepareReply = legacy ? { sessionId: 'legacy', files: JSON.parse(response.body) as Record<string, string> } : JSON.parse(response.body) as PrepareReply;
         if (!prepared.sessionId || !prepared.files) throw new Error('设备返回了无效传输会话');
+        for (const entry of this.sendSessions.entries()) {
+          if (entry[0] !== transfer.id && !this.sending.has(entry[0]) && samePeer(entry[1].peer, peer)) {
+            const old = this.retryContexts.get(entry[0]); if (old) old.accepted = undefined;
+            this.sendSessions.delete(entry[0]);
+          }
+        }
+        context.accepted = prepared; context.legacy = legacy;
         // Freeze the accepted subset before publishing progress, as Flutter does.
         for (const view of transfer.files) {
           view.selected = !!prepared.files[view.id];
@@ -822,7 +852,7 @@ export class LocalSendService {
           cancellation.check(); const view = transfer.files.find((item: TransferFile) => item.id === file.id)!;
           const token = prepared.files[file.id];
           if (!token) { view.status = 'skipped'; this.store.updateTransfer(transfer); continue; }
-          view.status = 'transferring'; this.store.updateTransfer(transfer);
+          view.status = 'transferring'; view.error = ''; view.transferred = 0; this.store.updateTransfer(transfer);
           await this.store.updateOutgoingHistory(transfer, files);
           cancellation.check();
           let lastUpdate = 0;
@@ -864,6 +894,7 @@ export class LocalSendService {
       if (failed) this.store.log(`发送：${transfer.error}`);
       else this.store.notice = `已发送到 ${peer.alias}`;
     } catch (e) {
+      context.accepted = undefined;
       const remote = this.sendSessions.get(transfer.id);
       if (remote && !cancellation.cancelled) this.notifyCancel(remote.peer, remote.remoteId, remote.legacy);
       transfer.status = cancellation.cancelled ? 'cancelled' : declined ? 'declined' : 'error'; transfer.error = (e as Error).message; transfer.finished = Date.now();
@@ -876,7 +907,9 @@ export class LocalSendService {
       }
       this.store.log(`发送：${transfer.error}`);
     } finally {
-      this.sending.delete(transfer.id); this.sendSessions.delete(transfer.id); this.store.updateTransfer(transfer);
+      this.sending.delete(transfer.id);
+      if (transfer.status !== 'error' || !context.accepted) { context.accepted = undefined; this.sendSessions.delete(transfer.id); }
+      this.store.updateTransfer(transfer);
       await this.store.updateOutgoingHistory(transfer, files, false, declined);
     }
     return transfer.id;
@@ -930,6 +963,10 @@ export class LocalSendService {
     if (!files.length) return;
     previous.retrying = true; this.store.updateTransfer(previous);
     try {
+      if (context.accepted && previous.status === 'error') {
+        await this.send(context.peer, files, context.keepSelection, id);
+        return;
+      }
       const next = await this.send(context.peer, files, context.keepSelection);
       if (next) {
         for (const file of previous.files) { if (incomplete.includes(file.id)) file.retryTransferId = next; }
@@ -939,9 +976,10 @@ export class LocalSendService {
       }
     }
     finally {
-      previous.retrying = false;
+      const current = this.store.transfers.find((transfer: TransferView) => transfer.id === id);
+      if (current) current.retrying = false;
       // Do not resurrect an old row evicted by the bounded transfer list.
-      if (this.store.transfers.some((transfer: TransferView) => transfer.id === id)) this.store.updateTransfer(previous);
+      if (current) this.store.updateTransfer(current);
     }
   }
 }
