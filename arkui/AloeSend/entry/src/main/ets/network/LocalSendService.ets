@@ -759,6 +759,7 @@ export class LocalSendService {
         for (const file of transfer.files) {
           const source = files.find((item: ShareFile) => item.id === file.id)!;
           file.status = source.text ? 'complete' : 'skipped'; file.transferred = source.text ? file.size : 0;
+          file.selected = file.status !== 'skipped';
         }
       } else {
         if (response.status !== 200) {
@@ -767,6 +768,11 @@ export class LocalSendService {
         }
         const prepared: PrepareReply = legacy ? { sessionId: 'legacy', files: JSON.parse(response.body) as Record<string, string> } : JSON.parse(response.body) as PrepareReply;
         if (!prepared.sessionId || !prepared.files) throw new Error('设备返回了无效传输会话');
+        // Freeze the accepted subset before publishing progress, as Flutter does.
+        for (const view of transfer.files) {
+          view.selected = !!prepared.files[view.id];
+          if (!view.selected) view.status = 'skipped';
+        }
         this.sendSessions.set(transfer.id, new SendSessionRef(peer, prepared.sessionId, legacy));
         transfer.status = 'transferring'; this.store.updateTransfer(transfer);
         for (const file of files) {

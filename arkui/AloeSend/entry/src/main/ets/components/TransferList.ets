@@ -2,6 +2,7 @@ import { AppStore, TransferView, TransferFile, HistoryEntry, formatSize } from '
 import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { AppIcon } from './AppIcon';
+import { transferTotal, transferredBytes, remainingSeconds } from '../model/TransferMetrics';
 
 @Component
 export struct TransferList {
@@ -76,8 +77,8 @@ export struct TransferList {
     return this.store.t('传输未完成');
   }
 
-  total(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + (file.selected ? file.size : 0), 0); }
-  done(transfer: TransferView): number { return transfer.files.reduce((sum: number, file: TransferFile) => sum + file.transferred, 0); }
+  total(transfer: TransferView): number { return transferTotal(transfer); }
+  done(transfer: TransferView): number { return transferredBytes(transfer); }
   percent(transfer: TransferView): number {
     if (transfer.status === 'complete') return 100;
     return Math.max(0, Math.min(100, this.done(transfer) * 100 / Math.max(1, this.total(transfer))));
@@ -91,7 +92,7 @@ export struct TransferList {
   rate(transfer: TransferView): string {
     const seconds = Math.max(1, ((transfer.finished || Date.now()) - (transfer.activeStarted || transfer.started)) / 1000);
     const speed = this.done(transfer) / seconds;
-    const remaining = speed > 0 ? Math.ceil((this.total(transfer) - this.done(transfer)) / speed) : 0;
+    const remaining = remainingSeconds(transfer, speed);
     return `${formatSize(Math.round(speed))}/s${remaining > 0 ? this.store.tf(' · 剩余 {0}', [`${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`]) : ''}`;
   }
 
