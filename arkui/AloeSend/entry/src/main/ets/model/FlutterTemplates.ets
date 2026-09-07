@@ -22,6 +22,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "افتح هذا الرابط في المتصفح:",
         "other": "افتح أحد هذه الروابط في المتصفح:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "الطلبات المعلقة: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "az": {
@@ -44,6 +64,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Open this link in your browser:",
         "other": "Open one of these links in your browser:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pending requests: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -68,6 +108,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Отворете тази връзка във вашия браузър:",
         "other": "Отворете една от тези връзки във вашия браузър:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Чакащи заявки: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "bn": {
@@ -90,6 +150,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "ব্রাউজারে এই লিঙ্কটি খুলুন:",
         "other": "ব্রাউজারে এই লিঙ্কগুলির একটি খুলুন:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "রিকুয়েস্ট অপেক্ষারত: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -114,6 +194,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Obrir l'enllaç al navegador:",
         "other": "Obrir un d'aquests enllaços al navegador:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Peticions pendents: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "cs": {
@@ -136,6 +236,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Otevřete tento odkaz v prohlížeči:",
         "other": "Otevřete v prohlížeči jeden z těchto odkazů:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Čekající žádosti: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -160,6 +280,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Åben dette link i browseren:",
         "other": "Åben et af disse links i browseren:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Ventende forespørgsler: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "de": {
@@ -182,6 +322,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Öffne diesen Link im Browser:",
         "other": "Öffne einer dieser Links im Browser:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Offene Anfragen: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -206,6 +366,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Άνοιγμα αυτού του συνδέσμου στον φυλλομετρητή:",
         "other": "Άνοιγμα ενός από αυτούς τους συνδέσμους στον φυλλομετρητή:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Αναμονή αιτημάτων: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "en": {
@@ -228,6 +408,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Open this link in your browser:",
         "other": "Open one of these links in your browser:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pending requests: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -252,6 +452,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Open this link in your browser:",
         "other": "Open one of these links in your browser:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pending requests: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "es-ES": {
@@ -274,6 +494,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Abre este enlace en el navegador:",
         "other": "Abre uno de estos enlaces en el navegador:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Solicitudes pendientes: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -298,6 +538,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Ava see link oma veebibrauseris:",
         "other": "Ava üks neist linkidest oma veebibrauseris:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Ootel päringuid: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "eu": {
@@ -320,6 +580,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Ireki lotura nabigatzailean:",
         "other": "Ireki hauetako lotura bat nabigatzailean:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Eskerak: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -344,6 +624,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "باز کردن لینک در مرورگر:",
         "other": "باز کردن لینک‌ها در مرورگر:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "درخواست‌های در حال انتظار: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "fi": {
@@ -366,6 +666,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Avaa tämä linkki selaimessasi:",
         "other": "Avaa jokin näistä linkeistä selaimessasi:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Odottavat pyynnöt: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -390,6 +710,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Buksan ang link na ito sa browser:",
         "other": "Buksan ang isa sa mga link na ito sa browser:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Mga naka-pending na request: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "fr": {
@@ -412,6 +752,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Ouvrir ce lien dans le navigateur :",
         "other": "Ouvrir un des liens suivants dans le navigateur :"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Requêtes en attente : \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -436,6 +796,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Open this link in your browser:",
         "other": "Open one of these links in your browser:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pending requests: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "gu": {
@@ -458,6 +838,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "તમારા બ્રાઉઝરમાં આ લિંક ખોલો:",
         "other": "તમારા બ્રાઉઝરમાં આમાંથી કોઈ એક લિંક ખોલો:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "બાકી વિનંતિઓ: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -482,6 +882,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "פתח את הקישור בדפדפן:",
         "other": "פתח את אחד מהקישורים האלו בדפדפן:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "בקשות בהמתנה: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "hi": {
@@ -504,6 +924,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "अपने ब्राउज़र में इस लिंक को खोलें:",
         "other": "अपने ब्राउज़र में इन लिंक में से एक को खोलें:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "लंबित अनुरोध: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -528,6 +968,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Nyissa meg ezt a hivatkozást böngészőben:",
         "other": "Nyissa meg a linkek egyikét a böngészőben:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Függőben lévő kérések: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "id": {
@@ -550,6 +1010,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Buka tautan ini di peramban:",
         "other": "Buka salah satu tautan ini di peramban:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Banyaknya permintaan yang tertunda: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -574,6 +1054,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Apri questo link nel browser:",
         "other": "Apri uno di questi link nel browser:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Richieste in sospeso: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "ja": {
@@ -596,6 +1096,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "このリンクをブラウザーで開いてください:",
         "other": "これらのリンクのいずれかをブラウザーで開いてください:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "保留中のリクエスト数: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -620,6 +1140,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "បើកតំណនេះនៅក្នុងកម្មវិធី browser:",
         "other": "បើកតំណមួយក្នុងចំណោមតំណភ្ជាប់ទាំងនេះក្នុងកម្មវិធី browser:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "សំណើដែលកំពុងរង់ចាំ: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "ko": {
@@ -642,6 +1182,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "해당 링크를 브라우저에서 여세요:",
         "other": "해당 링크들 중 하나를 브라우저에서 여세요:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "대기 중인 요청: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -666,6 +1226,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Open this link in your browser:",
         "other": "Open one of these links in your browser:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pending requests: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "mn": {
@@ -688,6 +1268,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Энэ холбоосыг browser дээрээ нээнэ үү:",
         "other": "Уг линкийн аль нэгрүү орно уу:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Хүлээгдэж буй хүсэлт: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -712,6 +1312,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Buka pautan ini dalam pelayar anda:",
         "other": "Buka salah satu pautan ini dalam pelayar anda:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Permintaan menunggu: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "ne": {
@@ -734,6 +1354,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "यो लिङ्क आफ्नो ब्राउजरमा खोल्नुहोस्:",
         "other": "आफ्नो ब्राउजरमा यी मध्ये एउटा लिङ्क खोल्नुहोस्:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "लंबित अनुरोध: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -758,6 +1398,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Open deze link in je browser:",
         "other": "Open een van deze links in je browser:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Openstaande verzoeken: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "pl": {
@@ -780,6 +1440,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Otwórz ten link w przeglądarce:",
         "other": "Otwórz jeden z tych linków w przeglądarce:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Oczekujące żądania: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -804,6 +1484,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Abra este link no navegador:",
         "other": "Abra um desses links no navegador:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Solicitações pendentes: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "pt-PT": {
@@ -826,6 +1526,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Abrir este link no navegador:",
         "other": "Abrir um destes links no navegador:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pedidos pendentes: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -850,6 +1570,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Deschide acest link în browserul tău:",
         "other": "Deschide unul dintre aceste linkuri în browserul tău:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Cereri în așteptare: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "ru": {
@@ -872,6 +1612,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Откройте эту ссылку в браузере:",
         "other": "Откройте одну из этих ссылок в браузере:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Ожидающие запросы: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -896,6 +1656,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "මෙම ලින්ක් (Link) එක ඔබේ බ්‍රවුසරය (Browser) මගින් විවෘත කරන්න:",
         "other": "මෙම ලින්ක් (Link) වලින් එකක් ඔබේ බ්‍රවුසරය (Browser) මගින් විවෘත කරන්න:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Pending වන ඉල්ලීම්: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "sk": {
@@ -918,6 +1698,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Otvorte tento odkaz vo svojom prehliadači:",
         "other": "Otvorte jeden z týchto odkazov vo svojom prehliadači:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Nespracované žiadosti: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -942,6 +1742,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Odprite to povezavo v svojem brskalniku:",
         "other": "Odprite eno od teh povezav v svojem brskalniku:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Čakajoče zahteve: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "sr": {
@@ -964,6 +1784,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Otvorite ovaj link u vašem pregledaču:",
         "other": "Otvorite jedan od ovih linkova u vašem pregledaču:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Zahtevi na čekanju: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -988,6 +1828,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Отворите овај линк у вашем прегледачу:",
         "other": "Отворите један од ових линкова у вашем прегледачу:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Захтеви на чекању: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "sv": {
@@ -1010,6 +1870,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Öppna denna länk i webbläsaren:",
         "other": "Öppna en av dessa länkar i webbläsaren:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Väntande förfrågningar: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -1034,6 +1914,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "உங்கள் உலாவியில் இந்த இணைப்பை திறக்கவும்:",
         "other": "உங்கள் உலாவியில் இந்த இணைப்புகளில் ஒன்றை திறக்கவும்:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "நிலுவை கோரிக்கைகள்: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "th": {
@@ -1056,6 +1956,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "เปิดลิงค์นี้ในเบราว์เซอร์:",
         "other": "เปิดลิงก์ใดลิงก์หนึ่งในเบราว์เซอร์:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "คำขอที่รอดำเนินการ: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -1080,6 +2000,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "Bu bağlantıyı tarayıcıda açın:",
         "other": "Bu bağlantılardan birini tarayıcıda açın:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Bekleyen istekler: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "uk": {
@@ -1102,6 +2042,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Відкрийте це посилання в браузері:",
         "other": "Відкрийте одне з цих посилань в браузері:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Запити, що очікують на розгляд: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -1126,6 +2086,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "اس لنک کو براوزر میں کھولیں:",
         "other": "ان میں سے کسی ایک لنک کو براوزر میں کھولیں:"
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "زیر التواء درخواستیں: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "vi": {
@@ -1148,6 +2128,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "Mở liên kết trong trình duyệt:",
         "other": "Mở một trong các liên kết với trình duyệt:"
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "Yêu cầu chờ: \u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   },
@@ -1172,6 +2172,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "在浏览器中打开链接：",
         "other": "在浏览器中打开其中一个链接："
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "待处理请求：\u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 个文件"
+      }
     }
   },
   "zh-HK": {
@@ -1195,6 +2215,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
         "one": "喺瀏覽器開啟以下連結：",
         "other": "喺瀏覽器開啟以下任何一個連結："
       }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "仲有 \u0001n\u0002 個請求未處理"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
+      }
     }
   },
   "zh-TW": {
@@ -1217,6 +2257,26 @@ export const flutterTemplates: Record<string, Record<string, FlutterTemplate>> =
       "forms": {
         "one": "在瀏覽器開啟此連結：",
         "other": "在瀏覽器中開啟其中一個連結："
+      }
+    },
+    "webSharePage.pendingRequests": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "待處理的要求：\u0001n\u0002"
+      }
+    },
+    "webSharePage.filesCount": {
+      "parameters": [
+        "n"
+      ],
+      "plural": "",
+      "locale": "",
+      "forms": {
+        "other": "\u0001n\u0002 file(s)"
       }
     }
   }

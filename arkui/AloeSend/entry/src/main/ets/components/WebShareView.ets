@@ -46,7 +46,7 @@ export struct WebShareView {
         }.width('100%').padding({ top: 24, bottom: 24 })
       }.width('100%').layoutWeight(1)
       if (this.store.webRequests.length > 0) {
-        Button(this.store.tf('{0} 个浏览器下载请求 · 点击查看', [String(this.store.webRequests.length)]))
+        Button(flutterCount('webSharePage.pendingRequests', this.store.settings.language, String(this.store.webRequests.length)))
           .width('100%').height(48).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).onClick(() => this.presenting = false)
       }
       Button(this.store.t('复制链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.webUrl))
@@ -92,6 +92,10 @@ export struct WebShareView {
           Button(this.store.t('停止分享')).width('100%').height(46).backgroundColor(this.store.controlSurface).fontColor(this.store.dangerText)
             .onClick(() => webShare.stop())
         }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(28)
+        if (this.store.webRequests.length > 0) {
+          Text(flutterCount('webSharePage.pendingRequests', this.store.settings.language, String(this.store.webRequests.length)))
+            .fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
+        }
         ForEach(this.store.webRequests, (request: WebAccessRequest) => {
           Column({ space: 12 }) {
             Text(this.store.tf('{0} 请求下载', [request.ip])).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
@@ -102,6 +106,8 @@ export struct WebShareView {
             }.width('100%')
           }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(24)
         }, (request: WebAccessRequest) => request.id)
+        Text(flutterCount('webSharePage.filesCount', this.store.settings.language, String(this.store.webFiles.length)))
+          .fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
         Search({ value: this.fileQuery, placeholder: this.store.t('搜索共享文件') })
           .width('100%').onChange((value: string) => { this.fileQuery = value; this.fileLimit = 30; })
           .accessibilityText(this.store.t('搜索共享文件'))
