@@ -37,10 +37,14 @@ const context = vm.createContext({
   }
 });
 const html = webPage('Device', [], 'en');
+const pinInput = html.match(/<input id="pin"[^>]*>/)[0];
+assert.ok(!/inputmode="numeric"|maxlength=/.test(pinInput), 'browser PIN must allow the same text as the native settings');
 vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], context);
 (async () => {
   const first = new File(['abcdefghij'], 'first.txt'); const skipped = new File(['second'], 'second.txt');
+  el('pin').value = 'Long-PIN + 中文 123456';
   context.selected([first, skipped]); await context.send([first, skipped], '');
+  assert.equal(new URL(requests[0][0], 'http://localhost').searchParams.get('pin'), el('pin').value);
   assert.equal(observedProgress, 50, 'progress denominator must use accepted files only');
   assert.equal(el('progress').value, 100);
   assert.equal(el('selected').textContent, 'Selected 1 items', 'skipped file remains in selection');
