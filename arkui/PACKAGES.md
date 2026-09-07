@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000064 | [M64-selection-flow](artifacts/AloeSend-2000064-M64-selection-flow-unsigned.hap) | 90cd1a3b | 06FF2BDD839AC6D95DED97A2DC127317B13EB4E2B88CA0A8A8C37C941F8D8D82 |
 | 2000063 | [M63-favorite-names](artifacts/AloeSend-2000063-M63-favorite-names-unsigned.hap) | 532d4f40 | 00C4EA6901C58F6527AEFA21918D0578EEDFB1E942C9BCD771BB403DCADBB4EE |
 | 2000062 | [M62-favorite-address](artifacts/AloeSend-2000062-M62-favorite-address-unsigned.hap) | 1ef0a0b0 | 1E37DED8F6B0B1153091B1E5BEA6773F80C12ECE9B6F8AAE47F26724BFA0ADB4 |
 | 2000061 | [M61-rtl-navigation](artifacts/AloeSend-2000061-M61-rtl-navigation-unsigned.hap) | 0339a20e | FBA7A8E6788822EA313EE800198FD44CB29191CEEA673B275046D046D9371692 |
