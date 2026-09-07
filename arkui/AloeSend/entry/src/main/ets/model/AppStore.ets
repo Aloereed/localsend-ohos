@@ -630,16 +630,19 @@ export class AppStore {
 
   removeFile(id: string): void { this.files = this.files.filter((file: ShareFile) => file.id !== id); }
 
-  renameFile(id: string, name: string): void {
+  renameFile(id: string, name: string): boolean {
+    const source = this.files.find((file: ShareFile) => file.id === id);
+    if (!source) return false;
     const trimmed = name.trim();
-    if (!trimmed || /[\\/:*?"<>|]/.test(trimmed) || trimmed === '.' || trimmed === '..') {
-      this.error = '请输入不包含路径分隔符的文件名'; return;
+    if (!trimmed || /[\\/:*?"<>|\x00-\x1f]/.test(trimmed) || trimmed === '.' || trimmed === '..') {
+      this.error = '请输入不包含路径分隔符的文件名'; return false;
     }
     this.files = this.files.map((file: ShareFile) => {
       if (file.id !== id) return file;
       const renamed = JSON.parse(JSON.stringify(file)) as ShareFile;
-      renamed.name = trimmed; return renamed;
+      renamed.name = file.name.slice(0, file.name.lastIndexOf('/') + 1) + trimmed; return renamed;
     });
+    this.error = ''; return true;
   }
 
   get networkPending(): boolean {

@@ -125,8 +125,10 @@ export struct SendView {
       Text(this.store.t('重命名发送文件')).fontSize(23).fontWeight(FontWeight.Medium)
       Text(this.store.t('只改变接收方看到的名称，不修改原文件。')).fontColor($r('sys.color.font_secondary'))
       TextInput({ text: this.renameText }).onChange((value: string) => this.renameText = value)
+        .defaultFocus(true).enterKeyType(EnterKeyType.Done)
+        .onSubmit(() => { if (this.store.renameFile(this.renameId, this.renameText)) this.sheetVisible = false; })
       Button(this.store.t('保存')).width('100%').height(48).backgroundColor(this.store.accentFill)
-        .onClick(() => { this.store.renameFile(this.renameId, this.renameText); if (!this.store.error) this.sheetVisible = false; })
+        .onClick(() => { if (this.store.renameFile(this.renameId, this.renameText)) this.sheetVisible = false; })
     }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
@@ -176,7 +178,7 @@ export struct SendView {
             Text(file.name).fontSize(15).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
             Text(`${formatSize(file.size)} · ${file.text ? this.store.t('文字') : file.mime}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
           }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => {
-            if (!file.text) { this.store.error = ''; this.renameId = file.id; this.renameText = file.name; this.openSheet('rename'); }
+            if (!file.text) { this.store.error = ''; this.renameId = file.id; this.renameText = file.name.slice(file.name.lastIndexOf('/') + 1); this.openSheet('rename'); }
             else { this.textId = file.id; this.text = file.text; this.openSheet('text'); }
           })
           if (file.uri && !file.text) {
