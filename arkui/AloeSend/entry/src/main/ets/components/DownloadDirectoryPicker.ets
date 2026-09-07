@@ -15,6 +15,7 @@ export struct DownloadDirectoryPicker {
   @State query: string = '';
   onChoose: (path: string) => void = () => {};
   private generation: number = 0;
+  private folderScroller: Scroller = new Scroller();
 
   aboutToAppear(): void {
     const root = this.store.downloadDirectory;
@@ -34,7 +35,10 @@ export struct DownloadDirectoryPicker {
     this.path = path; this.loading = true; this.error = ''; this.folders = []; this.limit = 50; this.query = '';
     try {
       const folders = await downloadSubfolders(root, path);
-      if (generation === this.generation) this.folders = folders;
+      if (generation === this.generation) {
+        this.folders = folders;
+        this.folderScroller.scrollTo({ xOffset: 0, yOffset: 0 });
+      }
     } catch (error) { if (generation === this.generation) this.error = (error as Error).message; }
     finally { if (generation === this.generation) this.loading = false; }
   }
@@ -50,9 +54,12 @@ export struct DownloadDirectoryPicker {
       }
       Search({ value: this.query, placeholder: this.store.t('搜索当前目录的文件夹') })
         .width('100%').enabled(!this.loading && !this.error)
-        .onChange((value: string) => { this.query = value; this.limit = 50; })
+        .onChange((value: string) => {
+          this.query = value; this.limit = 50;
+          this.folderScroller.scrollTo({ xOffset: 0, yOffset: 0 });
+        })
         .accessibilityText(this.store.t('搜索当前目录的文件夹'))
-      Scroll() {
+      Scroll(this.folderScroller) {
         Column({ space: 10 }) {
           if (this.loading) { LoadingProgress().width(36).height(36) }
           if (this.error) {

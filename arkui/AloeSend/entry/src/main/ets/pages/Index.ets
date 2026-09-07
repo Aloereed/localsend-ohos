@@ -405,6 +405,6 @@ struct Index {
       .direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
       .width('100%').height('100%')
       .onAreaChange((oldArea: Area, newArea: Area) => this.windowWidth = Number(newArea.width))
-      .bindSheet($$this.directoryVisible, this.directorySheet(), { height: SheetSize.LARGE, showClose: true, onDisappear: () => this.closeDirectory('') })
+      .bindSheet($$this.directoryVisible, this.directorySheet(), { height: SheetSize.LARGE, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY, onDisappear: () => this.closeDirectory('') })
   }
 }
