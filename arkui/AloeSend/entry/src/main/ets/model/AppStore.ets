@@ -271,7 +271,43 @@ export class AppStore {
       const imported = await importFlutterData(context, this.storage);
       this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
       const saved = await this.storage.get('settings', '') as string;
-      if (saved) this.settings = JSON.parse(saved) as AppSettings;
+      if (saved) {
+        const previous = JSON.parse(saved) as AppSettings;
+        // Before presets existed, the stored accent was the user's theme.
+        if (!previous.themePreset) previous.themePreset = 'custom';
+        const merged = new AppSettings();
+        if (previous.alias !== undefined) merged.alias = previous.alias;
+        if (previous.fingerprint !== undefined) merged.fingerprint = previous.fingerprint;
+        if (previous.theme !== undefined) merged.theme = previous.theme;
+        if (previous.language !== undefined) merged.language = previous.language;
+        if (previous.accent !== undefined) merged.accent = previous.accent;
+        if (previous.themePreset !== undefined) merged.themePreset = previous.themePreset;
+        if (previous.quickSave !== undefined) merged.quickSave = previous.quickSave;
+        if (previous.favoriteQuickSave !== undefined) merged.favoriteQuickSave = previous.favoriteQuickSave;
+        if (previous.saveHistory !== undefined) merged.saveHistory = previous.saveHistory;
+        if (previous.autoFinish !== undefined) merged.autoFinish = previous.autoFinish;
+        if (previous.openMessagesOnReceive !== undefined) merged.openMessagesOnReceive = previous.openMessagesOnReceive;
+        if (previous.offerGallerySave !== undefined) merged.offerGallerySave = previous.offerGallerySave;
+        if (previous.animations !== undefined) merged.animations = previous.animations;
+        if (previous.reduceEffects !== undefined) merged.reduceEffects = previous.reduceEffects;
+        if (previous.pureBlack !== undefined) merged.pureBlack = previous.pureBlack;
+        if (previous.visible !== undefined) merged.visible = previous.visible;
+        if (previous.pin !== undefined) merged.pin = previous.pin;
+        if (previous.port !== undefined) merged.port = previous.port;
+        if (previous.multicast !== undefined) merged.multicast = previous.multicast;
+        if (previous.destination !== undefined) merged.destination = previous.destination;
+        if (previous.destinationMode !== undefined) merged.destinationMode = previous.destinationMode;
+        if (previous.deviceModel !== undefined) merged.deviceModel = previous.deviceModel;
+        if (previous.deviceType !== undefined) merged.deviceType = previous.deviceType;
+        if (previous.sendMode !== undefined) merged.sendMode = previous.sendMode;
+        if (previous.advanced !== undefined) merged.advanced = previous.advanced;
+        if (previous.https !== undefined) merged.https = previous.https;
+        if (previous.discoveryTimeout !== undefined) merged.discoveryTimeout = previous.discoveryTimeout;
+        if (previous.networkFilter !== undefined) merged.networkFilter = previous.networkFilter;
+        if (previous.networkPatterns !== undefined) merged.networkPatterns = previous.networkPatterns;
+        if (previous.webAutoAccept !== undefined) merged.webAutoAccept = previous.webAutoAccept;
+        this.settings = merged;
+      }
       // Settings written by earlier builds bypassed the current form validation.
       // Recover only invalid network fields; retain identity and user choices.
       const defaults = new AppSettings();
@@ -1043,3 +1079,4 @@ export class AppStore {
 }
 
 export const appStore: AppStore = new AppStore();
+

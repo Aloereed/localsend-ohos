@@ -33,5 +33,20 @@ const { AppStore, AppSettings } = load('model/AppStore');
     assert.equal(settings.port, port); assert.equal(settings.discoveryTimeout, timeout);
     assert.equal(settings.multicast, '239.1.2.3');
   }
+  saved = JSON.stringify({ alias: 'Legacy', fingerprint: 'legacy-identity', accent: '#123456', quickSave: true });
+  const legacy = new AppStore();
+  await legacy.init({ filesDir: 'unused', getApplicationContext: () => ({ setColorMode() {} }) });
+  assert.equal(legacy.ready, true, legacy.initializationError);
+  assert.equal(legacy.settings.alias, 'Legacy');
+  assert.equal(legacy.settings.fingerprint, 'legacy-identity');
+  assert.equal(legacy.settings.quickSave, true);
+  assert.equal(legacy.settings.accent, '#123456');
+  assert.equal(legacy.settings.themePreset, 'custom', 'pre-preset colors must survive an upgrade');
+  for (const key of ['saveHistory', 'autoFinish', 'animations', 'https', 'visible', 'sendMode', 'language']) {
+    assert.equal(legacy.settings[key], defaults[key], `missing legacy field ${key} uses its current default`);
+  }
+  const explicit = await read({ animations: false, autoFinish: false, saveHistory: false, themePreset: 'oled' });
+  assert.equal(explicit.animations, false); assert.equal(explicit.autoFinish, false);
+  assert.equal(explicit.saveHistory, false); assert.equal(explicit.themePreset, 'oled');
   console.log('PASS saved network recovery, valid boundaries, canonical multicast and preserved user identity');
 })().catch(error => { console.error(error); process.exitCode = 1; });

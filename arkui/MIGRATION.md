@@ -24,7 +24,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence through M111 (device checks are handed back to the user and do not authorize device access):
+implementation evidence through M112 (device checks are handed back to the user and do not authorize device access):
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |
@@ -70,4 +70,5 @@ See `README.md` for morning checks and `PACKAGES.md` for verified archived packa
 Record commands, outcomes, known limitations and package hashes in `milestones/`.
 Unsigned HAPs cannot be runtime-installed on a normal device without signing. Build success
 does not prove device runtime behavior. Keep that distinction explicit in milestone notes.
+
 
