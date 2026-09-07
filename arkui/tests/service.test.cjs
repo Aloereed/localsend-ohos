@@ -157,11 +157,22 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
     });
     await check('checksum mismatch removes partial output and never records success', async () => {
       const count = store.history.length;
-      const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('bad-hash.bin', data, { hash: '0'.repeat(64) }))).json();
+      const payload = offer('bad-hash.bin', data, { hash: '0'.repeat(64) });
+      payload.files.good = { id: 'good', fileName: 'before-bad-hash.bin', size: data.length, fileType: 'application/octet-stream' };
+      payload.files.later = { ...payload.files.good, id: 'later', fileName: 'after-bad-hash.bin' };
+      const session = (await call(port, '/api/localsend/v2/prepare-upload', payload)).json();
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=good&token=${session.files.good}`, data)).status, 200);
       const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
-      assert.equal(result.status, 400); assert.equal(store.history.length, count + 1);
-      const failed = store.history.find(entry => entry.transferId === session.sessionId);
+      assert.equal(result.status, 400); assert.equal(store.history.length, count + 3);
+      const failed = store.history.find(entry => entry.id === `receive:${session.sessionId}:f1`);
       assert.equal(failed.status, 'error'); assert.equal(failed.path, ''); assert.match(failed.error, /校验和/);
+      const later = store.history.find(entry => entry.id === `receive:${session.sessionId}:later`);
+      assert.equal(later.error, '任务已停止，此文件尚未开始传输'); assert.equal(later.path, '');
+      const good = store.history.find(entry => entry.id === `receive:${session.sessionId}:good`);
+      assert.equal(good.status, 'complete'); assert.equal(good.error, ''); assert.deepEqual(await fs.readFile(good.path), data);
+      const view = store.transfers.find(item => item.id === session.sessionId);
+      assert.match(view.files.find(file => file.id === 'f1').error, /校验和/);
+      assert.equal(view.files.find(file => file.id === 'later').error, later.error);
       await until(() => handles.size === 0);
       await assert.rejects(fs.access(path.join(work, 'received', session.sessionId, 'bad-hash.bin')));
       await assert.rejects(fs.access(path.join(work, 'received', session.sessionId, 'bad-hash.bin.part')));

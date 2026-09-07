@@ -177,6 +177,7 @@ class UploadSink implements BodySink {
     this.finished = true;
     // Release the session before asynchronous disk cleanup. A blocked write
     // must not keep the receive entry point busy or leave other files running.
+    if (!this.session.cancelled) this.view.error = this.channel.failureReason || '文件接收中断';
     this.service.failReceive(this.session, this.channel.failureReason || '文件接收中断', this.channel);
     await this.pendingWrite.catch(() => {});
     if (this.output) { await fs.close(this.output).catch(() => {}); this.output = undefined; }
@@ -657,8 +658,14 @@ export class LocalSendService {
     if (session.cancelled || session.view.status === 'complete' || session.view.status === 'declined') return;
     session.cancelled = true; session.tokens = {}; session.resolve(false);
     session.view.status = status; session.view.error = message; session.view.finished = Date.now();
+    const fileFailed = session.view.files.some((file: TransferFile) => !!file.error);
     for (const file of session.view.files) {
-      if (file.selected && (file.status === 'waiting' || file.status === 'transferring')) file.status = status;
+      if (file.selected && (file.status === 'waiting' || file.status === 'transferring')) {
+        if (!file.error) {
+          file.error = fileFailed ? (file.status === 'waiting' ? '任务已停止，此文件尚未开始传输' : '任务已停止，此文件接收未完成') : message;
+        }
+        file.status = status;
+      }
     }
     if (this.store.pendingReceive === session.id) this.store.pendingReceive = '';
     this.store.updateTransfer(session.view);

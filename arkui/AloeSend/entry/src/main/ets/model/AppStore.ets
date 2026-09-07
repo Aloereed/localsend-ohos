@@ -709,7 +709,7 @@ export class AppStore {
       }
       // Paths become available only after checksum verification and rename.
       entry.path = file.status === 'complete' ? file.path : '';
-      entry.error = ['error', 'cancelled', 'declined'].includes(entry.status) ? transfer.error : '';
+      entry.error = ['error', 'cancelled', 'declined'].includes(entry.status) ? (file.error || transfer.error) : '';
       updates.set(id, entry);
       if (!existing) { additions.push(entry); if (this.settings.saveHistory) this.persistentHistory.add(id); }
     }
