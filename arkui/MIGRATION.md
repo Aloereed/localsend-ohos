@@ -15,10 +15,11 @@ Do not sign or install packages without a new request. Never include signing cre
 
 ## Architecture
 
-ArkUI frontend and ArkTS application state/platform services. TCP/TLS client and server
-I/O plus UDP discovery use C++ sockets and mbedTLS as of M130; ArkTS retains LocalSend
-protocol state and OS interface enumeration. M131 removes INTERNET at the user's explicit
-request; permission-free device operation is not yet verified. Host tests forbid ArkTS socket construction.
+ArkUI frontend and ArkTS application state/platform services. M132 restores the
+pre-M130 network implementation: NetworkKit TCP/TLS clients, HTTP servers and UDP
+discovery; the existing C++ pull TCP / mbedTLS HTTPS receiver remains. INTERNET is
+restored at the user's explicit request. M131 UI and selection changes are preserved.
+Backup of the fully migrated state: codex/backup-arkui-cpp-20260908 (9b0a7a48).
 Keep networking separated from views so backend changes do not require UI rewrites.
 Use the existing bundle name; milestone version codes increase so newest can be installed
 first. Downgrade may require uninstalling and would remove app data; preserve exported data.
@@ -27,7 +28,7 @@ first. Downgrade may require uninstalling and would remove app data; preserve ex
 
 The checkboxes below are final acceptance, not merely source presence. They remain
 open until device verification and the remaining parity audit are complete. Current
-implementation evidence through M131 (device checks are handed back to the user and do not authorize device access):
+implementation evidence through M132 (device checks are handed back to the user and do not authorize device access):
 
 | Flutter flow | Native implementation | Evidence / remaining checks |
 | --- | --- | --- |

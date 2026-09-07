@@ -1,4 +1,4 @@
-import { NativeClient } from './NativeClient';
+import { socket } from '@kit.NetworkKit';
 import { util } from '@kit.ArkTS';
 import { Peer } from '../model/AppStore';
 import { HttpHead, HttpBodyDecoder, concatBytes, headerEnd, parseHttpHead } from './Protocol';
@@ -33,7 +33,8 @@ export async function request(peer: Peer, method: string, path: string, body: st
 
 export async function exchange(peer: Peer, method: string, path: string, size: number, produce: BodyProducer, token: Cancellation, timeoutMs: number = 120000): Promise<HttpReply> {
   token.check();
-  const client = new NativeClient();
+  const tcp = peer.protocol === 'https' ? undefined : socket.constructTCPSocketInstance();
+  const tls = peer.protocol === 'https' ? socket.constructTLSSocketInstance() : undefined;
   let finished = false;
   let headerBytes = new Uint8Array(0);
   let bodyBytes = new Uint8Array(0);
@@ -46,7 +47,8 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
     if (timeout !== -1) clearTimeout(timeout);
     for (const reject of pendingWrites) reject(new Error(token.cancelled ? token.reason : '连接已结束'));
     pendingWrites.clear();
-    client.close();
+    if (tcp) tcp.close().catch(() => {});
+    if (tls) tls.close().catch(() => {});
   };
   return new Promise<HttpReply>((resolve, reject) => {
     const fail = (error: Error): void => { if (!finished) { finished = true; close(); reject(error); } };
@@ -82,25 +84,41 @@ export async function exchange(peer: Peer, method: string, path: string, size: n
     token.close = () => fail(new Error(token.reason));
     const start = async (): Promise<void> => {
       touch();
-      client.onMessage = (bytes: Uint8Array) => consume(bytes);
-      client.onError = (error: Error) => fail(error);
-      client.onClose = () => { if (!finished) fail(new Error('设备提前关闭了连接')); };
-      await client.connect(peer.ip, peer.port, peer.protocol === 'https');
+      const address: socket.NetAddress = { address: peer.ip, port: peer.port, family: peer.ip.includes(':') ? 2 : 1 };
+      const local: socket.NetAddress = { address: peer.ip.includes(':') ? '::' : '0.0.0.0', port: 0, family: address.family };
+      // TLSSocket event subscription requires a successful bind on HarmonyOS.
+      // Explicit ephemeral binding also makes IPv4/IPv6 selection unambiguous.
+      if (tcp) await tcp.bind(local);
+      if (tls) await tls.bind(local);
       if (finished) { close(); return; }
-      if (peer.protocol === 'https') {
-        // Self-signed certificates are pinned before application bytes are sent
-        // or response bytes are accepted, including handshake-coalesced data.
-        fingerprint = await sha256(client.certificate());
+      token.check();
+      if (tcp) {
+        tcp.on('message', (message: socket.SocketMessageInfo) => consume(new Uint8Array(message.message)));
+        tcp.on('error', (error) => fail(new Error(`网络错误 ${error.code}`)));
+        tcp.on('close', () => { if (!finished) fail(new Error('设备提前关闭了连接')); });
+      }
+      if (tls) {
+        tls.on('message', (message: socket.SocketMessageInfo) => consume(new Uint8Array(message.message)));
+        tls.on('error', (error) => fail(new Error(`TLS 网络错误 ${error.code}`)));
+        tls.on('close', () => { if (!finished) fail(new Error('设备提前关闭了连接')); });
+      }
+      if (tcp) await tcp.connect({ address: address, timeout: 5000 });
+      if (tls) {
+        // LocalSend uses self-signed certificates. Check the advertised/persisted
+        // fingerprint explicitly before sending any application request bytes.
+        await tls.connect({ address: address, secureOptions: {}, skipRemoteValidation: true });
+        const cert = await tls.getRemoteCertificate();
+        let raw = cert.data;
+        if (raw.length && raw[0] === 45) raw = new util.Base64Helper().decodeSync(decodeText(raw).replace(/-----[^-]+-----/g, '').replace(/\s/g, ''));
+        fingerprint = await sha256(raw);
         if (peer.fingerprint && fingerprint !== peer.fingerprint.toLowerCase().replace(/:/g, '')) throw new PeerIdentityError('设备证书指纹已改变，请确认设备身份后重新添加');
       }
-      if (finished) { close(); return; }
-      client.startReading();
       token.check();
       const write: ChunkWriter = async (bytes: Uint8Array): Promise<void> => {
         token.check(); if (finished) throw new Error('连接已结束'); touch();
         await new Promise<void>((resolve, reject) => {
           pendingWrites.add(reject);
-          const sent = client.send(bytes);
+          const sent = tcp ? tcp.send({ data: bytes.buffer as ArrayBuffer }) : tls!.send(bytes.buffer as ArrayBuffer);
           sent.then(() => { pendingWrites.delete(reject); resolve(); }, (error: Error) => { pendingWrites.delete(reject); reject(error); });
         });
       };

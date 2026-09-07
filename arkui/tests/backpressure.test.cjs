@@ -3,7 +3,6 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const net = require('node:net');
 const https = require('node:https');
-const http = require('node:http');
 const crypto = require('node:crypto');
 const { load, mocks, handles } = require('./host-runtime.cjs');
 if (process.env.ALOE_NETWORK_BASELINE) load('network/SecureServer').SecureServer = load(process.env.ALOE_NETWORK_BASELINE).SecureServer;
@@ -11,8 +10,6 @@ const { AppStore } = load('model/AppStore');
 const { LocalSendService } = load('network/LocalSendService');
 const { NativeConnection } = load('network/NativeServer');
 const work = path.join(__dirname, '../logs/backpressure-' + Date.now());
-const encrypted = process.env.ALOE_BACKPRESSURE_PROTOCOL !== 'http';
-const transport = encrypted ? https : http;
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function until(predicate, timeout = 3000) {
   const started = Date.now();
@@ -20,7 +17,7 @@ async function until(predicate, timeout = 3000) {
 }
 function request(port, route, data) {
   return new Promise((resolve, reject) => {
-    const req = transport.request({ host: '127.0.0.1', port, path: route, method: 'POST', rejectUnauthorized: false,
+    const req = https.request({ host: '127.0.0.1', port, path: route, method: 'POST', rejectUnauthorized: false,
       headers: { 'content-length': data.length } }, response => {
       const chunks = []; response.on('data', chunk => chunks.push(chunk));
       response.on('end', () => resolve({ status: response.statusCode, body: Buffer.concat(chunks).toString() }));
@@ -31,7 +28,7 @@ function request(port, route, data) {
 function streamUpload(port, route, block, count) {
   let req, produced = 0;
   const result = new Promise((resolve, reject) => {
-    req = transport.request({ host: '127.0.0.1', port, path: route, method: 'POST', rejectUnauthorized: false,
+    req = https.request({ host: '127.0.0.1', port, path: route, method: 'POST', rejectUnauthorized: false,
       headers: { 'content-length': block.length * count } }, response => {
       response.resume(); response.on('end', () => resolve(response.statusCode));
     });
@@ -60,7 +57,7 @@ function streamUpload(port, route, block, count) {
   const probe = net.createServer(); await new Promise(resolve => probe.listen(0, '127.0.0.1', resolve));
   const port = probe.address().port; await new Promise(resolve => probe.close(resolve));
   const store = new AppStore(); await store.init({ filesDir: work, getApplicationContext: () => ({ setColorMode() {} }) });
-  store.settings.port = port; store.settings.quickSave = true; store.settings.https = encrypted;
+  store.settings.port = port; store.settings.quickSave = true;
   const service = new LocalSendService(store); await service.start();
   const disk = mocks['@kit.CoreFileKit'].fileIo, write = disk.write;
   const enqueue = NativeConnection.prototype.enqueue; let peak = 0, waiting = false, release, upload;
@@ -98,7 +95,7 @@ function streamUpload(port, route, block, count) {
     for await (const bytes of require('node:fs').createReadStream(store.history[0].path)) actual.update(bytes);
     assert.equal(actual.digest('hex'), expected);
     await until(() => handles.size === 0);
-    console.log(`PASS ${mib} MiB real ${encrypted ? 'TLS' : 'HTTP'} receive after one-second disk stall and ${stalls} recurring ${stallMs} ms stalls; SHA-256 matches, peak queue ${peak} bytes, zero file handles`);
+    console.log(`PASS ${mib} MiB real TLS receive after one-second disk stall and ${stalls} recurring ${stallMs} ms stalls; SHA-256 matches, peak queue ${peak} bytes, zero file handles`);
   } finally {
     release(); upload?.close(); disk.write = write; NativeConnection.prototype.enqueue = enqueue; await service.stop();
   }

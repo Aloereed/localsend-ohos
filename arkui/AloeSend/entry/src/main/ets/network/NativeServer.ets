@@ -1,7 +1,6 @@
 import { socket } from '@kit.NetworkKit';
 import { HttpHead, HttpBodyDecoder, concatBytes, headerEnd, parseHttpHead } from './Protocol';
 import { encodeText } from './Transport';
-import { PullSocket } from './PullSocket';
 import { SecureConnection } from './SecureServer';
 
 export interface BodySink {
@@ -19,7 +18,7 @@ export class NativeConnection {
   failureReason: string = '';
   failureStatus: number = 400;
   transportInterrupted: boolean = false;
-  private tcp: PullSocket | undefined = undefined;
+  private tcp: socket.TCPSocketConnection | undefined = undefined;
   private tls: SecureConnection | undefined = undefined;
   private headBytes: Uint8Array = new Uint8Array(0);
   private decoder: HttpBodyDecoder | undefined = undefined;
@@ -38,16 +37,12 @@ export class NativeConnection {
 
   constructor(handler: RequestHandler) { this.handler = handler; }
 
-  attachTcp(tcp: PullSocket): void {
+  attachTcp(tcp: socket.TCPSocketConnection): void {
     if (this.closed) { tcp.close().catch(() => {}); return; }
-    this.tcp = tcp; this.ip = tcp.ip;
-    tcp.onMessage((info: socket.SocketMessageInfo) => {
-      this.ip = info.remoteInfo.address;
-      this.enqueue(new Uint8Array(info.message)).then(() => tcp.resume()).catch((error: Error) => this.fail(error));
-    });
-    tcp.onClose(() => this.disconnected());
-    tcp.onError((error: Error) => this.fail(error));
-    tcp.resume();
+    this.tcp = tcp;
+    tcp.on('message', (info: socket.SocketMessageInfo) => { this.ip = info.remoteInfo.address; this.enqueue(new Uint8Array(info.message)); });
+    tcp.on('close', () => this.disconnected());
+    tcp.on('error', (error) => this.fail(new Error(`TCP ${error.code}`)));
     this.touch();
   }
 

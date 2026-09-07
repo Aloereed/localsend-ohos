@@ -2,7 +2,6 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <iphlpapi.h>
 using Socket = SOCKET;
 constexpr Socket invalidSocket = INVALID_SOCKET;
 static void closeSocket(Socket fd) { closesocket(fd); }
@@ -15,7 +14,6 @@ static void shutdownSocket(Socket fd) { shutdown(fd, SD_BOTH); }
 #include <unistd.h>
 #include <poll.h>
 #include <fcntl.h>
-#include <net/if.h>
 using Socket = int;
 constexpr Socket invalidSocket = -1;
 static void closeSocket(Socket fd) { ::close(fd); }
@@ -106,9 +104,8 @@ bool wouldBlock() {
 }
 int ready(Socket fd, bool writing) {
 #ifdef _WIN32
-    fd_set selected, errors; FD_ZERO(&selected); FD_SET(fd, &selected); FD_ZERO(&errors); FD_SET(fd, &errors);
-    timeval wait{0, 100000};
-    return select(0, writing ? nullptr : &selected, writing ? &selected : nullptr, writing ? &errors : nullptr, &wait);
+    fd_set selected; FD_ZERO(&selected); FD_SET(fd, &selected); timeval wait{0, 100000};
+    return select(0, writing ? nullptr : &selected, writing ? &selected : nullptr, nullptr, &wait);
 #else
     pollfd descriptor{fd, static_cast<short>(writing ? POLLOUT : POLLIN), 0};
     return poll(&descriptor, 1, 100);
@@ -227,98 +224,6 @@ std::shared_ptr<Connection> lookup(int id) {
     const auto found = connections.find(id);
     if (found == connections.end()) throw std::runtime_error("TCP connection closed");
     return found->second;
-}
-napi_value tcpConnect(napi_env env, napi_callback_info info) {
-    size_t count = 3; napi_value args[3]{}; napi_get_cb_info(env, info, &count, args, nullptr, nullptr);
-    try {
-        if (count != 3) throw std::runtime_error("Expected peer address, port and callback");
-#ifdef _WIN32
-        static const bool initialized = [] { WSADATA data; return WSAStartup(MAKEWORD(2, 2), &data) == 0; }();
-        if (!initialized) throw std::runtime_error("Socket initialization failed");
-#endif
-        char host[128]{}; size_t length = 0;
-        if (napi_get_value_string_utf8(env, args[0], host, sizeof(host), &length) != napi_ok || length >= sizeof(host) - 1)
-            throw std::runtime_error("Invalid peer address");
-        const int port = integer(env, args[1]); if (port < 1 || port > 65535) throw std::runtime_error("Invalid peer port");
-        sockaddr_storage address{}; int addressSize;
-        if (std::strchr(host, ':')) {
-            auto& target = *reinterpret_cast<sockaddr_in6*>(&address); target.sin6_family = AF_INET6; target.sin6_port = htons(port);
-            if (char* scope = std::strchr(host, '%')) {
-                *scope++ = '\0'; const std::string zone(scope);
-                if (zone.empty()) throw std::runtime_error("Invalid IPv6 scope");
-                if (zone.find_first_not_of("0123456789") == std::string::npos) {
-                    const auto index = std::stoull(zone);
-                    if (index > 0xffffffffULL) throw std::runtime_error("Invalid IPv6 scope");
-                    target.sin6_scope_id = static_cast<uint32_t>(index);
-                } else {
-                    target.sin6_scope_id = if_nametoindex(scope);
-                    if (!target.sin6_scope_id) throw std::runtime_error("Unknown IPv6 interface");
-                }
-            }
-            if (inet_pton(AF_INET6, host, &target.sin6_addr) != 1) throw std::runtime_error("Invalid IPv6 peer address");
-            addressSize = sizeof(target);
-        } else {
-            auto& target = *reinterpret_cast<sockaddr_in*>(&address); target.sin_family = AF_INET; target.sin_port = htons(port);
-            if (inet_pton(AF_INET, host, &target.sin_addr) != 1) throw std::runtime_error("Invalid IPv4 peer address");
-            addressSize = sizeof(target);
-        }
-        auto connection = std::make_shared<Connection>(); connection->id = ++nextId; connection->ip = host;
-        connection->fd = socket(address.ss_family, SOCK_STREAM, 0);
-        if (connection->fd == invalidSocket) throw std::runtime_error("TCP socket creation failed");
-#ifdef _WIN32
-        u_long nonblocking = 1;
-        if (ioctlsocket(connection->fd, FIONBIO, &nonblocking) != 0) throw std::runtime_error("TCP nonblocking setup failed");
-#else
-        const int flags = fcntl(connection->fd, F_GETFL, 0);
-        if (flags < 0 || fcntl(connection->fd, F_SETFL, flags | O_NONBLOCK) != 0) throw std::runtime_error("TCP nonblocking setup failed");
-#endif
-        napi_value name; napi_create_string_utf8(env, "AloeTCPClient", NAPI_AUTO_LENGTH, &name);
-        { std::lock_guard<std::mutex> lock(registryMutex);
-          if (connections.size() >= 64) throw std::runtime_error("TCP connection limit reached");
-          if (napi_create_threadsafe_function(env, args[2], nullptr, name, 4, 1, nullptr, nullptr, nullptr, dispatch, &connection->callback) != napi_ok)
-              throw std::runtime_error("TCP callback creation failed");
-          connections[connection->id] = connection; }
-        try { std::thread([connection, address, addressSize] {
-            bool connected = false;
-            if (!connection->stopped) {
-                const int result = connect(connection->fd, reinterpret_cast<const sockaddr*>(&address), addressSize);
-                connected = result == 0;
-#ifdef _WIN32
-                const bool pending = result < 0 && WSAGetLastError() == WSAEWOULDBLOCK;
-#else
-                const bool pending = result < 0 && (errno == EINPROGRESS || errno == EINTR);
-#endif
-                const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(5);
-                while (!connected && pending && !connection->stopped && std::chrono::steady_clock::now() < deadline) {
-                    if (ready(connection->fd, true) <= 0) continue;
-                    int error = 0;
-#ifdef _WIN32
-                    int size = sizeof(error);
-#else
-                    socklen_t size = sizeof(error);
-#endif
-                    connected = getsockopt(connection->fd, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&error), &size) == 0 && error == 0;
-                    break;
-                }
-            }
-            if (connected && !connection->stopped) {
-                auto event = new Event(); event->kind = "connect"; event->id = connection->id; event->ip = connection->ip;
-                emit(connection->callback, event); readLoop(connection);
-            } else {
-                if (!connection->stopped) {
-                    auto error = new Event(); error->kind = "error"; error->id = connection->id; error->error = "TCP connection failed or timed out";
-                    emit(connection->callback, error);
-                }
-                connection->stop();
-                auto event = new Event(); event->kind = "close"; event->id = connection->id; emit(connection->callback, event);
-                napi_release_threadsafe_function(connection->callback, napi_tsfn_release);
-            }
-        }).detach(); } catch (...) {
-            { std::lock_guard<std::mutex> lock(registryMutex); connections.erase(connection->id); }
-            connection->stop(); napi_release_threadsafe_function(connection->callback, napi_tsfn_abort); throw;
-        }
-        napi_value result; napi_create_int32(env, connection->id, &result); return result;
-    } catch (const std::exception& error) { napi_throw_error(env, nullptr, error.what()); return nullptr; }
 }
 napi_value tcpListen(napi_env env, napi_callback_info info) {
     size_t count = 3; napi_value args[3]; napi_get_cb_info(env, info, &count, args, nullptr, nullptr);
@@ -444,7 +349,6 @@ napi_value tcpSend(napi_env env, napi_callback_info info) {
 
 void registerPullTcp(napi_env env, napi_value exports) {
     const napi_property_descriptor functions[] = {
-        {"tcpConnect", nullptr, tcpConnect, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"tcpListen", nullptr, tcpListen, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"tcpRead", nullptr, tcpRead, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"tcpSend", nullptr, tcpSend, nullptr, nullptr, nullptr, napi_default, nullptr},

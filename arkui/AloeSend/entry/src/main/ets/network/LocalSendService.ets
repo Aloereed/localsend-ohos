@@ -1,5 +1,3 @@
-import { NativeDatagram } from './NativeDatagram';
-import { PullServer, PullSocket } from './PullSocket';
 import { socket, connection } from '@kit.NetworkKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
@@ -215,8 +213,8 @@ class UploadSink implements BodySink {
 export class LocalSendService {
   store: AppStore;
   private identity: TlsIdentity = new TlsIdentity();
-  private udp: NativeDatagram | undefined = undefined;
-  private tcp: PullServer | undefined = undefined;
+  private udp: socket.MulticastSocket | undefined = undefined;
+  private tcp: socket.TCPSocketServer | undefined = undefined;
   private tls: SecureServer | undefined = undefined;
   private channels: NativeConnection[] = [];
   private receiving: ReceiveSession | undefined = undefined;
@@ -268,16 +266,23 @@ export class LocalSendService {
           const channel = this.newChannel(); channel.attachTls(client);
         }, (error: Error) => { this.store.serverStatus = `接收服务错误 ${error.message}`; this.store.log(this.store.serverStatus); });
       } else {
-        this.tcp = new PullServer();
-        await this.tcp.listen(address, (client: PullSocket) => { const channel = this.newChannel(); channel.attachTcp(client); });
+        this.tcp = socket.constructTCPSocketServerInstance();
+        await this.tcp.listen(address);
+        this.tcp.on('connect', (client: socket.TCPSocketConnection) => { const channel = this.newChannel(); channel.attachTcp(client); });
+        this.tcp.on('error', (error) => { this.store.serverStatus = `接收服务错误 ${error.code}`; this.store.log(this.store.serverStatus); });
       }
       this.running = true;
       this.store.listenerRunning = true;
       this.store.serverStatus = this.store.listenerHttps ? '已就绪 · 加密传输' : '已就绪 · 未加密';
       await this.readAddresses().catch((e: Error) => this.store.log(`读取本机地址失败，可尝试手动连接：${e.message}`));
       try {
-        this.udp = new NativeDatagram();
-        await this.udp.listen(address, this.store.listenerMulticast, (message: socket.SocketMessageInfo) => this.discovered(message));
+        this.udp = socket.constructMulticastSocketInstance();
+        await this.udp.bind(address);
+        await this.udp.setExtraOptions({ reuseAddress: true });
+        this.udp.on('message', (message: socket.SocketMessageInfo) => this.discovered(message));
+        this.udp.on('error', (error) => this.store.log(`组播错误 ${error.code}`));
+        await this.udp.addMembership({ address: this.store.listenerMulticast, port: this.store.listenerPort, family: 1 });
+        await this.udp.setMulticastTTL(1);
         await this.announce();
       } catch (e) { this.store.log(`组播不可用，可通过地址连接：${(e as Error).message}`); }
       // The first multicast can precede Wi-Fi readiness or another peer's listener.

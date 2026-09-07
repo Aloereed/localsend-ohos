@@ -1,13 +1,15 @@
 # AloeSend 原生 ArkUI
 
-正式发布包：[2.0.131 signed release APP](artifacts/release/AloeSend-2000131-release-20260908-001733-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。实际包内只有 GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，不含 INTERNET 和两项待审权限。
+上一正式发布包：[2.0.131 signed release APP](artifacts/release/AloeSend-2000131-release-20260908-001733-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。实际包内只有 GET_NETWORK_INFO、KEEP_BACKGROUND_RUNNING，不含 INTERNET 和两项待审权限。
 
 发布 APP：运行 `./arkui/build-release.ps1`，沿用 `app/ohos/build-profile.Release.json5` 的签名身份、发布 profile 和兼容 SDK，保留原生模块配置。证书路径失效时只接受同目录中与发布 profile 证书匹配的完整证书链。签名信息临时使用，构建结束恢复日常配置；密码不写入脚本和产物清单。已签名 release APP 归档到 `arkui/artifacts/release/`，同时校验 APP 及独立模块 HAP 签名。
 
-当前建议检查 **M131 / 2.0.131 / 2000131**：
-[未签名 debug 包](artifacts/AloeSend-2000131-M131-selection-layout-unsigned.hap)。包含所有此前里程碑。
+当前建议检查 **M132 / 2.0.132 / 2000132**：
+[未签名 debug 包](artifacts/AloeSend-2000132-M132-networkkit-rollback-unsigned.hap)。包含所有此前里程碑。
 
-M131 按用户最新要求移除 INTERNET，发布脚本同时排除 INTERNET 和两项待审权限；无此权限时的真机传输仍待确认。
+M132 按用户最新要求备份分支并撤回 M130 的 C++ 网络迁移，恢复迁移前的 NetworkKit 发送、HTTP 接收与 UDP 发现，以及 INTERNET 权限。原有 C++ HTTPS 接收背压实现和 M131 文案、999 项选择、底栏调整保留。备份：`codex/backup-arkui-cpp-20260908`。60 个主机测试及鸿蒙编译通过。
+
+M131 当时按用户要求移除 INTERNET，发布脚本同时排除 INTERNET 和两项待审权限；无此权限时的真机传输仍待确认。
 
 M131：导入文案统一为“从旧版本导入设置”，语言菜单显示“繁體中文”。文件和消息附件单次 999 项；图库因系统单次 500 项限制，选满后可继续添加到 999 项。悬浮底栏改为随窗口更新的明确宽度和居中间距，六个针对性主机测试及编译通过；实际缩放渲染待设备确认。
 

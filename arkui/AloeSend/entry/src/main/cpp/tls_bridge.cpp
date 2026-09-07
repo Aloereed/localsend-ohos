@@ -4,7 +4,6 @@
 #include <functional>
 void registerPullTcp(napi_env env, napi_value exports);
 void registerFileIdentity(napi_env env, napi_value exports);
-void registerUdp(napi_env env, napi_value exports);
 
 namespace {
 std::map<int, std::shared_ptr<aloe::Server>> servers;
@@ -44,23 +43,6 @@ napi_value createSession(napi_env env, napi_callback_info info) {
         const int id = ++nextId; sessions[id] = std::move(session); return number(env, id);
     });
 }
-napi_value createClient(napi_env env, napi_callback_info info) {
-    return invoke(env, info, [&](napi_value*) {
-        if (sessions.size() >= 64) throw std::runtime_error("TLS connection limit reached");
-        auto config = std::make_shared<aloe::Server>(); config->init("", "", true);
-        auto session = std::make_unique<aloe::Session>(config); session->init();
-        const int id = ++nextId; sessions[id] = std::move(session); return number(env, id);
-    });
-}
-napi_value peerCertificate(napi_env env, napi_callback_info info) {
-    return invoke(env, info, [&](napi_value* args) {
-        auto found = sessions.find(integer(env, args[0]));
-        if (found == sessions.end() || !found->second->ready) throw std::runtime_error("TLS handshake incomplete");
-        const auto* cert = mbedtls_ssl_get_peer_cert(&found->second->ssl);
-        if (!cert || !cert->raw.p || !cert->raw.len) throw std::runtime_error("TLS peer certificate missing");
-        return buffer(env, std::vector<unsigned char>(cert->raw.p, cert->raw.p + cert->raw.len));
-    });
-}
 napi_value process(napi_env env, napi_callback_info info, bool writing) {
     return invoke(env, info, [&](napi_value* args) {
         auto found = sessions.find(integer(env, args[0])); if (found == sessions.end()) throw std::runtime_error("TLS connection closed");
@@ -73,7 +55,6 @@ napi_value process(napi_env env, napi_callback_info info, bool writing) {
         napi_set_named_property(env, result, "plain", buffer(env, plain));
         napi_set_named_property(env, result, "wire", buffer(env, session.output)); session.output.clear();
         napi_value closed; napi_get_boolean(env, session.closed, &closed); napi_set_named_property(env, result, "closed", closed);
-        napi_value ready; napi_get_boolean(env, session.ready, &ready); napi_set_named_property(env, result, "ready", ready);
         return result;
     });
 }
@@ -92,12 +73,9 @@ napi_value closeServer(napi_env env, napi_callback_info info) { return invoke(en
 napi_value init(napi_env env, napi_value exports) {
     registerPullTcp(env, exports);
     registerFileIdentity(env, exports);
-    registerUdp(env, exports);
     const napi_property_descriptor functions[] = {
         {"createServer", nullptr, createServer, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"createSession", nullptr, createSession, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"createClient", nullptr, createClient, nullptr, nullptr, nullptr, napi_default, nullptr},
-        {"peerCertificate", nullptr, peerCertificate, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"feed", nullptr, feed, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"write", nullptr, write, nullptr, nullptr, nullptr, napi_default, nullptr},
         {"shutdown", nullptr, shutdown, nullptr, nullptr, nullptr, napi_default, nullptr},

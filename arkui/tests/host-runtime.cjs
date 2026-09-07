@@ -5,6 +5,9 @@ const fsp = fs.promises;
 const path = require('node:path');
 const vm = require('node:vm');
 const crypto = require('node:crypto');
+const net = require('node:net');
+const tls = require('node:tls');
+const dgram = require('node:dgram');
 const ts = require(process.env.TYPESCRIPT_PATH || 'E:/Huawei/DevEco_Studio/tools/hvigor/hvigor/node_modules/typescript');
 const root = path.join(__dirname, '../AloeSend/entry/src/main/ets');
 const handles = new Map(); let nextFd = 1;
@@ -42,7 +45,68 @@ const nativeFs = {
   listFile: file => fsp.readdir(file),
 };
 
-function forbiddenArkSocket() { throw new Error('ArkTS socket I/O must not be used: network transport is native C++'); }
+class SocketAdapter {
+  constructor(isTls, socket) { this.isTls = isTls; this.socket = socket; this.listeners = []; if (socket) this.attach(); }
+  async bind(address) { this.bindAddress = address; }
+  on(name, callback) {
+    if (this.isTls && !this.socket && !this.bindAddress) throw new Error('HarmonyOS TLSSocket.on requires successful bind first');
+    this.listeners.push([name, callback]); if (this.socket) this.install(name, callback);
+  }
+  install(name, cb) {
+    if (name === 'message') this.socket.on('data', data => cb({ message: Uint8Array.from(data).buffer, remoteInfo: { address: this.socket.remoteAddress?.replace(/^::ffff:/, ''), port: this.socket.remotePort } }));
+    else this.socket.on(name, cb);
+  }
+  attach() { for (const [name, cb] of this.listeners) this.install(name, cb); }
+  async connect(options) {
+    if (!this.bindAddress) throw new Error('Explicit client bind missing');
+    const settings = { host: options.address.address, port: options.address.port, localAddress: this.bindAddress.address, localPort: this.bindAddress.port };
+    this.socket = this.isTls ? tls.connect({ ...settings, rejectUnauthorized: false }) : net.connect(settings);
+    this.attach();
+    await new Promise((resolve, reject) => { this.socket.once(this.isTls ? 'secureConnect' : 'connect', resolve); this.socket.once('error', reject); });
+  }
+  async send(data) {
+    const bytes = this.isTls ? data : data.data;
+    await new Promise((resolve, reject) => this.socket.write(Buffer.from(bytes), error => error ? reject(error) : resolve()));
+  }
+  async getRemoteCertificate() { return { data: new Uint8Array(this.socket.getPeerCertificate().raw), encodingFormat: 0 }; }
+  async close() { if (this.socket && !this.socket.destroyed) this.socket.end(); }
+}
+
+class ServerAdapter {
+  constructor(isTls) { this.isTls = isTls; this.callbacks = {}; this.clients = new Set(); }
+  on(name, cb) {
+    // Both HarmonyOS server APIs require successful listen before subscribing.
+    // Node normally permits the reverse order, which concealed a device bug.
+    if (!this.server?.listening) throw new Error('HarmonyOS server.on requires listen to complete first');
+    this.callbacks[name] = cb;
+  }
+  async listen(options) {
+    const handle = client => {
+      this.clients.add(client); client.on('close', () => this.clients.delete(client));
+      this.callbacks.connect?.(new SocketAdapter(this.isTls, client));
+    };
+    this.server = this.isTls ? tls.createServer({ key: options.secureOptions.key, cert: options.secureOptions.cert }, handle) : net.createServer(handle);
+    this.server.on('error', error => this.callbacks.error?.(error));
+    this.server.on('tlsClientError', () => {});
+    const address = this.isTls ? options.address : options;
+    await new Promise((resolve, reject) => { this.server.once('error', reject); this.server.listen(address.port, address.address, resolve); });
+  }
+  async close() { for (const client of this.clients) client.destroy(); if (this.server?.listening) await new Promise(resolve => this.server.close(resolve)); }
+}
+
+class MulticastAdapter {
+  constructor() { this.socket = dgram.createSocket({ type: 'udp4', reuseAddr: true }); this.socket.on('error', () => {}); }
+  on(name, cb) {
+    if (name === 'message') this.socket.on('message', (data, remote) => cb({ message: Uint8Array.from(data).buffer, remoteInfo: remote }));
+    else this.socket.on(name, cb);
+  }
+  async bind(address) { await new Promise((resolve, reject) => { this.socket.once('error', reject); this.socket.bind(address.port, address.address, resolve); }); }
+  async setExtraOptions() {}
+  async addMembership(address) { this.socket.addMembership(address.address); }
+  async setMulticastTTL(ttl) { this.socket.setMulticastTTL(ttl); }
+  async send(options) { await new Promise((resolve, reject) => this.socket.send(options.data, options.address.port, options.address.address, e => e ? reject(e) : resolve())); }
+  async close() { try { this.socket.close(); } catch (_) {} }
+}
 
 const cryptoFramework = {
   createAsyKeyGenerator() { return { async generateKeyPair() {
@@ -60,9 +124,9 @@ Object.defineProperty(nativeAdapter, 'fileIdentity', { value: fd => nativeLibrar
 const mocks = {
   'libaloetls.so': nativeAdapter,
   '@kit.NetworkKit': { socket: {
-    constructTCPSocketInstance: forbiddenArkSocket, constructTLSSocketInstance: forbiddenArkSocket,
-    constructTCPSocketServerInstance: forbiddenArkSocket, constructTLSSocketServerInstance: forbiddenArkSocket,
-    constructMulticastSocketInstance: forbiddenArkSocket,
+    constructTCPSocketInstance: () => new SocketAdapter(false), constructTLSSocketInstance: () => new SocketAdapter(true),
+    constructTCPSocketServerInstance: () => new ServerAdapter(false), constructTLSSocketServerInstance: () => new ServerAdapter(true),
+    constructMulticastSocketInstance: () => new MulticastAdapter(),
   }, connection: { getAllNets: async () => [], getConnectionProperties: async () => ({ linkAddresses: [] }) } },
   '@kit.ArkTS': { util: { generateRandomUUID: () => crypto.randomUUID(),
     TextEncoder: class { encodeInto(text) { return new Uint8Array(Buffer.from(text)); } },

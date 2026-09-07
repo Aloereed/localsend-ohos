@@ -40,13 +40,11 @@ const { LocalSendService } = load('network/LocalSendService');
   console.log('PASS notification expiry, replacement, error duration and manual dismissal');
 
   let scans = 0, announcements = 0;
-  const { PullServer } = load('network/PullSocket');
-  const { NativeDatagram } = load('network/NativeDatagram');
-  PullServer.prototype.listen = async () => {};
-  PullServer.prototype.close = async () => {};
-  NativeDatagram.prototype.listen = async () => {};
-  NativeDatagram.prototype.send = async () => { announcements++; };
-  NativeDatagram.prototype.close = async () => {};
+  mocks['@kit.NetworkKit'].socket.constructTCPSocketServerInstance = () => ({ async listen() {}, on() {}, async close() {} });
+  mocks['@kit.NetworkKit'].socket.constructMulticastSocketInstance = () => ({
+    async bind() {}, async setExtraOptions() {}, on() {}, async addMembership() {}, async setMulticastTTL() {},
+    async send() { announcements++; }, async close() {}
+  });
   store.ready = true; store.settings.https = false;
   const service = new LocalSendService(store);
   service.readAddresses = async () => { scans++; store.localIps = ['192.168.1.2']; };
