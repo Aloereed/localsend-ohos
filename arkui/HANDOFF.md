@@ -1,8 +1,10 @@
-# 当前交接 · M76
+# 当前交接 · M77
 
-最新包：[AloeSend-2000076-M76-file-retry-unsigned.hap](artifacts/AloeSend-2000076-M76-file-retry-unsigned.hap)。版本 2.0.76，包含 M1–M76 累计实现，无需逐个安装。源码提交 `859eb425bbed116bd30147ba2627c70eb6326202`，分支 `arkui`。
+最新包：[AloeSend-2000077-M77-file-progress-unsigned.hap](artifacts/AloeSend-2000077-M77-file-progress-unsigned.hap)。版本 2.0.77，包含 M1–M77 累计实现，无需逐个安装。源码提交 `d228dc5b59aeab73ded4c30c0d5e9b3dec17fccd`，分支 `arkui`。
 
-SHA-256：`E55AA48E495D0BA3AF5BFFF2D94359AA6A7378E974F72CECE1F93DFC40D25DEF`。
+SHA-256：`997677B749CF59352BA91B7C6DCC2F6B90B94E43B9D08D2B1F1C2B781A57495C`。
+
+M77：活动文件新增逐项进度、字节数与百分比，整体进度和文件选择增加读屏标签。进度数值与语言测试、编译通过；77 个包已校验。界面动画和读屏实机效果待用户检查，本轮未访问设备。
 
 M76：补齐单文件重试，后续批量操作排除已重试项，失败的新任务可以继续重试。新增真实 HTTP 四轮请求清单测试及服务集成回归通过，编译成功，76 个包校验通过。仍需接收方确认新的重试会话，未复用已终止会话的令牌。
 
