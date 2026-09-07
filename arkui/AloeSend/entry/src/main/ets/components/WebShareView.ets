@@ -25,7 +25,7 @@ export struct WebShareView {
             QRCode(this.store.webUrl).width('80%').aspectRatio(1).constraintSize({ maxWidth: 380, maxHeight: 380 })
               .color('#101318').backgroundColor('#FFFFFF').padding(16).borderRadius(24)
           }
-          Text(this.store.webUrl).fontSize(this.presentationMode === 'qr' ? 17 : 36).lineHeight(this.presentationMode === 'qr' ? 26 : 48)
+          Text(this.store.webUrl).direction(Direction.Ltr).fontSize(this.presentationMode === 'qr' ? 17 : 36).lineHeight(this.presentationMode === 'qr' ? 26 : 48)
             .fontColor($r('sys.color.font_primary')).width('100%').textAlign(TextAlign.Center).wordBreak(WordBreak.BREAK_ALL).copyOption(CopyOptions.LocalDevice)
           if (this.store.settings.pin) {
             Text(`${this.store.t('上传 PIN')} · ${this.store.settings.pin}`).fontSize(24).fontColor(this.store.accentText)
@@ -38,8 +38,8 @@ export struct WebShareView {
           .width('100%').height(48).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).onClick(() => this.presenting = false)
       }
       Button(this.store.t('复制链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.webUrl))
-    }.width('100%').height('100%').padding(24).constraintSize({ maxWidth: 720 })
-    }.width('100%').height('100%').backgroundColor(this.store.canvasColor)
+    }.width('100%').height('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).padding(24).constraintSize({ maxWidth: 720 })
+    }.width('100%').height('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.canvasColor)
   }
 
   build() {
@@ -58,12 +58,12 @@ export struct WebShareView {
             .fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary'))
           Button(this.store.t('开始分享')).width('100%').height(48).backgroundColor(this.store.accentFill)
             .enabled(!this.store.webStarting).onClick(() => webShare.start(this.encrypted))
-        }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(28)
+        }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(28)
       } else {
         Column({ space: 18 }) {
           Text(this.store.t('扫码或打开链接')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
           QRCode(this.store.webUrl).width(200).height(200).color('#15271F').backgroundColor('#FFFFFF').padding(10).borderRadius(16)
-          Text(this.store.webUrl).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice).textAlign(TextAlign.Center)
+          Text(this.store.webUrl).direction(Direction.Ltr).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice).textAlign(TextAlign.Center)
           Text(this.store.t('链接有效期 1 小时；停止分享后立即失效。')).fontSize(12).fontColor($r('sys.color.font_secondary'))
           Button(this.store.t('复制链接')).width('100%').height(46).backgroundColor(this.store.accentFill).onClick(() => this.store.copy(this.store.webUrl))
           Row({ space: 12 }) {
@@ -79,7 +79,7 @@ export struct WebShareView {
           }.width('100%')
           Button(this.store.t('停止分享')).width('100%').height(46).backgroundColor(this.store.controlSurface).fontColor(this.store.dangerText)
             .onClick(() => webShare.stop())
-        }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(28)
+        }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(28)
         ForEach(this.store.webRequests, (request: WebAccessRequest) => {
           Column({ space: 12 }) {
             Text(this.store.tf('{0} 请求下载', [request.ip])).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
@@ -88,7 +88,7 @@ export struct WebShareView {
               Button(this.store.t('拒绝')).layoutWeight(1).onClick(() => webShare.respond(request.id, false))
               Button(this.store.t('允许')).layoutWeight(1).backgroundColor(this.store.accentFill).onClick(() => webShare.respond(request.id, true))
             }.width('100%')
-          }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
+          }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(24)
         }, (request: WebAccessRequest) => request.id)
         ForEach(this.store.webFiles, (file: ShareFile) => {
           Row() {

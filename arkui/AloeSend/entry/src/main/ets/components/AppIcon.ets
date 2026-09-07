@@ -3,6 +3,7 @@
 export struct AppIcon {
   @Prop name: string = 'file';
   @Prop iconSize: number = 24;
+  @Prop rtl: boolean = false;
   @Prop tint: ResourceColor = $r('sys.color.font_primary');
 
   path(): string {
@@ -21,7 +22,8 @@ export struct AppIcon {
     if (this.name === 'link') return 'M9 15L15 9 M8 17L6 19A4 4 0 0 1 1 14L6 9A4 4 0 0 1 12 9 M16 7L18 5A4 4 0 0 1 23 10L18 15A4 4 0 0 1 12 15';
     if (this.name === 'search') return 'M17 10A7 7 0 1 1 3 10A7 7 0 1 1 17 10 M15 15L22 22';
     if (this.name === 'check') return 'M5 12L10 17L20 6';
-    if (this.name === 'back') return 'M15 5L8 12L15 19';
+    if (this.name === 'back') return this.rtl ? 'M9 5L16 12L9 19' : 'M15 5L8 12L15 19';
+    if (this.name === 'forward') return this.rtl ? 'M15 5L8 12L15 19' : 'M9 5L16 12L9 19';
     if (this.name === 'close') return 'M6 6L18 18 M18 6L6 18';
     if (this.name === 'refresh') return 'M20 4V10H14 M4 20V14H10 M20 10A8 8 0 0 0 5 6 M4 14A8 8 0 0 0 19 18';
     if (this.name === 'star') return 'M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8Z';

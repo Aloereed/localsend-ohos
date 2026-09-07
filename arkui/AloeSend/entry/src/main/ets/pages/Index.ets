@@ -166,7 +166,7 @@ struct Index {
         Text(this.store.settings.visible ? this.store.t(this.store.serverStatus) : this.store.t('当前已隐藏，可通过地址连接')).fontSize(13).fontColor($r('sys.color.font_secondary'))
       }.padding({ left: 14, right: 14, top: 8, bottom: 8 }).backgroundColor(this.store.glassColor).borderRadius(20)
       ForEach(this.store.localIps, (ip: string) => {
-        Text(`${ip}:${this.store.listenerPort}`).fontSize(13).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
+        Text(`${ip}:${this.store.listenerPort}`).direction(Direction.Ltr).fontSize(13).fontColor($r('sys.color.font_secondary')).copyOption(CopyOptions.LocalDevice)
       })
     }.width('100%').padding({ left: 20, right: 20, bottom: 32 })
     Column() {
@@ -186,10 +186,22 @@ struct Index {
     Row({ space: 16 }) {
       AppIcon({ name: icon, iconSize: 24, tint: this.store.accentText })
       Text(this.store.t(title)).fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
-      Text('›').fontSize(24).fontColor($r('sys.color.font_secondary'))
+      AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') })
     }.width('100%').padding({ left: 22, right: 20, top: 20, bottom: 20 })
       .onClick(() => { if (route === 'settings') this.tab = 3; else this.route = route; })
       .accessibilityText(this.store.t(title))
+  }
+
+  @Builder
+  backButton() {
+    Button() {
+      Row({ space: 6 }) {
+        AppIcon({ name: 'back', rtl: this.store.rtl, iconSize: 22, tint: this.store.accentText })
+        Text(this.store.t('返回')).fontSize(16).fontColor(this.store.accentText)
+      }.padding({ left: 8, right: 8 })
+    }.constraintSize({ minWidth: 48, minHeight: 48 }).backgroundColor(Color.Transparent)
+      .accessibilityText(this.store.t('返回'))
+      .onClick(() => this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : '')
   }
 
   @Builder
@@ -334,13 +346,11 @@ struct Index {
       if (this.store.pendingReceive) {
         ReceiveRequestView({ store: this.store }).layoutWeight(1)
       } else if (this.route === 'privacy') {
-        Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
-          .alignSelf(ItemAlign.Start).onClick(() => this.route = '')
+        Row() { this.backButton() }.width('100%')
         PrivacyView({ store: this.store }).layoutWeight(1)
       } else if (this.route) {
         Row() {
-          Button(this.store.t('‹ 返回')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
-            .onClick(() => this.route = this.route === 'license-full' ? 'licenses' : this.route === 'credits' ? 'about' : '')
+          this.backButton()
           Text(this.title()).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
         }.width('100%').padding({ left: 8, right: 20, top: 10, bottom: 10 })
           .backgroundColor(this.store.glassColor).backgroundBlurStyle(this.store.settings.reduceEffects ? BlurStyle.NONE : BlurStyle.COMPONENT_THIN)

@@ -4,6 +4,7 @@ import { LengthMetrics } from '@kit.ArkUI';
 import { flutterLanguages } from '../model/FlutterLocales';
 import { resolvedLanguage } from '../model/Locale';
 import { LanguagePicker } from './LanguagePicker';
+import { AppIcon } from './AppIcon';
 
 @Component
 export struct SettingsView {
@@ -44,7 +45,7 @@ export struct SettingsView {
       Text(this.store.t(text)).fontSize(16).fontColor($r('sys.color.font_primary')).layoutWeight(1)
       Text(destination === 'diagnostics' ? this.store.t(this.store.serverStatus) : destination === 'network' ? this.store.t(this.store.settings.networkFilter === 'none' ? '全部网络' : '已筛选') : this.store.t(detail))
         .fontSize(13).fontColor($r('sys.color.font_secondary'))
-      Text('›').fontSize(24).fontColor($r('sys.color.font_secondary'))
+      AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') })
     }.padding(18).width('100%').constraintSize({ minHeight: 58 }).onClick(() => this.onNavigate(destination))
       .accessibilityText(`${this.store.t(text)} ${this.store.t(detail)}`)
   }
@@ -133,7 +134,7 @@ export struct SettingsView {
         Row() {
           Text(this.store.t('语言')).layoutWeight(1).fontColor($r('sys.color.font_primary'))
           Text(this.languageName()).fontSize(14).maxLines(2).fontColor($r('sys.color.font_secondary')).layoutWeight(2).textAlign(TextAlign.End)
-          Text(this.store.rtl ? '‹' : '›').fontSize(24).fontColor($r('sys.color.font_secondary')).margin({ left: 8 })
+          AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') })
         }.padding(18).width('100%').constraintSize({ minHeight: 60 }).onClick(() => this.languageVisible = true)
         if (!['zh', 'en'].includes(resolvedLanguage(this.store.settings.language))) {
           Text(this.store.t('部分原生界面说明暂以英文显示')).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%').padding({ left: 18, right: 18, bottom: 12 })

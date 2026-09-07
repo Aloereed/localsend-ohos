@@ -29,6 +29,7 @@ export struct FileDetailsView {
     Column({ space: 6 }) {
       Text(this.store.t(label)).fontSize(12).fontColor($r('sys.color.font_secondary')).width('100%')
       Text(this.value(label)).fontSize(15).lineHeight(22).fontColor($r('sys.color.font_primary')).width('100%').copyOption(CopyOptions.LocalDevice)
+        .direction(['文件位置', '已另存到', '相册副本', '大小与类型'].includes(label) ? Direction.Ltr : Direction.Auto)
     }.width('100%').padding({ top: 8, bottom: 8 })
   }
 
@@ -78,6 +79,6 @@ export struct FileDetailsView {
           Button(this.store.t('另存为')).layoutWeight(1).height(48).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.store.exportFile(this.current()))
         }
       }.width('100%') }
-    }.width('100%').height('100%').padding(24)
+    }.width('100%').height('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).padding(24)
   }
 }

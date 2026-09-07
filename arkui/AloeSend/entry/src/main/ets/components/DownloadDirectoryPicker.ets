@@ -34,7 +34,7 @@ export struct DownloadDirectoryPicker {
     Column({ space: 16 }) {
       Text(this.store.t(this.purpose === 'send' ? '选择要发送的文件夹' : '选择保存目录')).fontSize(23).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
       Text(this.path === this.store.downloadDirectory ? 'Download/com.aloereed.aloesend' : this.path.slice(this.store.downloadDirectory.length + 1))
-        .fontSize(14).maxLines(3).fontColor($r('sys.color.font_secondary')).width('100%')
+        .direction(Direction.Ltr).fontSize(14).maxLines(3).fontColor($r('sys.color.font_secondary')).width('100%')
       if (this.path !== this.store.downloadDirectory) {
         Button(this.store.t('上一级')).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
           .onClick(() => this.load(this.path.slice(0, this.path.lastIndexOf('/'))))
@@ -53,7 +53,7 @@ export struct DownloadDirectoryPicker {
             Row({ space: 14 }) {
               AppIcon({ name: 'folder', iconSize: 26, tint: this.store.accentText })
               Text(name).fontSize(16).maxLines(2).fontColor($r('sys.color.font_primary')).layoutWeight(1)
-              Text('›').fontSize(24).fontColor($r('sys.color.font_secondary'))
+              AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') })
             }.width('100%').padding(18).backgroundColor(this.store.controlSurface).borderRadius(18)
               .onClick(() => this.load(`${this.path}/${name}`)).accessibilityText(name)
           }, (name: string) => `${this.path}/${name}`)
@@ -64,6 +64,6 @@ export struct DownloadDirectoryPicker {
       }.width('100%').layoutWeight(1).align(Alignment.Top)
       Button(this.store.t(this.purpose === 'send' ? '添加此文件夹' : '选择此文件夹')).height(50).width('100%').backgroundColor(this.store.accentFill)
         .enabled(!this.loading && !this.error).onClick(() => this.onChoose(this.path))
-    }.padding(24).width('100%').height('100%')
+    }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).height('100%')
   }
 }

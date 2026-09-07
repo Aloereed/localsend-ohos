@@ -38,7 +38,7 @@ export struct PeerDetailView {
         Button(this.store.t('文字或链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('text'))
         Button(this.store.t('剪贴板')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.choose('clipboard'))
       }
-    }.padding(24).width('100%')
+    }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
   build() {
@@ -48,7 +48,7 @@ export struct PeerDetailView {
           .width(88).height(88).backgroundColor(this.store.controlSurface).borderRadius(28)
         Text(this.peer.alias).fontSize(26).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
         Text(this.peer.deviceModel || this.store.t('LocalSend 设备')).fontSize(14).fontColor($r('sys.color.font_secondary'))
-        Text(`${this.peer.protocol}://${this.peer.ip}:${this.peer.port}`).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice)
+        Text(`${this.peer.protocol}://${this.peer.ip}:${this.peer.port}`).direction(Direction.Ltr).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice)
         Button(this.store.t('发送到这台设备')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
           if (this.store.files.length) this.onSend(); else { this.textMode = false; this.choosing = true; }
         })
@@ -68,20 +68,20 @@ export struct PeerDetailView {
               return renamed;
             }); this.store.save(); this.store.notice = this.store.t('收藏备注已保存');
           })
-        }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
+        }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(24)
       }
       Column({ space: 12 }) {
         Text(this.store.t('连接身份')).fontSize(20).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).width('100%')
         Text(this.peer.protocol === 'https' ? this.store.t('TLS 加密传输。首次连接请与对方核对完整指纹；指纹变更会阻止已收藏设备的发送。') : this.store.t('此设备使用 HTTP，传输内容不加密。'))
           .fontSize(14).lineHeight(23).fontColor($r('sys.color.font_secondary'))
         if (this.peer.fingerprint) {
-          Text(this.peer.fingerprint).fontFamily('monospace').fontSize(13).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice)
+          Text(this.peer.fingerprint).direction(Direction.Ltr).fontFamily('monospace').fontSize(13).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice)
           Button(this.store.t('复制指纹')).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => this.store.copy(this.peer.fingerprint))
         }
         Button(this.store.t('检查连接')).backgroundColor(this.store.accentFill).onClick(() => {
           localSend.probe(this.peer).then(() => this.store.notice = this.store.t('连接正常')).catch((e: Error) => this.store.fail(this.store.t('连接失败'), e));
         })
-      }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
+      }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(24)
     }.width('100%').bindSheet($$this.choosing, this.contentPicker(), { height: SheetSize.FIT_CONTENT, showClose: true })
   }
 }

@@ -49,7 +49,7 @@ export struct TransferList {
         Button(this.store.t('应用到所选文件')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
           if (localSend.batchRenameReceive(this.batchMode, this.prefix, this.padZero, this.sortFirst)) this.renameSheet = false;
         })
-      }.padding(24).width('100%')
+      }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     } else {
     Column({ space: 18 }) {
       Text(this.store.t('接收时重命名')).fontSize(22).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary'))
@@ -58,7 +58,7 @@ export struct TransferList {
       Button(this.store.t('保存名称')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => {
         if (localSend.renameReceive(this.renameId, this.renameText)) this.renameSheet = false;
       })
-    }.width('100%').padding(24)
+    }.width('100%').padding(24).direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     }
   }
 
@@ -198,7 +198,7 @@ export struct TransferList {
           } else if (this.current(transfer.id).direction === 'send' && (this.current(transfer.id).status === 'error' || this.current(transfer.id).status === 'cancelled')) {
             Button(this.store.t('重试未完成文件')).backgroundColor(this.store.accentFill).onClick(() => localSend.retry(transfer.id))
           }
-        }.padding(24).width('100%').backgroundColor(this.store.surfaceColor).borderRadius(28)
+        }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(28)
       }, (transfer: TransferView) => transfer.id)
     }.width('100%').bindSheet($$this.renameSheet, this.renameEditor(), { height: this.batchEdit ? SheetSize.LARGE : SheetSize.MEDIUM, showClose: true })
   }

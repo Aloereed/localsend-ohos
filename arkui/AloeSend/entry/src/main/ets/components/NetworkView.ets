@@ -36,7 +36,7 @@ export struct NetworkView {
             .onSelect((index: number) => this.mode = ['none', 'allow', 'deny'][index])
         }.width('100%')
         if (this.mode !== 'none') {
-          TextArea({ text: this.patterns, placeholder: '192.168.1.*\n10.0.*.*' }).height(150)
+          TextArea({ text: this.patterns, placeholder: '192.168.1.*\n10.0.*.*' }).direction(Direction.Ltr).height(150)
             .onChange((value: string) => this.patterns = value)
           Text(this.store.t('每行一条规则，星号匹配一个地址段。白名单为空时不会发现设备。'))
             .fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary'))
@@ -55,7 +55,7 @@ export struct NetworkView {
             Text(local.name).fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('sys.color.font_primary')).layoutWeight(1)
             Text(this.store.t(local.ignored ? '已排除' : '已启用')).fontSize(12).fontColor($r('sys.color.font_secondary'))
           }.width('100%')
-          Text(`${local.ip}/${local.prefixLength}`).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice).width('100%')
+          Text(`${local.ip}/${local.prefixLength}`).direction(Direction.Ltr).fontSize(14).fontColor(this.store.accentText).copyOption(CopyOptions.LocalDevice).width('100%')
           Button(this.store.t('加入规则')).fontSize(13).backgroundColor(this.store.controlSurface).fontColor(this.store.accentText).onClick(() => {
             this.patterns = this.patterns ? `${this.patterns}\n${local.ip}` : local.ip;
             if (this.mode === 'none') this.mode = 'allow';

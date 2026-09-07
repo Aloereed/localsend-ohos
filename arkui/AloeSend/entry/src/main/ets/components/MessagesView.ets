@@ -72,7 +72,7 @@ export struct MessagesView {
           }.width('100%')
         }.layoutWeight(1).width('100%')
         Button(this.store.t('完成')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.showDetails = false)
-      }.padding(24).height('100%').width('100%')
+      }.padding(24).height('100%').width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     } else if (this.detailsKind === 'batch') {
       Column({ space: 16 }) {
         Row() {
@@ -92,7 +92,7 @@ export struct MessagesView {
             }
           }.width('100%')
         }.layoutWeight(1).width('100%')
-      }.padding(24).height('100%').width('100%')
+      }.padding(24).height('100%').width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     } else {
       Column() {
         if (this.selectedBatchKey) {
@@ -100,7 +100,7 @@ export struct MessagesView {
             .onClick(() => this.detailsKind = 'batch')
         }
         FileDetailsView({ store: this.store, entry: this.detailEntry }).layoutWeight(1)
-      }.width('100%').height('100%')
+      }.width('100%').height('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
     }
   }
 
@@ -167,7 +167,7 @@ export struct MessagesView {
       if (fromSheet) {
         Button(this.store.t('更多')).fontSize(12).height(36).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
           .bindMenu(this.messageActions(entry))
-      } else { Text('›').fontSize(24).fontColor($r('sys.color.font_secondary')) }
+      } else { AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') }) }
     }.width('100%').padding({ top: 12, bottom: 12 }).constraintSize({ minHeight: 64 })
       .onClick(() => this.openDetails(entry, fromSheet)).accessibilityText(`${entry.name}, ${this.store.t(historyStatus(entry))}`)
   }
@@ -289,7 +289,7 @@ export struct MessagesView {
     Column({ space: 12 }) {
       if (this.detailOpen) {
         Row({ space: 10 }) {
-          Button() { AppIcon({ name: 'back', iconSize: 22, tint: this.store.accentText }) }
+          Button() { AppIcon({ name: 'back', rtl: this.store.rtl, iconSize: 22, tint: this.store.accentText }) }
             .width(44).height(44).backgroundColor(Color.Transparent).onClick(() => this.detailOpen = false).accessibilityText(this.store.t('返回会话列表'))
           Column({ space: 4 }) {
             Text(this.peer.alias).fontSize(21).fontWeight(FontWeight.Medium).maxLines(1).fontColor($r('sys.color.font_primary'))
@@ -384,7 +384,7 @@ export struct MessagesView {
           }.width('100%').padding({ bottom: 24 })
         }.width('100%').layoutWeight(1).align(Alignment.Top)
       }
-    }.width('100%').height('100%').padding({ left: 24, right: 24, top: 8, bottom: 12 }).constraintSize({ maxWidth: 720 })
+    }.width('100%').height('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).padding({ left: 24, right: 24, top: 8, bottom: 12 }).constraintSize({ maxWidth: 720 })
       .bindSheet($$this.showDetails, this.detailsSheet(), { height: SheetSize.LARGE, showClose: true })
   }
 }

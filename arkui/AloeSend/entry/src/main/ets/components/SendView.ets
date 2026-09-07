@@ -68,7 +68,7 @@ export struct SendView {
       Button(this.store.t('文件')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('file'))
       Button(this.store.t('照片与视频')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('photo'))
       Button(this.store.t('文字或链接')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.chooseForPeer('text'))
-    }.padding(24).width('100%')
+    }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
   @Builder
@@ -98,7 +98,7 @@ export struct SendView {
           this.text = ''; this.textId = ''; this.sheetVisible = false;
           if (this.pendingPeer) { this.onSend(this.pendingPeer); this.pendingPeer = undefined; }
         })
-    }.padding(24).width('100%')
+    }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
   @Builder
@@ -106,10 +106,10 @@ export struct SendView {
     Column({ space: 20 }) {
       Text(this.store.t('通过地址添加')).fontSize(23).fontWeight(FontWeight.Medium)
       Text(this.store.t('输入另一台设备的 IP 地址，可附带端口。')).fontColor($r('sys.color.font_secondary'))
-      TextInput({ text: this.address, placeholder: '192.168.1.10:53317' }).onChange((value: string) => this.address = value)
+      TextInput({ text: this.address, placeholder: '192.168.1.10:53317' }).direction(Direction.Ltr).onChange((value: string) => this.address = value)
       Button(this.store.t('查找设备')).width('100%').height(48).backgroundColor(this.store.accentFill)
         .enabled(this.address.trim().length > 0).onClick(() => { this.onAddress(this.address); this.sheetVisible = false; })
-    }.padding(24).width('100%')
+    }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
   @Builder
@@ -120,7 +120,7 @@ export struct SendView {
       TextInput({ text: this.renameText }).onChange((value: string) => this.renameText = value)
       Button(this.store.t('保存')).width('100%').height(48).backgroundColor(this.store.accentFill)
         .onClick(() => { this.store.renameFile(this.renameId, this.renameText); if (!this.store.error) this.sheetVisible = false; })
-    }.padding(24).width('100%')
+    }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr)
   }
 
   @Builder
@@ -130,7 +130,7 @@ export struct SendView {
         .width(48).height(56).borderRadius(17).backgroundColor(this.store.controlSurface).onClick(() => this.onDetails(peer))
       Column({ space: 5 }) {
         Text(peer.alias || peer.ip).fontSize(17).fontWeight(FontWeight.Medium).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
-        Text(`${peer.ip}:${peer.port}`).fontSize(12).fontColor($r('sys.color.font_secondary'))
+        Text(`${peer.ip}:${peer.port}`).direction(Direction.Ltr).fontSize(12).fontColor($r('sys.color.font_secondary'))
         Text(`${peer.protocol === 'https' ? this.store.t('加密连接') : this.store.t('未加密')}${this.store.isFavorite(peer) ? this.store.t(' · 已收藏') : ''}`).fontSize(11).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onDetails(peer))
       Button(this.store.settings.sendMode === 'multiple' ? (this.targets.includes(`${peer.ip}:${peer.port}`) ? this.store.t('已选') : this.store.t('选择')) : this.store.t('发送'))
