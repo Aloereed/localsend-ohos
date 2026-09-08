@@ -1135,6 +1135,19 @@ export class AppStore {
     catch (e) { this.fail('打开链接失败', e as Error); }
   }
 
+  async openFeedbackGroup(): Promise<void> {
+    if (!this.context) {
+      this.notice = this.t('无法拉起 QQ，请打开 QQ 搜索群号 936959829');
+      return;
+    }
+    try {
+      await this.context.startAbility({ action: 'ohos.want.action.viewData',
+        uri: 'mqqapi://card/show_pslcard?src_type=internal&version=1&uin=936959829&card_type=group&source=external' });
+    } catch (_) {
+      this.notice = this.t('无法拉起 QQ，请打开 QQ 搜索群号 936959829');
+    }
+  }
+
   systemDeviceName(): string {
     try { return deviceInfo.marketName || deviceInfo.productModel || 'HarmonyOS'; }
     catch (_) { return 'HarmonyOS'; }

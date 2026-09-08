@@ -69,7 +69,10 @@ export struct SettingsView {
         }
       }.layoutWeight(1).alignItems(HorizontalAlign.Start)
       AppIcon({ name: 'forward', rtl: this.store.rtl, iconSize: 22, tint: $r('sys.color.font_secondary') })
-    }.padding(18).width('100%').constraintSize({ minHeight: 58 }).onClick(() => this.onNavigate(destination))
+    }.padding(18).width('100%').constraintSize({ minHeight: 58 }).onClick(() => {
+      if (destination === 'qq-group') this.store.openFeedbackGroup();
+      else this.onNavigate(destination);
+    })
       .accessibilityText(`${this.store.t(text)} ${this.linkDetail(detail, destination)}`)
   }
 
@@ -293,7 +296,8 @@ export struct SettingsView {
         this.link('开源许可', '', 'licenses')
         this.link('更新记录', '', 'changelog')
         this.link('关于 AloeSend', '原生鸿蒙', 'about')
-        this.link('支持开源项目', '', 'donate')
+        this.link('支持作者', '', 'donate')
+        this.link('进群吐槽', 'QQ 群：936959829', 'qq-group')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
     }.width('100%').bindSheet($$this.languageVisible, this.languageSheet(), { height: SheetSize.LARGE, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY })
   }

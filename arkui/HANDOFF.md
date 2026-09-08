@@ -1,4 +1,12 @@
-# 当前交接 · M132
+# 当前交接 · M133
+
+版本 2.0.133 / 2000133。ArkUI 支持界面统一显示“支持作者”，跳转 AloeSend 作者的指定链接；帮助与支持新增“进群吐槽”，拉起 QQ 群 936959829，失败时提示手动搜索。英文文案已同步。详情见 [M133](milestones/M133-author-support.md)。
+
+两项语言测试、链接与 QQ 拉起的主机断言、鸿蒙调试编译通过。未访问设备，实际外部页面跳转和 QQ 群资料页拉起仍需真机验证。
+
+调试包：[M133 unsigned HAP](artifacts/AloeSend-2000133-M133-author-support-unsigned.hap)，SHA-256：`F509E2BB3AE1D62674FE778949F809F80A19E23A604FB30D636F0C0AE25521A3`。本次未生成正式签名 APP；最新正式包仍为下述 M132。
+
+# M132 历史交接
 
 最新正式包：[2.0.132 signed release APP](artifacts/release/AloeSend-2000132-release-20260908-002452-signed.app)，源码 `eb7ca12873fa4a4c2f23c0cf0f07bff0d986b093`，构建前工作区干净。沿用 Flutter 发布签名，APP 与独立模块 HAP 签名验证通过。SHA-256：`B555F397CE20261FED05121D8041CC4A26B6153F3B8350D85FA2EE947D3361EC`。
 

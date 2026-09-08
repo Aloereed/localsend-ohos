@@ -136,7 +136,7 @@ struct Index {
   }
 
   title(): string {
-    if (this.route === 'donate') return this.store.t('支持开源项目');
+    if (this.route === 'donate') return this.store.t('支持作者');
     if (this.route === 'credits') return this.store.t('贡献者与翻译者');
     if (this.route === 'license-full') return 'Apache License 2.0';
     if (this.route === 'network') return this.store.t('网络接口');
@@ -230,9 +230,8 @@ struct Index {
     } else if (this.route === 'credits') {
       this.info('感谢每一位贡献者', '', 'credits')
     } else if (this.route === 'donate') {
-      this.info('支持开源项目', '你可以自愿支持 LocalSend 的持续开发。所有文件分享功能均可免费使用。')
-      Button('GitHub Sponsors').width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://github.com/sponsors/Tienisto'))
-      Button('Ko-fi').width('100%').height(48).margin({ top: 16 }).fontColor(this.store.accentText).backgroundColor(this.store.surfaceColor).onClick(() => this.store.openUrl('https://ko-fi.com/tienisto'))
+      this.info('支持作者', '你可以自愿支持 AloeSend 作者的持续开发。所有文件分享功能均可免费使用。')
+      Button(this.store.t('支持作者')).width('100%').height(48).backgroundColor(this.store.accentFill).onClick(() => this.store.openUrl('https://afdian.com/a/aloereed'))
     } else if (this.route === 'network') { NetworkView({ store: this.store }) }
     else if (this.route === 'peer') { PeerDetailView({ store: this.store, peer: this.selectedPeer,
       onUpdate: (peer: Peer) => this.selectedPeer = peer,
