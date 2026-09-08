@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000133 | [M133-author-support](artifacts/AloeSend-2000133-M133-author-support-unsigned.hap) | 81341b53 | F509E2BB3AE1D62674FE778949F809F80A19E23A604FB30D636F0C0AE25521A3 |
 | 2000132 | [M132-networkkit-rollback](artifacts/AloeSend-2000132-M132-networkkit-rollback-unsigned.hap) | eb7ca128 | F03F4E7A1DFDB59E8FEA649E0A9D4687C32217693CD2B658B909FEC96E1C76EB |
 | 2000131 | [M131-selection-layout](artifacts/AloeSend-2000131-M131-selection-layout-unsigned.hap) | 4afc50b2 | 2246EAD4562753A1B3645EBE7C1E65ABC841F1780B09B655DD6131E6C88D182C |
 | 2000130 | [M130-native-network](artifacts/AloeSend-2000130-M130-native-network-unsigned.hap) | 28d1d307 | EBC778D47B303FDC77D9C6B4EE21005E6066FDF03E2D745C010182B3F5DB2F4C |
