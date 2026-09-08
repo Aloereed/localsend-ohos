@@ -1,8 +1,8 @@
 # AloeSend 原生 ArkUI
 
-最新里程碑：[M133 · 支持作者与 QQ 群反馈入口](milestones/M133-author-support.md)，版本 2.0.133。支持页面改为 AloeSend 作者链接，界面统一显示“支持作者”；新增“进群吐槽”，拉起 QQ 群 936959829，失败时提示手动搜索。语言测试、链接主机验证及鸿蒙编译通过；实际跳转待真机验证。调试包见 [M133 unsigned HAP](artifacts/AloeSend-2000133-M133-author-support-unsigned.hap)，正式签名包仍为下述 M132。
+最新里程碑：[M134 · 隐藏反馈入口群号](milestones/M134-feedback-label.md)，版本 2.0.134。入口仅显示“进群吐槽”，保留 QQ 群拉起及 M133 支持作者功能。正式签名 [APP](artifacts/release/AloeSend-2000134-release-20260908-232754-signed.app) 和 [HAP](artifacts/release/AloeSend-2000134-release-20260908-232754-signed.hap) 已生成，语言测试、编译及签名校验通过；真机跳转待验证。哈希与交接信息见 [HANDOFF](HANDOFF.md)。
 
-正式发布包：[2.0.132 signed release APP](artifacts/release/AloeSend-2000132-release-20260908-002452-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。已恢复 NetworkKit 和 INTERNET，保留 M131 界面与选择数量调整。
+历史发布包：[2.0.132 signed release APP](artifacts/release/AloeSend-2000132-release-20260908-002452-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。已恢复 NetworkKit 和 INTERNET，保留 M131 界面与选择数量调整。
 
 发布 APP：运行 `./arkui/build-release.ps1`，沿用 `app/ohos/build-profile.Release.json5` 的签名身份、发布 profile 和兼容 SDK，保留原生模块配置。证书路径失效时只接受同目录中与发布 profile 证书匹配的完整证书链。签名信息临时使用，构建结束恢复日常配置；密码不写入脚本和产物清单。已签名 release APP 归档到 `arkui/artifacts/release/`，同时校验 APP 及独立模块 HAP 签名。
 

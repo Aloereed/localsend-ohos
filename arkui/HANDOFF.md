@@ -1,4 +1,12 @@
-# 当前交接 · M133
+# 当前交接 · M134
+
+版本 2.0.134 / 2000134，源码 `61d1a58aa57e8a3c317175bf4e3a8ebc1957da41`。设置入口只显示“进群吐槽”，隐藏下方群号，保留 QQ 拉起及失败提示；包含 M133 的“支持作者”页面。详见 [M134](milestones/M134-feedback-label.md)。
+
+正式签名包：[APP](artifacts/release/AloeSend-2000134-release-20260908-232754-signed.app)、[HAP](artifacts/release/AloeSend-2000134-release-20260908-232754-signed.hap)。沿用 Flutter 发布身份，APP 与独立 HAP 签名校验通过，APP 内模块版本、包名、debug=false 和权限检查通过。APP SHA-256：`65A4B1A0A43A4AB9744B691472ACD3491D603EA7B0D2281C462100D1A94BD7D0`；HAP SHA-256：`3FE87433E5E84A286E83041382B1708752AB25E74A30FAC671396949F71908BF`。
+
+两项语言测试及调试、release 构建通过。调试归档 [M134 unsigned HAP](artifacts/AloeSend-2000134-M134-feedback-label-unsigned.hap)，12 个归档包校验通过。构建元数据 sourceDirty=true：仓库保留用户原有未跟踪 output/，源码修改已提交，包清单在归档阶段更新。未访问设备、未上传或推送远程，实际 QQ 拉起及支持页面跳转仍待真机验证。
+
+# M133 历史交接
 
 版本 2.0.133 / 2000133。ArkUI 支持界面统一显示“支持作者”，跳转 AloeSend 作者的指定链接；帮助与支持新增“进群吐槽”，拉起 QQ 群 936959829，失败时提示手动搜索。英文文案已同步。详情见 [M133](milestones/M133-author-support.md)。
 
