@@ -297,7 +297,7 @@ export struct SettingsView {
         this.link('更新记录', '', 'changelog')
         this.link('关于 AloeSend', '原生鸿蒙', 'about')
         this.link('支持作者', '', 'donate')
-        this.link('进群吐槽', 'QQ 群：936959829', 'qq-group')
+        this.link('进群吐槽', '', 'qq-group')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
     }.width('100%').bindSheet($$this.languageVisible, this.languageSheet(), { height: SheetSize.LARGE, showClose: true, keyboardAvoidMode: SheetKeyboardAvoidMode.RESIZE_ONLY })
   }

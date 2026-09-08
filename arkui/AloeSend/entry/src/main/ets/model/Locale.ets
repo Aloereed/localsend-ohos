@@ -434,7 +434,6 @@ const english: Record<string, string> = {
   "文件位置": "File location",
   "支持作者": "Support the author",
   "进群吐槽": "Join the feedback group",
-  "QQ 群：936959829": "QQ group: 936959829",
   "无法拉起 QQ，请打开 QQ 搜索群号 936959829": "Could not launch QQ. Open QQ and search for group 936959829.",
   "贡献者与翻译者": "Contributors and translators",
   "阅读完整许可": "Read the full license",
