@@ -1,4 +1,14 @@
-# 当前交接 · M134
+# 当前交接 · M135
+
+版本 2.0.135 / 2000135，源码 `855e8e0681d05a8a510ba678b4f0c3cb2ea974f7`。旧 HTTP 记录连接 HTTPS 设备提前断连时，验证 HTTPS 和证书后更新设备协议并重新发起接收请求。详情与限制见 [M135](milestones/M135-protocol-upgrade.md)。
+
+正式签名包：[APP](artifacts/release/AloeSend-2000135-release-20260909-201019-signed.app)、[HAP](artifacts/release/AloeSend-2000135-release-20260909-201019-signed.hap)。沿用 Flutter 发布身份，APP 与独立 HAP 签名验证通过；模块版本、包名、debug=false 和权限检查通过。APP SHA-256：`B95480681723A9FA66AEA54151437442B0B8BB9BA96E1D236333386F031D846C`；HAP SHA-256：`655FC8A649FAFF49A724652D29467268FBB48F0F0A0E439CD7F85DD3C56C6FA2`。
+
+三个针对性主机测试文件（含 30 组 service 集成检查）、鸿蒙 debug/release 编译通过。调试归档：[M135 unsigned HAP](artifacts/AloeSend-2000135-M135-protocol-upgrade-unsigned.hap)，SHA-256：`C8C87062D178EA42A8C69EE51AE17184E0CEEDB93FFDC7F0D76C746A3486713E`。13 个里程碑归档包校验通过。此前沿用 2000134 的临时验证包移至 artifacts/experiments，避免与正式 M134 归档混淆。
+
+构建元数据 sourceDirty=true：构建时源码已提交，包清单正在更新，用户原有 output/ 保留未跟踪。未安装、上传或推送新版本。排查时只读查询过连接的鸿蒙设备日志，未获得这次断连的定位日志；Android 1.17.0 和 Windows 1.16.1 真机回归仍待完成，旧 HTTP 状态的来源尚未确认。
+
+# M134 历史交接
 
 版本 2.0.134 / 2000134，源码 `61d1a58aa57e8a3c317175bf4e3a8ebc1957da41`。设置入口只显示“进群吐槽”，隐藏下方群号，保留 QQ 拉起及失败提示；包含 M133 的“支持作者”页面。详见 [M134](milestones/M134-feedback-label.md)。
 
