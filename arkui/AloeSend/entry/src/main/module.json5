@@ -40,6 +40,7 @@
           {
             "actions": ["ohos.want.action.sendData"],
             "uris": [{ "scheme": "file", "utd": "general.object", "maxFileSupported": 100 },
+              { "scheme": "file", "utd": "general.file", "maxFileSupported": 100 },
               { "scheme": "", "utd": "general.text" }, { "scheme": "", "utd": "general.hyperlink" }]
           }
         ]

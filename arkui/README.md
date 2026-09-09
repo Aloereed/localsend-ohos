@@ -1,6 +1,6 @@
 # AloeSend 原生 ArkUI
 
-最新里程碑：[M135 · 纠正旧 HTTP 设备记录](milestones/M135-protocol-upgrade.md)，版本 2.0.135。设备实际开启 HTTPS、ArkUI 仍记录 HTTP 时，提前断连后验证 HTTPS 和证书，再更新设备协议并发起接收请求。三个主机测试文件通过；Android 1.17.0 与 Windows 1.16.1 真机回归待完成。安装包、构建和签名校验信息见 [HANDOFF](HANDOFF.md)。
+最新里程碑：[M136 · 系统分享接收通用文件](milestones/M136-share-file-types.md)，版本 2.0.136。补充 general.file 分享类型声明，处理系统文件管理器分享无后缀、未知后缀及混合文件时的匹配缺口。导入测试通过，系统分享面板列出并拉起 AloeSend 的行为待真机验证。包含 M135 协议纠正修复；安装包、构建和签名校验信息见 [HANDOFF](HANDOFF.md)。
 
 历史发布包：[2.0.132 signed release APP](artifacts/release/AloeSend-2000132-release-20260908-002452-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。已恢复 NetworkKit 和 INTERNET，保留 M131 界面与选择数量调整。
 
