@@ -1,4 +1,14 @@
-# 当前交接 · M135
+# 当前交接 · M136
+
+版本 2.0.136 / 2000136，源码 `1388b8e0f72606c97e020d4a58fa476cf97ab739`。系统分享入口补充 general.file 通用文件声明，覆盖无后缀、未知后缀及混合文件分享的类型匹配缺口。详情见 [M136](milestones/M136-share-file-types.md)。包含 M135 的旧 HTTP 设备记录纠正。
+
+正式签名包：[APP](artifacts/release/AloeSend-2000136-release-20260909-202151-signed.app)、[HAP](artifacts/release/AloeSend-2000136-release-20260909-202151-signed.hap)。release 构建、APP 与独立 HAP 签名验证通过，沿用 Flutter 发布身份；模块版本、包名、debug=false 和权限检查通过。APP SHA-256：`63671F0C202CEDC1C9C60068F244663DBABDA60C4B7D23C4BC94C96C846FD0E6`；HAP SHA-256：`3965F336CE04CEBE47066A404FFBA29437619B6EF5275FFCAB8E8FED932E22F2`。
+
+incoming-share.test.cjs 已通过，验证单个无后缀、未知后缀和混合文件导入后的文件名、字节内容、大小及句柄释放。鸿蒙调试编译通过，调试归档：[M136 unsigned HAP](artifacts/AloeSend-2000136-M136-share-file-types-unsigned.hap)，SHA-256：`444CCD2FD9A0EB1CA44EF02A26B339CB29C6A7707830786FE5B73037966D2143`。14 个里程碑归档包校验通过。
+
+系统分享目标筛选和应用拉起仍待真机验证；需要安装新包后，从系统文件管理器分别分享无后缀、未知后缀及混合批次。本轮未安装新包、未上传或推送。构建时源码已提交，包清单正在更新，用户原有 output/ 保留未跟踪，因此正式包元数据 sourceDirty=true。
+
+# M135 历史交接
 
 版本 2.0.135 / 2000135，源码 `855e8e0681d05a8a510ba678b4f0c3cb2ea974f7`。旧 HTTP 记录连接 HTTPS 设备提前断连时，验证 HTTPS 和证书后更新设备协议并重新发起接收请求。详情与限制见 [M135](milestones/M135-protocol-upgrade.md)。
 

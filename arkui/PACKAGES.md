@@ -4,6 +4,7 @@
 
 | 版本号 | 包（新到旧） | 源码提交 | SHA-256 |
 | --- | --- | --- | --- |
+| 2000136 | [M136-share-file-types](artifacts/AloeSend-2000136-M136-share-file-types-unsigned.hap) | 1388b8e0 | 444CCD2FD9A0EB1CA44EF02A26B339CB29C6A7707830786FE5B73037966D2143 |
 | 2000135 | [M135-protocol-upgrade](artifacts/AloeSend-2000135-M135-protocol-upgrade-unsigned.hap) | 855e8e06 | C8C87062D178EA42A8C69EE51AE17184E0CEEDB93FFDC7F0D76C746A3486713E |
 | 2000134 | [M134-feedback-label](artifacts/AloeSend-2000134-M134-feedback-label-unsigned.hap) | 61d1a58a | 3BF5F67C097E250636475282806EA65B2C0A8F63C8F853FE31B2D13D5E7483EB |
 | 2000133 | [M133-author-support](artifacts/AloeSend-2000133-M133-author-support-unsigned.hap) | 81341b53 | F509E2BB3AE1D62674FE778949F809F80A19E23A604FB30D636F0C0AE25521A3 |
