@@ -1,6 +1,6 @@
 # AloeSend 原生 ArkUI
 
-最新里程碑：[M134 · 隐藏反馈入口群号](milestones/M134-feedback-label.md)，版本 2.0.134。入口仅显示“进群吐槽”，保留 QQ 群拉起及 M133 支持作者功能。正式签名 [APP](artifacts/release/AloeSend-2000134-release-20260908-232754-signed.app) 和 [HAP](artifacts/release/AloeSend-2000134-release-20260908-232754-signed.hap) 已生成，语言测试、编译及签名校验通过；真机跳转待验证。哈希与交接信息见 [HANDOFF](HANDOFF.md)。
+最新里程碑：[M135 · 纠正旧 HTTP 设备记录](milestones/M135-protocol-upgrade.md)，版本 2.0.135。设备实际开启 HTTPS、ArkUI 仍记录 HTTP 时，提前断连后验证 HTTPS 和证书，再更新设备协议并发起接收请求。三个主机测试文件通过；Android 1.17.0 与 Windows 1.16.1 真机回归待完成。安装包、构建和签名校验信息见 [HANDOFF](HANDOFF.md)。
 
 历史发布包：[2.0.132 signed release APP](artifacts/release/AloeSend-2000132-release-20260908-002452-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。已恢复 NetworkKit 和 INTERNET，保留 M131 界面与选择数量调整。
 

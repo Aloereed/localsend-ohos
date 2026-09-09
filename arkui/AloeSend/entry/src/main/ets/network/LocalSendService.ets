@@ -436,7 +436,13 @@ export class LocalSendService {
   }
 
   private async register(peer: Peer): Promise<void> {
-    const result = await request(peer, 'POST', `/api/localsend/${peer.version === '1.0' ? 'v1' : 'v2'}/register`, JSON.stringify(this.info()), new Cancellation(), this.store.settings.discoveryTimeout);
+    let result: HttpReply;
+    try {
+      result = await request(peer, 'POST', `/api/localsend/${peer.version === '1.0' ? 'v1' : 'v2'}/register`, JSON.stringify(this.info()), new Cancellation(), this.store.settings.discoveryTimeout);
+    } catch (error) {
+      if (peer.protocol !== 'http' || (error as Error).message !== '设备提前关闭了连接') throw error as Error;
+      await this.verifyHttpsPeer(peer, new Cancellation()); return;
+    }
     if (result.status === 200) {
       const info = JSON.parse(result.body) as DeviceInfo;
       const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
@@ -446,7 +452,13 @@ export class LocalSendService {
   }
 
   async probe(peer: Peer): Promise<void> {
-    let reply = await request(peer, 'GET', '/api/localsend/v2/info', '', new Cancellation(), this.store.settings.discoveryTimeout);
+    let reply: HttpReply;
+    try {
+      reply = await request(peer, 'GET', '/api/localsend/v2/info', '', new Cancellation(), this.store.settings.discoveryTimeout);
+    } catch (error) {
+      if (peer.protocol !== 'http' || (error as Error).message !== '设备提前关闭了连接') throw error as Error;
+      await this.verifyHttpsPeer(peer, new Cancellation()); return;
+    }
     if (reply.status === 404) reply = await request(peer, 'GET', '/api/localsend/v1/info', '', new Cancellation(), this.store.settings.discoveryTimeout);
     if (reply.status !== 200) throw new Error(`设备返回 ${reply.status}`);
     const info = JSON.parse(reply.body) as DeviceInfo;
@@ -454,6 +466,21 @@ export class LocalSendService {
     if (reply.fingerprint) known.fingerprint = reply.fingerprint;
     this.upsertPeer(known, !!reply.fingerprint || known.protocol === 'http');
     if (this.store.settings.visible) await this.register(known);
+  }
+
+  private async verifyHttpsPeer(peer: Peer, cancellation: Cancellation): Promise<Peer> {
+    const secure = JSON.parse(JSON.stringify(peer)) as Peer; secure.protocol = 'https';
+    let reply = await request(secure, 'GET', '/api/localsend/v2/info', '', cancellation, this.store.settings.discoveryTimeout);
+    if (reply.status === 404) reply = await request(secure, 'GET', '/api/localsend/v1/info', '', cancellation, this.store.settings.discoveryTimeout);
+    if (reply.status !== 200) throw new Error(`设备返回 ${reply.status}`);
+    const info = JSON.parse(reply.body) as DeviceInfo;
+    if (!info || typeof info.alias !== 'string' || !reply.fingerprint) throw new Error('设备返回了无效响应');
+    cancellation.check();
+    const known = this.peerFrom(info, peer.ip);
+    known.port = peer.port; known.protocol = 'https'; known.fingerprint = reply.fingerprint;
+    this.upsertPeer(known, true);
+    this.store.networkLog('discovery', `${known.alias} · ${known.ip}:${known.port} · HTTPS 已验证，更新旧 HTTP 记录`);
+    return known;
   }
 
   async addAddress(address: string): Promise<void> {
@@ -835,7 +862,20 @@ export class LocalSendService {
       let response = new HttpReply();
       if (resumed?.accepted) {
         response.status = 200; response.body = JSON.stringify(legacy ? resumed.accepted.files : resumed.accepted);
-      } else response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
+      } else {
+        try { response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation); }
+        catch (error) {
+          // A stale HTTP advertisement can point at an HTTPS-only listener.
+          // Verify with a read-only TLS request before repeating the offer;
+          // never downgrade HTTPS or retry an upload body.
+          if (peer.protocol !== 'http' || (error as Error).message !== '设备提前关闭了连接') throw error as Error;
+          peer = await this.verifyHttpsPeer(peer, cancellation);
+          context.peer = peer; transfer.peerInfo = peer; transfer.encrypted = true;
+          legacy = peer.version === '1.0'; context.legacy = legacy;
+          preparePath = legacy ? '/api/localsend/v1/send-request' : '/api/localsend/v2/prepare-upload';
+          response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
+        }
+      }
       if (response.status === 404 && !legacy) {
         legacy = true; preparePath = '/api/localsend/v1/send-request';
         response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
