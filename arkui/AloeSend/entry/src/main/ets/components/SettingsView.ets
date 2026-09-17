@@ -7,6 +7,7 @@ import { flutterLanguages } from '../model/FlutterLocales';
 import { resolvedLanguage } from '../model/Locale';
 import { LanguagePicker } from './LanguagePicker';
 import { AppIcon } from './AppIcon';
+import { normalizeColor, colorChannel, changeColorChannel } from '../model/Colors';
 
 @Component
 export struct SettingsView {
@@ -30,6 +31,36 @@ export struct SettingsView {
   @State timeout: string = '';
   @State model: string = '';
   @State languageVisible: boolean = false;
+  @State colorDraft: string = '#168A75';
+  @State colorPickerVisible: boolean = false;
+
+  @Builder
+  colorPicker() {
+    Column({ space: 12 }) {
+      Row({ space: 12 }) {
+        Circle().width(48).height(48).fill(normalizeColor(this.colorDraft) || this.store.settings.accent)
+        TextInput({ text: this.colorDraft, placeholder: '#168A75' }).layoutWeight(1).maxLength(7)
+          .onChange((value: string) => this.colorDraft = value).accessibilityText(this.store.t('十六进制颜色'))
+      }.width('100%')
+      ForEach([0, 1, 2], (index: number) => {
+        Row({ space: 12 }) {
+          Text(['R', 'G', 'B'][index]).fontColor($r('sys.color.font_primary')).width(24)
+          Slider({ value: colorChannel(this.colorDraft, index), min: 0, max: 255, step: 1 }).layoutWeight(1)
+            .selectedColor(['#D64545', '#258A4A', '#3478F6'][index])
+            .onChange((value: number) => this.colorDraft = changeColorChannel(this.colorDraft, index, value))
+            .accessibilityText(this.store.t(['红色分量', '绿色分量', '蓝色分量'][index]))
+          Text(String(colorChannel(this.colorDraft, index))).width(36).fontColor($r('sys.color.font_secondary'))
+        }.width('100%')
+      })
+      Row({ space: 12 }) {
+        Button(this.store.t('取消')).onClick(() => this.colorPickerVisible = false)
+        Button(this.store.t('应用颜色')).enabled(!!normalizeColor(this.colorDraft)).onClick(async () => {
+          this.store.settings.accent = normalizeColor(this.colorDraft); this.store.settings.themePreset = 'custom';
+          if (await this.store.save()) this.colorPickerVisible = false;
+        })
+      }
+    }.width('100%')
+  }
 
   importSettings(): void {
     this.getUIContext().showAlertDialog({ title: this.store.t('从旧版本导入设置'),
@@ -86,6 +117,9 @@ export struct SettingsView {
     const settings = this.store.settings;
     if (key === 'quickSave') return settings.quickSave;
     if (key === 'favorites') return settings.favoriteQuickSave;
+    if (key === 'createChecksums') return settings.createChecksums;
+    if (key === 'showAddressTags') return settings.showAddressTags;
+    if (key === 'verifyChecksums') return settings.verifyChecksums;
     if (key === 'history') return settings.saveHistory;
     if (key === 'finish') return settings.autoFinish;
     if (key === 'messages') return settings.openMessagesOnReceive;
@@ -111,6 +145,9 @@ export struct SettingsView {
           if (value === this.toggleValue(key)) return;
           if (key === 'quickSave') this.store.settings.quickSave = value;
           if (key === 'favorites') this.store.settings.favoriteQuickSave = value;
+          if (key === 'createChecksums') this.store.settings.createChecksums = value;
+          if (key === 'showAddressTags') this.store.settings.showAddressTags = value;
+          if (key === 'verifyChecksums') this.store.settings.verifyChecksums = value;
           if (key === 'history') this.store.settings.saveHistory = value;
           if (key === 'finish') this.store.settings.autoFinish = value;
           if (key === 'messages') this.store.settings.openMessagesOnReceive = value;
@@ -198,8 +235,13 @@ export struct SettingsView {
                 .onClick(() => { this.store.settings.themePreset = 'custom'; this.store.settings.accent = color; this.store.save(); }).accessibilityText(this.store.tf('主题色 {0}', [color]))
             })
           }.width('100%')
+          Button(this.store.t('自定义取色')).onClick(() => {
+            this.colorDraft = this.store.settings.accent; this.colorPickerVisible = !this.colorPickerVisible;
+          })
+          if (this.colorPickerVisible) { this.colorPicker() }
         }.padding(18).width('100%')
         this.toggle('界面动画', '自然流畅的页面过渡', 'animation')
+        this.toggle('使用 #尾号区分地址', '开启时按地址显示；关闭时按设备指纹合并多个地址', 'showAddressTags')
         this.toggle('轻量效果', '关闭背景模糊，使用实色表面', 'effects')
         this.toggle('OLED 纯黑背景', '深色模式下使用纯黑背景', 'black')
       }.width('100%').backgroundColor(this.store.surfaceColor).borderRadius(24)
@@ -207,6 +249,8 @@ export struct SettingsView {
       Column() {
         this.toggle('允许发现', '在同一网络中显示本设备', 'visible')
         this.toggle('自动接收', '信任当前网络时使用，无需逐次确认', 'quickSave')
+        this.toggle('发送校验和', '发送前计算 SHA-256，供接收方检查文件完整性', 'createChecksums')
+        this.toggle('验证校验和', '接收后检查 SHA-256，不匹配的文件不会标记为成功', 'verifyChecksums')
         this.toggle('仅收藏设备自动接收', '其他设备仍需手动确认', 'favorites')
         this.toggle('保留历史', '记录仅保存在当前设备', 'history')
         this.toggle('自动完成', '成功传输后结束会话', 'finish')

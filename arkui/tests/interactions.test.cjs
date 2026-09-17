@@ -16,7 +16,7 @@ async function advance(ms) {
     const [id, task] = due; now = task.at;
     if (task.interval) task.at += task.delay; else pending.delete(id);
     task.callback();
-    for (let n = 0; n < 12; n++) await Promise.resolve();
+    for (let n = 0; n < 36; n++) await Promise.resolve();
   }
   now = end;
 }
@@ -47,6 +47,11 @@ const { LocalSendService } = load('network/LocalSendService');
   });
   store.ready = true; store.settings.https = false;
   const service = new LocalSendService(store);
+  // This timer-only fixture has no filesystem context; certificate I/O is
+  // exercised by mutual-tls.test.cjs with real persisted identities.
+  service.ensureIdentity = async () => {};
+  service.multicast = { async sync() {}, send() { announcements++; }, async close() {} };
+  service.scan = { async run() {}, cancel() {} };
   service.readAddresses = async () => { scans++; store.localIps = ['192.168.1.2']; };
   await service.start(); assert.equal(announcements, 1);
   await advance(800); assert.equal(announcements, 2);

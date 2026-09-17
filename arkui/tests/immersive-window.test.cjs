@@ -7,9 +7,10 @@ const EntryAbility = load('entryability/EntryAbility').default;
 const tick = () => new Promise(resolve => setImmediate(resolve));
 (async () => {
   const ability = new EntryAbility();
-  const bars = [], fullscreen = [], backgrounds = []; let listener, removed = false;
+  const bars = [], fullscreen = [], backgrounds = [], indicators = []; let listener, removed = false;
   const areas = [[40, 0], [48, 0], [0, 24]];
   const mainWindow = {
+    setSpecificSystemBarEnabled: async (name, enabled) => { indicators.push([name, enabled]); },
     setWindowLayoutFullScreen: async value => { fullscreen.push(value); },
     setWindowBackgroundColor: value => backgrounds.push(value),
     setWindowSystemBarProperties: async value => { bars.push(value); },
@@ -21,6 +22,7 @@ const tick = () => new Promise(resolve => setImmediate(resolve));
   ability.onWindowStageCreate({ getMainWindow: async () => mainWindow, loadContent: () => {} });
   await tick();
   assert.deepEqual(fullscreen, [true]);
+  assert.deepEqual(indicators.at(-1), ['navigationIndicator', false]);
   assert.equal(appStore.safeTopPx, 48); assert.equal(appStore.safeBottomPx, 24);
   assert.equal(bars.at(-1).statusBarColor, '#00000000');
   assert.equal(bars.at(-1).statusBarContentColor, '#182431');

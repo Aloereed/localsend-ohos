@@ -97,6 +97,10 @@ function readCatalog(directory = path.join(__dirname, '../app/lib/gen')) {
     locales[locale] = resolve({ ...base.values, ...parsed.values });
     unsupported[locale] = parsed.unsupported;
   }
+  if (directory === path.join(__dirname, '../app/lib/gen')) {
+    const { names, supplementLabels } = require('./upstream-locales.cjs');
+    for (const locale of Object.keys(names)) { locales[locale] = supplementLabels(locales.en, locale); unsupported[locale] = []; }
+  }
   return { locales, unsupported };
 }
 

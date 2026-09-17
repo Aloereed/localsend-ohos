@@ -19,7 +19,7 @@ export class PullSocket {
   deliver(event: native.TcpEvent): void {
     if (this.closed) return;
     if (event.kind === 'message') this.message({ message: event.data,
-      remoteInfo: { address: this.ip, family: 'IPv4', port: 0, size: event.data.byteLength } });
+      remoteInfo: { address: this.ip, family: this.ip.includes(':') ? 'IPv6' : 'IPv4', port: 0, size: event.data.byteLength } });
     else if (event.kind === 'error') this.failed(new Error(event.error));
     else if (event.kind === 'close') { this.closed = true; native.tcpClose(this.id); this.disconnected(); }
   }

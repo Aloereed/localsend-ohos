@@ -60,7 +60,7 @@ class SocketAdapter {
   async connect(options) {
     if (!this.bindAddress) throw new Error('Explicit client bind missing');
     const settings = { host: options.address.address, port: options.address.port, localAddress: this.bindAddress.address, localPort: this.bindAddress.port };
-    this.socket = this.isTls ? tls.connect({ ...settings, rejectUnauthorized: false }) : net.connect(settings);
+    this.socket = this.isTls ? tls.connect({ ...settings, cert: options.secureOptions?.cert, key: options.secureOptions?.key, rejectUnauthorized: false }) : net.connect(settings);
     this.attach();
     await new Promise((resolve, reject) => { this.socket.once(this.isTls ? 'secureConnect' : 'connect', resolve); this.socket.once('error', reject); });
   }
@@ -120,6 +120,8 @@ const cryptoFramework = {
 };
 const nativeLibrary = require('../logs/native-host/aloetls.node');
 const nativeAdapter = Object.create(nativeLibrary);
+// Host fixtures supply their own network topology; do not discover the test PC.
+Object.defineProperty(nativeAdapter, 'networkInterfaces', { value: () => [], configurable: true, writable: true });
 Object.defineProperty(nativeAdapter, 'fileIdentity', { value: fd => nativeLibrary.fileIdentity(handles.get(fd)?.fd ?? -1) });
 const mocks = {
   'libaloetls.so': nativeAdapter,
@@ -136,7 +138,8 @@ const mocks = {
   '@kit.CryptoArchitectureKit': { cryptoFramework },
   '@kit.CoreFileKit': { fileIo: nativeFs, fileUri: { FileUri: class { constructor(uri) { this.name = path.basename(uri); } }, getUriFromPath: file => file }, picker: {},
     fileShare: { OperationMode: { READ_MODE: 1, WRITE_MODE: 2 }, activatePermission: async () => {}, persistPermission: async () => {} } },
-  '@kit.BasicServicesKit': { pasteboard: {} },
+    '@kit.BasicServicesKit': { pasteboard: {}, deviceInfo: { sdkApiVersion: 22 }, settings: { display: { ANIMATOR_DURATION_SCALE: 'animator_duration_scale' }, getValue: async () => '1' } },
+    '@kit.AccessibilityKit': { accessibility: { isAnimationReduceEnabled: async () => false } },
   '@kit.ShareKit': { systemShare: {} },
   '@kit.MediaLibraryKit': { photoAccessHelper: {} },
   '@kit.LocalizationKit': { intl: { PluralRules: Intl.PluralRules }, i18n: { System: { getSystemLanguage: () => 'zh-Hans' } } },

@@ -1,6 +1,6 @@
 import { preferences } from '@kit.ArkData';
 import { common, ConfigurationConstant } from '@kit.AbilityKit';
-import { picker, fileIo as fs, fileUri } from '@kit.CoreFileKit';
+import { picker, fileIo as fs, fileUri, fileShare } from '@kit.CoreFileKit';
 import { systemShare } from '@kit.ShareKit';
 import { pasteboard, deviceInfo, BusinessError } from '@kit.BasicServicesKit';
 import { util } from '@kit.ArkTS';
@@ -17,6 +17,7 @@ import { importFlutterData } from '../platform/FlutterImport';
 import { importFlutterSettings } from '../platform/FlutterSettings';
 import { checkDownloadFolder, downloadFolderFiles } from '../platform/DownloadFolders';
 import { directoryIdentity } from '../platform/DirectoryIdentity';
+import { initialAnimations } from '../platform/AnimationPreference';
 
 export class ShareFile {
   id: string = util.generateRandomUUID();
@@ -46,7 +47,12 @@ export class Peer {
 }
 
 export function samePeer(a: Peer, b: Peer): boolean {
-  if (a.fingerprint && b.fingerprint) return a.fingerprint === b.fingerprint;
+  if (a.fingerprint && b.fingerprint) {
+    if (/^[a-fA-F0-9]{64}$/.test(a.fingerprint) && /^[a-fA-F0-9]{64}$/.test(b.fingerprint)) {
+      return a.fingerprint.toLowerCase() === b.fingerprint.toLowerCase();
+    }
+    return a.fingerprint === b.fingerprint;
+  }
   return !!a.ip && a.ip === b.ip && a.port === b.port;
 }
 
@@ -115,6 +121,8 @@ export class TransferView {
   activeBytes: number = -1;
   finished: number = 0;
   encrypted: boolean = true;
+  hashing: boolean = false;
+  hashedBytes: number = 0;
   peerInfo: Peer | undefined = undefined;
   destination: string = '';
 }
@@ -133,7 +141,10 @@ export class AppSettings {
   accent: string = '#168A75';
   themePreset: string = 'localsend';
   quickSave: boolean = false;
-  favoriteQuickSave: boolean = false;
+  favoriteQuickSave: boolean = true;
+  createChecksums: boolean = true;
+  showAddressTags: boolean = true;
+  verifyChecksums: boolean = true;
   saveHistory: boolean = true;
   autoFinish: boolean = true;
   openMessagesOnReceive: boolean = false;
@@ -159,6 +170,8 @@ export class AppSettings {
 }
 
 export function formatSize(bytes: number): string {
+  if (bytes >= 1000000000000000) return `${(bytes / 1000000000000000).toFixed(2)} PB`;
+  if (bytes >= 1000000000000) return `${(bytes / 1000000000000).toFixed(2)} TB`;
   if (bytes < 1000) return `${bytes} B`;
   if (bytes < 1000000) return `${(bytes / 1000).toFixed(1)} KB`;
   if (bytes < 1000000000) return `${(bytes / 1000000).toFixed(1)} MB`;
@@ -190,6 +203,17 @@ export class AppStore {
   files: ShareFile[] = [];
   peers: Peer[] = [];
   favorites: Peer[] = [];
+  peerEndpoints: Peer[] = [];
+
+  get displayedPeers(): Peer[] {
+    return this.settings.showAddressTags && this.peerEndpoints.length ? this.peerEndpoints : this.peers;
+  }
+
+  displayedAddresses(peer: Peer): string {
+    const endpoints = this.settings.showAddressTags ? [peer] : [peer, ...this.peerEndpoints.filter((item: Peer) => samePeer(item, peer))];
+    return Array.from(new Set(endpoints.map((item: Peer) => `${item.ip.includes(':') ? `[${item.ip}]` : item.ip}:${item.port}`))).join('\n');
+  }
+  discoveryAddresses: string[] = [];
   history: HistoryEntry[] = [];
   logs: string[] = [];
   networkLogs: NetworkLogEntry[] = [];
@@ -232,6 +256,9 @@ export class AppStore {
   pendingPin: string = '';
   pendingPinInvalid: boolean = false;
   webUrl: string = '';
+  launchRoute: string = '';
+  webTemplateConfigured: boolean = false;
+  webTemplateBusy: boolean = false;
   webStarting: boolean = false;
   webRequests: WebAccessRequest[] = [];
   webFiles: ShareFile[] = [];
@@ -245,6 +272,7 @@ export class AppStore {
   onTransferCompleted: (transfer: TransferView) => void = () => {};
   onReceiveStarted: (transfer: TransferView) => void = () => {};
   onTransferActivity: (active: boolean) => void = () => {};
+  onSelectionActivity: (active: boolean) => void = () => {};
   onPickDownloadDirectory: (path: string, purpose: string) => Promise<string> = async () => '';
   onContinuePhotoSelection: (selected: number, remaining: number) => Promise<boolean> = async () => false;
   downloadAccess: boolean = false;
@@ -279,6 +307,7 @@ export class AppStore {
       const settingsReport = await importFlutterSettings(context, this.storage);
       this.privacyAccepted = (await this.storage.get('privacy_policy_accepted', false)) === true;
       const saved = await this.storage.get('settings', '') as string;
+      const initializeAnimations = !saved || (JSON.parse(saved) as AppSettings).animations === undefined;
       if (saved) {
         const previous = JSON.parse(saved) as AppSettings;
         // Before presets existed, the stored accent was the user's theme.
@@ -292,6 +321,9 @@ export class AppStore {
         if (previous.themePreset !== undefined) merged.themePreset = previous.themePreset;
         if (previous.quickSave !== undefined) merged.quickSave = previous.quickSave;
         if (previous.favoriteQuickSave !== undefined) merged.favoriteQuickSave = previous.favoriteQuickSave;
+        if (previous.createChecksums !== undefined) merged.createChecksums = previous.createChecksums;
+        if (typeof previous.showAddressTags === 'boolean') merged.showAddressTags = previous.showAddressTags;
+        if (previous.verifyChecksums !== undefined) merged.verifyChecksums = previous.verifyChecksums;
         if (previous.saveHistory !== undefined) merged.saveHistory = previous.saveHistory;
         if (previous.autoFinish !== undefined) merged.autoFinish = previous.autoFinish;
         if (previous.openMessagesOnReceive !== undefined) merged.openMessagesOnReceive = previous.openMessagesOnReceive;
@@ -315,6 +347,14 @@ export class AppStore {
         if (previous.networkPatterns !== undefined) merged.networkPatterns = previous.networkPatterns;
         if (previous.webAutoAccept !== undefined) merged.webAutoAccept = previous.webAutoAccept;
         this.settings = merged;
+      }
+      if (initializeAnimations) {
+        const savedAnimation = await this.storage.get('initial_animations', '');
+        this.settings.animations = typeof savedAnimation === 'boolean' ? savedAnimation : await initialAnimations(context);
+        if (typeof savedAnimation !== 'boolean') {
+          try { await this.storage.put('initial_animations', this.settings.animations); await this.storage.flush(); }
+          catch (_) { this.log('首次动画偏好暂未保存'); }
+        }
       }
       // Settings written by earlier builds bypassed the current form validation.
       // Recover only invalid network fields; retain identity and user choices.
@@ -349,6 +389,10 @@ export class AppStore {
         this.log(`旧版本导入：收藏 ${imported.favorites}，历史 ${imported.history}，消息 ${imported.messages}，未识别 ${imported.skipped.length}`);
       }
       this.favorites = JSON.parse(await this.storage.get('favorites', '[]') as string) as Peer[];
+      try {
+        const hints = JSON.parse(await this.storage.get('discoveryAddresses', '[]') as string) as string[];
+        if (Array.isArray(hints)) this.discoveryAddresses = hints.filter((value: string) => typeof value === 'string' && value.length < 80).slice(0, 16);
+      } catch (_) { this.discoveryAddresses = []; }
       // Earlier native versions did not distinguish saved remarks from device names.
       for (const favorite of this.favorites) {
         if (typeof favorite.customAlias !== 'boolean') favorite.customAlias = true;
@@ -494,7 +538,7 @@ export class AppStore {
   }
 
   updateTransfer(transfer: TransferView): void {
-    const wasActive = this.transfers.some((item: TransferView) => item.status === 'transferring');
+    const wasActive = this.transfers.some((item: TransferView) => item.status === 'transferring' || item.hashing);
     const previous = this.transfers.find((item: TransferView) => item.id === transfer.id);
     if (!transfer.activeStarted && transfer.status === 'transferring') transfer.activeStarted = Date.now();
     const snapshot = JSON.parse(JSON.stringify(transfer)) as TransferView;
@@ -506,7 +550,7 @@ export class AppStore {
       if (item.status === 'waiting' || item.status === 'transferring') return true;
       return finishedSlots-- > 0;
     });
-    const active = this.transfers.some((item: TransferView) => item.status === 'transferring');
+    const active = this.transfers.some((item: TransferView) => item.status === 'transferring' || item.hashing);
     if (active !== wasActive) this.onTransferActivity(active);
     if (this.context) backgroundKeeper.sync(active, this.context,
       (message: string) => this.log(message));
@@ -517,6 +561,25 @@ export class AppStore {
   fail(title: string, error: Error): void {
     this.error = `${title}：${error.message || String(error)}`;
     this.log(this.error);
+  }
+
+  async rememberDiscoveryAddress(address: string): Promise<void> {
+    if (this.discoveryAddresses.includes(address)) return;
+    this.discoveryAddresses = [address, ...this.discoveryAddresses].slice(0, 16);
+    try {
+      await this.persist(async () => {
+        await this.storage?.put('discoveryAddresses', JSON.stringify(this.discoveryAddresses));
+        await this.storage?.flush();
+      });
+    } catch (error) { this.log(`保存发现地址失败：${(error as Error).message}`); }
+  }
+
+  async clearDiscoveryAddresses(): Promise<void> {
+    this.discoveryAddresses = [];
+    await this.persist(async () => {
+      await this.storage?.put('discoveryAddresses', '[]');
+      await this.storage?.flush();
+    });
   }
 
   async save(): Promise<boolean> {
@@ -582,6 +645,7 @@ export class AppStore {
   private beginSelection(): void {
     this.busy = true; this.selecting = true; this.selectionCancelled = false;
     this.selectionCount = 0; this.selectionReadCount = 0;
+    this.onSelectionActivity(true);
   }
 
   cancelSelection(): void { if (this.selecting) this.selectionCancelled = true; }
@@ -595,6 +659,7 @@ export class AppStore {
 
   private endSelection(): void {
     this.selectionReadCount = this.selectionCount; this.selecting = false; this.busy = false;
+    this.onSelectionActivity(false);
     if (this.selectionCancelled) this.notice = this.t('已取消读取，原清单保留');
   }
 
@@ -671,12 +736,15 @@ export class AppStore {
   }
 
   private async readShareFile(uri: string, relativeName: string = ''): Promise<ShareFile> {
+    const started = Date.now();
     const file = new ShareFile();
     file.uri = uri;
     file.name = relativeName || new fileUri.FileUri(uri).name;
     const opened = await fs.open(uri, fs.OpenMode.READ_ONLY);
-    try { file.size = (await fs.stat(opened.fd)).size; }
+    const openedAt = Date.now(); let statedAt = openedAt;
+    try { file.size = (await fs.stat(opened.fd)).size; statedAt = Date.now(); }
     finally { await fs.close(opened); }
+    if (Date.now() - started >= 500) this.log(`文件信息读取较慢 · 打开 ${openedAt - started} ms · 属性 ${statedAt - openedAt} ms · 关闭 ${Date.now() - statedAt} ms`);
     file.mime = mimeForName(file.name);
     return file;
   }
@@ -1006,7 +1074,26 @@ export class AppStore {
   }
 
   async pickDestination(): Promise<string> {
-    return this.pickDownloadFolder('save');
+    if (!this.context) return '';
+    if (!canIUse('SystemCapability.FileManagement.UserFileService.FolderSelection')) {
+      return this.pickDownloadFolder('save');
+    }
+    const options = new picker.DocumentSelectOptions();
+    options.selectMode = picker.DocumentSelectMode.FOLDER;
+    options.maxSelectNumber = 1;
+    let selected: string[];
+    try { selected = await new picker.DocumentViewPicker(this.context).select(options); }
+    catch (error) {
+      if ((error as BusinessError).code === 801) return this.pickDownloadFolder('save');
+      throw error as Error;
+    }
+    if (!selected.length) return '';
+    const policies: fileShare.PolicyInfo[] = [{ uri: selected[0],
+      operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }];
+    // Save settings only after the grant can survive a process restart.
+    await fileShare.persistPermission(policies);
+    await fileShare.activatePermission(policies);
+    return selected[0];
   }
 
   async pickDownloadFolder(purpose: string): Promise<string> {
@@ -1025,14 +1112,18 @@ export class AppStore {
     try {
       const download = destination === this.downloadDirectory || destination.startsWith(`${this.downloadDirectory}/`);
       if (download && entry.path.startsWith(`${destination}/`)) { this.updateHistoryLocation(entry, entry.path); await this.save(); return; }
+      if (!download) {
+        await fileShare.activatePermission([{ uri: destination,
+          operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
+      }
       if (!download && !await fs.access(destination)) {
         this.notice = '旧保存目录暂不可用，文件已保存在应用内。请重新选择目录或在历史记录中另存为。'; return;
       }
       // A unique per-transfer directory prevents overwriting unrelated user files.
       let path = download ? `${destination}/${safeRelativePath(entry.name)}` : `${destination}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
       const original = path; let suffix = 1;
-      while (download && await fs.access(path)) {
-        const dot = original.lastIndexOf('.'); const split = dot > original.lastIndexOf('/') ? dot : original.length;
+      while (await fs.access(path)) {
+        const dot = original.lastIndexOf('.'); const split = dot > original.lastIndexOf('/') + 1 ? dot : original.length;
         path = `${original.slice(0, split)} (${suffix++})${original.slice(split)}`;
       }
       await ensureDirectory(path.slice(0, path.lastIndexOf('/')));

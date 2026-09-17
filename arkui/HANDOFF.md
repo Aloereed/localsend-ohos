@@ -1,4 +1,128 @@
-# 当前交接 · M136
+# M154 正式包交接
+
+版本 2.0.154 / 2000154。发布 Release 配置已使用 aloesend5Release.p7b，本次也补入通用 build-profile.json5.template。设置 → 外观新增默认开启的“使用 #尾号区分地址”：开启分地址显示，关闭按指纹合并并展示多地址，立即生效并持久保存。保留端点列表供切换，十六进制证书指纹忽略大小写。详见 [M154](milestones/M154-device-display-mode.md)。
+
+七个相关测试文件通过，正式构建、APP/HAP 签名及内嵌 p7b 一致性校验通过。最终包：[APP](artifacts/release/AloeSend-2000154-release-20260915-220501-signed.app)、[HAP](artifacts/release/AloeSend-2000154-release-20260915-220501-signed.hap)。APP SHA256 `178407C8C9B6655203D87C5B3DD2D3D84CC034245404166E10CAEA9263FA8E22`。未安装真机，源码未提交。
+
+# M153 历史交接
+
+版本 2.0.153 / 2000153。确认 LocalSend 旧版的 IPv4 尾号标记用法后，在 AloeSend 接收页设备名下、发送页附近/收藏设备卡片加入 `#12` 等标记；多本机尾号去重，保留完整地址，IPv6 不生成短号。见 [M153](milestones/M153-device-address-tags.md)。
+
+格式化边界检查、release 构建及 APP/HAP 签名验证通过，内嵌 profile 与用户指定的 aloesend5Release.p7b 一致。正式包：[APP](artifacts/release/AloeSend-2000153-release-20260915-215815-signed.app)、[HAP](artifacts/release/AloeSend-2000153-release-20260915-215815-signed.hap)。APP SHA256：`012FA54302BD2FB69F6C50C225C8104E90080095957CE9D158E23C3B9733D7AB`。未连接/安装真机，源码未提交；M152 的真机首次发现计时仍未完成。
+
+# M152 历史交接
+
+发布签名更新：用户指定 `C:/Users/huzheng/Downloads/aloesend5Release.p7b`，已替换 `app/ohos/build-profile.Release.json5` 的 profile 路径并重打，版本仍为 2.0.152。最新包：[APP](artifacts/release/AloeSend-2000152-release-20260912-221935-signed.app)、[HAP](artifacts/release/AloeSend-2000152-release-20260912-221935-signed.hap)。正式构建、APP/HAP 签名验证通过，提取的两个内嵌 p7b SHA256 均与用户指定文件一致。APP SHA256：`5C60C41706FB3AA9FD34E0BAA0CCD97C99D4F9751A1A0AA624D0E4A31D985F5B`。本次未安装设备。
+
+版本 2.0.152 / 2000152。用户要求继续加快首次发现；自动未知地址先用 350 ms 无载荷 TCP 检查过滤空端口，开放后才进行完整注册。短检查漏答地址进入正常超时补查阶段，已知/收藏/手动绕过。保留 2 并发和正常操作避让，诊断增加仅清除发现缓存并重启发现的入口。见 [M152](milestones/M152-fast-first-discovery.md)。
+
+九个相关测试文件通过，正式构建及 APP/HAP 签名通过。[APP](artifacts/release/AloeSend-2000152-release-20260912-220712-signed.app)、[HAP](artifacts/release/AloeSend-2000152-release-20260912-220712-signed.hap)。已请用户安装 152 后继续真机无缓存测量（此前 hdc 发布包安装被 9568322 拒绝），尚未验证真机提速数字。源码未提交。
+
+# M151 历史交接
+
+版本 2.0.151 / 2000151。已真机复现 150 冷启动后超过两分钟才发现 Windows .12；Windows TCP 正常但未见 UDP 监听，不能将我主动诊断的 GET 当作官方注册。保留扫描限速，改为邻近地址优先，并持久保存最多 16 个已验证端点作为下次扫描顺序提示；提示不直接显示在线、不固定旧身份。增加注册成功耗时日志，详见 [M151](milestones/M151-device-discovery.md)。
+
+八个相关测试文件通过，正式构建及 APP/HAP 签名通过。[APP](artifacts/release/AloeSend-2000151-release-20260912-215524-signed.app)、[HAP](artifacts/release/AloeSend-2000151-release-20260912-215524-signed.hap)。hdc 安装因 9568322 拒绝，随后用户自行装好 151，未卸载/清数据。真机首次约 38 秒主动注册发现 .12，保存地址后再次启动约 3 秒；HTTPS 注册分别 158/154 ms，确认无需 Windows 刷新。Windows UDP 缺失的内部原因仍未知，首次新设备不保证秒发现。用户已授权真机与常亮；源码未提交。
+
+# M150 历史交接
+
+版本 2.0.150 / 2000150。用户确认本机鸿蒙 AloeSend、对端 LocalSend 1.18.2，有时对端进入发送页后才相互发现。可见模式主动探测改为直接注册，一次连接交换身份；收到公告后的失败注册增加有界、低频定向重试，忙时取消让步，网络变化/停止清空。保留 M149 子网扫描限速，详见 [M150](milestones/M150-reciprocal-discovery.md)。
+
+12 个相关测试文件通过，release 编译与 APP/HAP 签名校验通过。正式包：[APP](artifacts/release/AloeSend-2000150-release-20260912-213555-signed.app)、[HAP](artifacts/release/AloeSend-2000150-release-20260912-213555-signed.hap)。未安装设备，未完成与官方 1.18.2 的真机复测，不能断言现场问题全部解决。源码未提交。
+
+# M149 历史交接
+
+版本 2.0.149 / 2000149。用户确认 M148 已解决选一个小文件后的长等待，要求进一步优化扫描不影响正常功能。自动子网扫描改为 2 并发、100 ms 请求间隔，每批最多 16 地址/6 秒；批间至少 10 秒、完整扫描后至少 60 秒冷却。手动扫描最多 4 并发、25 ms 间隔。忙时中止在途探测并保留未完成地址，网卡交替扫描。详见 [M149](milestones/M149-background-discovery.md)。
+
+十个相关测试文件完成验证：discovery-priority、discovery-automatic、discovery-scan、selection-discovery、discovery-stages、discovery-recovery、discovery-ipv6、hotspot-discovery、interactions、selection-cancel。priority 的旧时间断言按“完成后冷却”调整后复测通过。release 编译及 APP/HAP 签名验证通过。正式包：[APP](artifacts/release/AloeSend-2000149-release-20260912-211923-signed.app)、[HAP](artifacts/release/AloeSend-2000149-release-20260912-211923-signed.hap)。未安装此包或测量真机性能，源码未提交。
+
+# M148 历史交接
+
+版本 2.0.148 / 2000148。用户反馈 147 选择一个 1.4 MB 文件后长等待，稍后恢复。只读获取已连接设备 hilog，见照片选择器返回和同期密集扫描；无法从现有日志精确归因。修复选择/附件读取期间仍可进行子网扫描的资源竞争：选择开始取消在途扫描和兜底计时，选择期间延后前台自动发现，结束后保留 3 秒界面恢复空档。增加超过 500 ms 的文件打开/属性/关闭耗时日志，不记录文件路径。详见 [M148](milestones/M148-selection-discovery.md)。
+
+selection-discovery、selection-cancel、selection-atomic、selection-limits、folder-selection、discovery-automatic、interactions 七个测试文件通过；release 编译及 APP/HAP 签名通过。正式包：[APP](artifacts/release/AloeSend-2000148-release-20260912-211128-signed.app)、[HAP](artifacts/release/AloeSend-2000148-release-20260912-211128-signed.hap)。未安装此包，未测真机前后耗时，不声称已确认全部根因。源码未提交。
+
+# M147 历史交接
+
+版本 2.0.147 / 2000147。发送页“附近的设备”标题旁新增随主题色显示的“传输有问题？”按钮，进入现有使用帮助页。帮助顶部新增三项常用建议：可信局域网内双方关闭加密并完全退出重启（Windows 含托盘退出、可能加快传输及明文说明）、接收设备发送页刷新、双方更新应用。简繁中文和英文已补齐。
+
+flutter-locales、flutter-templates 测试、release 编译和 APP/HAP 签名验证通过。正式包：[APP](artifacts/release/AloeSend-2000147-release-20260912-210213-signed.app)、[HAP](artifacts/release/AloeSend-2000147-release-20260912-210213-signed.hap)。未安装真机，源码未提交。
+
+# M146 历史交接
+
+版本 2.0.146 / 2000146。修复自动发现中“有一个设备确认即跳过整个子网扫描”的条件，已知设备响应不再阻止发现漏掉组播的新设备。保留一分钟自动扫描冷却、16 并发及传输期间暂停；组播监听每分钟主动重建，定时任务异常写诊断，下一轮继续。见 [M146](milestones/M146-automatic-discovery.md)。
+
+discovery-automatic、discovery-stages、discovery-scan、discovery-recovery、discovery-ipv6、hotspot-discovery、interactions、add-address 八个测试文件通过，release 编译及 APP/HAP 签名验证通过。正式包：[APP](artifacts/release/AloeSend-2000146-release-20260912-205718-signed.app)、[HAP](artifacts/release/AloeSend-2000146-release-20260912-205718-signed.hap)。包含热点及地址添加修复；未安装真机，源码未提交。
+
+# M145 历史交接
+
+版本 2.0.145 / 2000145。修复地址添加路径对空编码结果读取 length：空请求体直接生成零长度字节数组，空响应直接解码为空字符串；证书数据缺失时明确失败并禁止按裸地址回退明文。HTTPS 初次探测错误写入诊断。详见 [M145](milestones/M145-add-address.md)。
+
+add-address、addresses、protocol-upgrade、mutual-tls、file-checksum、service 六个测试文件通过，其中 service 31 组。release 编译及 APP/HAP 签名校验通过。正式包：[APP](artifacts/release/AloeSend-2000145-release-20260912-205140-signed.app)、[HAP](artifacts/release/AloeSend-2000145-release-20260912-205140-signed.hap)。包含 M144 热点发现改动。无当前已连接设备，用户只确认点击添加后报错，未提供加密状态或调用栈；空编码返回值为主机注入复现条件，不能声称已确认真机根因。源码未提交。
+
+# M144 历史交接
+
+版本 2.0.144 / 2000144。针对 138 用户反馈“手机开热点双向不可发现”，补齐不在 getAllNets 列表中的系统网卡：鸿蒙使用 getifaddrs 获取运行中非回环 IPv4/IPv6 地址、作用域和掩码，与 NetworkKit 合并后统一过滤并用于组播、扫描及本机地址。现有 15 秒发现刷新可处理热点切换。详见 [M144](milestones/M144-hotspot-discovery.md)。
+
+八个相关测试文件通过，包括热点拓扑、发现恢复/扫描/阶段/IPv6、保存网络设置、网页 IPv6 和原生真实网卡枚举/组播。release 编译、APP/HAP 签名校验通过。正式包：[APP](artifacts/release/AloeSend-2000144-release-20260912-203909-signed.app)、[HAP](artifacts/release/AloeSend-2000144-release-20260912-203909-signed.hap)。未安装鸿蒙真机，未确认反馈者设备上的实际根因已全部解决；源码未提交。
+
+# M143 历史交接
+
+版本 2.0.143 / 2000143。网页文件列表新增“全部下载（ZIP）”，单次确认下载整批文件；文字继续提供网页复制。使用流式 ZIP64，不缓存整批文件，不需要浏览器允许多个自动下载。复用现有链接有效期、下载确认/自动允许、进度和取消。详情见 [M143](milestones/M143-web-batch-download.md)。
+
+web-batch、web、web-page、web-language、web-template 五个测试文件通过，release 编译及 APP/HAP 签名验证通过。正式包：[APP](artifacts/release/AloeSend-2000143-release-20260911-194902-signed.app)、[HAP](artifacts/release/AloeSend-2000143-release-20260911-194902-signed.hap)。源码未提交，未安装设备，真机浏览器保存仍待验证。
+
+# M142 历史交接
+
+版本 2.0.142 / 2000142。网页模板的“导入网页”“导出模板”和“恢复默认网页”按钮显式绑定 AppStore.accentText/controlSurface，与页面其他次级按钮一致，随主题更新。主题颜色对比度测试、release 编译及 APP/HAP 签名验证通过；真机视觉待验证。
+
+正式包：[APP](artifacts/release/AloeSend-2000142-release-20260911-194255-signed.app)、[HAP](artifacts/release/AloeSend-2000142-release-20260911-194255-signed.hap)。源码未提交，未安装设备。
+
+# M141 历史交接
+
+版本 2.0.141 / 2000141。接收页快捷操作列表顶部增加“通过链接分享”，复用发送页的 web 路由和同一个链接收发页面，沿用已有翻译和链接图标。返回后仍在接收页。
+
+9 组浏览器分享集成检查通过，release 编译、APP/HAP 签名校验通过。正式包：[APP](artifacts/release/AloeSend-2000141-release-20260911-193920-signed.app)、[HAP](artifacts/release/AloeSend-2000141-release-20260911-193920-signed.hap)。未安装真机，源码尚未提交。
+
+# M140 历史交接
+
+后续维护约束：默认只跟进原版的简体中文、繁体中文和英文本地化；其他原版功能与语言变更均等用户明确要求再同步。保留已有语言资源。
+
+版本 2.0.140 / 2000140，已完成 LocalSend 1.18–1.18.2 适用于当前鸿蒙应用的新增功能及平台对应实现，包含 M137–M139 的 TLS、沉浸导航、发现与文件持久权限修复。详见 [M140](milestones/M140-localsend-118.md)、[功能对齐清单](localsend-1.18-feature-audit.md)、[平台对应](platform-1.18.md) 和 [网页模板说明](web-template.md)。
+
+正式签名包：[APP](artifacts/release/AloeSend-2000140-release-20260911-192730-signed.app)、[HAP](artifacts/release/AloeSend-2000140-release-20260911-192730-signed.hap)。release 编译及 APP/HAP 签名验证通过。76 个测试文件完成验证：73 文件批次中三项失败修复后复测通过，另两个新增测试及原生组播测试单独通过。
+
+APP SHA-256：`03B6128F8BACEC23868CB8CFFF9721D24290ACDEDD67EF539AB0FCDB66835398`。HAP SHA-256：`1176D35924ABEFB5566A8247666A1F1072D8BF6AE979CBA8878CA6FC6CE81533`。
+
+源码尚未提交，sourceDirty=true，用户原有 output/ 保持未跟踪。未安装设备或推送；鸿蒙真机跨端互传、导航观感、重启后目录访问及桌面快捷入口待设备验证。
+
+# M139 正式包交接
+
+版本 2.0.139 / 2000139。恢复 FILE_ACCESS_PERSIST 声明、系统保存目录选择后的持久化授权，以及导出前的授权激活。保留下载目录回退和应用内接收文件。四项相关主机测试、最终 release 编译及 APP/HAP 签名校验通过，实际鸿蒙重启后访问待验证。详情见 [M139](milestones/M139-file-access-persist.md)。
+
+正式签名包：[APP](artifacts/release/AloeSend-2000139-release-20260911-003834-signed.app)、[HAP](artifacts/release/AloeSend-2000139-release-20260911-003834-signed.hap)。包含前轮 M137/M138 修复，源码修改未提交。
+
+# M138 历史交接
+
+版本 2.0.138 / 2000138。发现机制补齐六项差异：组播恢复、分阶段子网扫描、逐网卡组播、单网错误隔离、HTTPS 纠正后的反向注册、IPv6 发现与接收。包含前轮 M137 修复，详情见 [M138](milestones/M138-discovery.md)。
+
+68 个主机测试文件通过（66 文件完整批次、stages 单独执行、native 组播放行本机网络执行）。主机真实双接口 IPv4/IPv6 组播通过；IPv4/IPv6 HTTP/HTTPS 双向发现与文件内容验证通过。鸿蒙 debug/release 编译、APP 与模块签名校验通过。
+
+正式签名包：[APP](artifacts/release/AloeSend-2000138-release-20260910-230203-signed.app)、[HAP](artifacts/release/AloeSend-2000138-release-20260910-230203-signed.hap)。APP SHA-256：28128283AFB06CA8C5BDC714AFC7D1EAF758B53B091E14058E0A5B6232FD5264。
+
+源码修改未提交，sourceDirty=true。用户原有 output/ 保持未跟踪。未安装设备、未推送远程；鸿蒙真机与 LocalSend 1.18.2 跨端互操作待装包检查。原生补充限定于组播发现及既有 HTTPS 背压接收的 IPv6 地址支持，未重做 M130 整套网络迁移。
+
+# M137 历史交接
+
+版本 2.0.137 / 2000137。出站 HTTPS 携带本机证书和私钥，适配 LocalSend 1.18 强制客户端身份；隐藏系统手势条并在页面加载后和回前台重新应用。详情见 [M137](milestones/M137-mutual-tls-immersion.md)。
+
+63 个主机测试文件通过（完整回归中的 interactions 旧模拟缺少身份上下文，修正模拟后单独复测通过）。debug/release 编译、APP 与模块 HAP 签名校验通过。沿用 Flutter 发布身份，源码修改尚未提交，sourceDirty=true。
+
+正式包：[APP](artifacts/release/AloeSend-2000137-release-20260910-215558-signed.app)、[HAP](artifacts/release/AloeSend-2000137-release-20260910-215558-signed.hap)。APP SHA-256：2EC89A5DAB90B2E50B470FF3D9B4209FB0E46C4895045B358260BB6E2A308049。
+
+未安装设备、未推送；HarmonyOS NetworkKit 与 LocalSend 1.18 实际互传、系统栏真机显示仍待确认。用户原有 output/ 保持未跟踪。
+
+# M136 历史交接
 
 版本 2.0.136 / 2000136，源码 `1388b8e0f72606c97e020d4a58fa476cf97ab739`。系统分享入口补充 general.file 通用文件声明，覆盖无后缀、未知后缀及混合文件分享的类型匹配缺口。详情见 [M136](milestones/M136-share-file-types.md)。包含 M135 的旧 HTTP 设备记录纠正。
 

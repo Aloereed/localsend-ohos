@@ -1,4 +1,5 @@
 import { socket, connection } from '@kit.NetworkKit';
+import * as native from 'libaloetls.so';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
@@ -6,8 +7,11 @@ import { AppStore, appStore, Peer, ShareFile, HistoryEntry, TransferView, Transf
 import { HttpHead, queryValue, safeRelativePath, uniqueName } from './Protocol';
 import { NativeConnection, BodySink, JsonSink } from './NativeServer';
 import { TlsIdentity } from './TlsIdentity';
-import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter, HttpReply, PeerIdentityError } from './Transport';
-import { parseAddress, LocalInterface, ignoredInterface, sameSubnet } from './Addresses';
+import { Cancellation, request, exchange, encodeText, decodeText, ChunkWriter, BodyProducer, HttpReply, PeerIdentityError, discoveryPortOpen } from './Transport';
+import { parseAddress, LocalInterface, ignoredInterface, sameSubnet, ipv4, ipv6 } from './Addresses';
+import { DiscoveryMulticast } from './DiscoveryMulticast';
+import { DiscoveryScan } from './DiscoveryScan';
+import { fileChecksum } from './FileChecksum';
 import { storageError } from '../platform/StorageError';
 import { batchReceiveNames, receiveName } from '../model/ReceiveNames';
 import { SecureServer, SecureConnection } from './SecureServer';
@@ -33,6 +37,7 @@ export interface FileInfo {
   fileType: string;
   preview?: string;
   hash?: string;
+  sha256?: string;
 }
 
 interface PrepareRequest { info: DeviceInfo; files: Record<string, FileInfo>; }
@@ -46,6 +51,7 @@ class ReceiveSession {
   view: TransferView = new TransferView();
   files: Record<string, FileInfo> = {};
   tokens: Record<string, string> = {};
+  attempts: Record<string, number> = {};
   resolve: (accepted: boolean) => void = () => {};
   accepted: boolean = false;
   cancelled: boolean = false;
@@ -124,7 +130,7 @@ class UploadSink implements BodySink {
       this.service.store.notice = this.session.view.storageNotice;
       this.service.store.log(`下载目录写入失败，改用应用内目录：${(error as Error).message}`);
     }
-    if (this.fileInfo.hash) this.hash = cryptoFramework.createMd('SHA256');
+    if (this.service.store.settings.verifyChecksums && (this.fileInfo.sha256 || this.fileInfo.hash)) this.hash = cryptoFramework.createMd('SHA256');
     if (this.session.cancelled || this.channel.closed) { await this.session.stopNotification; throw new Error('接收已取消'); }
     if (this.session.view.status !== 'transferring' || this.session.view.activeBytes < 0) {
       this.session.view.activeStarted = Date.now(); this.session.view.activeBytes = 0;
@@ -167,7 +173,9 @@ class UploadSink implements BodySink {
     if (this.received !== this.fileInfo.size) throw new Error('文件未完整接收');
     if (this.hash) {
       const hash = (await this.hash.digest()).data.reduce((value: string, byte: number) => value + byte.toString(16).padStart(2, '0'), '');
-      if (hash !== this.fileInfo.hash!.toLowerCase()) { this.channel.failureStatus = 500; throw new Error('文件校验和不匹配'); }
+      if (hash !== (this.fileInfo.sha256 || this.fileInfo.hash!).toLowerCase()) {
+        this.channel.failureStatus = this.fileInfo.sha256 ? 422 : 500; throw new Error('文件校验和不匹配');
+      }
     }
     try { if (this.output) { await fs.close(this.output); this.output = undefined; } }
     catch (error) { this.channel.failureStatus = 500; throw new Error(this.service.store.t(storageError(error as Error))); }
@@ -190,7 +198,7 @@ class UploadSink implements BodySink {
     // Release the session before asynchronous disk cleanup. A blocked write
     // must not keep the receive entry point busy or leave other files running.
     if (!this.session.cancelled) this.view.error = this.channel.failureReason || '文件接收中断';
-    const recoverable = (this.channel.failureStatus === 500 || this.channel.transportInterrupted) && !this.session.cancelled;
+    const recoverable = (this.channel.failureStatus === 500 || this.channel.failureStatus === 422 || this.channel.transportInterrupted) && !this.session.cancelled;
     if (recoverable) {
       this.session.cleaning.add(this.view.id); this.view.status = 'error';
       if (!this.session.view.files.some((file: TransferFile) => file.status === 'transferring')) {
@@ -213,7 +221,38 @@ class UploadSink implements BodySink {
 export class LocalSendService {
   store: AppStore;
   private identity: TlsIdentity = new TlsIdentity();
-  private udp: socket.MulticastSocket | undefined = undefined;
+  private identityLoading: Promise<void> | undefined = undefined;
+
+  private async ensureIdentity(): Promise<void> {
+    if (this.identity.fingerprint) return;
+    if (!this.identityLoading) this.identityLoading = this.identity.load(this.store);
+    try { await this.identityLoading; } finally { this.identityLoading = undefined; }
+  }
+
+  private async request(peer: Peer, method: string, path: string, body: string = '', token: Cancellation = new Cancellation(), timeoutMs: number = 120000): Promise<HttpReply> {
+    if (peer.protocol === 'https') await this.ensureIdentity();
+    return request(peer, method, path, body, token, timeoutMs, this.identity);
+  }
+
+  private async exchange(peer: Peer, method: string, path: string, size: number, produce: BodyProducer, token: Cancellation): Promise<HttpReply> {
+    if (peer.protocol === 'https') await this.ensureIdentity();
+    return exchange(peer, method, path, size, produce, token, 120000, this.identity);
+  }
+  private multicast: DiscoveryMulticast = new DiscoveryMulticast((message: socket.SocketMessageInfo) => this.discovered(message),
+    (message: string) => this.store.log(message));
+  private scan: DiscoveryScan = new DiscoveryScan();
+  private discoveryGeneration: number = 0;
+  private discoveryNetworks: string = '';
+  private discoveryFallback: number = -1;
+  private lastDiscoveryRebind: number = 0;
+  private discoveryQuietUntil: number = 0;
+  private discoveryTokens: Set<Cancellation> = new Set();
+  private registering: Set<string> = new Set();
+  private registrationRetries: Map<string, Peer> = new Map();
+  private lastRegistrationRetry: number = 0;
+  private tcp6: socket.TCPSocketServer | undefined = undefined;
+  private tls6: SecureServer | undefined = undefined;
+  private ipv6Starting: Promise<void> | undefined = undefined;
   private tcp: socket.TCPSocketServer | undefined = undefined;
   private tls: SecureServer | undefined = undefined;
   private channels: NativeConnection[] = [];
@@ -231,7 +270,19 @@ export class LocalSendService {
   private lifecycle: Promise<void> = Promise.resolve();
   private pinAttempts: Map<string, PinFailures> = new Map();
 
-  constructor(store: AppStore) { this.store = store; }
+  constructor(store: AppStore) {
+    this.store = store;
+    this.store.onSelectionActivity = (active: boolean): void => {
+      if (active) {
+        this.scan.cancel(false);
+        if (this.discoveryFallback !== -1) clearTimeout(this.discoveryFallback);
+        this.discoveryFallback = -1;
+      } else {
+        // Leave time for the picker dismissal and selected-file UI to render.
+        this.discoveryQuietUntil = Date.now() + 3000;
+      }
+    };
+  }
 
   info(announce: boolean = false): DeviceInfo {
     return { alias: this.store.settings.alias, version: '2.1', deviceModel: this.store.settings.deviceModel, deviceType: this.store.settings.deviceType,
@@ -252,13 +303,26 @@ export class LocalSendService {
   resume(): Promise<void> { return this.scheduleLifecycle(() => this.resumeNow()); }
   resetIdentity(): Promise<void> { return this.scheduleLifecycle(() => this.resetIdentityNow()); }
 
+  resetDiscovery(): Promise<void> {
+    return this.scheduleLifecycle(async (): Promise<void> => {
+      if (!this.running || !this.scanAvailable() || this.store.webUrl) return;
+      await this.stopNow();
+      this.store.peers = [];
+      this.store.peerEndpoints = [];
+      try { await this.store.clearDiscoveryAddresses(); }
+      catch (error) { this.store.log(`清除发现缓存失败：${(error as Error).message}`); }
+      this.store.log('开始无缓存发现');
+      await this.startNow();
+    });
+  }
+
   private async startNow(): Promise<void> {
     if (this.store.identityResetting || this.paused || this.running || this.starting || !this.store.ready) return;
     this.starting = true; this.store.serverStatus = '正在启动接收服务';
     this.store.listenerPort = this.store.settings.port; this.store.listenerHttps = this.store.settings.https;
     this.store.listenerMulticast = this.store.settings.multicast;
     try {
-      if (this.store.listenerHttps) await this.identity.load(this.store);
+      await this.ensureIdentity();
       const address: socket.NetAddress = { address: '0.0.0.0', port: this.store.listenerPort, family: 1 };
       if (this.store.listenerHttps) {
         this.tls = new SecureServer();
@@ -275,21 +339,18 @@ export class LocalSendService {
       this.store.listenerRunning = true;
       this.store.serverStatus = this.store.listenerHttps ? '已就绪 · 加密传输' : '已就绪 · 未加密';
       await this.readAddresses().catch((e: Error) => this.store.log(`读取本机地址失败，可尝试手动连接：${e.message}`));
-      try {
-        this.udp = socket.constructMulticastSocketInstance();
-        await this.udp.bind(address);
-        await this.udp.setExtraOptions({ reuseAddress: true });
-        this.udp.on('message', (message: socket.SocketMessageInfo) => this.discovered(message));
-        this.udp.on('error', (error) => this.store.log(`组播错误 ${error.code}`));
-        await this.udp.addMembership({ address: this.store.listenerMulticast, port: this.store.listenerPort, family: 1 });
-        await this.udp.setMulticastTTL(1);
-        await this.announce();
-      } catch (e) { this.store.log(`组播不可用，可通过地址连接：${(e as Error).message}`); }
+      await this.startIpv6();
+      await this.multicast.sync(this.store.interfaces, this.store.listenerMulticast, this.store.listenerPort, !!this.tcp6 || !!this.tls6);
+      this.lastDiscoveryRebind = Date.now();
+      await this.announce();
       // The first multicast can precede Wi-Fi readiness or another peer's listener.
       // Retry without requiring a tap and refresh addresses on subsequent scans.
       this.discoveryRetries = [800, 2500, 6000].map((delay: number) =>
-        setTimeout(() => { if (this.running) this.discover(false); }, delay));
-      this.timer = setInterval(() => { this.checkReceiveIdle(); this.discover(false); }, 15000);
+        setTimeout(() => { if (this.running) this.discover(false).catch((error: Error) => this.store.log(`自动发现：${error.message}`)); }, delay));
+      this.timer = setInterval(() => {
+        this.checkReceiveIdle();
+        this.discover(false).catch((error: Error) => this.store.log(`自动发现：${error.message}`));
+      }, 15000);
       this.store.log('LocalSend 接收服务启动');
     } catch (e) { this.store.fail('接收服务启动失败', e as Error); await this.stopNow(); this.store.serverStatus = '启动失败'; }
     finally { this.starting = false; }
@@ -301,10 +362,19 @@ export class LocalSendService {
     if (this.timer !== -1) { clearInterval(this.timer); this.timer = -1; }
     for (const retry of this.discoveryRetries) clearTimeout(retry);
     this.discoveryRetries = [];
+    this.lastDiscoveryRebind = 0;
     if (this.receiving && ['waiting', 'transferring', 'error'].includes(this.receiving.view.status)) this.cancel(this.receiving.id);
     for (const id of Array.from(this.sendSessions.keys())) { if (!this.sending.has(id)) this.cancel(id); }
     for (const channel of this.channels) channel.close(); this.channels = [];
-    await this.udp?.close().catch(() => {}); this.udp = undefined;
+    this.discoveryGeneration++;
+    if (this.discoveryFallback !== -1) clearTimeout(this.discoveryFallback);
+    this.discoveryFallback = -1; this.scan.cancel();
+    for (const token of this.discoveryTokens) token.cancel();
+    this.discoveryTokens.clear(); this.registering.clear(); this.registrationRetries.clear();
+    await this.multicast.close();
+    await this.ipv6Starting;
+    await this.tcp6?.close().catch(() => {}); this.tcp6 = undefined;
+    await this.tls6?.close().catch(() => {}); this.tls6 = undefined;
     await this.tcp?.close().catch(() => {}); this.tcp = undefined;
     await this.tls?.close().catch(() => {}); this.tls = undefined;
     this.store.serverStatus = '接收服务已停止';
@@ -343,6 +413,40 @@ export class LocalSendService {
 
   certificate(): string { return this.identity.certificate; }
 
+  private async startIpv6(): Promise<void> {
+    if (this.tcp6 || this.tls6) return;
+    if (!this.ipv6Starting) this.ipv6Starting = this.startIpv6Now();
+    try { await this.ipv6Starting; } finally { this.ipv6Starting = undefined; }
+  }
+
+  private async startIpv6Now(): Promise<void> {
+    const address: socket.NetAddress = { address: '::', port: this.store.listenerPort, family: 2 };
+    try {
+      if (this.store.listenerHttps) {
+        this.tls6 = new SecureServer();
+        await this.tls6.listen(address, this.identity.certificate, this.identity.privateKey,
+          (client: SecureConnection) => this.newChannel().attachTls(client), (error: Error) => this.store.log(`IPv6 接收：${error.message}`));
+      } else {
+        this.tcp6 = socket.constructTCPSocketServerInstance();
+        await this.tcp6.listen(address);
+        this.tcp6.on('connect', (client: socket.TCPSocketConnection) => this.newChannel().attachTcp(client));
+        this.tcp6.on('error', (error) => this.store.log(`IPv6 接收错误 ${error.code}`));
+      }
+      this.store.log('IPv6 接收已就绪');
+    } catch (error) {
+      await this.tcp6?.close().catch(() => {}); this.tcp6 = undefined;
+      await this.tls6?.close().catch(() => {}); this.tls6 = undefined;
+      this.store.log(`IPv6 接收不可用，保留 IPv4：${(error as Error).message}`);
+    }
+  }
+
+  private async discoverPeer(peer: Peer): Promise<void> {
+    if (this.discoveryTokens.size >= 16) return;
+    const token = new Cancellation(); this.discoveryTokens.add(token);
+    try { await this.probe(peer, token); }
+    finally { this.discoveryTokens.delete(token); }
+  }
+
   setReceiveGalleryOffer(value: boolean): void {
     if (!this.receiving || this.receiving.accepted || this.receiving.cancelled) return;
     this.receiving.view.offerGallerySave = value;
@@ -359,41 +463,121 @@ export class LocalSendService {
   }
 
   async readAddresses(): Promise<void> {
-    const addresses: string[] = [];
     const interfaces: LocalInterface[] = [];
+    let read = false;
+    try {
     for (const net of await connection.getAllNets()) {
+      try {
       const props = await connection.getConnectionProperties(net);
-      const ignored = ignoredInterface(props.linkAddresses.map((link: connection.LinkAddress) => link.address.address), this.store.settings.networkFilter, this.store.settings.networkPatterns);
       for (const link of props.linkAddresses) {
         const ip = link.address.address;
-        const local = new LocalInterface(); local.name = props.interfaceName; local.ip = ip; local.prefixLength = link.prefixLength; local.ignored = ignored;
-        if (ip && !ip.startsWith('127.') && ip !== '::1') interfaces.push(local);
-        if (!ignored && ip && !ip.startsWith('127.') && !ip.includes(':') && !addresses.includes(ip)) addresses.push(ip);
+        const local = new LocalInterface(); local.name = props.interfaceName; local.ip = ip; local.prefixLength = link.prefixLength;
+        interfaces.push(local);
       }
+      } catch (error) { this.store.log(`读取单个网络失败：${(error as Error).message}`); }
     }
-    this.store.localIps = addresses;
-    this.store.interfaces = interfaces;
+    read = true;
+    } catch (error) { this.store.log(`读取连接网络失败：${(error as Error).message}`); }
+    // Tethering/downstream interfaces may have no NetHandle. Enumerate OS links
+    // as well so hotspot discovery does not depend on an upstream Wi-Fi network.
+    try {
+      for (const link of native.networkInterfaces()) {
+        const existing = interfaces.find((local: LocalInterface) => local.name === link.name && local.ip.split('%')[0] === link.ip.split('%')[0]);
+        if (existing) {
+          if (link.ip.includes('%')) existing.ip = link.ip;
+          if (link.prefixLength > 0) existing.prefixLength = link.prefixLength;
+        } else {
+          const local = new LocalInterface(); local.name = link.name; local.ip = link.ip; local.prefixLength = link.prefixLength;
+          interfaces.push(local);
+        }
+      }
+      read = true;
+    } catch (error) { this.store.log(`读取系统网卡失败：${(error as Error).message}`); }
+    if (!read) throw new Error('无法读取本机网络');
+    const usable = interfaces.filter((local: LocalInterface) =>
+      (ipv4(local.ip) && !local.ip.startsWith('127.') && !local.ip.startsWith('0.') && Number(local.ip.split('.')[0]) < 224) ||
+      (ipv6(local.ip) && local.ip !== '::' && local.ip !== '::1' && !local.ip.toLowerCase().startsWith('ff')));
+    for (const local of usable) {
+      const ips = usable.filter((item: LocalInterface) => item.name === local.name).map((item: LocalInterface) => item.ip);
+      local.ignored = ignoredInterface(ips, this.store.settings.networkFilter, this.store.settings.networkPatterns);
+    }
+    this.store.interfaces = usable;
+    this.store.localIps = Array.from(new Set(usable.filter((local: LocalInterface) => !local.ignored && ipv4(local.ip)).map((local: LocalInterface) => local.ip)));
   }
 
   async announce(): Promise<void> {
     if (!this.store.settings.visible || !this.running) return;
-    if (this.store.settings.networkFilter !== 'none' && !this.store.localIps.length) return;
-    await this.udp?.send({ data: JSON.stringify(this.info(true)), address: { address: this.store.listenerMulticast, port: this.store.listenerPort, family: 1 } });
+    if (this.store.settings.networkFilter !== 'none' && !this.store.interfaces.some((local: LocalInterface) => !local.ignored)) return;
+    this.multicast.send(encodeText(JSON.stringify(this.info(true))));
   }
 
-  async discover(notify: boolean = true): Promise<void> {
+  async discover(notify: boolean = true, rebind: boolean = false): Promise<void> {
+    if (this.store.selecting || (!notify && Date.now() < this.discoveryQuietUntil)) return;
     if (this.paused) {
       if (notify) this.store.notice = '接收服务已暂停，请在设置中启动';
       return;
     }
     if (!this.running) await this.start();
-    await this.readAddresses().catch(() => {});
+    if (!this.running) return;
+    let generation = this.discoveryGeneration;
+    await this.readAddresses().catch((error: Error) => this.store.log(`读取发现网络失败：${error.message}`));
+    if (!this.running || generation !== this.discoveryGeneration) return;
+    const networks = this.store.interfaces.map((local: LocalInterface) => `${local.name}:${local.ip}/${local.prefixLength}:${local.ignored}`).sort().join('|');
+    if (networks !== this.discoveryNetworks) {
+      this.discoveryNetworks = networks; generation = ++this.discoveryGeneration;
+      this.scan.cancel();
+      if (this.discoveryFallback !== -1) clearTimeout(this.discoveryFallback);
+      this.discoveryFallback = -1;
+      for (const token of this.discoveryTokens) token.cancel();
+      this.discoveryTokens.clear(); this.registering.clear(); this.registrationRetries.clear();
+    }
+    if (this.store.interfaces.some((local: LocalInterface) => !local.ignored && local.ip.includes(':'))) await this.startIpv6();
+    if (!this.running || generation !== this.discoveryGeneration) return;
+    // Some Wi-Fi transitions silently drop multicast membership without changing
+    // the IP or closing the socket. Refresh discovery listeners periodically.
+    const renew = rebind || Date.now() - this.lastDiscoveryRebind >= 60000;
+    await this.multicast.sync(this.store.interfaces, this.store.listenerMulticast, this.store.listenerPort, !!this.tcp6 || !!this.tls6, renew);
+    if (renew) this.lastDiscoveryRebind = Date.now();
+    if (!this.running || generation !== this.discoveryGeneration) return;
     await this.announce().catch((e: Error) => {
       if (notify) this.store.fail('发现设备失败', e); else this.store.log(`自动发现：${e.message}`);
     });
     if (notify) this.store.notice = '已发送发现请求';
     this.store.networkLog('discovery', `发现广播 · ${this.store.localIps.join(', ')}`);
-    for (const peer of this.store.favorites) this.probe(peer).catch(() => {});
+    for (const peer of this.store.favorites) this.discoverPeer(peer).catch(() => {});
+    if (this.scanAvailable() && Date.now() - this.lastRegistrationRetry >= 15000) {
+      this.lastRegistrationRetry = Date.now();
+      for (const peer of Array.from(this.registrationRetries.values()).slice(0, 2)) this.answerAnnouncement(peer, true);
+    }
+    if (this.discoveryFallback === -1) {
+      this.discoveryFallback = setTimeout(() => {
+        this.discoveryFallback = -1;
+        if (!this.running || generation !== this.discoveryGeneration || !this.scanAvailable()) return;
+        // One responding device says nothing about missing peers. DiscoveryScan
+        // runs short, paced batches and retains its position while busy.
+        this.scan.run(this.store.interfaces, this.store.listenerPort, this.store.favorites,
+          async (peer: Peer, token: Cancellation): Promise<void> => {
+            if (!this.scanAvailable()) { this.scan.cancel(false); token.check(); }
+            await this.probe(peer, token);
+          }, notify, () => this.running && this.scanAvailable(),
+          this.store.discoveryAddresses.filter((address: string) => address.endsWith(`:${this.store.listenerPort}`))
+            .map((address: string) => address.slice(0, address.lastIndexOf(':'))),
+          (peer: Peer, token: Cancellation): Promise<boolean> => this.scanPortOpen(peer, token))
+          .catch((error: Error) => this.store.log(`子网发现：${error.message}`));
+      }, 1500);
+    }
+  }
+
+  private scanAvailable(): boolean {
+    return !this.store.busy && !this.store.selecting && !this.store.activeTransfers &&
+      !this.store.transfers.some((item: TransferView) => item.hashing) &&
+      !this.store.webStarting && !this.store.webTemplateBusy && this.store.webRequests.length === 0 &&
+      Date.now() >= this.discoveryQuietUntil;
+  }
+
+  private async scanPortOpen(peer: Peer, token: Cancellation): Promise<boolean> {
+    if (!this.scanAvailable()) { this.scan.cancel(false); token.check(); }
+    return discoveryPortOpen(peer, token);
   }
 
   private discovered(message: socket.SocketMessageInfo): void {
@@ -406,8 +590,33 @@ export class LocalSendService {
       const peer = this.peerFrom(info, message.remoteInfo.address);
       this.store.networkLog('discovery', `${peer.alias} · ${peer.ip}:${peer.port} · ${peer.protocol}`);
       this.upsertPeer(peer);
-      if (info.announce && this.store.settings.visible) this.register(peer).catch((e: Error) => this.store.log(`设备握手：${e.message}`));
+      // v2.2 announcements need not carry the legacy v2.0 announce flag.
+      if ((info.announce === true || (info.announce === undefined && Number(info.version) >= 2.2)) && this.store.settings.visible && this.running) {
+        this.answerAnnouncement(peer);
+      }
     } catch (_) { /* Ignore malformed UDP datagrams from unrelated applications. */ }
+  }
+
+  private answerAnnouncement(peer: Peer, retry: boolean = false): void {
+    if (!this.running || !this.store.settings.visible) return;
+    const key = `${peer.ip}:${peer.port}:${peer.fingerprint}`;
+    if (this.registering.has(key) || this.registering.size >= 16) return;
+    this.registering.add(key); this.registrationRetries.delete(key);
+    const generation = this.discoveryGeneration;
+    const token = new Cancellation(); this.discoveryTokens.add(token);
+    // A failed startup handshake must not depend on another UDP announcement.
+    // Retry only a bounded number of known endpoints, yielding to foreground work.
+    const monitor = retry ? setInterval(() => { if (!this.scanAvailable()) token.cancel(); }, 100) : -1;
+    this.register(peer, token).catch((error: Error) => {
+      this.store.log(`设备握手 ${peer.ip}:${peer.port}：${error.message}`);
+      if (this.running && generation === this.discoveryGeneration && !(error instanceof PeerIdentityError) && this.registrationRetries.size < 16) {
+        this.registrationRetries.set(key, peer);
+      }
+    }).finally(() => {
+      if (monitor !== -1) clearInterval(monitor);
+      this.discoveryTokens.delete(token);
+      if (generation === this.discoveryGeneration) this.registering.delete(key);
+    });
   }
 
   private peerFrom(info: DeviceInfo, ip: string): Peer {
@@ -419,10 +628,13 @@ export class LocalSendService {
   }
 
   private upsertPeer(peer: Peer, verified: boolean = false): void {
-    if (peer.fingerprint === this.store.settings.fingerprint) return;
+    if (peer.fingerprint.toLowerCase() === this.store.settings.fingerprint.toLowerCase()) return;
+    // Retain endpoints so changing display mode never needs another discovery.
+    this.store.peerEndpoints = [peer, ...this.store.peerEndpoints.filter((item: Peer) => item.ip !== peer.ip || item.port !== peer.port)].slice(0, 100);
     this.store.peers = [peer, ...this.store.peers.filter((item: Peer) => !samePeer(item, peer) && (item.ip !== peer.ip || item.port !== peer.port))].slice(0, 100);
     let favoritesChanged = false;
     if (verified) {
+      if (ipv4(peer.ip)) this.store.rememberDiscoveryAddress(`${peer.ip}:${peer.port}`);
       this.store.favorites = this.store.favorites.map((item: Peer) => {
         if (!samePeer(item, peer) || (item.protocol === 'https' && peer.protocol !== 'https')) return item;
         const alias = item.customAlias !== false ? item.alias : peer.alias;
@@ -435,43 +647,61 @@ export class LocalSendService {
     }
   }
 
-  private async register(peer: Peer): Promise<void> {
+  private async register(peer: Peer, cancellation: Cancellation = new Cancellation()): Promise<void> {
+    const started = Date.now();
+    await this.ensureIdentity();
     let result: HttpReply;
     try {
-      result = await request(peer, 'POST', `/api/localsend/${peer.version === '1.0' ? 'v1' : 'v2'}/register`, JSON.stringify(this.info()), new Cancellation(), this.store.settings.discoveryTimeout);
+      result = await this.request(peer, 'POST', `/api/localsend/${peer.version === '1.0' ? 'v1' : 'v2'}/register`, JSON.stringify(this.info()), cancellation, this.store.settings.discoveryTimeout);
+      if (result.status === 404 && peer.version !== '1.0') {
+        result = await this.request(peer, 'POST', '/api/localsend/v1/register', JSON.stringify(this.info()), cancellation, this.store.settings.discoveryTimeout);
+      }
     } catch (error) {
       if (peer.protocol !== 'http' || (error as Error).message !== '设备提前关闭了连接') throw error as Error;
-      await this.verifyHttpsPeer(peer, new Cancellation()); return;
+      const secure = await this.verifyHttpsPeer(peer, cancellation);
+      if (this.store.settings.visible) await this.register(secure, cancellation); return;
     }
+    cancellation.check();
+    if (result.status !== 200) throw new Error(`设备返回 ${result.status}`);
     if (result.status === 200) {
       const info = JSON.parse(result.body) as DeviceInfo;
+      if (!info || typeof info.alias !== 'string' || (!result.fingerprint && !info.fingerprint)) throw new Error('设备返回了无效响应');
       const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
       if (result.fingerprint) known.fingerprint = result.fingerprint;
       this.upsertPeer(known, !!result.fingerprint || known.protocol === 'http');
+      const message = `主动注册成功 · ${known.alias} · ${known.ip}:${known.port} · ${known.protocol} · ${Date.now() - started} ms`;
+      this.store.networkLog('discovery', message); this.store.log(message);
     }
   }
 
-  async probe(peer: Peer): Promise<void> {
+  async probe(peer: Peer, cancellation: Cancellation = new Cancellation()): Promise<void> {
+    // Registration exchanges both identities in one connection (also on 1.18).
+    // Hidden devices retain read-only discovery and do not announce themselves.
+    if (this.store.settings.visible) { await this.register(peer, cancellation); return; }
     let reply: HttpReply;
     try {
-      reply = await request(peer, 'GET', '/api/localsend/v2/info', '', new Cancellation(), this.store.settings.discoveryTimeout);
+      reply = await this.request(peer, 'GET', '/api/localsend/v2/info', '', cancellation, this.store.settings.discoveryTimeout);
     } catch (error) {
       if (peer.protocol !== 'http' || (error as Error).message !== '设备提前关闭了连接') throw error as Error;
-      await this.verifyHttpsPeer(peer, new Cancellation()); return;
+      const secure = await this.verifyHttpsPeer(peer, cancellation);
+      if (this.store.settings.visible) await this.register(secure, cancellation); return;
     }
-    if (reply.status === 404) reply = await request(peer, 'GET', '/api/localsend/v1/info', '', new Cancellation(), this.store.settings.discoveryTimeout);
+    if (reply.status === 404) reply = await this.request(peer, 'GET', '/api/localsend/v1/info', '', cancellation, this.store.settings.discoveryTimeout);
+    cancellation.check();
     if (reply.status !== 200) throw new Error(`设备返回 ${reply.status}`);
     const info = JSON.parse(reply.body) as DeviceInfo;
+    if (!info || typeof info.alias !== 'string' || (!reply.fingerprint && !info.fingerprint)) throw new Error('设备返回了无效响应');
     const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
     if (reply.fingerprint) known.fingerprint = reply.fingerprint;
     this.upsertPeer(known, !!reply.fingerprint || known.protocol === 'http');
-    if (this.store.settings.visible) await this.register(known);
+    if (this.store.settings.visible) await this.register(known, cancellation);
   }
 
   private async verifyHttpsPeer(peer: Peer, cancellation: Cancellation): Promise<Peer> {
     const secure = JSON.parse(JSON.stringify(peer)) as Peer; secure.protocol = 'https';
-    let reply = await request(secure, 'GET', '/api/localsend/v2/info', '', cancellation, this.store.settings.discoveryTimeout);
-    if (reply.status === 404) reply = await request(secure, 'GET', '/api/localsend/v1/info', '', cancellation, this.store.settings.discoveryTimeout);
+    let reply = await this.request(secure, 'GET', '/api/localsend/v2/info', '', cancellation, this.store.settings.discoveryTimeout);
+    if (reply.status === 404) reply = await this.request(secure, 'GET', '/api/localsend/v1/info', '', cancellation, this.store.settings.discoveryTimeout);
+    cancellation.check();
     if (reply.status !== 200) throw new Error(`设备返回 ${reply.status}`);
     const info = JSON.parse(reply.body) as DeviceInfo;
     if (!info || typeof info.alias !== 'string' || !reply.fingerprint) throw new Error('设备返回了无效响应');
@@ -488,7 +718,11 @@ export class LocalSendService {
       const parsed = parseAddress(address);
       const peer = new Peer(); peer.ip = parsed.ip; peer.port = parsed.port; peer.protocol = parsed.protocol;
       try { await this.probe(peer); }
-      catch (e) { if (parsed.explicitProtocol) throw e as Error; peer.protocol = 'http'; await this.probe(peer); }
+      catch (e) {
+        if (parsed.explicitProtocol || e instanceof PeerIdentityError) throw e as Error;
+        this.store.log(`地址探测 HTTPS 失败：${(e as Error).message}`);
+        peer.protocol = 'http'; await this.probe(peer);
+      }
       this.store.notice = '设备已添加';
     } catch (e) { this.store.fail('添加设备失败', e as Error); }
   }
@@ -504,7 +738,8 @@ export class LocalSendService {
       else if (/^\/api\/localsend\/v[12]\/register$/.test(path) && head.method === 'POST') {
         const info = JSON.parse(decodeText(bytes)) as DeviceInfo;
         if (!info || typeof info.alias !== 'string') { await channel.respond(400); return; }
-        this.upsertPeer(this.peerFrom(info, channel.ip)); await channel.respond(200, JSON.stringify(this.info()));
+        this.upsertPeer(this.peerFrom(info, channel.ip));
+        await channel.respond(200, JSON.stringify(this.info()));
       } else if ((/^\/api\/localsend\/v[12]\/prepare-upload$/.test(path) || path === '/api/localsend/v1/send-request') && head.method === 'POST') await this.prepare(channel, head, bytes);
       else if (/^\/api\/localsend\/v[12]\/cancel$/.test(path) && head.method === 'POST') {
         const id = queryValue(head.target, 'sessionId');
@@ -545,6 +780,7 @@ export class LocalSendService {
     for (const id of ids) {
       const file = payload.files[id];
       if (!file || typeof file.fileName !== 'string' || !Number.isSafeInteger(file.size) || file.size < 0 || file.id !== id) throw new Error('文件信息无效');
+      if (file.sha256 !== undefined && (typeof file.sha256 !== 'string' || !/^[a-fA-F0-9]{64}$/.test(file.sha256))) throw new Error('文件校验和无效');
       const view = new TransferFile(); view.id = id; view.originalName = file.fileName;
       view.name = uniqueName(safeRelativePath(file.fileName), session.view.files.map((item: TransferFile) => item.name)); view.size = file.size;
       if (file.preview && file.fileType === 'text/plain') { view.name = file.fileName.slice(0, 100); view.preview = file.preview.slice(0, 100000); }
@@ -566,7 +802,7 @@ export class LocalSendService {
       this.store.favorites.some((peer: Peer) => !!peer.fingerprint && peer.fingerprint === session.peer.fingerprint)) {
       // A fingerprint in JSON is only a claim. Prove possession of the matching
       // TLS identity at the sender address before bypassing receive consent.
-      try { automatic = (await request(session.peer, 'GET', '/api/localsend/v2/info')).status === 200; }
+      try { automatic = (await this.request(session.peer, 'GET', '/api/localsend/v2/info')).status === 200; }
       catch (_) { this.store.log('收藏身份验证失败，转为手动确认'); }
     }
     if (channel.closed || session.cancelled) {
@@ -678,10 +914,14 @@ export class LocalSendService {
       await channel.respond(403); return new JsonSink(async () => {});
     }
     const info = session.files[fileId]; const view = session.view.files.find((file: TransferFile) => file.id === fileId);
+    if (info?.sha256 && (session.attempts[fileId] || 0) >= 3) {
+      await channel.respond(403); return new JsonSink(async () => {});
+    }
     if (!info || !view || session.cleaning.has(fileId) || !['waiting', 'error'].includes(view.status) || (!head.chunked && head.contentLength !== info.size)) {
       await channel.respond(400); return new JsonSink(async () => {});
     }
     const sink = new UploadSink(this, session, info, view, channel);
+    session.attempts[fileId] = (session.attempts[fileId] || 0) + 1;
     view.status = 'transferring'; session.uploads.push(channel);
     try {
       await this.store.updateIncomingHistory(session.view);
@@ -764,7 +1004,7 @@ export class LocalSendService {
     // Retry transport failures once, preserving protocol, identity and session.
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
-        const reply = await request(peer, 'POST', path, '', new Cancellation(), 4000);
+        const reply = await this.request(peer, 'POST', path, '', new Cancellation(), 4000);
         if (reply.status === 200) { this.store.log('对方已确认终止传输'); return; }
         this.store.log(`终止通知未被对方接受：HTTP ${reply.status}`);
         break;
@@ -852,18 +1092,38 @@ export class LocalSendService {
     const cancellation = new Cancellation(); this.sending.set(transfer.id, cancellation);
     let declined = false;
     try {
+      await this.ensureIdentity();
       await this.store.updateOutgoingHistory(transfer, files, true);
       cancellation.check();
       const favorite = this.store.favorites.find((item: Peer) => item.ip === peer.ip && item.port === peer.port);
       if (favorite?.fingerprint && favorite.fingerprint !== peer.fingerprint) throw new Error('收藏设备的身份已改变，请核对后重新收藏');
       const payload: PrepareRequest = { info: this.info(), files: fileInfos };
+      if (this.store.settings.createChecksums && !resumed?.accepted) {
+        transfer.hashing = true; transfer.hashedBytes = 0; this.store.updateTransfer(transfer);
+        let completed = 0; let lastProgress = 0;
+        try {
+          for (const file of files) {
+            try {
+            fileInfos[file.id].sha256 = await fileChecksum(file.uri, file.size, file.text, cancellation, (bytes: number) => {
+              transfer.hashedBytes = completed + bytes;
+              if (Date.now() - lastProgress > 100) { lastProgress = Date.now(); this.store.updateTransfer(transfer); }
+            });
+            } catch (error) {
+              cancellation.check();
+              this.store.log(`无法计算文件校验和，继续发送请求：${file.name} · ${(error as Error).message}`);
+            }
+            completed += file.size;
+            transfer.hashedBytes = completed;
+          }
+        } finally { transfer.hashing = false; this.store.updateTransfer(transfer); }
+      }
       let legacy = resumed ? resumed.legacy : peer.version === '1.0';
       let preparePath = legacy ? '/api/localsend/v1/send-request' : '/api/localsend/v2/prepare-upload';
       let response = new HttpReply();
       if (resumed?.accepted) {
         response.status = 200; response.body = JSON.stringify(legacy ? resumed.accepted.files : resumed.accepted);
       } else {
-        try { response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation); }
+        try { response = await this.request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation); }
         catch (error) {
           // A stale HTTP advertisement can point at an HTTPS-only listener.
           // Verify with a read-only TLS request before repeating the offer;
@@ -873,12 +1133,12 @@ export class LocalSendService {
           context.peer = peer; transfer.peerInfo = peer; transfer.encrypted = true;
           legacy = peer.version === '1.0'; context.legacy = legacy;
           preparePath = legacy ? '/api/localsend/v1/send-request' : '/api/localsend/v2/prepare-upload';
-          response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
+          response = await this.request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
         }
       }
       if (response.status === 404 && !legacy) {
         legacy = true; preparePath = '/api/localsend/v1/send-request';
-        response = await request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
+        response = await this.request(peer, 'POST', preparePath, JSON.stringify(payload), cancellation);
       }
       let pinSubmitted = false;
       while (response.status === 401) {
@@ -888,7 +1148,7 @@ export class LocalSendService {
         const pin = await new Promise<string>((resolve) => { this.pinResolver = resolve; });
         if (!pin) { cancellation.cancel(); cancellation.check(); }
         pinSubmitted = true;
-        response = await request(peer, 'POST', `${preparePath}?pin=${encodeURIComponent(pin)}`, JSON.stringify(payload), cancellation);
+        response = await this.request(peer, 'POST', `${preparePath}?pin=${encodeURIComponent(pin)}`, JSON.stringify(payload), cancellation);
       }
       cancellation.check();
       if (response.status === 204) {
@@ -930,7 +1190,10 @@ export class LocalSendService {
           let lastUpdate = 0;
           const uploadPath = legacy ? `/api/localsend/v1/send?fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}` :
             `/api/localsend/v2/upload?sessionId=${encodeURIComponent(prepared.sessionId)}&fileId=${encodeURIComponent(file.id)}&token=${encodeURIComponent(token)}`;
-          const upload = await exchange(peer, 'POST', uploadPath, file.size,
+          let upload = new HttpReply();
+          for (let attempt = 0; attempt < 3; attempt++) {
+          view.transferred = 0;
+          upload = await this.exchange(peer, 'POST', uploadPath, file.size,
             async (write: ChunkWriter): Promise<void> => {
               if (file.text) { await write(encodeText(file.text)); view.transferred = file.size; transfer.activeBytes += file.size; return; }
               const source = await fs.open(file.uri, fs.OpenMode.READ_ONLY);
@@ -945,11 +1208,14 @@ export class LocalSendService {
                 }
               } finally { await fs.close(source); }
             }, cancellation);
+          if (upload.status !== 422) break;
           cancellation.check();
-          if (upload.status === 500) {
+          }
+          cancellation.check();
+          if (upload.status === 500 || upload.status === 422) {
             // A receiver's per-file failure does not invalidate the accepted
             // batch. Continue other files unless its cancel callback says stop.
-            view.status = 'error'; view.error = `文件发送失败 ${upload.status}`;
+            view.status = 'error'; view.error = upload.status === 422 ? this.store.t('文件校验和不匹配') : `文件发送失败 ${upload.status}`;
             this.store.updateTransfer(transfer);
             await this.store.updateOutgoingHistory(transfer, files);
             continue;

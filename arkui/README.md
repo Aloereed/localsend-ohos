@@ -1,12 +1,50 @@
 # AloeSend 原生 ArkUI
 
+最新版本：[2.0.154 · 设备显示方式](milestones/M154-device-display-mode.md)。默认 #尾号按地址显示，可在设置 → 外观关闭后按设备指纹合并。通用签名模板也补入 aloesend5Release.p7b；七个相关测试、正式构建及签名验证通过，包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[2.0.153 · 设备 IP 尾号标记](milestones/M153-device-address-tags.md)。接收页及发送设备卡片增加 `#12` 等 IPv4 尾号，保留完整地址。格式化检查、正式构建及签名验证通过，使用 aloesend5Release.p7b，包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[2.0.152 · 首次发现快速检查](milestones/M152-fast-first-discovery.md)。未知地址先检查 TCP 端口，未响应地址仍保留正常超时补查；扫描限速与忙时避让不变。九个相关测试和正式签名构建通过，待用户安装后继续真机测量，包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[2.0.151 · 真机发现延迟排查](milestones/M151-device-discovery.md)。低速扫描优先确认已验证地址和附近地址，保留正常操作避让。八个相关测试及正式签名构建通过；当前真机首次约 38 秒、记录地址后再次启动约 3 秒发现 Windows，包和实际限制见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[2.0.150 · 双向发现与注册重试](milestones/M150-reciprocal-discovery.md)。主动发现一次注册交换双方身份；公告后的失败注册低频定向重试，并避让正常操作。12 个相关测试文件、正式构建及签名验证通过，安装包见 [HANDOFF](HANDOFF.md)，与官方客户端真机复测待完成。
+
+最新版本：[2.0.149 · 后台扫描调度](milestones/M149-background-discovery.md)。自动扫描改为两路并发的短批次，忙时中止并保留进度，多网卡交替探测。十个相关测试文件、正式构建和签名校验通过，包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[2.0.148 · 文件选择与扫描避让](milestones/M148-selection-discovery.md)。选择文件时取消后台子网扫描，返回后留出界面恢复空档，并记录慢文件属性读取的分阶段耗时。七个相关测试文件、正式构建和签名校验通过，安装包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：2.0.147，发送页新增“传输有问题？”帮助入口，帮助顶部补充关闭加密并重启、接收端刷新和更新应用三项建议，简繁中文与英文同步。语言测试、正式构建及签名校验通过，安装包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[2.0.146 · 自动发现补漏](milestones/M146-automatic-discovery.md)。已发现设备的响应不再让补充扫描被跳过，增加组播监听定期重建和自动发现异常处理。八个相关测试文件、正式构建和签名校验通过，包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[2.0.145 · 地址添加空值处理](milestones/M145-add-address.md)。补齐空请求体编码及 TLS 证书空值检查，六个相关测试文件、release 编译和签名校验通过。安装包见 [HANDOFF](HANDOFF.md)，实际用户设备待复测。
+
+最新版本：[2.0.144 · 热点网卡发现](milestones/M144-hotspot-discovery.md)。补充系统网卡枚举，覆盖热点接口未出现在 NetworkKit 连接列表时的组播和扫描缺口。八个相关测试文件、release 编译及签名验证通过，安装包见 [HANDOFF](HANDOFF.md)；反馈者热点真机待复测。
+
+最新版本：[2.0.143 · 网页批量下载](milestones/M143-web-batch-download.md)。网页接收方可点“全部下载（ZIP）”保存全部文件，沿用下载确认、自动允许与取消。五个相关测试文件、release 编译和签名验证通过，安装包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：2.0.142，修复网页模板导入、导出和恢复按钮未跟随应用主题色的问题。主题颜色测试、release 编译与签名验证通过，安装包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：2.0.141，接收页顶部快捷操作新增“通过链接分享”，与发送页共用链接收发页面。9 组浏览器分享检查、release 编译及签名校验通过，安装包见 [HANDOFF](HANDOFF.md)。
+
+最新版本：[M140 · LocalSend 1.18 功能对齐](milestones/M140-localsend-118.md)，2.0.140。新增校验和收发、取色器、网页目录拖放与模板、网页 IPv6、系统动画偏好及鸿蒙快捷入口等，包含 M137–M139 修复。76 个测试文件验证完成（批次失败修复后复测），release 编译与签名校验通过；正式包见 [HANDOFF](HANDOFF.md)，真机验证仍待完成。
+
+后续默认只跟进原版的简体中文、繁体中文和英文本地化；其他功能与语言变更等用户明确要求再同步。
+
+最新修复：[M139 · 恢复文件持久化权限](milestones/M139-file-access-persist.md)，版本 2.0.139。保存目录授权持久化、导出前激活、下载目录回退通过主机验证，release 编译及签名校验通过。正式包见 [HANDOFF](HANDOFF.md)。
+
+最新修复：[M138 · 发现恢复、扫描兜底与双栈组播](milestones/M138-discovery.md)，版本 2.0.138。68 个主机测试、真实双接口组播、IPv4/IPv6 传输、debug/release 编译和签名校验通过。正式包见 [HANDOFF](HANDOFF.md)，鸿蒙跨端真机待验证。
+
+最新修复：[M137 · 客户端 TLS 身份与系统手势条](milestones/M137-mutual-tls-immersion.md)，版本 2.0.137。63 个主机测试、debug/release 编译及签名校验通过，正式包见 [HANDOFF](HANDOFF.md)。真机互传和显示待验证。
+
 最新里程碑：[M136 · 系统分享接收通用文件](milestones/M136-share-file-types.md)，版本 2.0.136。补充 general.file 分享类型声明，处理系统文件管理器分享无后缀、未知后缀及混合文件时的匹配缺口。导入测试通过，系统分享面板列出并拉起 AloeSend 的行为待真机验证。包含 M135 协议纠正修复；安装包、构建和签名校验信息见 [HANDOFF](HANDOFF.md)。
 
 历史发布包：[2.0.132 signed release APP](artifacts/release/AloeSend-2000132-release-20260908-002452-signed.app)，沿用 Flutter 发布身份，APP 与独立模块 HAP 签名验证通过。已恢复 NetworkKit 和 INTERNET，保留 M131 界面与选择数量调整。
 
 发布 APP：运行 `./arkui/build-release.ps1`，沿用 `app/ohos/build-profile.Release.json5` 的签名身份、发布 profile 和兼容 SDK，保留原生模块配置。证书路径失效时只接受同目录中与发布 profile 证书匹配的完整证书链。签名信息临时使用，构建结束恢复日常配置；密码不写入脚本和产物清单。已签名 release APP 归档到 `arkui/artifacts/release/`，同时校验 APP 及独立模块 HAP 签名。
 
-当前建议检查 **M132 / 2.0.132 / 2000132**：
+历史 M132 验证包 **2.0.132 / 2000132**：
 [未签名 debug 包](artifacts/AloeSend-2000132-M132-networkkit-rollback-unsigned.hap)。包含所有此前里程碑。
 
 M132 按用户最新要求备份分支并撤回 M130 的 C++ 网络迁移，恢复迁移前的 NetworkKit 发送、HTTP 接收与 UDP 发现，以及 INTERNET 权限。原有 C++ HTTPS 接收背压实现和 M131 文案、999 项选择、底栏调整保留。备份：`codex/backup-arkui-cpp-20260908`。60 个主机测试及鸿蒙编译通过。

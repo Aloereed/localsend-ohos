@@ -2,7 +2,7 @@ import { AppStore, TransferView, TransferFile, HistoryEntry, formatSize } from '
 import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { AppIcon } from './AppIcon';
-import { transferTotal, transferredBytes, remainingSeconds, filePercent, transferSpeed } from '../model/TransferMetrics';
+import { transferTotal, transferredBytes, remainingSeconds, filePercent, transferSpeed, formatRemaining } from '../model/TransferMetrics';
 import { flutterCount, flutterText } from '../model/DynamicLocale';
 
 @Component
@@ -110,7 +110,7 @@ export struct TransferList {
   rate(transfer: TransferView): string {
     const speed = transferSpeed(transfer);
     const remaining = remainingSeconds(transfer, speed);
-    return `${formatSize(Math.round(speed))}/s${remaining > 0 ? this.store.tf(' · 剩余 {0}', [`${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`]) : ''}`;
+    return `${formatSize(Math.round(speed))}/s${remaining > 0 ? this.store.tf(' · 剩余 {0}', [formatRemaining(remaining, this.store.t('天'))]) : ''}`;
   }
 
   build() {
@@ -134,6 +134,12 @@ export struct TransferList {
                 .fontSize(13).fontColor($r('sys.color.font_secondary'))
             }.alignItems(HorizontalAlign.Start).layoutWeight(1)
           }.width('100%')
+          if (this.current(transfer.id).hashing) {
+            Text(this.store.tf('正在计算校验和 · {0} / {1}', [formatSize(this.current(transfer.id).hashedBytes), formatSize(this.total(this.current(transfer.id)))]))
+              .fontSize(13).fontColor(this.store.accentText).width('100%')
+            Progress({ value: this.current(transfer.id).hashedBytes, total: Math.max(1, this.total(this.current(transfer.id))), type: ProgressType.Linear })
+              .color(this.store.accentText).width('100%')
+          }
           if (this.current(transfer.id).status === 'transferring' || this.current(transfer.id).status === 'complete') {
             Row({ space: 12 }) {
               Text(`${Math.floor(this.percent(this.current(transfer.id)))}%`)

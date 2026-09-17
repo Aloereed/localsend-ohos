@@ -13,3 +13,9 @@ export const tcpSend: (connection: number, bytes: ArrayBuffer) => Promise<void>;
 export const tcpClose: (connection: number) => void;
 export const tcpStop: (server: number) => void;
 export const fileIdentity: (fd: number) => string;
+export interface MulticastEvent { kind: string; ip: string; port: number; data: ArrayBuffer; error: string; }
+export const multicastOpen: (group: string, port: number, networkInterface: string, callback: (event: MulticastEvent) => void) => number;
+export const multicastSend: (id: number, bytes: ArrayBuffer) => void;
+export const multicastStop: (id: number) => void;
+export interface NetworkInterface { name: string; ip: string; prefixLength: number; }
+export const networkInterfaces: () => NetworkInterface[];

@@ -6,7 +6,7 @@ const previous = system.getDisplayLanguage;
 try {
   system.getDisplayLanguage = (tag, display) => tag === 'de' ? (display === 'zh-CN' ? '德语' : 'German') : tag;
   const choices = languageChoices('zh');
-  assert.equal(choices.length, 53);
+  assert.equal(choices.length, 56);
   for (const query of ['Deutsch', 'German', '德语', '  GERMAN de  ']) {
     assert.equal(filterLanguages(choices, query)[0].id, 'de');
     assert.equal(filterLanguages(choices, query).length, 1);
@@ -14,11 +14,11 @@ try {
   assert.equal(filterLanguages(choices, 'zh_CN')[0].id, 'zh');
   assert.equal(filterLanguages(choices, 'zh-Hans')[0].id, 'zh');
   assert.equal(filterLanguages(choices, 'sr_Cyrl')[0].id, 'sr-Cyrl');
-  assert.equal(filterLanguages(choices, '   ').length, 53);
+  assert.equal(filterLanguages(choices, '   ').length, 56);
   assert.equal(filterLanguages(choices, 'no-such-language').length, 0);
   system.getDisplayLanguage = () => { throw new Error('ICU unavailable'); };
   const fallback = languageChoices('en');
-  assert.equal(fallback.length, 53);
+  assert.equal(fallback.length, 56);
   assert.equal(filterLanguages(fallback, 'Deutsch')[0].id, 'de');
   assert.equal(filterLanguages(fallback, 'pt_BR')[0].id, 'pt-BR');
 } finally { system.getDisplayLanguage = previous; }

@@ -72,7 +72,7 @@ try {
     $packages = @(Get-ChildItem -LiteralPath $outputDir -Filter '*.app' -File | Where-Object { $_.LastWriteTime -ge $started -and $_.Name -notlike '*unsigned*' })
     if ($packages.Count -ne 1) { throw "Expected one newly generated signed APP in $outputDir" }
     # Check the final nested module manifests, not only the editable source.
-    $disallowed = @('ohos.permission.READ_PASTEBOARD', 'ohos.permission.FILE_ACCESS_PERSIST')
+    $disallowed = @('ohos.permission.READ_PASTEBOARD')
     $actualPermissions = @()
     $appArchive = [IO.Compression.ZipFile]::OpenRead($packages[0].FullName)
     try {
@@ -96,6 +96,7 @@ try {
         }
     } finally { $appArchive.Dispose() }
     if ($actualPermissions -notcontains 'ohos.permission.INTERNET') { throw 'Native release is missing its required network permission' }
+    if ($actualPermissions -notcontains 'ohos.permission.FILE_ACCESS_PERSIST') { throw 'Native release is missing its approved persistent file access permission' }
     $verifyDir = Join-Path $releaseDir 'verification'
     New-Item -ItemType Directory -Path $verifyDir -Force | Out-Null
     $java = Join-Path $DevEcoRoot 'jbr\bin\java.exe'

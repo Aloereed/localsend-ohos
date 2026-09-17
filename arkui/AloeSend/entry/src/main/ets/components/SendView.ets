@@ -4,6 +4,7 @@ import { ClipboardPasteButton } from './ClipboardPasteButton';
 import { EmptyState } from './EmptyState';
 import { peerKey } from '../model/Conversations';
 import { selectedSendTargets } from '../model/SendTargets';
+import { deviceAddressTag } from '../network/Addresses';
 
 @Component
 export struct SendView {
@@ -12,6 +13,7 @@ export struct SendView {
   onDiscover: () => void = () => {};
   onAddress: (address: string) => void = () => {};
   onWebShare: () => void = () => {};
+  onHelp: () => void = () => {};
   onDetails: (peer: Peer) => void = () => {};
   onSendMany: (peers: Peer[]) => void = () => {};
   @State sheetVisible: boolean = false;
@@ -142,7 +144,12 @@ export struct SendView {
         .width(48).height(56).borderRadius(17).backgroundColor(this.store.controlSurface).onClick(() => this.onDetails(peer))
       Column({ space: 5 }) {
         Text(peer.alias || peer.ip).fontSize(17).fontWeight(FontWeight.Medium).maxLines(2).textOverflow({ overflow: TextOverflow.Ellipsis }).fontColor($r('sys.color.font_primary'))
-        Text(`${peer.ip}:${peer.port}`).direction(Direction.Ltr).fontSize(12).fontColor($r('sys.color.font_secondary'))
+        if (this.store.settings.showAddressTags && deviceAddressTag(peer.ip)) {
+          Text(deviceAddressTag(peer.ip)).direction(Direction.Ltr).fontSize(13).fontWeight(FontWeight.Medium)
+            .fontColor(this.store.accentText).backgroundColor(this.store.controlSurface).borderRadius(8)
+            .padding({ left: 8, right: 8, top: 3, bottom: 3 })
+        }
+        Text(this.store.displayedAddresses(peer)).direction(Direction.Ltr).fontSize(12).fontColor($r('sys.color.font_secondary'))
         Text(`${peer.protocol === 'https' ? this.store.t('加密连接') : this.store.t('未加密')}${this.store.isFavorite(peer) ? this.store.t(' · 已收藏') : ''}`).fontSize(11).fontColor($r('sys.color.font_secondary'))
       }.alignItems(HorizontalAlign.Start).layoutWeight(1).onClick(() => this.onDetails(peer))
       Button(this.store.settings.sendMode === 'multiple' ? (this.targets.includes(peerKey(peer)) ? this.store.t('已选') : this.store.t('选择')) : this.store.t('发送'))
@@ -204,7 +211,11 @@ export struct SendView {
       if (this.fileLimit > 6 && this.store.files.length > 6) {
         Button(this.store.t('收起清单')).fontColor(this.store.accentText).backgroundColor(Color.Transparent).onClick(() => this.fileLimit = 6)
       }
-      Text(this.store.t('附近的设备')).fontSize(19).fontWeight(FontWeight.Medium).width('100%').fontColor($r('sys.color.font_primary')).margin({ top: 16 })
+      Row({ space: 8 }) {
+        Text(this.store.t('附近的设备')).fontSize(19).fontWeight(FontWeight.Medium).layoutWeight(1).fontColor($r('sys.color.font_primary'))
+        Button(this.store.t('传输有问题？')).fontSize(13).height(44).backgroundColor(Color.Transparent).fontColor(this.store.accentText)
+          .onClick(() => this.onHelp())
+      }.width('100%').margin({ top: 16 })
       Row() {
         Select([{ value: this.store.t('单台设备') }, { value: this.store.t('多台设备') }]).selected(this.store.settings.sendMode === 'multiple' ? 1 : 0)
           .value(this.store.t(this.store.settings.sendMode === 'multiple' ? '多台设备' : '单台设备'))
@@ -213,13 +224,13 @@ export struct SendView {
         Blank()
         Button(this.store.t('刷新')).fontSize(13).backgroundColor(Color.Transparent).fontColor(this.store.accentText).onClick(() => this.onDiscover())
       }.width('100%')
-      if (this.store.peers.length === 0) {
+      if (this.store.displayedPeers.length === 0) {
         EmptyState({ icon: 'search', title: this.store.t('寻找另一台设备'), description: this.store.t('在对方设备打开 LocalSend，并连接同一网络。也可以通过 IP 地址直接添加。'), accent: this.store.accentText })
       }
-      ForEach(this.store.peers, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peerKey(peer)}:${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
+      ForEach(this.store.displayedPeers, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peerKey(peer)}:${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}:${this.store.settings.showAddressTags}:${this.store.displayedAddresses(peer)}`)
       if (this.store.favorites.length > 0) {
         Text(this.store.t('收藏设备')).fontSize(19).fontWeight(FontWeight.Medium).width('100%').fontColor($r('sys.color.font_primary')).margin({ top: 12 })
-        ForEach(this.store.favorites, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peerKey(peer)}:${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}`)
+        ForEach(this.store.favorites, (peer: Peer) => { this.peerCard(peer) }, (peer: Peer) => `${peerKey(peer)}:${peer.ip}:${peer.port}:${peer.alias}:${peer.protocol}:${this.store.settings.showAddressTags}:${this.store.displayedAddresses(peer)}`)
       }
       Row({ space: 12 }) {
         Button(this.store.t('通过地址添加')).layoutWeight(1).height(46).backgroundColor(this.store.surfaceColor).fontColor(this.store.accentText)

@@ -8,7 +8,7 @@ for (const language of flutterLanguages) {
   const html = webPage('My device', [], language.id);
   assert.ok(html.includes(`lang="${language.id === 'zh' ? 'zh-CN' : language.id}"`));
   assert.ok(html.includes(`dir="${isRtlLanguage(language.id) ? 'rtl' : 'ltr'}"`));
-  assert.equal((html.match(/<option /g) || []).length, 53);
+  assert.equal((html.match(/<option /g) || []).length, 56);
   assert.ok(html.includes(`value="${language.id}" selected`));
   if (language.id !== 'zh') assert.ok(html.includes(htmlEscape(flutterLabels[language.id]['取消'])));
   const words = JSON.parse(html.match(/const words=(.*);/)[1]);
@@ -23,4 +23,4 @@ try {
   assert.ok(html.includes('&lt;script&gt;name&lt;/script&gt;'));
   assert.equal(JSON.parse(html.match(/const words=(.*);/)[1]).copied, unsafe);
 } finally { flutterLabels.de['已复制'] = original; }
-console.log('PASS 53 web locale choices, language tags, RTL, source labels and safe HTML/script embedding');
+console.log('PASS 56 web locale choices, language tags, RTL, source labels and safe HTML/script embedding');

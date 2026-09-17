@@ -1,7 +1,7 @@
 import { AbilityConstant, UIAbility, Want, Configuration } from '@kit.AbilityKit';
 import { window } from '@kit.ArkUI';
 import { appStore } from '../model/AppStore';
-import { receiveSystemShare } from '../platform/IncomingShare';
+import { receiveSystemShare, isIncomingWant } from '../platform/IncomingShare';
 import { localSend } from '../network/LocalSendService';
 import { webShare } from '../network/WebShareService';
 import { ScreenKeeper } from '../platform/ScreenKeeper';
@@ -14,6 +14,10 @@ export default class EntryAbility extends UIAbility {
   private mainWindow: window.Window | undefined = undefined;
 
   private syncSystemBars(): void {
+    // The gesture indicator is a separate system bar; navigationBarColor does
+    // not control it. Reapply after content load and returning from other apps.
+    this.mainWindow?.setSpecificSystemBarEnabled('navigationIndicator', false)
+      .catch((error: Error) => appStore.log(`设置手势条失败：${error.message}`));
     // Also paint the window behind the gesture area during layout transitions.
     // A transparent navigation bar alone can expose the system's default fill.
     try { this.mainWindow?.setWindowBackgroundColor(appStore.canvasColor); }
@@ -50,7 +54,7 @@ export default class EntryAbility extends UIAbility {
   private async importWant(want: Want): Promise<void> {
     await appStore.init(this.context);
     if (!appStore.ready || !appStore.privacyAccepted) {
-      if (want.action === 'ohos.want.action.sendData' || want.action === 'ohos.want.action.viewData') this.pendingWants.push(want);
+      if (isIncomingWant(want)) this.pendingWants.push(want);
       return;
     }
     await receiveSystemShare(want, appStore);
@@ -71,6 +75,7 @@ export default class EntryAbility extends UIAbility {
     }).catch((error: Error) => appStore.log(`读取主窗口失败：${error.message}`));
     windowStage.loadContent('pages/Index', (error) => {
       if (error.code) appStore.log(`加载主界面失败：${error.message}`);
+      else if (generation === this.windowGeneration) { this.syncSystemBars(); this.syncSafeArea(); }
     });
   }
 
@@ -79,7 +84,7 @@ export default class EntryAbility extends UIAbility {
     this.syncSystemBars(); this.syncSafeArea();
     this.screenKeeper?.sync(appStore.transfers.some((item) => item.status === 'transferring'));
     appStore.log('应用已回到前台');
-    appStore.init(this.context).then(async (): Promise<void> => { if (appStore.ready && appStore.privacyAccepted) await localSend.discover(false); }).catch((error: Error) => appStore.log(error.message));
+    appStore.init(this.context).then(async (): Promise<void> => { if (appStore.ready && appStore.privacyAccepted) await localSend.discover(false, true); }).catch((error: Error) => appStore.log(error.message));
   }
   onConfigurationUpdate(configuration: Configuration): void { appStore.refreshSystemTheme(); }
   onBackground(): void {

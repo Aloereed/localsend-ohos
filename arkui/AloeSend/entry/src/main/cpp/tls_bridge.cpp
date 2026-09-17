@@ -2,6 +2,7 @@
 #include <napi/native_api.h>
 #include <map>
 #include <functional>
+void registerMulticast(napi_env env, napi_value exports);
 void registerPullTcp(napi_env env, napi_value exports);
 void registerFileIdentity(napi_env env, napi_value exports);
 
@@ -71,6 +72,7 @@ napi_value shutdown(napi_env env, napi_callback_info info) {
 napi_value closeSession(napi_env env, napi_callback_info info) { return invoke(env, info, [&](napi_value* args) { sessions.erase(integer(env, args[0])); return number(env, 0); }); }
 napi_value closeServer(napi_env env, napi_callback_info info) { return invoke(env, info, [&](napi_value* args) { servers.erase(integer(env, args[0])); return number(env, 0); }); }
 napi_value init(napi_env env, napi_value exports) {
+    registerMulticast(env, exports);
     registerPullTcp(env, exports);
     registerFileIdentity(env, exports);
     const napi_property_descriptor functions[] = {

@@ -5,6 +5,7 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
+          "profile": "C:/Users/huzheng/Downloads/aloesend5Release.p7b"
         }
       }
     ],

@@ -20,11 +20,12 @@ import { PinRequestView } from '../components/PinRequestView';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { HdsTabs, HdsTabsController, SystemMaterialParams } from '@kit.UIDesignKit';
 import { floatingBarLayout } from '../model/NavigationLayout';
+import { deviceAddressTags } from '../network/Addresses';
 
 @Entry
 @Component
 struct Index {
-  @State store: AppStore = appStore;
+  @State @Watch('applyLaunchRoute') store: AppStore = appStore;
   @State tab: number = 0;
   @State route: string = '';
   @State selectedPeer: Peer = new Peer();
@@ -45,12 +46,20 @@ struct Index {
     await this.initializePage();
   }
 
+  applyLaunchRoute(): void {
+    if (!this.store.privacyAccepted || !this.store.launchRoute) return;
+    const route = this.store.launchRoute; this.store.launchRoute = '';
+    if (route === 'web') this.route = 'web';
+    else if (route === 'send') { this.route = ''; this.selectTab(1); }
+  }
+
   async initializePage(): Promise<void> {
     if (deviceInfo.sdkApiVersion >= 23 && canIUse('SystemCapability.UIDesign.HDSComponent.Core')) {
       this.systemTabsController = new HdsTabsController(); this.systemFloatingTabs = true;
     }
     await this.store.init(this.getUIContext().getHostContext() as common.UIAbilityContext);
     if (!this.store.ready) return;
+    this.applyLaunchRoute();
     this.store.onReceiveStarted = () => { this.route = 'transfers'; };
     this.store.onContinuePhotoSelection = async (selected: number, remaining: number): Promise<boolean> => {
       try {
@@ -180,6 +189,10 @@ struct Index {
         Image($r('app.media.aloesend_logo')).width(112).height(112).objectFit(ImageFit.Contain).accessibilityLevel('no')
       }.width(208).height(208).borderRadius(104).clip(true).margin({ top: 4, bottom: 6 })
       Text(this.store.settings.alias).fontSize(28).fontWeight(FontWeight.Medium).maxLines(2).textAlign(TextAlign.Center).fontColor($r('sys.color.font_primary'))
+      if (this.store.settings.showAddressTags && this.store.listenerRunning && deviceAddressTags(this.store.localIps)) {
+        Text(deviceAddressTags(this.store.localIps)).direction(Direction.Ltr).fontSize(20).fontWeight(FontWeight.Medium)
+          .fontColor(this.store.accentText).textAlign(TextAlign.Center).width('100%')
+      }
       Row({ space: 7 }) {
         Circle().width(6).height(6).fill(this.store.serverStatus.startsWith('已就绪') ? this.store.accentText : '#B88632')
         Text(this.store.settings.visible ? this.store.t(this.store.serverStatus) : this.store.t('当前已隐藏，可通过地址连接')).fontSize(13).fontColor($r('sys.color.font_secondary'))
@@ -189,6 +202,8 @@ struct Index {
       })
     }.width('100%').padding({ left: 20, right: 20, bottom: 32 })
     Column() {
+      this.receiveShortcut('通过链接分享', 'link', 'web')
+      Divider().color(this.store.controlSurface).margin({ left: 60 }).width('80%')
       this.receiveShortcut('接收历史', 'history', 'history')
       Divider().color(this.store.controlSurface).margin({ left: 60 }).width('80%')
       this.receiveShortcut('查看传输任务', 'receive', 'transfers')
@@ -242,6 +257,9 @@ struct Index {
     else if (this.route === 'diagnostics') {
       DiagnosticsView({ store: this.store })
     } else if (this.route === 'help') {
+      this.info('1. 关闭加密并重启双方应用', '在可信的局域网内，建议双方先到设置 → 高级设置关闭加密，再完全退出并重新打开应用后重试。Windows 端也要从系统托盘退出。关闭加密可减少处理开销，也可能提升传输速度；此时文件内容不再受传输加密保护。')
+      this.info('2. 在接收端刷新设备', '让接收方设备也打开发送页，点一下“刷新”，等待设备出现后再从发送方重试。双方都应保持应用打开，并连接同一个 Wi-Fi 或热点。')
+      this.info('3. 更新双方应用', '建议双方更新到各自应用的最新版本；对方使用原版 LocalSend 时，也请升级 LocalSend 后重启再试。新版本包含发现和传输兼容性修复。')
       this.info('找不到设备？', '确认两台设备连接同一个局域网，关闭路由器的 AP 隔离。允许 LocalSend 通过防火墙，确保 TCP 与 UDP 53317 端口可用。也可通过地址直接添加设备。')
       this.info('接收的文件在哪里？', '允许下载目录授权后，默认保存到 Download/com.aloereed.aloesend。未授权时保存在应用内，可从接收历史另存为。')
       this.info('文字与文件', '发送页可以选择文件、图片、文件夹，以及文字或剪贴板内容。选择后点击目标设备。文件重命名只影响对方收到的名称。')
@@ -296,6 +314,7 @@ struct Index {
         Column() {
           this.heading('发送', '选择内容，再选择设备')
           SendView({ store: this.store, onSend: (peer: Peer) => { localSend.send(peer); this.route = 'transfers'; },
+            onHelp: () => this.route = 'help',
             onDiscover: () => { localSend.discover(); },
             onAddress: (address: string) => { localSend.addAddress(address); }, onWebShare: () => this.route = 'web', onDetails: (peer: Peer) => { this.selectedPeer = peer; this.route = 'peer'; }, onSendMany: (peers: Peer[]) => { localSend.sendMany(peers); this.route = 'transfers'; } })
         }.padding({ left: 24, right: 24, bottom: 116 }).constraintSize({ maxWidth: 720 }).width('100%')

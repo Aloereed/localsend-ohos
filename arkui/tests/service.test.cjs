@@ -107,7 +107,7 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
     });
     const data = crypto.randomBytes(180000);
     await check('prepare, tokenized chunked binary upload, checksum and actual file contents', async () => {
-      const prepared = await call(port, '/api/localsend/v2/prepare-upload', offer('相册/test.bin', data, { hash: crypto.createHash('sha256').update(data).digest('hex') }));
+      const prepared = await call(port, '/api/localsend/v2/prepare-upload', offer('相册/test.bin', data, { sha256: crypto.createHash('sha256').update(data).digest('hex') }));
       assert.equal(prepared.status, 200); const session = prepared.json();
       const uploadPath = `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`;
       assert.equal((await call(port, uploadPath, data, 'POST', true)).status, 200);
@@ -161,13 +161,13 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
     });
     await check('checksum mismatch removes partial output and never records success', async () => {
       const count = store.history.length;
-      const payload = offer('bad-hash.bin', data, { hash: '0'.repeat(64) });
+      const payload = offer('bad-hash.bin', data, { sha256: '0'.repeat(64) });
       payload.files.good = { id: 'good', fileName: 'before-bad-hash.bin', size: data.length, fileType: 'application/octet-stream' };
       payload.files.later = { ...payload.files.good, id: 'later', fileName: 'after-bad-hash.bin' };
       const session = (await call(port, '/api/localsend/v2/prepare-upload', payload)).json();
       assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=good&token=${session.files.good}`, data)).status, 200);
       const result = await call(port, `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`, data);
-      assert.equal(result.status, 500); assert.equal(store.history.length, count + 3);
+      assert.equal(result.status, 422); assert.equal(store.history.length, count + 3);
       const failed = store.history.find(entry => entry.id === `receive:${session.sessionId}:f1`);
       assert.equal(failed.status, 'error'); assert.equal(failed.path, ''); assert.match(failed.error, /校验和/);
       const later = store.history.find(entry => entry.id === `receive:${session.sessionId}:later`);
@@ -215,10 +215,21 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         await until(() => handles.size === 0);
       }
     });
+    await check('official sha256 verification switch and retry limit', async () => {
+      store.settings.verifyChecksums = false;
+      const unchecked = (await call(port, '/api/localsend/v2/prepare-upload', offer('unchecked.bin', data, { sha256: '0'.repeat(64) }))).json();
+      assert.equal((await call(port, `/api/localsend/v2/upload?sessionId=${unchecked.sessionId}&fileId=f1&token=${unchecked.files.f1}`, data)).status, 200);
+      store.settings.verifyChecksums = true;
+      const checked = (await call(port, '/api/localsend/v2/prepare-upload', offer('retry-limit.bin', data, { sha256: '0'.repeat(64) }))).json();
+      const route = `/api/localsend/v2/upload?sessionId=${checked.sessionId}&fileId=f1&token=${checked.files.f1}`;
+      for (let attempt = 0; attempt < 3; attempt++) assert.equal((await call(port, route, data)).status, 422);
+      assert.equal((await call(port, route, data)).status, 403);
+      assert.equal(store.transfers.find(item => item.id === checked.sessionId).files[0].path, '');
+    });
     await check('restart invalidates retained failed receive tokens', async () => {
-      const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('restart-failed.bin', data, { hash: '0'.repeat(64) }))).json();
+      const session = (await call(port, '/api/localsend/v2/prepare-upload', offer('restart-failed.bin', data, { sha256: '0'.repeat(64) }))).json();
       const upload = `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`;
-      assert.equal((await call(port, upload, data)).status, 500);
+      assert.equal((await call(port, upload, data)).status, 422);
       await service.stop(); await service.start();
       assert.equal((await call(port, upload, data)).status, 403);
     });
@@ -496,7 +507,7 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       const expected = crypto.createHash('sha256'); for (let i = 0; i < blocks; i++) expected.update(block);
       const digest = expected.digest('hex');
       let started = 0; store.onReceiveStarted = () => started++;
-      const prepared = await call(port, '/api/localsend/v2/prepare-upload', offer('nonzero-128MiB.bin', { length: block.length * blocks }, { hash: digest }));
+      const prepared = await call(port, '/api/localsend/v2/prepare-upload', offer('nonzero-128MiB.bin', { length: block.length * blocks }, { sha256: digest }));
       assert.equal(prepared.status, 200); const session = prepared.json();
       await new Promise((resolve, reject) => {
         const upload = https.request({ host: '127.0.0.1', port, path: `/api/localsend/v2/upload?sessionId=${session.sessionId}&fileId=f1&token=${session.files.f1}`,

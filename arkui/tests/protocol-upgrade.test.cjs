@@ -13,7 +13,8 @@ const { TlsIdentity } = load('network/TlsIdentity');
   const store = new AppStore();
   await store.init({ filesDir: work, getApplicationContext: () => ({ setColorMode() {} }) });
   store.settings.visible = false;
-  const identity = new TlsIdentity(); await identity.load(store);
+  await fs.mkdir(path.join(work, 'receiver'));
+  const identity = new TlsIdentity(); await identity.load({ context: { filesDir: path.join(work, 'receiver') }, settings: {}, log() {}, async save() {} });
   const crypto = require('node:crypto');
   const fingerprint = new crypto.X509Certificate(identity.certificate).fingerprint256.replaceAll(':', '').toLowerCase();
   // The test endpoint is a different device with the generated certificate.

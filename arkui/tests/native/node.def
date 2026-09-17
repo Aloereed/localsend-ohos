@@ -1,5 +1,8 @@
 LIBRARY node.exe
 EXPORTS
+  napi_create_array
+  napi_get_array_length
+  napi_set_element
  napi_call_threadsafe_function
  napi_create_threadsafe_function
  napi_acquire_threadsafe_function

@@ -1,3 +1,18 @@
+export function normalizeColor(value: string): string {
+  const color = value.trim();
+  return /^#?[0-9a-f]{6}$/i.test(color) ? '#' + color.replace('#', '').toUpperCase() : '';
+}
+
+export function colorChannel(color: string, index: number): number {
+  return parseInt((normalizeColor(color) || '#168A75').slice(1 + index * 2, 3 + index * 2), 16);
+}
+
+export function changeColorChannel(color: string, index: number, value: number): string {
+  const normalized = normalizeColor(color) || '#168A75';
+  const channel = Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, '0').toUpperCase();
+  return normalized.slice(0, 1 + index * 2) + channel + normalized.slice(3 + index * 2);
+}
+
 function channel(value: number): number {
   const normalized = value / 255;
   return normalized <= 0.04045 ? normalized / 12.92 : Math.pow((normalized + 0.055) / 1.055, 2.4);

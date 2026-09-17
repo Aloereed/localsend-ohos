@@ -68,6 +68,8 @@ function readTemplates(directory = path.join(__dirname, '../app/lib/gen')) {
   const paths = classPaths(classes(english));
   const locales = {}, unsupported = {};
   for (const locale of Object.keys(staticCatalog.locales)) {
+    const { names } = require('./upstream-locales.cjs');
+    if (locale in names && !fs.existsSync(path.join(directory, 'strings_' + locale + '.g.dart'))) continue;
     // Inherited Dart methods resolve _root references on the localized instance.
     const base = methods(english, paths, staticCatalog.locales[locale], true);
     const source = fs.readFileSync(path.join(directory, 'strings_' + locale.replaceAll('-', '_') + '.g.dart'), 'utf8');
@@ -76,6 +78,12 @@ function readTemplates(directory = path.join(__dirname, '../app/lib/gen')) {
     // Unsupported overrides must never quietly inherit a different English method.
     for (const key of Object.keys(own.unsupported)) delete locales[locale][key];
     unsupported[locale] = own.unsupported;
+  }
+  if (directory === path.join(__dirname, '../app/lib/gen')) {
+    const { names, supplementTemplates } = require('./upstream-locales.cjs');
+    for (const locale of Object.keys(names)) {
+      locales[locale] = supplementTemplates(locales.en, staticCatalog.locales[locale], locale); unsupported[locale] = {};
+    }
   }
   return { locales, unsupported };
 }

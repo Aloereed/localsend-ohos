@@ -2,6 +2,40 @@ import { i18n } from '@kit.LocalizationKit';
 import { flutterLabels, flutterLanguages } from './FlutterLocales';
 
 const english: Record<string, string> = {
+  "传输有问题？": "Transfer trouble?",
+  "1. 关闭加密并重启双方应用": "1. Turn off encryption and restart both apps",
+  "在可信的局域网内，建议双方先到设置 → 高级设置关闭加密，再完全退出并重新打开应用后重试。Windows 端也要从系统托盘退出。关闭加密可减少处理开销，也可能提升传输速度；此时文件内容不再受传输加密保护。": "On a trusted local network, try turning off encryption in Settings → Advanced settings on both devices, then fully quit and reopen both apps. On Windows, also quit from the system tray. Turning off encryption reduces processing overhead and may improve transfer speed; file contents will no longer be encrypted in transit.",
+  "2. 在接收端刷新设备": "2. Refresh devices on the receiving device",
+  "让接收方设备也打开发送页，点一下“刷新”，等待设备出现后再从发送方重试。双方都应保持应用打开，并连接同一个 Wi-Fi 或热点。": "On the receiving device, open the Send tab and tap Refresh. Wait for the device to appear, then retry from the sender. Keep both apps open and connect both devices to the same Wi-Fi network or hotspot.",
+  "3. 更新双方应用": "3. Update both apps",
+  "建议双方更新到各自应用的最新版本；对方使用原版 LocalSend 时，也请升级 LocalSend 后重启再试。新版本包含发现和传输兼容性修复。": "Update the app on each device to its latest version. If the other device uses LocalSend, update LocalSend too, then restart and try again. Newer versions include discovery and transfer compatibility fixes.",
+  "文字编码失败": "Could not encode text",
+  "无法读取设备证书，请重试连接": "Could not read the device certificate. Try connecting again.",
+  "全部下载（ZIP）": "Download all (ZIP)",
+  "网页模板不能超过 2 MB": "Web templates must not exceed 2 MB",
+  "请选择有效的 HTML 网页模板": "Select a valid HTML web template",
+  "网页模板写入失败": "Could not write the web template",
+  "网页模板设置已更新": "Web template settings updated",
+  "网页模板操作失败": "Web template operation failed",
+  "正在使用自定义网页": "Using a custom web page",
+  "正在使用默认网页": "Using the default web page",
+  "导入网页": "Import web page",
+  "导出模板": "Export template",
+  "恢复默认网页": "Restore default web page",
+  "天": "d",
+  "自定义取色": "Choose a custom color",
+  "十六进制颜色": "Hex color",
+  "红色分量": "Red channel",
+  "绿色分量": "Green channel",
+  "蓝色分量": "Blue channel",
+  "应用颜色": "Apply color",
+  "发送校验和": "Create checksums",
+  "验证校验和": "Verify checksums",
+  "发送前计算 SHA-256，供接收方检查文件完整性": "Calculate SHA-256 before sending so the receiver can check file integrity",
+  "接收后检查 SHA-256，不匹配的文件不会标记为成功": "Verify SHA-256 after receiving; mismatched files are not marked as successful",
+  "正在计算校验和 · {0} / {1}": "Calculating checksums · {0} / {1}",
+  "源文件大小已改变，请重新选择": "The source file size changed. Select it again.",
+  "文件校验和无效": "Invalid file checksum",
   "继续添加照片或视频": "Add more photos or videos",
   "已选择 {0} 项，还可继续添加 {1} 项。": "{0} items selected. You can add {1} more.",
   "完成选择": "Finish selecting",
@@ -383,6 +417,9 @@ const english: Record<string, string> = {
   "开始": "Start",
   "附近暂时没有设备，请确认双方连接同一网络。": "No nearby devices. Make sure both devices are on the same network.",
   "刷新附近设备": "Refresh nearby devices",
+  "清除发现缓存并重新发现": "Clear discovery cache and scan again",
+  "使用 #尾号区分地址": "Identify addresses with #suffixes",
+  "开启时按地址显示；关闭时按设备指纹合并多个地址": "Show each address when on; group addresses by device fingerprint when off",
   "返回会话列表": "Back to conversations",
   "等待设备上线后即可回复": "Reply when the device comes online",
   "管理": "Manage",
@@ -556,9 +593,42 @@ export function resolvedLanguage(language: string): string {
 
 export function isRtlLanguage(language: string): boolean { return ['ar', 'fa', 'he', 'ur'].includes(resolvedLanguage(language).split('-')[0]); }
 
+const traditional: Record<string, string> = {
+  '使用 #尾号区分地址': '使用 #尾碼區分位址',
+  '开启时按地址显示；关闭时按设备指纹合并多个地址': '開啟時按位址顯示；關閉時按裝置指紋合併多個位址',
+  '清除发现缓存并重新发现': '清除探索快取並重新探索',
+  "传输有问题？": "傳輸有問題？",
+  "1. 关闭加密并重启双方应用": "1. 關閉加密並重新啟動雙方應用程式",
+  "在可信的局域网内，建议双方先到设置 → 高级设置关闭加密，再完全退出并重新打开应用后重试。Windows 端也要从系统托盘退出。关闭加密可减少处理开销，也可能提升传输速度；此时文件内容不再受传输加密保护。": "在可信任的區域網路內，建議雙方先到設定 → 進階設定關閉加密，再完全結束並重新開啟應用程式後重試。Windows 端也要從系統匣結束。關閉加密可減少處理負擔，也可能提升傳輸速度；此時檔案內容不再受傳輸加密保護。",
+  "2. 在接收端刷新设备": "2. 在接收端重新整理裝置",
+  "让接收方设备也打开发送页，点一下“刷新”，等待设备出现后再从发送方重试。双方都应保持应用打开，并连接同一个 Wi-Fi 或热点。": "讓接收方裝置也開啟傳送頁，點一下「重新整理」，等待裝置出現後再從傳送方重試。雙方都應保持應用程式開啟，並連線至同一個 Wi-Fi 或熱點。",
+  "3. 更新双方应用": "3. 更新雙方應用程式",
+  "建议双方更新到各自应用的最新版本；对方使用原版 LocalSend 时，也请升级 LocalSend 后重启再试。新版本包含发现和传输兼容性修复。": "建議雙方更新至各自應用程式的最新版本；對方使用原版 LocalSend 時，也請升級 LocalSend 後重新啟動再試。新版本包含探索裝置和傳輸相容性的修正。",
+  "文字编码失败": "文字編碼失敗",
+  "无法读取设备证书，请重试连接": "無法讀取裝置憑證，請重新連線",
+  "全部下载（ZIP）": "全部下載（ZIP）",
+  '网页模板不能超过 2 MB': '網頁範本不能超過 2 MB',
+  '请选择有效的 HTML 网页模板': '請選擇有效的 HTML 網頁範本',
+  '网页模板写入失败': '網頁範本寫入失敗',
+  '网页模板设置已更新': '網頁範本設定已更新',
+  '网页模板操作失败': '網頁範本操作失敗',
+  '正在使用自定义网页': '正在使用自訂網頁',
+  '正在使用默认网页': '正在使用預設網頁',
+  '导入网页': '匯入網頁', '导出模板': '匯出範本', '恢复默认网页': '還原預設網頁',
+  '自定义取色': '自訂選色', '十六进制颜色': '十六進位顏色',
+  '红色分量': '紅色分量', '绿色分量': '綠色分量', '蓝色分量': '藍色分量', '应用颜色': '套用顏色',
+  '天': '天', '发送校验和': '傳送校驗碼', '验证校验和': '驗證校驗碼',
+  '发送前计算 SHA-256，供接收方检查文件完整性': '傳送前計算 SHA-256，供接收方檢查檔案完整性',
+  '接收后检查 SHA-256，不匹配的文件不会标记为成功': '接收後檢查 SHA-256，不符的檔案不會標記為成功',
+  '正在计算校验和 · {0} / {1}': '正在計算校驗碼 · {0} / {1}',
+  '源文件大小已改变，请重新选择': '來源檔案大小已變更，請重新選擇',
+  '文件校验和无效': '檔案校驗碼無效', '文件校验和不匹配': '檔案校驗碼不符'
+};
+
 export function uiText(text: string, language: string): string {
   const resolved = resolvedLanguage(language);
   if (resolved === 'zh') return text;
+  if ((resolved === 'zh-TW' || resolved === 'zh-HK') && traditional[text]) return traditional[text];
   const translated = flutterLabels[resolved];
   if (translated && translated[text]) return translated[text];
   if (english[text]) return english[text];

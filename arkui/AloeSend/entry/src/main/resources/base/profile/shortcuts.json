@@ -1,0 +1,16 @@
+{
+  "shortcuts": [
+    {
+      "shortcutId": "send",
+      "label": "$string:shortcut_send",
+      "icon": "$media:icon_startwindow",
+      "wants": [{ "bundleName": "com.aloereed.aloesend", "moduleName": "entry", "abilityName": "EntryAbility", "parameters": { "aloesend.route": "send" } }]
+    },
+    {
+      "shortcutId": "web",
+      "label": "$string:shortcut_web",
+      "icon": "$media:icon_startwindow",
+      "wants": [{ "bundleName": "com.aloereed.aloesend", "moduleName": "entry", "abilityName": "EntryAbility", "parameters": { "aloesend.route": "web" } }]
+    }
+  ]
+}

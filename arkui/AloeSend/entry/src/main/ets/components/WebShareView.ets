@@ -10,6 +10,7 @@ export struct WebShareView {
   @State presentationMode: string = 'qr';
   @State fileQuery: string = '';
   @State fileLimit: number = 30;
+  aboutToAppear(): void { webShare.refreshTemplate().catch(() => {}); }
 
   checkShare(): void {
     if (!this.store.webUrl) { this.presenting = false; this.fileQuery = ''; this.fileLimit = 30; }
@@ -69,7 +70,18 @@ export struct WebShareView {
           Text(this.encrypted ? this.store.t('使用本机自签名证书，浏览器会要求确认。') : this.store.t('HTTP 浏览器模式不加密，仅在可信网络中使用。LocalSend 设备之间的加密传输不受影响。'))
             .fontSize(12).lineHeight(20).fontColor($r('sys.color.font_secondary'))
           Button(this.store.t('开始分享')).width('100%').height(48).backgroundColor(this.store.accentFill)
-            .enabled(!this.store.webStarting).onClick(() => webShare.start(this.encrypted))
+            .enabled(!this.store.webStarting && !this.store.webTemplateBusy).onClick(() => webShare.start(this.encrypted))
+          Text(this.store.t(this.store.webTemplateConfigured ? '正在使用自定义网页' : '正在使用默认网页')).fontSize(13).fontColor($r('sys.color.font_secondary'))
+          Flex({ wrap: FlexWrap.Wrap }) {
+            Button(this.store.t('导入网页')).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+              .onClick(() => webShare.configureTemplate('import'))
+            Button(this.store.t('导出模板')).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+              .onClick(() => webShare.configureTemplate('export'))
+            if (this.store.webTemplateConfigured) {
+              Button(this.store.t('恢复默认网页')).fontColor(this.store.accentText).backgroundColor(this.store.controlSurface)
+                .onClick(() => webShare.configureTemplate('reset'))
+            }
+          }.enabled(!this.store.webStarting && !this.store.webTemplateBusy)
         }.padding(24).width('100%').direction(this.store.rtl ? Direction.Rtl : Direction.Ltr).backgroundColor(this.store.surfaceColor).borderRadius(28)
       } else {
         Column({ space: 18 }) {

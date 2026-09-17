@@ -190,6 +190,8 @@ void acceptLoop(const std::shared_ptr<Server>& server) {
         if (address.ss_family == AF_INET) inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in*>(&address)->sin_addr, ip, sizeof(ip));
         else inet_ntop(AF_INET6, &reinterpret_cast<sockaddr_in6*>(&address)->sin6_addr, ip, sizeof(ip));
         connection->ip = ip;
+        if (address.ss_family == AF_INET6 && reinterpret_cast<sockaddr_in6*>(&address)->sin6_scope_id)
+            connection->ip += "%" + std::to_string(reinterpret_cast<sockaddr_in6*>(&address)->sin6_scope_id);
         {
             std::lock_guard<std::mutex> lock(registryMutex);
             if (connections.size() >= 64 || server->stopped) { connection->stop(); continue; }
@@ -237,11 +239,23 @@ napi_value tcpListen(napi_env env, napi_callback_info info) {
         if (napi_get_value_string_utf8(env, args[0], host, sizeof(host), &length) != napi_ok) throw std::runtime_error("Invalid listen address");
         const int port = integer(env, args[1]); if (port < 1 || port > 65535) throw std::runtime_error("Invalid listen port");
         auto server = std::make_shared<Server>(); server->id = ++nextId;
-        server->fd = socket(AF_INET, SOCK_STREAM, 0);
+        const bool v6 = std::strchr(host, ':') != nullptr;
+        server->fd = socket(v6 ? AF_INET6 : AF_INET, SOCK_STREAM, 0);
         if (server->fd == invalidSocket) throw std::runtime_error("Socket creation failed");
         const int reuse = 1; setsockopt(server->fd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char*>(&reuse), sizeof(reuse));
-        sockaddr_in address{}; address.sin_family = AF_INET; address.sin_port = htons(static_cast<unsigned short>(port));
-        if (inet_pton(AF_INET, host, &address.sin_addr) != 1 || bind(server->fd, reinterpret_cast<sockaddr*>(&address), sizeof(address)) != 0 || listen(server->fd, 16) != 0) {
+        sockaddr_storage address{}; int addressSize; int parsed;
+        if (v6) {
+            const int only = 1;
+            if (setsockopt(server->fd, IPPROTO_IPV6, IPV6_V6ONLY, reinterpret_cast<const char*>(&only), sizeof(only)) != 0) {
+                closeSocket(server->fd); throw std::runtime_error("IPv6-only listener option failed");
+            }
+            auto& ip = *reinterpret_cast<sockaddr_in6*>(&address); ip.sin6_family = AF_INET6; ip.sin6_port = htons(port);
+            parsed = inet_pton(AF_INET6, host, &ip.sin6_addr); addressSize = sizeof(ip);
+        } else {
+            auto& ip = *reinterpret_cast<sockaddr_in*>(&address); ip.sin_family = AF_INET; ip.sin_port = htons(port);
+            parsed = inet_pton(AF_INET, host, &ip.sin_addr); addressSize = sizeof(ip);
+        }
+        if (parsed != 1 || bind(server->fd, reinterpret_cast<sockaddr*>(&address), addressSize) != 0 || listen(server->fd, 16) != 0) {
             closeSocket(server->fd); throw std::runtime_error("TCP listen failed (address or port unavailable)");
         }
         napi_value name; napi_create_string_utf8(env, "AloePullTCP", NAPI_AUTO_LENGTH, &name);

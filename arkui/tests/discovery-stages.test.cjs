@@ -1,0 +1,25 @@
+const assert = require('node:assert/strict');
+const { load } = require('./host-runtime.cjs');
+const { AppStore, Peer } = load('model/AppStore');
+const { LocalSendService } = load('network/LocalSendService');
+const { Cancellation } = load('network/Transport');
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+(async () => {
+  const store = new AppStore(); store.settings.fingerprint = 'local';
+  const service = new LocalSendService(store); service.running = true;
+  let ip = '10.1.2.3', scans = 0, cancelled = 0; const resets = [];
+  service.readAddresses = async () => { store.interfaces = [{ name: 'wlan0', ip, prefixLength: 24, ignored: false }]; store.localIps = [ip]; };
+  service.multicast = { async sync(...args) { resets.push(args[4]); }, send() {}, async close() {} };
+  service.scan = { async run() { scans++; }, cancel() { cancelled++; } };
+  await service.discover(false); await service.discover(false);
+  await delay(1600); assert.equal(scans, 1, 'overlapping refreshes share one fallback');
+  await service.discover(false);
+  service.upsertPeer(Object.assign(new Peer(), { ip: '10.1.2.4', fingerprint: 'remote' }), true);
+  await delay(1600); assert.equal(scans, 2, 'one confirmed device must not suppress discovery of other devices');
+  await service.discover(false, true); assert.equal(resets.at(-1), true, 'foreground requests a rebind');
+  let stopped = 0; const token = new Cancellation(); token.close = () => stopped++;
+  service.discoveryTokens.add(token); ip = '10.2.3.4';
+  await service.discover(false); assert.equal(stopped, 1); assert.ok(cancelled >= 2, 'network change cancels old scan and requests');
+  await service.stop(); await delay(1600); assert.equal(scans, 2, 'stop clears pending fallback');
+  console.log('PASS staged fallback, overlapping refresh, confirmations, foreground rebind, network change cancellation and stop');
+})().catch(error => { console.error(error); process.exitCode = 1; });

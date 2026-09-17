@@ -5,7 +5,18 @@ import { util } from '@kit.ArkTS';
 import { AppStore } from '../model/AppStore';
 import { ensureDirectory } from './Directories';
 
+export function isIncomingWant(want: Want): boolean {
+  return want.action === 'ohos.want.action.sendData' || want.action === 'ohos.want.action.viewData' ||
+    typeof want.parameters?.['aloesend.text'] === 'string' || typeof want.parameters?.['aloesend.route'] === 'string';
+}
+
 export async function receiveSystemShare(want: Want, store: AppStore): Promise<void> {
+  const text = want.parameters?.['aloesend.text'];
+  if (typeof text === 'string' && text.trim()) {
+    store.addText(text); store.incomingShare = true; store.launchRoute = 'send'; return;
+  }
+  const route = want.parameters?.['aloesend.route'];
+  if (route === 'send' || route === 'web') { store.launchRoute = route as string; return; }
   if (want.action !== 'ohos.want.action.sendData' && want.action !== 'ohos.want.action.viewData') return;
   try {
     const data = await systemShare.getSharedData(want);

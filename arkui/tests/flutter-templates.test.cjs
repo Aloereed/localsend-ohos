@@ -10,7 +10,7 @@ const { flutterText } = load('model/DynamicLocale');
 const { AppStore } = load('model/AppStore');
 const { execFileSync } = require('node:child_process');
 execFileSync(process.execPath, [path.join(__dirname, '../sync-templates.cjs'), '--check']);
-assert.equal(Object.keys(catalog.locales).length, 53);
+assert.equal(Object.keys(catalog.locales).length, 56);
 assert.equal(Object.keys(catalog.locales.en).length, 29);
 for (const [locale, templates] of Object.entries(catalog.locales)) {
   assert.deepEqual(catalog.unsupported[locale], {}, locale);
@@ -72,4 +72,4 @@ assert.equal(renderTemplate(fixture.locales.de.message, { n: 3 }), 'Deutsch: 3')
 assert.equal(fixture.locales.de.count.locale, 'en', 'inherited plural resolver retains its source locale');
 assert.equal(fixture.locales.fr.message, undefined, 'unsupported localized overrides cannot silently inherit English');
 assert.match(fixture.unsupported.fr.message, /Unsupported/);
-console.log('PASS 53 locales × 29 dynamic templates, six plural categories, localized inheritance, literal parameters and unsupported override detection');
+console.log('PASS 56 locales × 29 dynamic templates, six plural categories, localized inheritance, literal parameters and unsupported override detection');
