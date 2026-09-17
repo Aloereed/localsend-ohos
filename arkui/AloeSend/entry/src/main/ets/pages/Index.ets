@@ -133,7 +133,7 @@ struct Index {
     else this.tabsController.changeIndex(index);
   }
 
-  systemMaterial(): SystemMaterialParams {
+  resolveSystemMaterial(): SystemMaterialParams {
     // MaterialType.ADAPTIVE (100), MaterialLevel.ADAPTIVE (10). Keep the new
     // hdsMaterial runtime module out of API 22 startup; HdsTabs itself is API 20.
     return { materialType: this.store.settings.reduceEffects ? 0 : 100, materialLevel: 10 };
@@ -404,7 +404,7 @@ struct Index {
             .barFloatingStyle({ barWidth: { smallWidth: floatingBarLayout(this.windowWidth).width,
               mediumWidth: floatingBarLayout(this.windowWidth).width, largeWidth: floatingBarLayout(this.windowWidth).width },
               barSideMargin: floatingBarLayout(this.windowWidth).sideMargin, barBottomMargin: 16,
-              adaptToHandedness: false, systemMaterialEffect: this.systemMaterial(), thermoCtrl: true })
+              adaptToHandedness: false, systemMaterialEffect: this.resolveSystemMaterial(), thermoCtrl: true })
             .barHeight(this.tab === 2 && this.messageDetail ? 0 : 74).width('100%').height('100%')
             .animationDuration(this.store.settings.animations ? 280 : 0).onChange((index: number) => this.tab = index)
         } else {

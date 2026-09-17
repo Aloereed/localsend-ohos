@@ -10,3 +10,8 @@
 
 # FVM Version Cache
 .fvm/
+
+# Local signing inputs and generated delivery assets
+/.signing/
+/output/
+/build-linux.log
