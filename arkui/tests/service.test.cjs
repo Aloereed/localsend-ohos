@@ -101,9 +101,13 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
         assert.ok(Date.now() - started < 1500);
       } finally { for (const socket of sockets) socket.destroy(); await new Promise(r => remote.close(r)); }
     });
-    await check('register populates actual device state', async () => {
-      const result = await call(port, '/api/localsend/v2/register', peerInfo); assert.equal(result.status, 200);
-      assert.ok(store.peers.some(p => p.alias === peerInfo.alias));
+    await check('register confirms the return endpoint before displaying device', async () => {
+      const remote = require('node:http').createServer((req, res) => res.end(JSON.stringify(peerInfo)));
+      await new Promise(resolve => remote.listen(0, '127.0.0.1', resolve));
+      try {
+        const result = await call(port, '/api/localsend/v2/register', { ...peerInfo, port: remote.address().port }); assert.equal(result.status, 200);
+        await until(() => store.peers.some(p => p.alias === peerInfo.alias));
+      } finally { await new Promise(resolve => remote.close(resolve)); }
     });
     const data = crypto.randomBytes(180000);
     await check('prepare, tokenized chunked binary upload, checksum and actual file contents', async () => {
@@ -285,6 +289,7 @@ async function until(predicate, timeout = 2000) { const started = Date.now(); wh
       for (const [protocol, scenario] of [['http', 'normal'], ['https', 'slow'], ['https', 'retry'], ['https', 'failure']]) {
         let notified = '', requests = 0, confirmed = false, closedBeforeConfirmation = false; const sockets = new Set();
         const handler = (req, res) => {
+          if (req.method === 'GET') { req.resume(); res.writeHead(404); res.end(); return; }
           requests++; notified = req.url; req.resume();
           if (scenario === 'retry' && requests === 1) { req.socket.destroy(); return; }
           setTimeout(() => { confirmed = true; res.writeHead(200, { 'content-length': 2 }); res.end('{}'); }, scenario === 'normal' ? 0 : 1300);

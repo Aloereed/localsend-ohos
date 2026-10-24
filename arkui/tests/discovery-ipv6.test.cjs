@@ -25,6 +25,10 @@ async function create(root, https) {
       const peer = Object.assign(new Peer(), receiver.service.info(), { ip: '::1' });
       await sender.service.probe(peer);
       assert.ok(sender.store.peers.some(p => p.fingerprint === receiver.store.settings.fingerprint));
+      const deadline = Date.now() + 5000;
+      while (!receiver.store.peers.some(p => p.fingerprint === sender.store.settings.fingerprint) && Date.now() < deadline) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
       assert.ok(receiver.store.peers.some(p => p.fingerprint === sender.store.settings.fingerprint), 'reciprocal IPv6 discovery');
       const bytes = crypto.randomBytes(1048593); const uri = path.join(root, 'sample-' + encrypted);
       await fs.writeFile(uri, bytes);

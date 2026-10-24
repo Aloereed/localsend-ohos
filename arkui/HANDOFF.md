@@ -1,4 +1,22 @@
-# M154 正式包交接
+# M157 正式包交接
+
+版本 2.0.157 / 2000157。统一证书指纹的会话键和设备匹配规则，修复大小写不同导致消息列表两行、预览不同却打开同一详情的问题。打开会话只刷新同一身份的在线地址；旧历史直接归并展示，保留同名不同设备的隔离。详见 [M157](milestones/M157-conversation-identity.md)。
+
+8 个相关测试文件通过（含 31 组服务集成），正式构建及 APP/HAP 签名校验通过。[APP](artifacts/release/AloeSend-2000157-release-20261016-193213-signed.app)、[HAP](artifacts/release/AloeSend-2000157-release-20261016-193213-signed.hap)。APP SHA256 `0D7E1AA0FD648601D09C94696378459719BD76612AEF31ED89654C1D921923BD`。包含 M156 保存目录修复；未读取用户实际历史、未安装真机，现场验收待完成；源码未提交。
+
+# M156 历史交接
+
+版本 2.0.156 / 2000156。修复用户选择保存目录后，`file://docs/...` URI 被直接用于目录检查、建目录和文件创建而导致仅保留沙箱副本的问题。授权与设置保留原始 URI，实际文件操作使用 CoreFileKit 转换的路径。已有设置直接兼容，自选目录沿用传输子目录布局。详见 [M156](milestones/M156-destination-uri.md)。
+
+8 个相关测试文件通过（含 31 组服务集成），正式构建及 APP/HAP 签名校验通过。最终包：[APP](artifacts/release/AloeSend-2000156-release-20261016-192536-signed.app)、[HAP](artifacts/release/AloeSend-2000156-release-20261016-192536-signed.hap)。APP SHA256 `32BEAC7E2688ED6D933F842CE0872DFAD2AEBE62FF4D9476C16D7C976FAEC618`。包含 M155 已有改动；未安装真机，选择目录与重启后的实际持久授权待验证；源码未提交。
+
+# M155 历史交接
+
+版本 2.0.155 / 2000155。发现公告、入站注册和传输请求的来源地址改为经 LocalSend 接口与身份验证后才进入在线列表，防止未验证的网关来源形成设备分身，兼容真实 .1 热点设备及两种显示模式。详见 [M155](milestones/M155-verified-discovery.md)。
+
+11 个相关测试文件通过（含 31 组服务集成），正式构建及 APP/HAP 签名验证通过。最终包：[APP](artifacts/release/AloeSend-2000155-release-20261009-081412-signed.app)、[HAP](artifacts/release/AloeSend-2000155-release-20261009-081412-signed.hap)。APP SHA256 `379CE0C55AF46C1E67BC740A63CCB534D7C7CEE7259453B82913BABA7B89F9E0`。使用 aloesend5Release.p7b；未安装真机，网友网络环境待复测，源码未提交。
+
+# M154 历史交接
 
 版本 2.0.154 / 2000154。发布 Release 配置已使用 aloesend5Release.p7b，本次也补入通用 build-profile.json5.template。设置 → 外观新增默认开启的“使用 #尾号区分地址”：开启分地址显示，关闭按指纹合并并展示多地址，立即生效并持久保存。保留端点列表供切换，十六进制证书指纹忽略大小写。详见 [M154](milestones/M154-device-display-mode.md)。
 

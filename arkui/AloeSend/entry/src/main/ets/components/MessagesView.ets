@@ -140,7 +140,7 @@ export struct MessagesView {
   }
 
   open(peer: Peer): void {
-    this.peer = this.store.peers.find((item: Peer) => samePeer(item, peer)) || peer;
+    this.peer = currentConversationPeer(peer, this.store.peers);
     const saved = this.store.messageDrafts.get(peerKey(this.peer));
     this.query = ''; this.draft = saved?.text || ''; this.attachments = saved?.files || []; this.visibleCount = 40; this.detailOpen = true;
     this.updates.reset(this.store.history, this.peer); this.observedHistory = this.store.history;

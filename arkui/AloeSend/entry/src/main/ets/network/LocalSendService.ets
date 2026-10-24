@@ -589,16 +589,14 @@ export class LocalSendService {
       if (!info || typeof info.alias !== 'string' || typeof info.fingerprint !== 'string' || info.fingerprint === this.store.settings.fingerprint) return;
       const peer = this.peerFrom(info, message.remoteInfo.address);
       this.store.networkLog('discovery', `${peer.alias} · ${peer.ip}:${peer.port} · ${peer.protocol}`);
-      this.upsertPeer(peer);
       // v2.2 announcements need not carry the legacy v2.0 announce flag.
-      if ((info.announce === true || (info.announce === undefined && Number(info.version) >= 2.2)) && this.store.settings.visible && this.running) {
-        this.answerAnnouncement(peer);
-      }
+      const reply = info.announce === true || (info.announce === undefined && Number(info.version) >= 2.2);
+      this.answerAnnouncement(peer, false, reply);
     } catch (_) { /* Ignore malformed UDP datagrams from unrelated applications. */ }
   }
 
-  private answerAnnouncement(peer: Peer, retry: boolean = false): void {
-    if (!this.running || !this.store.settings.visible) return;
+  private answerAnnouncement(peer: Peer, retry: boolean = false, reply: boolean = true): void {
+    if (!this.running || !peer.fingerprint || samePeer(peer, this.peerFrom(this.info(), peer.ip))) return;
     const key = `${peer.ip}:${peer.port}:${peer.fingerprint}`;
     if (this.registering.has(key) || this.registering.size >= 16) return;
     this.registering.add(key); this.registrationRetries.delete(key);
@@ -607,7 +605,10 @@ export class LocalSendService {
     // A failed startup handshake must not depend on another UDP announcement.
     // Retry only a bounded number of known endpoints, yielding to foreground work.
     const monitor = retry ? setInterval(() => { if (!this.scanAvailable()) token.cancel(); }, 100) : -1;
-    this.register(peer, token).catch((error: Error) => {
+    // Packet/request source addresses can belong to a relay or gateway. Only a
+    // successful reverse discovery may add them to either device display mode.
+    const verification = this.store.settings.visible && reply ? this.register(peer, token) : this.probe(peer, token, true);
+    verification.catch((error: Error) => {
       this.store.log(`设备握手 ${peer.ip}:${peer.port}：${error.message}`);
       if (this.running && generation === this.discoveryGeneration && !(error instanceof PeerIdentityError) && this.registrationRetries.size < 16) {
         this.registrationRetries.set(key, peer);
@@ -625,6 +626,19 @@ export class LocalSendService {
     peer.port = Number.isInteger(info.port) && info.port > 0 && info.port <= 65535 ? info.port : 53317;
     peer.protocol = info.protocol === 'http' ? 'http' : 'https'; peer.fingerprint = info.fingerprint || '';
     peer.deviceModel = info.deviceModel || ''; peer.deviceType = info.deviceType || 'desktop'; return peer;
+  }
+
+  private confirmedPeer(reply: HttpReply, peer: Peer): Peer {
+    const info = JSON.parse(reply.body) as DeviceInfo;
+    if (!info || typeof info.alias !== 'string' || !info.alias.trim() ||
+      typeof info.version !== 'string' || !/^\d+\.\d+(\.\d+)?$/.test(info.version) ||
+      (!reply.fingerprint && (typeof info.fingerprint !== 'string' || !info.fingerprint.trim()))) {
+      throw new Error('设备返回了无效响应');
+    }
+    const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
+    if (reply.fingerprint) known.fingerprint = reply.fingerprint;
+    if (peer.fingerprint && !samePeer(peer, known)) throw new PeerIdentityError('设备身份与发现公告不匹配');
+    return known;
   }
 
   private upsertPeer(peer: Peer, verified: boolean = false): void {
@@ -664,37 +678,31 @@ export class LocalSendService {
     cancellation.check();
     if (result.status !== 200) throw new Error(`设备返回 ${result.status}`);
     if (result.status === 200) {
-      const info = JSON.parse(result.body) as DeviceInfo;
-      if (!info || typeof info.alias !== 'string' || (!result.fingerprint && !info.fingerprint)) throw new Error('设备返回了无效响应');
-      const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
-      if (result.fingerprint) known.fingerprint = result.fingerprint;
+      const known = this.confirmedPeer(result, peer);
       this.upsertPeer(known, !!result.fingerprint || known.protocol === 'http');
       const message = `主动注册成功 · ${known.alias} · ${known.ip}:${known.port} · ${known.protocol} · ${Date.now() - started} ms`;
       this.store.networkLog('discovery', message); this.store.log(message);
     }
   }
 
-  async probe(peer: Peer, cancellation: Cancellation = new Cancellation()): Promise<void> {
+  async probe(peer: Peer, cancellation: Cancellation = new Cancellation(), readOnly: boolean = false): Promise<void> {
     // Registration exchanges both identities in one connection (also on 1.18).
     // Hidden devices retain read-only discovery and do not announce themselves.
-    if (this.store.settings.visible) { await this.register(peer, cancellation); return; }
+    if (this.store.settings.visible && !readOnly) { await this.register(peer, cancellation); return; }
     let reply: HttpReply;
     try {
       reply = await this.request(peer, 'GET', '/api/localsend/v2/info', '', cancellation, this.store.settings.discoveryTimeout);
     } catch (error) {
       if (peer.protocol !== 'http' || (error as Error).message !== '设备提前关闭了连接') throw error as Error;
       const secure = await this.verifyHttpsPeer(peer, cancellation);
-      if (this.store.settings.visible) await this.register(secure, cancellation); return;
+      if (this.store.settings.visible && !readOnly) await this.register(secure, cancellation); return;
     }
     if (reply.status === 404) reply = await this.request(peer, 'GET', '/api/localsend/v1/info', '', cancellation, this.store.settings.discoveryTimeout);
     cancellation.check();
     if (reply.status !== 200) throw new Error(`设备返回 ${reply.status}`);
-    const info = JSON.parse(reply.body) as DeviceInfo;
-    if (!info || typeof info.alias !== 'string' || (!reply.fingerprint && !info.fingerprint)) throw new Error('设备返回了无效响应');
-    const known = this.peerFrom(info, peer.ip); known.port = peer.port; known.protocol = peer.protocol;
-    if (reply.fingerprint) known.fingerprint = reply.fingerprint;
+    const known = this.confirmedPeer(reply, peer);
     this.upsertPeer(known, !!reply.fingerprint || known.protocol === 'http');
-    if (this.store.settings.visible) await this.register(known, cancellation);
+    if (this.store.settings.visible && !readOnly) await this.register(known, cancellation);
   }
 
   private async verifyHttpsPeer(peer: Peer, cancellation: Cancellation): Promise<Peer> {
@@ -703,11 +711,9 @@ export class LocalSendService {
     if (reply.status === 404) reply = await this.request(secure, 'GET', '/api/localsend/v1/info', '', cancellation, this.store.settings.discoveryTimeout);
     cancellation.check();
     if (reply.status !== 200) throw new Error(`设备返回 ${reply.status}`);
-    const info = JSON.parse(reply.body) as DeviceInfo;
-    if (!info || typeof info.alias !== 'string' || !reply.fingerprint) throw new Error('设备返回了无效响应');
+    if (!reply.fingerprint) throw new Error('设备返回了无效响应');
     cancellation.check();
-    const known = this.peerFrom(info, peer.ip);
-    known.port = peer.port; known.protocol = 'https'; known.fingerprint = reply.fingerprint;
+    const known = this.confirmedPeer(reply, secure);
     this.upsertPeer(known, true);
     this.store.networkLog('discovery', `${known.alias} · ${known.ip}:${known.port} · HTTPS 已验证，更新旧 HTTP 记录`);
     return known;
@@ -737,9 +743,9 @@ export class LocalSendService {
       if (/^\/api\/localsend\/v[12]\/info$/.test(path) && head.method === 'GET') await channel.respond(200, JSON.stringify(this.info()));
       else if (/^\/api\/localsend\/v[12]\/register$/.test(path) && head.method === 'POST') {
         const info = JSON.parse(decodeText(bytes)) as DeviceInfo;
-        if (!info || typeof info.alias !== 'string') { await channel.respond(400); return; }
-        this.upsertPeer(this.peerFrom(info, channel.ip));
+        if (!info || typeof info.alias !== 'string' || typeof info.fingerprint !== 'string' || !info.fingerprint) { await channel.respond(400); return; }
         await channel.respond(200, JSON.stringify(this.info()));
+        this.answerAnnouncement(this.peerFrom(info, channel.ip), false, false);
       } else if ((/^\/api\/localsend\/v[12]\/prepare-upload$/.test(path) || path === '/api/localsend/v1/send-request') && head.method === 'POST') await this.prepare(channel, head, bytes);
       else if (/^\/api\/localsend\/v[12]\/cancel$/.test(path) && head.method === 'POST') {
         const id = queryValue(head.target, 'sessionId');
@@ -786,7 +792,8 @@ export class LocalSendService {
       if (file.preview && file.fileType === 'text/plain') { view.name = file.fileName.slice(0, 100); view.preview = file.preview.slice(0, 100000); }
       session.view.files.push(view);
     }
-    this.receiving = session; this.store.updateTransfer(session.view); this.upsertPeer(session.peer);
+    this.receiving = session; this.store.updateTransfer(session.view);
+    this.answerAnnouncement(session.peer, false, false);
     this.store.updateIncomingHistory(session.view, true);
     channel.onClosed = () => {
       if (!session.accepted) {

@@ -66,3 +66,37 @@ const importedA = { ...files[0], id: 'flutter:message:original-batch:item-a', tr
 const importedB = { ...files[0], id: 'flutter:message:original-batch:item-b', transferId: '' };
 assert.equal(messageKey(importedA), messageKey(importedB), 'older imported message IDs preserve explicit batch identity');
 console.log('PASS batch grouping, contextual search, identity/direction isolation, partial states, legacy compatibility and unread counts');
+
+// Discovery and incoming transfers may spell the same certificate fingerprint
+// differently. The list, preview, opened conversation and draft must agree.
+const upper = Object.assign(new Peer(), { alias: 'Windows', ip: '192.168.1.12', fingerprint: 'AB'.repeat(32) });
+const lower = Object.assign(new Peer(), { ...upper, ip: '192.168.1.13', fingerprint: upper.fingerprint.toLowerCase() });
+const unrelated = Object.assign(new Peer(), { ...upper, fingerprint: 'CD'.repeat(32) });
+const olderFile = Object.assign(entry(upper, 100, ''), { name: 'old.zip', transferId: 'older' });
+const newestFile = Object.assign(entry(lower, 200, ''), { name: 'new.zip', transferId: 'newest' });
+const unrelatedFile = Object.assign(entry(unrelated, 150, ''), { name: 'other.zip' });
+const mixedHistory = [newestFile, unrelatedFile, olderFile];
+const merged = conversationList(mixedHistory);
+assert.equal(merged.length, 2, 'fingerprint casing must not create duplicate conversation rows');
+assert.equal(merged[0].last, newestFile); assert.equal(merged[0].count, 2);
+assert.equal(peerKey(upper), peerKey(lower));
+assert.equal(conversationList(mixedHistory, 'old.zip')[0].last, newestFile, 'search retains the merged latest preview');
+for (const group of merged) {
+  const opened = currentConversationPeer(group.peer, [upper, unrelated]);
+  assert.equal(peerKey(opened), group.key, 'opening a row must preserve its identity');
+  const visible = mixedHistory.filter(item => inConversation(item, opened));
+  assert.equal(messageBatches(visible).length, group.count);
+  assert.equal(visible.reduce((latest, item) => item.time > latest.time ? item : latest), group.last);
+}
+store.messageDrafts.set(peerKey(upper), { text: 'unfinished reply', files: [] });
+assert.equal(store.messageDrafts.get(peerKey(lower)).text, 'unfinished reply');
+updates.reset([olderFile], upper);
+assert.equal(updates.observe(mixedHistory, lower), 1, 'casing changes must not reset incoming-message tracking');
+assert.equal(messageBatches([olderFile, { ...olderFile, id: 'second-file', peerInfo: lower }]).length, 1);
+const remaining = mixedHistory.filter(item => !inConversation(item, upper));
+assert.deepEqual(remaining, [unrelatedFile], 'clearing a merged conversation leaves the other same-name device alone');
+assert.notEqual(peerKey(Object.assign(new Peer(), { fingerprint: 'Opaque-ID' })),
+  peerKey(Object.assign(new Peer(), { fingerprint: 'opaque-id' })), 'non-certificate identifiers remain case-sensitive');
+const addressOnly = Object.assign(new Peer(), { alias: upper.alias, ip: upper.ip, port: upper.port });
+assert.equal(currentConversationPeer(addressOnly, [upper]), addressOnly, 'opening an address-only row cannot switch it to a different history key');
+console.log('PASS mixed-case certificate conversations, latest preview/detail agreement, batch/draft/unread consistency and same-name isolation');

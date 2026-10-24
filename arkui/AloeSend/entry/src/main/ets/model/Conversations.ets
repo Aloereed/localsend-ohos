@@ -1,4 +1,4 @@
-import { HistoryEntry, Peer, samePeer, historyStatus } from './AppStore';
+import { HistoryEntry, Peer, samePeer, historyStatus, normalizedFingerprint } from './AppStore';
 
 export class MessageBatch {
   key: string = '';
@@ -83,7 +83,7 @@ export class ConversationUpdates {
 }
 
 export function peerKey(peer: Peer): string {
-  return peer.fingerprint ? `identity:${peer.fingerprint}` : peer.ip ? `address:${peer.ip}:${peer.port}` : `alias:${peer.alias}`;
+  return peer.fingerprint ? `identity:${normalizedFingerprint(peer.fingerprint)}` : peer.ip ? `address:${peer.ip}:${peer.port}` : `alias:${peer.alias}`;
 }
 
 export function historyPeer(entry: HistoryEntry): Peer {

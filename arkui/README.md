@@ -1,5 +1,11 @@
 # AloeSend 原生 ArkUI
 
+最新版本：[2.0.157 · 消息会话身份一致性](milestones/M157-conversation-identity.md)。统一证书指纹大小写规则，修复列表重复分组、最近文件与进入后的详情不一致；旧历史直接归并展示。8 个相关测试、正式构建及签名验证通过，包见 [HANDOFF](HANDOFF.md)，真机待验收。
+
+最新版本：[2.0.156 · 自选保存目录 URI 修复](milestones/M156-destination-uri.md)。授权保留选择器原始 URI，目录检查和文件写入使用系统转换后的路径，修复选目录后文件仅留在沙箱的问题。8 个相关测试、正式构建及 APP/HAP 签名校验通过，包见 [HANDOFF](HANDOFF.md)，真机待验收。
+
+最新版本：[2.0.155 · 发现地址验证](milestones/M155-verified-discovery.md)。来源地址经 LocalSend 服务及身份验证后才进入设备列表，修复网关分身风险，保留真实热点设备。11 个相关测试、正式构建及签名验证通过，包见 [HANDOFF](HANDOFF.md)。
+
 最新版本：[2.0.154 · 设备显示方式](milestones/M154-device-display-mode.md)。默认 #尾号按地址显示，可在设置 → 外观关闭后按设备指纹合并。通用签名模板也补入 aloesend5Release.p7b；七个相关测试、正式构建及签名验证通过，包见 [HANDOFF](HANDOFF.md)。
 
 最新版本：[2.0.153 · 设备 IP 尾号标记](milestones/M153-device-address-tags.md)。接收页及发送设备卡片增加 `#12` 等 IPv4 尾号，保留完整地址。格式化检查、正式构建及签名验证通过，使用 aloesend5Release.p7b，包见 [HANDOFF](HANDOFF.md)。

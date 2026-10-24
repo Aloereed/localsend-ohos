@@ -46,12 +46,14 @@ export class Peer {
   lastSeen: number = Date.now();
 }
 
+export function normalizedFingerprint(fingerprint: string): string {
+  // Certificate SHA-256 hex is case-insensitive; opaque protocol IDs are not.
+  return /^[a-fA-F0-9]{64}$/.test(fingerprint) ? fingerprint.toLowerCase() : fingerprint;
+}
+
 export function samePeer(a: Peer, b: Peer): boolean {
   if (a.fingerprint && b.fingerprint) {
-    if (/^[a-fA-F0-9]{64}$/.test(a.fingerprint) && /^[a-fA-F0-9]{64}$/.test(b.fingerprint)) {
-      return a.fingerprint.toLowerCase() === b.fingerprint.toLowerCase();
-    }
-    return a.fingerprint === b.fingerprint;
+    return normalizedFingerprint(a.fingerprint) === normalizedFingerprint(b.fingerprint);
   }
   return !!a.ip && a.ip === b.ip && a.port === b.port;
 }
@@ -1116,11 +1118,15 @@ export class AppStore {
         await fileShare.activatePermission([{ uri: destination,
           operationMode: fileShare.OperationMode.READ_MODE | fileShare.OperationMode.WRITE_MODE }]);
       }
-      if (!download && !await fs.access(destination)) {
+      // Picker grants belong to the original URI (also after restarting), but
+      // access/mkdir and CREATE require its filesystem path. Keep the saved URI
+      // intact and let CoreFileKit resolve the authority and encoded characters.
+      const directory = destination.startsWith('file://') ? new fileUri.FileUri(destination).path : destination;
+      if (!download && !await fs.access(directory)) {
         this.notice = '旧保存目录暂不可用，文件已保存在应用内。请重新选择目录或在历史记录中另存为。'; return;
       }
       // A unique per-transfer directory prevents overwriting unrelated user files.
-      let path = download ? `${destination}/${safeRelativePath(entry.name)}` : `${destination}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
+      let path = download ? `${directory}/${safeRelativePath(entry.name)}` : `${directory}/AloeSend-${sessionId || entry.id}/${safeRelativePath(entry.name)}`;
       const original = path; let suffix = 1;
       while (await fs.access(path)) {
         const dot = original.lastIndexOf('.'); const split = dot > original.lastIndexOf('/') + 1 ? dot : original.length;
